@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.api import departments, scrape_departments, scrape_stream, evaluation, cdl
+from app.api import departments, scrape_departments, scrape_stream, evaluation, cdl, syllabi, stats
 
 
 @asynccontextmanager
@@ -33,3 +33,5 @@ app.include_router(scrape_departments.router)
 app.include_router(scrape_stream.router)
 app.include_router(evaluation.router)
 app.include_router(cdl.router)
+app.include_router(syllabi.router)
+app.include_router(stats.router)
