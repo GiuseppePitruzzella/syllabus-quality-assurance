@@ -101,7 +101,7 @@ def _extract_sections(soup: BeautifulSoup, lang: str) -> dict[str, dict[str, Any
 
 
 def _split_dublin_descriptors(
-    text: str, html: str, lang: str
+    text: str, lang: str
 ) -> dict[str, str]:
     """Split the learning outcomes section into 5 Dublin Descriptors.
 
@@ -148,9 +148,18 @@ def _parse_schedule_table(html_fragment: str) -> list[dict[str, str]] | None:
     if header_row is None:
         return None
 
-    headers = [th.get_text(strip=True) for th in header_row.find_all(["th", "td"])]
-    if not headers:
+    raw_headers = [th.get_text(strip=True) for th in header_row.find_all(["th", "td"])]
+    if not raw_headers:
         return None
+
+    # Normalize headers: lowercase, replace \xa0 and whitespace, snake_case
+    headers: list[str] = []
+    for h in raw_headers:
+        h = h.replace("\xa0", " ").strip().lower()
+        h = re.sub(r"\s+", "_", h)
+        if not h:
+            h = "numero"
+        headers.append(h)
 
     rows: list[dict[str, str]] = []
     for tr in table.find_all("tr")[1:]:  # skip header row
@@ -236,7 +245,7 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
 
     # Dublin Descriptors from learning outcomes section
     lo = sections.get("learning_outcomes", {"text": "", "html": ""})
-    dublin = _split_dublin_descriptors(lo["text"], lo["html"], lang)
+    dublin = _split_dublin_descriptors(lo["text"], lang)
 
     # Schedule table
     sched_section = sections.get("schedule", {"text": "", "html": ""})

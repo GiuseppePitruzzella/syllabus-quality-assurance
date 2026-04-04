@@ -199,6 +199,13 @@ def test_it_schedule_entries_are_dicts(parsed_it):
             assert isinstance(entry, dict), f"Schedule entry should be dict, got {type(entry)}"
 
 
+def test_it_schedule_entry_has_argomenti_key(parsed_it):
+    """Schedule entries should contain normalized 'argomenti' key."""
+    sched = parsed_it["schedule"]
+    if sched:
+        assert "argomenti" in sched[0], f"Expected 'argomenti' key, got {list(sched[0].keys())}"
+
+
 def test_en_schedule_is_list_or_none(parsed_en):
     sched = parsed_en["schedule"]
     assert sched is None or isinstance(sched, list)
