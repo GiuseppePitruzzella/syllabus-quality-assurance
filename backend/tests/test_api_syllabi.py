@@ -244,18 +244,33 @@ def test_get_syllabus_404(client):
 
 
 # ---------------------------------------------------------------------------
-# Phase 3 stubs
+# POST /api/scrape/syllabi/{seuid}  (sync, 200)
 # ---------------------------------------------------------------------------
 
 
-def test_scrape_single_syllabus_returns_501(client):
-    resp = client.post("/api/scrape/syllabi/some-seuid")
-    assert resp.status_code == 501
+def test_scrape_single_syllabus_404_nonexistent(client):
+    """POST /scrape/syllabi/{seuid} returns 404 for unknown seuid."""
+    resp = client.post("/api/scrape/syllabi/DOES-NOT-EXIST")
+    assert resp.status_code == 404
 
 
-def test_scrape_all_syllabi_returns_501(client):
-    resp = client.post("/api/scrape/cdl/1/syllabi/all")
-    assert resp.status_code == 501
+# ---------------------------------------------------------------------------
+# POST /api/scrape/cdl/{cdl_id}/syllabi/all  (async, 202)
+# ---------------------------------------------------------------------------
+
+
+def test_scrape_all_syllabi_404_nonexistent_cdl(client):
+    """POST /scrape/cdl/{cdl_id}/syllabi/all returns 404 for unknown CdL."""
+    resp = client.post("/api/scrape/cdl/9999/syllabi/all")
+    assert resp.status_code == 404
+
+
+def test_scrape_all_syllabi_404_empty_cdl(client, test_db):
+    """POST /scrape/cdl/{cdl_id}/syllabi/all returns 404 if CdL has no syllabi."""
+    dept = _make_dept(test_db)
+    cdl = _make_cdl(test_db, dept.id)
+    resp = client.post(f"/api/scrape/cdl/{cdl.id}/syllabi/all")
+    assert resp.status_code == 404
 
 
 # ---------------------------------------------------------------------------

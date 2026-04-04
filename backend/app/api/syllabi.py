@@ -13,7 +13,9 @@ from app.models.cdl import CorsoDiLaurea
 from app.models.syllabus import Syllabus
 from app.schemas.job import JobCreated, SseEvent
 from app.schemas.syllabus import SyllabusDetail, SyllabusListItem
+from app.scraper.syllabus_detail import scrape_syllabus_detail
 from app.scraper.syllabus_list import scrape_syllabus_list
+from app.scraper.utils import RateLimitedSession
 
 router = APIRouter(prefix="/api", tags=["syllabi"])
 
@@ -136,17 +138,73 @@ def get_syllabus(seuid: str, db: Session = Depends(get_db)):
 
 
 # ---------------------------------------------------------------------------
-# Phase 3 stubs
+# Syllabus detail scraping
 # ---------------------------------------------------------------------------
 
 
-@router.post("/scrape/syllabi/{seuid}", status_code=501)
-def scrape_single_syllabus(seuid: str):
-    """Phase 3: scrape full content for a single syllabus."""
-    raise HTTPException(status_code=501, detail="Phase 3")
+@router.post("/scrape/syllabi/{seuid}", response_model=SyllabusDetail)
+def scrape_single_syllabus(seuid: str, db: Session = Depends(get_db)):
+    """Scrape full content for a single syllabus (IT + EN). Synchronous ~3s."""
+    syllabus = db.query(Syllabus).filter(Syllabus.seuid == seuid).first()
+    if not syllabus:
+        raise HTTPException(status_code=404, detail="Syllabus not found")
+
+    data = scrape_syllabus_detail(syllabus.url_it, syllabus.url_en)
+    for key, value in data.items():
+        setattr(syllabus, key, value)
+    syllabus.scraped_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(syllabus)
+    return syllabus
 
 
-@router.post("/scrape/cdl/{cdl_id}/syllabi/all", status_code=501)
-def scrape_all_syllabi(cdl_id: int):
-    """Phase 3: scrape full content for all syllabi in a CdL."""
-    raise HTTPException(status_code=501, detail="Phase 3")
+@router.post("/scrape/cdl/{cdl_id}/syllabi/all", response_model=JobCreated, status_code=202)
+async def scrape_all_syllabi(cdl_id: int, db: Session = Depends(get_db)):
+    """Batch scrape all syllabi content for a CdL. Async with SSE progress."""
+    cdl = db.query(CorsoDiLaurea).filter(CorsoDiLaurea.id == cdl_id).first()
+    if not cdl:
+        raise HTTPException(status_code=404, detail="CdL not found")
+
+    syllabi = db.query(Syllabus).filter(Syllabus.cdl_id == cdl_id).all()
+    if not syllabi:
+        raise HTTPException(status_code=404, detail="No syllabi found for this CdL")
+
+    job_id = job_registry.create_job()
+    loop = asyncio.get_event_loop()
+
+    syllabi_data = [(s.seuid, s.url_it, s.url_en) for s in syllabi]
+    total = len(syllabi_data)
+
+    def _run():
+        session_http = RateLimitedSession()
+        scraped = 0
+        errors = 0
+
+        for i, (s_seuid, url_it, url_en) in enumerate(syllabi_data, 1):
+            try:
+                data = scrape_syllabus_detail(url_it, url_en, session=session_http)
+                syl = db.query(Syllabus).filter(Syllabus.seuid == s_seuid).first()
+                if syl:
+                    for key, value in data.items():
+                        setattr(syl, key, value)
+                    syl.scraped_at = datetime.now(timezone.utc)
+                    db.commit()
+                scraped += 1
+                event = SseEvent(
+                    type="progress", current=i, total=total,
+                    message=f"Scraped: {syl.course_name if syl else s_seuid}",
+                )
+            except Exception as e:
+                errors += 1
+                event = SseEvent(
+                    type="progress", current=i, total=total,
+                    message=f"Error on {s_seuid}: {str(e)[:100]}",
+                )
+            job_registry.publish(job_id, event, loop)
+
+        done = SseEvent(type="done", scraped=scraped, errors=errors)
+        job_registry.publish(job_id, done, loop)
+        job_registry.complete(job_id, loop)
+
+    loop.run_in_executor(None, _run)
+    return JobCreated(job_id=job_id)
