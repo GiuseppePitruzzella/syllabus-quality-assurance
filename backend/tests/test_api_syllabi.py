@@ -238,6 +238,19 @@ def test_get_syllabus_detail(client, test_db):
     assert "dublin_knowledge_it" in data
 
 
+def test_get_syllabus_detail_has_breadcrumb_fields(client, test_db):
+    dept = _make_dept(test_db, name="Dip. Matematica e Informatica")
+    cdl = _make_cdl(test_db, dept.id, name="Informatica LM", code="lm-18")
+    _make_syllabus(test_db, cdl.id, seuid="BREAD-CRUMB")
+
+    resp = client.get("/api/syllabi/BREAD-CRUMB")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["cdl_name"] == "Informatica LM"
+    assert data["department_id"] == dept.id
+    assert data["department_name"] == "Dip. Matematica e Informatica"
+
+
 def test_get_syllabus_404(client):
     resp = client.get("/api/syllabi/DOES-NOT-EXIST")
     assert resp.status_code == 404

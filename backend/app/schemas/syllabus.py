@@ -52,3 +52,8 @@ class SyllabusDetail(SyllabusListItem):
     schedule_en: list | None = None
     assessment_methods_en: str | None = None
     sample_questions_en: str | None = None
+
+    # Breadcrumb fields (resolved via relationships)
+    cdl_name: str | None = None
+    department_id: int | None = None
+    department_name: str | None = None

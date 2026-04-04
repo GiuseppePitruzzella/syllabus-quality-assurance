@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
 from app.jobs import job_registry
@@ -131,10 +131,20 @@ async def start_scrape_syllabi(cdl_id: int, db: Session = Depends(get_db)):
 @router.get("/syllabi/{seuid}", response_model=SyllabusDetail)
 def get_syllabus(seuid: str, db: Session = Depends(get_db)):
     """Return full syllabus detail by seuid."""
-    syl = db.query(Syllabus).filter(Syllabus.seuid == seuid).first()
+    syl = (
+        db.query(Syllabus)
+        .options(joinedload(Syllabus.cdl).joinedload(CorsoDiLaurea.department))
+        .filter(Syllabus.seuid == seuid)
+        .first()
+    )
     if syl is None:
         raise HTTPException(status_code=404, detail="Syllabus not found")
-    return syl
+
+    detail = SyllabusDetail.model_validate(syl)
+    detail.cdl_name = syl.cdl.name
+    detail.department_id = syl.cdl.department_id
+    detail.department_name = syl.cdl.department.name
+    return detail
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +155,12 @@ def get_syllabus(seuid: str, db: Session = Depends(get_db)):
 @router.post("/scrape/syllabi/{seuid}", response_model=SyllabusDetail)
 def scrape_single_syllabus(seuid: str, db: Session = Depends(get_db)):
     """Scrape full content for a single syllabus (IT + EN). Synchronous ~3s."""
-    syllabus = db.query(Syllabus).filter(Syllabus.seuid == seuid).first()
+    syllabus = (
+        db.query(Syllabus)
+        .options(joinedload(Syllabus.cdl).joinedload(CorsoDiLaurea.department))
+        .filter(Syllabus.seuid == seuid)
+        .first()
+    )
     if not syllabus:
         raise HTTPException(status_code=404, detail="Syllabus not found")
 
@@ -155,7 +170,12 @@ def scrape_single_syllabus(seuid: str, db: Session = Depends(get_db)):
     syllabus.scraped_at = datetime.now(timezone.utc)
     db.commit()
     db.refresh(syllabus)
-    return syllabus
+
+    detail = SyllabusDetail.model_validate(syllabus)
+    detail.cdl_name = syllabus.cdl.name
+    detail.department_id = syllabus.cdl.department_id
+    detail.department_name = syllabus.cdl.department.name
+    return detail
 
 
 @router.post("/scrape/cdl/{cdl_id}/syllabi/all", response_model=JobCreated, status_code=202)
