@@ -310,6 +310,30 @@ Testo Sub.
     assert len(ids) == len(set(ids))
 
 
+def test_chunker_disambiguates_repeated_section_ref_via_sub_index():
+    """Two distinct H2/H3 with the same section_ref get unique chunk_ids."""
+    md = """
+## D.CDS.3.2 Dotazione di personale
+
+Primo blocco.
+
+## D.CDS.3.2 Dotazione di personale (LM-41)
+
+Secondo blocco.
+""".strip()
+    ck = MarkdownChunker()
+    chunks = ck.chunk_text(md, {"document_id": "ava3_unict"})
+    assert len(chunks) == 2
+    # section_ref is the same for both (the duplicate is a real feature of
+    # the source document), but chunk_id and sub_index differ.
+    assert chunks[0].metadata["section_ref"] == chunks[1].metadata["section_ref"]
+    assert chunks[0].metadata["sub_index"] == 0
+    assert chunks[1].metadata["sub_index"] == 1
+    assert chunks[0].chunk_id != chunks[1].chunk_id
+    assert chunks[0].chunk_id.endswith("__0")
+    assert chunks[1].chunk_id.endswith("__1")
+
+
 def test_chunker_split_long_section_uses_letter_suffix():
     """A long section produces sub-chunks with .a/.b suffixes."""
     body = ("Paragrafo " + "x" * 800 + "\n\n") * 3

@@ -346,9 +346,23 @@ class MarkdownChunker:
         document_id: str,
         document_metadata: dict[str, Any],
     ) -> list[Chunk]:
-        """Convert raw section dicts into ``Chunk`` instances with split logic."""
+        """Convert raw section dicts into ``Chunk`` instances with split logic.
+
+        ``chunk_id`` is ``{document_id}__{section_ref}__{sub_index}`` where
+        ``sub_index`` is a per-section_ref counter that disambiguates
+        duplicates. Most sections produce exactly one chunk with
+        ``sub_index=0``. Collisions arise when a document has two distinct
+        H2/H3 with titles that resolve to the same ``section_ref`` (e.g.
+        two ``### D.CDS.3.2`` blocks for different CdS in ava3_unict, or
+        slug-fallback collisions when two long titles share their first
+        four words).
+        """
         chunks: list[Chunk] = []
         chunk_order = 0
+        # Track how many chunks have already been emitted for each section_ref
+        # so duplicates get monotonically increasing sub_indexes.
+        sub_index_counter: dict[str, int] = {}
+
         for section in raw:
             body = "\n".join(section["lines"]).strip()
             if not body:
@@ -366,13 +380,17 @@ class MarkdownChunker:
                     section_ref = section["section_ref"]
                     parent_section_ref = section["parent_section_ref"]
 
-                chunk_id = f"{document_id}__{section_ref}__0"
+                sub_index = sub_index_counter.get(section_ref, 0)
+                sub_index_counter[section_ref] = sub_index + 1
+
+                chunk_id = f"{document_id}__{section_ref}__{sub_index}"
                 metadata = {
                     **document_metadata,
                     "section_title": section["section_title"],
                     "section_ref": section_ref,
                     "parent_section_ref": parent_section_ref,
                     "chunk_order": chunk_order,
+                    "sub_index": sub_index,
                     "char_count": len(sub),
                     "language": document_metadata.get("language", "it"),
                 }
