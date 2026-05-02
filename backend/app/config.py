@@ -1,12 +1,82 @@
 from pathlib import Path
-from pydantic_settings import BaseSettings
+
+from pydantic import BaseModel, ConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Project root contains both `backend/` and the shared `data/` directory
+# (corpus + vector store live at project root; the SQLite DB stays under backend/data/).
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+BACKEND_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
+
+class ScientificConfig(BaseModel):
+    """Parametri scientifici versionati in git.
+
+    Frozen: non sovrascrivibili a runtime nemmeno via env. Modificarli richiede
+    un commit e una nuova ``prompt_version`` registrata in ``EvaluationResult``.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    llm_model: str = "gemini-2.5-flash"
+    embedding_model: str = "gemini-embedding-001"
+    embedding_output_dimensionality: int = 3072
+    llm_temperature: float = 0.1
+    llm_max_output_tokens: int = 2048
+    rag_top_k: int = 5
+    rag_final_k: int = 3
+    rag_similarity_threshold: float = 0.6
 
 
 class Settings(BaseSettings):
-    database_url: str = f"sqlite:///{Path(__file__).resolve().parent.parent / 'data' / 'syllabus_ai.db'}"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    # === Persistence (existing) ===
+    database_url: str = f"sqlite:///{BACKEND_DATA_DIR / 'syllabus_ai.db'}"
+
+    # === Scraping (existing) ===
     scrape_delay: float = 1.5
     scrape_timeout: int = 15
     scrape_user_agent: str = "SyllabusAI/1.0 (UniCT research thesis)"
+
+    # === GCP / Vertex AI ===
+    gcp_project_id: str = ""
+    gcp_location: str = "europe-west1"
+
+    # === Vector store and corpus paths (project root) ===
+    chroma_persist_dir: str = str(PROJECT_ROOT / "data" / "chroma")
+    normative_corpus_dir: str = str(PROJECT_ROOT / "data" / "normative_corpus")
+    tagging_rules_file: str = str(PROJECT_ROOT / "data" / "tagging_rules.yaml")
+
+    # === Rate limiting (Vertex AI) ===
+    vertex_ai_rpm_limit: int = 30
+
+    # === Logging ===
+    log_level: str = "INFO"
+
+    @property
+    def scientific(self) -> ScientificConfig:
+        return ScientificConfig()
+
+    def require_vertex_ai_config(self) -> tuple[str, str]:
+        """Validate Vertex AI config and return ``(project_id, location)``.
+
+        No fallback to ``gcloud config get-value project``: the project used
+        for any experimental run must be explicit in the configuration so
+        every ``EvaluationResult`` is reproducible.
+
+        Raises:
+            RuntimeError: if ``gcp_project_id`` is empty.
+        """
+        if not self.gcp_project_id:
+            raise RuntimeError(
+                "GCP_PROJECT_ID is not set. Vertex AI calls (embeddings and "
+                "LLM) require an explicit project ID. Set it in backend/.env "
+                "(see backend/.env.example). No automatic fallback to "
+                "`gcloud config` is performed: the project is part of the "
+                "experimental configuration and must be tracked explicitly."
+            )
+        return self.gcp_project_id, self.gcp_location
 
 
 settings = Settings()
