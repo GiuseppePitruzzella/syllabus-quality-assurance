@@ -1,0 +1,389 @@
+# Tagging rules for the 8 normative-corpus documents.
+# Each chunk produced by MarkdownChunker is tagged with criterion_tags
+# (C1-C9 + E1-E4) and agent_tags (A1-A4) based on the section_ref of the
+# chunk and the rules under section_tags below.
+#
+# Match semantics:
+#   A rule keyed `R` matches any chunk whose section_ref is exactly `R`
+#   or starts with `R + "."`. The most-specific (longest-key) rule wins.
+#   Rules are evaluated AFTER excluded_sections: an excluded section
+#   produces an untagged chunk regardless of any matching rule.
+#
+# Documents are versioned in this file so the prompt_version recorded in
+# EvaluationResult covers the corpus configuration too.
+#
+# Source: Appendix B of docs/superpowers/plans/2026-05-01-phase5-evaluation.md
+# Cross-referenced with the actual section_refs produced by the chunker
+# on the 8 corpus files (see backend/app/evaluation/rag/chunker.py).
+
+documents:
+
+  # === lg_unict =========================================================
+  # Linee Guida UniCT per la compilazione del Syllabus.
+  # Most directly relevant document: each subsection maps almost 1:1 to
+  # one or two of the C1-C9 criteria.
+  lg_unict:
+    document_title: "Linee Guida UniCT per la compilazione del Syllabus"
+    document_version: "2.0_settembre_2023"
+    source_type: "linea_guida_ateneo"
+    document_priority: 2
+    excluded_sections: []
+    section_tags:
+      "1":
+        criterion_tags: []
+        agent_tags: []
+        note: "Premessa: contesto e finalità, non normativa specifica."
+      "2":
+        criterion_tags: ["C1"]
+        agent_tags: ["A1"]
+        note: "Indicazioni operative: enumera le sezioni obbligatorie del syllabus."
+      "3":
+        criterion_tags: ["C2"]
+        agent_tags: ["A1"]
+        note: "Intro alla guida: contiene il vincolo bilingue 'in italiano e in inglese'."
+      "3.1":
+        criterion_tags: ["C2", "C3", "C4"]
+        agent_tags: ["A1", "A2"]
+        note: "Risultati di apprendimento: formulazione, Dublin Descriptors, vincolo bilingue."
+      "3.2":
+        criterion_tags: ["C5"]
+        agent_tags: ["A1"]
+        note: "Prerequisiti: distinzione culturali/formali, gradazione."
+      "3.3":
+        criterion_tags: ["C2", "C7"]
+        agent_tags: ["A1", "A3"]
+        note: "Contenuti del corso: vincolo bilingue + struttura contenuti."
+      "3.4":
+        criterion_tags: ["C2", "C6", "C8"]
+        agent_tags: ["A1", "A3"]
+        note: "Modalità di valutazione: criteri, coerenza con RA, vincolo bilingue."
+      "3.5":
+        criterion_tags: ["C2", "C6"]
+        agent_tags: ["A1", "A3"]
+        note: "Esempi domande: supporto a C6, vincolo bilingue esplicito."
+      "3.6":
+        criterion_tags: ["C1", "C9"]
+        agent_tags: ["A1", "A4"]
+        note: "Testi: presenza (C1) e cura editoriale dei riferimenti (C9)."
+      "3.7":
+        criterion_tags: ["C8"]
+        agent_tags: ["A3"]
+        note: "Svolgimento: metodi didattici e relazione coi RA."
+      "3.8":
+        criterion_tags: ["C7"]
+        agent_tags: ["A3"]
+        note: "Programmazione: distribuzione temporale dei contenuti."
+      "3.9":
+        criterion_tags: []
+        agent_tags: []
+        note: "Funzionalità 'Copia da': operativa, non valutativa."
+      "Allegato 1":
+        criterion_tags: ["C4"]
+        agent_tags: ["A2"]
+        note: "Allegato Descrittori di Dublino."
+      "Allegato 2":
+        criterion_tags: ["C6"]
+        agent_tags: ["A3"]
+        note: "Esempi per l'attribuzione del voto d'esame."
+
+  # === ava3 =============================================================
+  # AVA 3 ANVUR. Most of the document concerns CdS/sede-level processes
+  # and is not relevant to single-syllabus evaluation. Only Section 3.2
+  # (Requisiti AQ dei Corsi di Studio) is tagged.
+  ava3:
+    document_title: "Linee Guida AVA 3"
+    document_version: "8_agosto_2024"
+    source_type: "linea_guida_anvur"
+    document_priority: 2
+    excluded_sections:
+      - "1"      # Capitolo 1: il sistema AVA, generale
+      - "4"      # Capitolo 4: indicatori quantitativi
+      - "5"      # Capitolo 5: attori dell'AQ
+      - "6"      # Capitolo 6: strutture periferiche
+      - "7"      # Capitolo 7: processo di accreditamento
+    section_tags:
+      "2":
+        criterion_tags: []
+        agent_tags: []
+        note: "Novità di AVA 3: contesto generale, non vincolante per syllabus."
+      "3.1":
+        criterion_tags: []
+        agent_tags: []
+        note: "Requisiti AQ delle Sedi: livello sede, non syllabus."
+      "3.2":
+        criterion_tags: ["C1"]
+        agent_tags: ["A1"]
+        note: "Requisiti AQ dei Corsi di Studio: riferimento per completezza."
+      "3.3":
+        criterion_tags: []
+        agent_tags: []
+        note: "Requisiti AQ Dottorato: fuori scope tesi (LM-18)."
+      "3.4":
+        criterion_tags: []
+        agent_tags: []
+        note: "Requisiti AQ Dipartimenti: livello struttura, non syllabus."
+
+  # === ava3_unict =======================================================
+  # Documento UniCT che dettaglia D.CDS.X di AVA 3 con "Aspetti da
+  # Considerare". D.CDS.1.4 è la sezione più rilevante per il syllabus.
+  ava3_unict:
+    document_title: "AVA 3 UniCT - Processo di Accreditamento Periodico"
+    document_version: "2026"
+    source_type: "linea_guida_ateneo"
+    document_priority: 3
+    excluded_sections:
+      - "i_requisiti_dei_corsi"      # Focus Medicina/LM-41
+      - "indicatori_corsi_di_medicina"
+      - "indicatori_sentinella_dei_corsi"
+      - "i_riferimenti_crociati_dei"
+      - "ambito_di_valutazione_d"    # Alto livello CdS
+      - "riepilogo_indicatori_per_i"
+    section_tags:
+      "la_struttura_del_modello":
+        criterion_tags: []
+        agent_tags: []
+      "dialogo_e_requisiti_dei":
+        criterion_tags: []
+        agent_tags: []
+      "la_valutazione_dei_corsi":
+        criterion_tags: []
+        agent_tags: []
+      "i_requisiti_a_confronto":
+        criterion_tags: []
+        agent_tags: []
+      "D.CDS.1":
+        criterion_tags: []
+        agent_tags: []
+        note: "Intro al capitolo Progettazione."
+      "D.CDS.1.1":
+        criterion_tags: []
+        agent_tags: []
+        note: "Progettazione del CdS e parti interessate: livello CdS."
+      "D.CDS.1.2":
+        criterion_tags: []
+        agent_tags: []
+        note: "Carattere del CdS, obiettivi formativi: livello CdS."
+      "D.CDS.1.3":
+        criterion_tags: []
+        agent_tags: []
+        note: "Offerta formativa e percorsi: livello CdS."
+      "D.CDS.1.4":
+        criterion_tags: ["C1", "C6", "C7", "C8"]
+        agent_tags: ["A1", "A3"]
+        note: "Programmi degli insegnamenti e modalità di verifica: cuore del syllabus."
+      "D.CDS.1.5":
+        criterion_tags: ["C1"]
+        agent_tags: ["A1"]
+        note: "Pianificazione e organizzazione degli insegnamenti."
+      "D.CDS.2":
+        criterion_tags: []
+        agent_tags: []
+      "D.CDS.2.1":
+        criterion_tags: []
+        agent_tags: []
+        note: "Orientamento e tutorato: livello CdS."
+      "D.CDS.2.2":
+        criterion_tags: ["C5"]
+        agent_tags: ["A1"]
+        note: "Conoscenze richieste in ingresso: collegato a prerequisiti."
+      "D.CDS.2.3":
+        criterion_tags: ["C8"]
+        agent_tags: ["A3"]
+        note: "Metodologie didattiche e percorsi flessibili."
+      "D.CDS.2.4":
+        criterion_tags: []
+        agent_tags: []
+        note: "Internazionalizzazione: fuori scope syllabus singolo."
+      "D.CDS.2.5":
+        criterion_tags: ["C6"]
+        agent_tags: ["A3"]
+        note: "Pianificazione e monitoraggio delle verifiche."
+      "D.CDS.2.6":
+        criterion_tags: ["C8"]
+        agent_tags: ["A3"]
+        note: "Interazione didattica e valutazione formativa."
+      "D.CDS.3":
+        criterion_tags: []
+        agent_tags: []
+        note: "Risorse del CdS: livello CdS, non syllabus."
+      "D.CDS.3.1":
+        criterion_tags: []
+        agent_tags: []
+      "D.CDS.3.2":
+        criterion_tags: []
+        agent_tags: []
+      "D.CDS.4":
+        criterion_tags: []
+        agent_tags: []
+        note: "Riesame e miglioramento: livello CdS."
+      "D.CDS.4.1":
+        criterion_tags: []
+        agent_tags: []
+      "D.CDS.4.2":
+        criterion_tags: []
+        agent_tags: []
+
+  # === dm1154 ===========================================================
+  # Decreto ministeriale 1154/2021. Most articles concern accreditation
+  # procedures; relevant content is in Allegato A (Trasparenza/Requisiti)
+  # and Allegato C (Ambiti di valutazione AQ, including didattica).
+  dm1154:
+    document_title: "DM 1154/2021"
+    document_version: "1154_2021"
+    source_type: "normativa_ministeriale"
+    document_priority: 1
+    excluded_sections:
+      - "premesse_e_riferimenti_normativi"
+      - "Art. 1"
+      - "Art. 2"
+      - "Art. 3"
+      - "Art. 5"
+      - "Art. 6"
+      - "Art. 7"
+      - "Art. 8"
+      - "Art. 9"
+      - "Art. 10"
+      - "ALLEGATO B"
+      - "ALLEGATO D"
+      - "ALLEGATO E"
+    section_tags:
+      "Art. 4":
+        criterion_tags: []
+        agent_tags: []
+        note: "Accreditamento iniziale CdS: procedure, non syllabus."
+      "ALLEGATO A":
+        criterion_tags: ["C1"]
+        agent_tags: ["A1"]
+        note: "Trasparenza e requisiti di accreditamento del CdS."
+      "ALLEGATO C":
+        criterion_tags: ["C1", "C7", "C8"]
+        agent_tags: ["A1", "A3"]
+        note: "Ambiti di valutazione AQ, incluso ambito D didattica."
+
+  # === lgsua_cds ========================================================
+  # Linee guida ANVUR per la compilazione SUA-CdS. La SEZIONE A "Obiettivi
+  # della formazione" contiene i Quadri A4.b/A4.c che parlano dei
+  # descrittori di Dublino — collegati a C4. Le altre sezioni sono
+  # gestionali, escluse dal core (eventualmente E1).
+  lgsua_cds:
+    document_title: "Linee guida SUA-CdS"
+    document_version: "2026"
+    source_type: "linea_guida_ateneo"
+    document_priority: 2
+    excluded_sections:
+      - "sommario"
+      - "4"   # Legenda acronimi
+      - "5"   # Documenti di riferimento
+      - "6"   # Presentazione
+      - "8"   # SEZIONE B - Esperienza dello studente
+      - "9"   # SEZIONE C - Risultati della formazione
+      - "10"  # SEZIONE D - Organizzazione e gestione qualità
+    section_tags:
+      "2":
+        criterion_tags: []
+        agent_tags: []
+        note: "Cos'è la SUA-CdS: introduzione."
+      "3":
+        criterion_tags: []
+        agent_tags: []
+        note: "Note per la compilazione."
+      "7":
+        criterion_tags: ["C3", "C4", "E1"]
+        agent_tags: ["A2"]
+        note: "SEZIONE A - Obiettivi formazione: Quadri A4.b.1/A4.b.2/A4.c (Dublin, RA, competenze)."
+
+  # === matrice_tuning ===================================================
+  # Linee guida UniCT per la compilazione della Matrice di Tuning.
+  # Riguarda criterio esteso E2 (matrice obiettivi-risultati).
+  # L'Appendice "Descrittori di Dublino" è collegata a C4.
+  matrice_tuning:
+    document_title: "Linee guida Matrice di Tuning"
+    document_version: "1.0_gennaio_2026"
+    source_type: "linea_guida_ateneo"
+    document_priority: 2
+    excluded_sections:
+      - "sommario"
+      - "lista_degli_acronimi"
+      - "1"   # Introduzione
+    section_tags:
+      "2":
+        criterion_tags: ["C3", "E2"]
+        agent_tags: ["A2"]
+        note: "La Matrice di Tuning: collega competenze e risultati di apprendimento."
+      "corsi_di_studio_di":
+        criterion_tags: ["E2"]
+        agent_tags: ["A2"]
+        note: "Costruzione: nuova istituzione."
+      "corso_di_studio_gi":
+        criterion_tags: ["E2"]
+        agent_tags: ["A2"]
+        note: "Costruzione: CdS già attivato."
+      "come_costruire_la_matrice":
+        criterion_tags: ["E2"]
+        agent_tags: ["A2"]
+        note: "Costruzione operativa."
+      "hard_skill_a4b2":
+        criterion_tags: ["C3", "C4"]
+        agent_tags: ["A2"]
+        note: "Appendice Dublin: hard skill (Quadro A4.b.2), competenze e RA disciplinari."
+      "soft_skill_a4c":
+        criterion_tags: ["C3", "C4"]
+        agent_tags: ["A2"]
+        note: "Appendice Dublin: soft skill (Quadro A4.c), competenze trasversali e RA."
+
+  # === lg_cpds_unict ====================================================
+  # Linee guida UniCT per la compilazione della Relazione annuale CPDS.
+  # Procedurali per le CPDS, di scarso utilizzo nella valutazione del
+  # syllabus singolo. Tutto escluso salvo eventuale riferimento
+  # operativo per chunks rari.
+  lg_cpds_unict:
+    document_title: "Linee Guida CPDS UniCT"
+    document_version: "3.0_novembre_2025"
+    source_type: "documento_cpds"
+    document_priority: 3
+    excluded_sections:
+      - "indice"
+      - "lista_degli_acronimi"
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "componenti_cpds"
+      - "sezione_i__parte"
+      - "sezione_iii__valutazioni"
+      - "sezione_iv__appendice"
+    section_tags:
+      "sezione_ii__analisi":
+        criterion_tags: []
+        agent_tags: []
+        note: "Analisi dei CdS: livello CdS, non syllabus."
+
+  # === cpds_unict =======================================================
+  # Istruzioni operative CPDS: descrive i Quadri A-F della relazione
+  # annuale. Quadro B (materiali didattici) e Quadro C (metodi
+  # accertamento) sono direttamente collegati alla qualità del syllabus.
+  cpds_unict:
+    document_title: "Istruzioni Operative CPDS UniCT"
+    document_version: "24_ottobre_2025"
+    source_type: "documento_cpds"
+    document_priority: 3
+    excluded_sections:
+      - "ciclo_di_deming"
+      - "ruolo_delle_cpds"
+      - "Quadro A"   # Soddisfazione studenti, operativo
+      - "Quadro D"   # Riesame, livello CdS
+      - "Quadro F"   # Ulteriori proposte
+    section_tags:
+      "Quadro B":
+        criterion_tags: ["C1", "C9"]
+        agent_tags: ["A1", "A4"]
+        note: "Materiali didattici e laboratori: collegato a presenza/cura."
+      "Quadro C":
+        criterion_tags: ["C6", "C8"]
+        agent_tags: ["A3"]
+        note: "Metodi di accertamento delle conoscenze."
+      "Quadro E":
+        criterion_tags: ["C4", "C5"]
+        agent_tags: ["A1", "A2"]
+        note: "Informazioni nella SUA-CdS: collegato a Dublin (C4) e prerequisiti (C5)."
