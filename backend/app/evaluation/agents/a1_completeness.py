@@ -76,7 +76,14 @@ class CompletenessAgent(BaseAgent):
 
     agent_code = "A1"
     criteria_codes = ["C1", "C2", "C5"]
-    prompt_version = "a1_v1"
+    # Version history:
+    # - a1_v1: initial prompt + ScientificConfig.llm_max_output_tokens=2048.
+    # - a1_v2: ScientificConfig bumped to 4096 (insufficient, see D030).
+    # - a1_v3: ScientificConfig bumped to 8192 (D030 final) AND prompt
+    #   instructed to leave evidences=[] when no literal text is
+    #   available, instead of emitting "evidences": [{"text": "", ...}]
+    #   that the schema (CriterionEvidence.text min_length=1) rejects.
+    prompt_version = "a1_v3"
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

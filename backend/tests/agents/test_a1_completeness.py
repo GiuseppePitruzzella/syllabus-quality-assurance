@@ -173,7 +173,7 @@ def test_completeness_agent_advertises_correct_codes():
     agent = CompletenessAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A1"
     assert agent.criteria_codes == ["C1", "C2", "C5"]
-    assert agent.prompt_version == "a1_v1"
+    assert agent.prompt_version == "a1_v3"
 
 
 def test_completeness_agent_uses_a1_prompt_builder():

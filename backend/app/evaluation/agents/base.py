@@ -109,7 +109,18 @@ class BaseAgent(ABC):
         raise ValueError(f"LLM output did not match schema after {max_retries + 1} attempts") from last_error
 
     def _parse_response(self, raw: str) -> list[CriterionJudgment]:
-        """Parse LLM JSON output into CriterionJudgment objects."""
+        """Parse LLM JSON output into CriterionJudgment objects.
+
+        Pre-processes the JSON before Pydantic validation to drop
+        ``evidences`` items whose ``text`` is empty or whitespace-only.
+        Empirically the LLM keeps emitting ``{"text": "", "source_field":
+        "X_en"}`` to signal an absent field even when the prompt
+        explicitly forbids it; rather than burn three retries on the
+        same error, we drop the offending entries here. The schema
+        remains semantically tight (an empty quote is not evidence) and
+        the dropped entries are a no-op for the downstream agent
+        (justification carries the absence-of-content information).
+        """
         payload = json.loads(_strip_json_fence(raw))
         if isinstance(payload, dict):
             judgments_payload = payload.get("judgments")
@@ -119,6 +130,7 @@ class BaseAgent(ABC):
             raise ValueError("LLM output must be a JSON object or list")
         if not isinstance(judgments_payload, list):
             raise ValueError("LLM output must contain a judgments list")
+        judgments_payload = [_drop_empty_evidences(item) for item in judgments_payload]
         judgments = [CriterionJudgment.model_validate(item) for item in judgments_payload]
         self._validate_criteria_coverage(judgments)
         return judgments
@@ -176,3 +188,27 @@ def _strip_json_fence(raw: str) -> str:
             lines = lines[:-1]
         text = "\n".join(lines).strip()
     return text
+
+
+def _drop_empty_evidences(judgment: dict) -> dict:
+    """Remove evidences whose text is empty or whitespace-only.
+
+    Returns a new dict; the input is not mutated. If ``evidences`` is
+    not a list (or is missing), the dict is returned unchanged so
+    Pydantic can produce a clear validation error downstream.
+    """
+    if not isinstance(judgment, dict):
+        return judgment
+    evidences = judgment.get("evidences")
+    if not isinstance(evidences, list):
+        return judgment
+    cleaned = [
+        ev
+        for ev in evidences
+        if isinstance(ev, dict)
+        and isinstance(ev.get("text"), str)
+        and ev["text"].strip() != ""
+    ]
+    if len(cleaned) == len(evidences):
+        return judgment
+    return {**judgment, "evidences": cleaned}

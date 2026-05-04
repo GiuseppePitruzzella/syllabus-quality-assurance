@@ -22,7 +22,18 @@ class ScientificConfig(BaseModel):
     embedding_model: str = "gemini-embedding-001"
     embedding_output_dimensionality: int = 3072
     llm_temperature: float = 0.1
-    llm_max_output_tokens: int = 2048
+    # Sized for gemini-2.5-flash with default thinking enabled.
+    # Empirical evidence (D030):
+    # - 2048: every A1 calibration run truncated (5/5).
+    # - 4096: only 1/5 succeeded (OTTIMIZZAZIONE, prompt 39811c). Larger
+    #   prompts (40-47k chars) consumed >2500 thoughts_tokens and the
+    #   JSON output was truncated.
+    # - 8192: gives ~5-6k token of headroom over the observed thoughts
+    #   budget, enough for the JSON output of any 3-criterion agent
+    #   (A1, A3) on prompts up to the largest LM-18 syllabus seen so
+    #   far (Deep Learning, ~12k input tokens).
+    # Cost is bounded by tokens actually generated, not by this limit.
+    llm_max_output_tokens: int = 8192
     rag_top_k: int = 5
     rag_final_k: int = 3
     rag_similarity_threshold: float = 0.6

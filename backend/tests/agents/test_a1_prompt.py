@@ -141,6 +141,22 @@ def test_prompt_emits_evidences_only_from_syllabus_rule():
     assert "evidences deve contenere solo citazioni letterali dal SYLLABUS" in prompt
 
 
+def test_prompt_forbids_empty_text_evidences():
+    """When a field is empty, the prompt must instruct evidences=[] rather than text=''.
+
+    This rule exists because ``CriterionEvidence.text`` has min_length=1
+    (an empty quote is not evidence). Without the rule the LLM emits
+    `[{"text": "", "source_field": "X_en"}]` to signal an absent field,
+    which the validator rejects, the agent retries, and we waste a full
+    LLM call with the same outcome.
+    """
+    from app.evaluation.agents.prompts.a1_prompt import (
+        A1_OUTPUT_SCHEMA_INSTRUCTIONS,
+    )
+    schema = A1_OUTPUT_SCHEMA_INSTRUCTIONS
+    assert "NON inserire MAI evidenze" in schema or "evidences\" come lista vuota" in schema
+
+
 def test_prompt_accepts_dict_input():
     """build_a1_prompt should accept either AgentInput or a dict."""
     payload = {

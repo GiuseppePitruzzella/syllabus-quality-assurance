@@ -84,6 +84,7 @@ Vincoli sull'output:
 - Se is_na è true, score deve essere null e na_reason deve spiegare il problema tecnico.
 - Per C2, l'assenza della versione inglese non è NA: è score 0.
 - evidences deve contenere solo citazioni letterali dal SYLLABUS (mai dal contesto normativo).
+- Ogni "evidences[i].text" DEVE essere una stringa NON vuota. Se non hai testo letterale da citare (per esempio perché un campo del syllabus è assente o vuoto), descrivi l'assenza nella "justification" e LASCIA "evidences" come lista vuota []. NON inserire MAI evidenze con "text": "".
 """
 
 
