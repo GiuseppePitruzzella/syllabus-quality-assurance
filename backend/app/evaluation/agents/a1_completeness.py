@@ -83,7 +83,16 @@ class CompletenessAgent(BaseAgent):
     #   instructed to leave evidences=[] when no literal text is
     #   available, instead of emitting "evidences": [{"text": "", ...}]
     #   that the schema (CriterionEvidence.text min_length=1) rejects.
-    prompt_version = "a1_v3"
+    # - a1_v4: methodological softening on C5. The previous wording
+    #   ("le LG UniCT richiedono distinzione culturali/formali e
+    #   gradazione utili/importanti/indispensabili") was too strong:
+    #   the LG UniCT use language like "è opportuno"/"raccomandato".
+    #   The anchor C5=1 is no longer triggered by absence of the
+    #   gradation alone: prerequisites already specific and useful to
+    #   the student can earn score=2 even without the explicit
+    #   gradation. Score=1 now means "generic topic areas, of limited
+    #   help to the student" — independent of the gradation question.
+    prompt_version = "a1_v4"
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

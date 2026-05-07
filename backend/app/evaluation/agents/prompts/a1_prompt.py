@@ -20,7 +20,7 @@ Gli anchor di punteggio per ciascun criterio sono nel blocco "SPECIFICHE CRITERI
 Avvertenze specifiche per A1:
 - Le 9 sezioni obbligatorie da verificare per C1 sono: RA (risultati di apprendimento), PR (prerequisiti), CN (contenuti del corso), MV (modalità di verifica), ED (esempi domande), TD (testi/riferimenti), MS (modalità di svolgimento e metodi didattici), MF (modalità di frequenza), PRG (programmazione).
 - Per C2 il perimetro minimo bilingue è: titolo del corso, risultati di apprendimento, contenuti, modalità di verifica. Il flag "has_english" non basta: verifica i campi "_en" effettivi nel syllabus.
-- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Un elenco nudo di codici di esami è 0; aree tematiche generiche senza gradazione sono 1; conoscenze e abilità specifiche con distinzione culturali/formali e gradazione utili/importanti/indispensabili sono 2.
+- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Un elenco nudo di codici di esami è 0; aree tematiche generiche senza ulteriore esplicitazione sono 1; conoscenze e abilità specifiche e utili allo studente sono 2. Le Linee Guida UniCT RACCOMANDANO (non impongono) di esplicitare la gradazione "utili/importanti/indispensabili" e di chiarire la distinzione tra propedeuticità culturali e formali quando previste dal Regolamento didattico; l'assenza di queste due esplicitazioni può abbassare il punteggio rispetto al massimo, ma non lo determina da sola: prerequisiti già specifici e utili allo studente possono ricevere 2 anche senza la gradazione esplicita.
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto (stringa vuota o null), considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
@@ -51,8 +51,8 @@ A1_CRITERIA_SPECS: list[dict[str, Any]] = [
         "owned_by": "A1",
         "anchors": {
             "0": "Prerequisiti assenti, o espressi solo come elenco di codici di esami.",
-            "1": "Prerequisiti generici, senza gradazione né distinzione culturali/formali.",
-            "2": "Prerequisiti specifici e utili allo studente, con distinzione/gradazione quando rilevante.",
+            "1": "Prerequisiti espressi come aree tematiche generiche, poco utili allo studente per orientarsi.",
+            "2": "Prerequisiti specifici e utili allo studente in termini di conoscenze e abilità. Le Linee Guida UniCT raccomandano di esplicitare la gradazione (utili/importanti/indispensabili) e la distinzione tra propedeuticità culturali e formali quando previste dal Regolamento didattico; l'assenza di queste esplicitazioni può abbassare il punteggio rispetto al massimo ma non lo determina da sola.",
         },
     },
 ]

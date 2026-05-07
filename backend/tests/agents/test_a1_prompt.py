@@ -170,6 +170,24 @@ def test_prompt_accepts_dict_input():
     assert "Some Course" in prompt
 
 
+def test_a1_c5_uses_soft_normative_wording():
+    """C5 narrative must NOT phrase LG UniCT recommendations as obligations.
+
+    Methodological correction: the LG UniCT use 'opportuno' / raccomandato',
+    not 'richiesto'. The prompt must reflect that. The previous wording
+    ('le LG UniCT richiedono ...') was too strong and biased the agent
+    against syllabi that had specific prerequisites without the gradation.
+    """
+    spec_text = A1_SPECIFIC_INSTRUCTIONS
+    # The narrative must not assert an obligation on the gradation.
+    assert "richiedono distinzione" not in spec_text
+    # And the C5 anchors must explicitly say the gradation is recommended,
+    # not mandatory.
+    c5_spec = next(s for s in A1_CRITERIA_SPECS if s["criterion_code"] == "C5")
+    score_2_anchor = c5_spec["anchors"]["2"]
+    assert "raccoman" in score_2_anchor.lower() or "non lo determina da sola" in score_2_anchor.lower()
+
+
 def test_build_a1_prompt_defaults_to_a1_criteria_specs_when_empty():
     """If criteria_specs is empty in the input, the builder falls back to A1_CRITERIA_SPECS."""
     prompt = build_a1_prompt(
