@@ -217,6 +217,72 @@ def test_a4_prompt_includes_one_criterion_spec():
         assert f'"criterion_code": "{code}"' not in prompt
 
 
+def test_a4_anchor_0_is_for_grave_diffuse_systematic_defects():
+    """C9=0 must be reserved for grave, diffuse and systematic defects.
+
+    The diagnostic A4 v1 run scored 4/4 syllabi as C9=0 because the
+    anchor was too permissive: any cluster of typos plus formatting
+    residues triggered score 0. The new wording requires the defects
+    to be GRAVE, DIFFUSI and SISTEMATICI before falling to 0.
+    """
+    c9 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")
+    score_0 = c9["anchors"]["0"].lower()
+    assert "gravi" in score_0
+    assert "diffusi" in score_0
+    assert "sistematici" in score_0
+    # And explicit exclusion of "refusi sparsi alone -> score 0".
+    assert "non va assegnato" in score_0 or "non va a 0" in score_0
+
+
+def test_a4_anchor_1_is_default_for_isolated_residues():
+    """C9=1 is the default for typical real syllabi: scattered typos and
+    localised formatting residues."""
+    c9 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")
+    score_1 = c9["anchors"]["1"].lower()
+    assert "default" in score_1 or "maggior parte" in score_1
+
+
+def test_a4_default_confidence_is_explicitly_medium():
+    """Confidence guidance must default to medium; high requires evidence
+    that is numerous, concordant, distributed and clearly grave."""
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    assert "default" in spec
+    assert "medium" in spec
+    # The 'high' bar must be explicit in the spec.
+    assert "numerosi" in spec or "concordanti" in spec or "distribuiti" in spec
+
+
+def test_a4_anti_english_exclusion_is_severe():
+    """A4 must NOT cite English absence/partiality anywhere in the judgment.
+
+    Diagnostic A4 v1 caught: "la versione inglese è gravemente incompleta
+    in sezioni chiave" — that is C2 (A1), not C9. The new spec enforces
+    a hard ban with explicit "RIGORE SULL'ESCLUSIONE C2" wording.
+    """
+    spec = A4_SPECIFIC_INSTRUCTIONS
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS
+    # The severe wording must appear in the spec block.
+    assert "RIGORE SULL'ESCLUSIONE C2" in spec or "rigore" in spec.lower()
+    # Both blocks must explicitly forbid citing English absence.
+    forbid_phrases = [
+        "non citare in evidences né in justification",
+        "non citare l'assenza",
+        "non penalizzare un campo en per il fatto di essere vuoto",
+    ]
+    assert any(p in spec.lower() for p in forbid_phrases)
+    assert "completezza bilingue è esclusivamente di c2" in schema.lower() or \
+        "non citare l'assenza" in schema.lower()
+
+
+def test_a4_caps_evidences_at_five():
+    """Evidence inflation triggered MAX_TOKENS in the diagnostic run.
+    a4_v2 caps evidences at 5 representative items."""
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+    assert "massimo 5 evidences" in spec or "max 5" in spec or "limite evidences" in spec
+    assert "massimo 5 evidences" in schema or "max 5" in schema or "5 evidences" in schema
+
+
 def test_a4_prompt_accepts_dict_input():
     payload = {
         "syllabus_seuid": "X",

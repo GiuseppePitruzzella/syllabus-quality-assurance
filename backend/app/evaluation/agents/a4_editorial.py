@@ -28,13 +28,25 @@ class EditorialCareAgent(BaseAgent):
 
     agent_code = "A4"
     criteria_codes = ["C9"]
-    # a4_v1: first version of the A4 prompt, calibrated against
-    # ScientificConfig.llm_max_output_tokens=8192 (D030). Anchors use
-    # soft normative wording. The prompt enforces a prudent posture
-    # ("non inventare problemi"), a default confidence of "medium",
-    # and an explicit cross-criterion exclusion list (C2 / C3 / C4 /
-    # C5 / C6 / C7 / C8 / E4) to avoid double-counting.
-    prompt_version = "a4_v1"
+    # Version history:
+    # - a4_v1: first prompt + ScientificConfig.llm_max_output_tokens=8192
+    #   (D030). Diagnostic run on 5 LM-18 syllabi: A4 found real
+    #   editorial issues (parser '-->' residues, typos like 'utlizzando',
+    #   leftover 'ENGLISH VERSION' template markers) but mis-calibrated
+    #   the 0/1 boundary (4/4 valid runs scored C9=0 with confidence=high)
+    #   and double-counted C2 (penalised English absence as editorial
+    #   defect). 1 truncated run on MACHINE LEARNING due to
+    #   evidence-list inflation. Treated as DIAGNOSTIC, not committed
+    #   as official fixtures.
+    # - a4_v2: four corrections in response to the diagnostic run:
+    #   (1) tighter anchors — score=1 is the default for "refusi sparsi
+    #       + residui localizzati", score=0 reserved for "gravi, diffusi,
+    #       sistematici";
+    #   (2) confidence='medium' enforced as the real default;
+    #   (3) RIGORE SULL'ESCLUSIONE C2: explicit ban on citing English
+    #       absence/partiality in justification or evidences;
+    #   (4) cap of 5 evidences per judgment to prevent MAX_TOKENS.
+    prompt_version = "a4_v2"
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

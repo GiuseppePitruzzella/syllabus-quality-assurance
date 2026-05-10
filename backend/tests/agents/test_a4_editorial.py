@@ -178,7 +178,7 @@ def test_editorial_care_agent_advertises_correct_codes():
     agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A4"
     assert agent.criteria_codes == ["C9"]
-    assert agent.prompt_version == "a4_v1"
+    assert agent.prompt_version == "a4_v2"
 
 
 def test_editorial_care_agent_uses_a4_prompt_builder():
