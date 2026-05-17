@@ -9,7 +9,12 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from app.evaluation.agents.schemas import AgentInput, AgentOutput, CriterionJudgment
+from app.evaluation.agents.schemas import (
+    AgentInput,
+    AgentOutput,
+    CriterionJudgment,
+    RetrievedChunkRef,
+)
 from app.evaluation.rag.query_builder import CRITERION_DESCRIPTIONS, build_retrieval_query
 
 PromptBuilder = Callable[[AgentInput], str]
@@ -67,6 +72,9 @@ class BaseAgent(ABC):
                 "criteria_codes": self.criteria_codes,
                 "retrieved_chunks_count": len(normative_context),
             },
+            retrieved_chunks=[
+                _compact_chunk_ref(item) for item in normative_context
+            ],
         )
 
     def _retrieve_normative_context(self, syllabus_fields: dict[str, Any]) -> list[dict[str, Any]]:
@@ -176,6 +184,24 @@ class BaseAgent(ABC):
             "metadata": metadata,
             "similarity_score": getattr(chunk, "similarity_score", None),
         }
+
+
+def _compact_chunk_ref(item: dict[str, Any]) -> RetrievedChunkRef:
+    """Turn a ``_retrieve_normative_context`` dict into a compact ref.
+
+    ``item`` follows the shape produced by :meth:`BaseAgent._chunk_to_context`:
+    ``{criterion_code, chunk_id, text, metadata, similarity_score}``. The
+    full text is intentionally dropped — it lives in ChromaDB and is
+    reproducible from ``chunk_id``.
+    """
+    metadata = item.get("metadata") or {}
+    return RetrievedChunkRef(
+        criterion_code=item.get("criterion_code", ""),
+        chunk_id=item.get("chunk_id", ""),
+        document_id=metadata.get("document_id"),
+        section_ref=metadata.get("section_ref"),
+        similarity_score=item.get("similarity_score"),
+    )
 
 
 def _strip_json_fence(raw: str) -> str:

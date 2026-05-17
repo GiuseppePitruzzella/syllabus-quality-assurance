@@ -51,9 +51,30 @@ class AgentInput(BaseModel):
     syllabus_seuid: str = Field(..., min_length=1)
 
 
+class RetrievedChunkRef(BaseModel):
+    """Compact reference to a RAG chunk used during the agent run.
+
+    Stored on ``AgentOutput.retrieved_chunks`` so that the persistence
+    layer (Phase 5.4.H) can record which normative passages grounded
+    each judgment, without bloating the row with the full text (which
+    is already in ChromaDB and reproducible from ``chunk_id``).
+    """
+
+    criterion_code: str
+    chunk_id: str
+    document_id: str | None = None
+    section_ref: str | None = None
+    similarity_score: float | None = None
+
+
 class AgentOutput(BaseModel):
     """Standardized output returned by each evaluation agent."""
 
     agent_code: str = Field(..., pattern=r"^A[1-4]$")
     judgments: list[CriterionJudgment]
     execution_metadata: dict[str, Any] = Field(default_factory=dict)
+    # Compact per-criterion list of the RAG chunks the agent actually
+    # consulted. Empty list when the agent ran with no normative_context
+    # (e.g. in tests). Per chunk: chunk_id + provenance metadata +
+    # similarity score; the full text lives in ChromaDB.
+    retrieved_chunks: list[RetrievedChunkRef] = Field(default_factory=list)

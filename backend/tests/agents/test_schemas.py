@@ -1,7 +1,45 @@
 import pytest
 from pydantic import ValidationError
 
-from app.evaluation.agents.schemas import AgentInput, AgentOutput, CriterionJudgment
+from app.evaluation.agents.schemas import (
+    AgentInput,
+    AgentOutput,
+    CriterionJudgment,
+    RetrievedChunkRef,
+)
+
+
+def test_agent_output_retrieved_chunks_defaults_to_empty_list():
+    out = AgentOutput(agent_code="A1", judgments=[], execution_metadata={})
+    assert out.retrieved_chunks == []
+
+
+def test_agent_output_can_carry_retrieved_chunks():
+    refs = [
+        RetrievedChunkRef(
+            criterion_code="C1",
+            chunk_id="lg_unict__2__0",
+            document_id="lg_unict",
+            section_ref="2",
+            similarity_score=0.78,
+        ),
+        RetrievedChunkRef(
+            criterion_code="C2",
+            chunk_id="lg_unict__3__0",
+            document_id="lg_unict",
+            section_ref="3",
+            similarity_score=0.72,
+        ),
+    ]
+    out = AgentOutput(
+        agent_code="A1",
+        judgments=[],
+        execution_metadata={},
+        retrieved_chunks=refs,
+    )
+    assert len(out.retrieved_chunks) == 2
+    assert out.retrieved_chunks[0].chunk_id == "lg_unict__2__0"
+    assert out.retrieved_chunks[1].similarity_score == 0.72
 
 
 def test_criterion_judgment_requires_score_when_not_na():
