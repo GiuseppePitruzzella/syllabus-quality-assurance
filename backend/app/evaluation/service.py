@@ -1,20 +1,38 @@
-"""Synchronous EvaluationService (Phase 5.4.H.1).
+"""Synchronous EvaluationService (Phase 5.4.H).
 
 The service is the single module that touches both the LangGraph
-orchestrator and the database. It pre-allocates an
-``EvaluationResult`` row in status=``pending``, runs the graph, then
-persists the final state. Phase 5.4.H.2 will add async / SSE on top
-without touching this core flow.
+orchestrator and the database. The flow is split in two halves so the
+async layer can return ``evaluation_uuid`` immediately (HTTP 202) and
+keep the heavy graph run in a background thread:
+
+1. :meth:`create_pending_run` — opens a session, snapshots the
+   syllabus, inserts an ``EvaluationResult`` row in ``status="pending"``
+   with a fresh UUID and the full scientific-config snapshot, commits,
+   and returns a :class:`PendingRun` that the caller can hand back to
+   :meth:`execute_pending_run`.
+2. :meth:`execute_pending_run` — invokes the graph (blocking) outside
+   any DB session, then persists the final state onto the row.
+
+:meth:`evaluate` is the convenience wrapper for tests and offline /
+batch usage: it runs both halves sequentially and returns the
+persisted row.
 
 Persistence is intentionally OUTSIDE the graph (per the 5.4.H design
 checkpoint): ``graph.invoke()`` returns the final ``EvaluationState``
 and this service writes it. The orchestrator stays DB-free and
 trivially testable.
+
+The graph is injected as a callable ``graph_invoker(initial_state, *,
+progress_publisher=None) -> final_state`` rather than a compiled
+LangGraph directly. Tests pass a fake invoker that returns hand-built
+final states; the production wiring will pass a closure that builds /
+invokes the LangGraph and forwards the publisher.
 """
 from __future__ import annotations
 
 import uuid
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 
@@ -40,21 +58,43 @@ DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
 
 
 SessionFactory = Callable[[], Session]
-GraphInvoker = Callable[[dict[str, Any]], dict[str, Any]]
+ProgressPublisher = Callable[[dict[str, Any]], None]
+# A graph invoker accepts the initial state and an optional
+# progress_publisher. The publisher is a plain ``dict -> None`` so the
+# graph never imports the SSE / FastAPI layer.
+GraphInvoker = Callable[..., dict[str, Any]]
 
 
 class SyllabusNotFoundError(LookupError):
-    """Raised when ``evaluate(seuid)`` cannot find the syllabus."""
+    """Raised when ``create_pending_run(seuid)`` cannot find the syllabus."""
+
+
+class EvaluationNotFoundError(LookupError):
+    """Raised when an ``evaluation_uuid`` is unknown to the service."""
+
+
+@dataclass(frozen=True)
+class PendingRun:
+    """Everything :meth:`EvaluationService.execute_pending_run` needs.
+
+    Returned by :meth:`EvaluationService.create_pending_run` so the
+    async layer can publish ``evaluation_started`` and schedule the
+    blocking graph execution without re-opening the DB session.
+    """
+
+    evaluation_uuid: str
+    seuid: str
+    course_name: str
+    syllabus_snapshot: dict[str, Any]
 
 
 class EvaluationService:
     """Sync evaluation service.
 
-    The graph is injected as a callable ``graph_invoker(initial_state)
-    -> final_state`` rather than a compiled LangGraph directly: this
-    makes the service trivially testable with a fake invoker that
-    returns hand-built final states. The production wiring will pass
-    ``compiled_graph.invoke``.
+    Construct once at application startup with the production
+    ``graph_invoker`` and reuse across requests. Each call to
+    :meth:`create_pending_run` / :meth:`execute_pending_run` opens its
+    own short-lived DB session.
     """
 
     def __init__(
@@ -72,17 +112,12 @@ class EvaluationService:
 
     # ---- public API ----
 
-    def evaluate(self, seuid: str) -> EvaluationResult:
-        """Run a single-syllabus evaluation end to end (sync).
+    def create_pending_run(self, seuid: str) -> PendingRun:
+        """Pre-allocate the run row and snapshot the syllabus.
 
-        Steps:
-        1. Open a session, find the Syllabus by ``seuid``.
-        2. Insert an ``EvaluationResult(status="pending")`` with a fresh
-           UUID and the full scientific configuration snapshot.
-        3. Build the syllabus snapshot.
-        4. Invoke the graph (blocking).
-        5. Persist the final state on the same row.
-        6. Return the row.
+        Commits before returning so a parallel reader (the SSE stream
+        endpoint in Phase 5.4.H.2) can observe the ``pending`` row
+        while the graph runs in a worker thread.
 
         Raises:
             SyllabusNotFoundError: if no syllabus matches ``seuid``.
@@ -96,9 +131,6 @@ class EvaluationService:
             evaluation_uuid = record.evaluation_uuid
             course_name = record.course_name_snapshot
             syllabus_snapshot = snapshot_syllabus(syllabus)
-
-            # The pending record is committed here so a parallel reader
-            # (Phase 5.4.H.2 SSE) can observe the row while the graph runs.
             session.commit()
 
             logger.info(
@@ -107,28 +139,60 @@ class EvaluationService:
                 seuid=seuid,
             )
 
-        # Run the graph OUTSIDE the DB session. The graph is DB-free by design.
+        return PendingRun(
+            evaluation_uuid=evaluation_uuid,
+            seuid=seuid,
+            course_name=course_name,
+            syllabus_snapshot=syllabus_snapshot,
+        )
+
+    def execute_pending_run(
+        self,
+        pending: PendingRun,
+        *,
+        progress_publisher: ProgressPublisher | None = None,
+    ) -> None:
+        """Run the graph for an already-created pending row and persist.
+
+        Blocking; meant to be called either directly (offline / tests)
+        or via ``asyncio.to_thread`` from the async layer. Any exception
+        raised by the graph is caught and persisted as
+        ``status="failed"`` — the method never raises for graph errors.
+        """
         try:
             final_state = self._run_graph(
-                evaluation_uuid=evaluation_uuid,
-                seuid=seuid,
-                course_name=course_name,
-                syllabus_snapshot=syllabus_snapshot,
+                pending=pending,
+                progress_publisher=progress_publisher,
             )
             terminal_status = final_state.get("status") or "completed"
-            self._persist_success(evaluation_uuid, final_state, terminal_status)
+            self._persist_success(pending.evaluation_uuid, final_state, terminal_status)
         except Exception as exc:  # noqa: BLE001 — service-level safety net
             logger.error(
                 "evaluation_failed",
-                evaluation_uuid=evaluation_uuid,
-                seuid=seuid,
+                evaluation_uuid=pending.evaluation_uuid,
+                seuid=pending.seuid,
                 error_type=type(exc).__name__,
                 error_message=str(exc),
                 exc_info=True,
             )
-            self._persist_failure(evaluation_uuid, exc)
+            self._persist_failure(pending.evaluation_uuid, exc)
 
-        return self.get_evaluation(evaluation_uuid)
+    def evaluate(
+        self,
+        seuid: str,
+        *,
+        progress_publisher: ProgressPublisher | None = None,
+    ) -> EvaluationResult:
+        """Run a single-syllabus evaluation end to end (sync, convenience).
+
+        Used by tests and the offline / batch entry points. The HTTP
+        endpoint uses :meth:`create_pending_run` +
+        :meth:`execute_pending_run` directly so the 202 response can
+        return the UUID before the graph starts.
+        """
+        pending = self.create_pending_run(seuid)
+        self.execute_pending_run(pending, progress_publisher=progress_publisher)
+        return self.get_evaluation(pending.evaluation_uuid)
 
     def get_evaluation(self, evaluation_uuid: str) -> EvaluationResult:
         """Fetch one ``EvaluationResult`` by UUID. Raises if absent."""
@@ -139,8 +203,9 @@ class EvaluationService:
                 .one_or_none()
             )
             if record is None:
-                raise LookupError(f"evaluation not found: {evaluation_uuid!r}")
-            # Force loading of all attributes BEFORE the session closes.
+                raise EvaluationNotFoundError(
+                    f"evaluation not found: {evaluation_uuid!r}"
+                )
             session.expunge(record)
             return record
 
@@ -191,32 +256,32 @@ class EvaluationService:
             prompt_versions=dict(self._prompt_versions),
         )
         session.add(record)
-        session.flush()  # populate id
+        session.flush()
         return record
 
     def _run_graph(
         self,
         *,
-        evaluation_uuid: str,
-        seuid: str,
-        course_name: str,
-        syllabus_snapshot: dict[str, Any],
+        pending: PendingRun,
+        progress_publisher: ProgressPublisher | None,
     ) -> EvaluationState:
         initial_state: dict[str, Any] = {
-            "syllabus_seuid": seuid,
-            "course_name": course_name,
-            "syllabus_snapshot": syllabus_snapshot,
+            "syllabus_seuid": pending.seuid,
+            "course_name": pending.course_name,
+            "syllabus_snapshot": pending.syllabus_snapshot,
         }
         logger.info(
             "evaluation_graph_started",
-            evaluation_uuid=evaluation_uuid,
-            seuid=seuid,
+            evaluation_uuid=pending.evaluation_uuid,
+            seuid=pending.seuid,
         )
-        final_state = self._graph_invoker(initial_state)
+        final_state = _invoke_graph(
+            self._graph_invoker, initial_state, progress_publisher
+        )
         logger.info(
             "evaluation_graph_completed",
-            evaluation_uuid=evaluation_uuid,
-            seuid=seuid,
+            evaluation_uuid=pending.evaluation_uuid,
+            seuid=pending.seuid,
             status=final_state.get("status"),
         )
         return final_state
@@ -281,6 +346,27 @@ class EvaluationService:
 # === helpers ================================================================
 
 
+def _invoke_graph(
+    invoker: GraphInvoker,
+    initial_state: dict[str, Any],
+    progress_publisher: ProgressPublisher | None,
+) -> EvaluationState:
+    """Call ``invoker`` either with or without ``progress_publisher``.
+
+    The legacy test fakes only accept ``(initial_state)``. Production
+    invokers built by :func:`make_graph_invoker` accept the keyword
+    too. Probing avoids forcing every test to update its fake.
+    """
+    try:
+        return invoker(initial_state, progress_publisher=progress_publisher)
+    except TypeError as exc:
+        # Only swallow the specific "unexpected keyword argument" — any
+        # other TypeError raised inside the graph must bubble up.
+        if "progress_publisher" not in str(exc):
+            raise
+        return invoker(initial_state)
+
+
 def _duration_ms(started: datetime | None, finished: datetime) -> int | None:
     if started is None:
         return None
@@ -309,18 +395,7 @@ def _dump_agent_outputs(outputs: dict[str, Any]) -> dict[str, Any]:
 def _index_chunks_by_criterion(
     agent_outputs: dict[str, Any],
 ) -> dict[str, list[dict[str, Any]]]:
-    """Aggregate the per-agent ``retrieved_chunks`` by criterion code.
-
-    Returns a dict like::
-
-        {"C1": [{"chunk_id": "...", "document_id": "lg_unict",
-                 "section_ref": "2", "similarity_score": 0.79}, ...],
-         "C3": [...], ...}
-
-    Useful for the persistence layer and the future frontend, which
-    will want to look up the chunks per criterion rather than per
-    agent.
-    """
+    """Aggregate the per-agent ``retrieved_chunks`` by criterion code."""
     by_criterion: dict[str, list[dict[str, Any]]] = {}
     for output in agent_outputs.values():
         if output is None:

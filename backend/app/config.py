@@ -62,6 +62,13 @@ class Settings(BaseSettings):
     # === Rate limiting (Vertex AI) ===
     vertex_ai_rpm_limit: int = 30
 
+    # === Evaluation pipeline (Phase 5.4.H) ===
+    # Hard timeout for a single graph run. The AsyncEvaluationService
+    # cancels the worker thread (and emits an ``error`` SSE event) if
+    # the graph takes longer than this. Default 10 min covers the
+    # observed end-to-end runs (~3-5 min) with comfortable headroom.
+    evaluation_timeout_seconds: int = 600
+
     # === Logging ===
     log_level: str = "INFO"
 

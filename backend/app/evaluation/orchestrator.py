@@ -3,19 +3,25 @@
 Sequential fan-out → fan-in (D015): the four agents A1..A4 run one
 after the other; an aggregator collapses their outputs into an
 ``AggregatedResult``; a deterministic synthesizer produces the
-Markdown report; a ``persist_stub`` records the run via structlog
-without touching the DB (the real persistence lives in Phase 5.4.H).
+Markdown report; a ``finalize`` node sets ``finished_at`` (real
+persistence happens OUTSIDE the graph in
+:mod:`app.evaluation.service`).
 
 Graph topology::
 
     START -> prepare_context
           -> a1 -> a2 -> a3 -> a4
-          -> aggregate -> synthesize -> persist_stub -> END
+          -> aggregate -> synthesize -> finalize -> END
 
 Every agent node is independent: a crash in one agent is caught,
 recorded in ``state.agent_errors`` and the graph proceeds. The
 aggregate node will translate the missing agents into NA tecnico
 (``source="agent_error"``) per the rules in :mod:`aggregator`.
+
+Progress events are emitted through an optional ``progress_publisher``
+callable. The publisher is a plain ``dict -> None``: the graph never
+imports the SSE / FastAPI layer. The async wrapper supplies a
+publisher that marshals events onto an asyncio queue.
 
 The agent classes are looked up via :func:`_default_agent_factory`,
 which the tests can monkeypatch to inject ``FakeAgent`` instances
@@ -54,14 +60,11 @@ _AGENT_NODE_ORDER: tuple[str, ...] = ("a1", "a2", "a3", "a4")
 # Agent codes -> agent classes. Indirected through a factory so tests
 # can inject fakes without monkey-patching the class imports.
 AgentFactory = Callable[[str, Any, Any], Any]
+ProgressPublisher = Callable[[dict[str, Any]], None]
 
 
 def _default_agent_factory(agent_code: str, retriever: Any, llm_client: Any) -> Any:
-    """Default agent factory: returns a real BaseAgent subclass instance.
-
-    Replace via the ``agent_factory`` parameter of :func:`build_graph`
-    in tests.
-    """
+    """Default agent factory: returns a real BaseAgent subclass instance."""
     if agent_code == "A1":
         return CompletenessAgent(retriever=retriever, llm_client=llm_client)
     if agent_code == "A2":
@@ -78,6 +81,7 @@ def build_graph(
     llm_client: Any,
     *,
     agent_factory: AgentFactory = _default_agent_factory,
+    progress_publisher: ProgressPublisher | None = None,
 ):
     """Build the compiled LangGraph for a single-syllabus evaluation.
 
@@ -90,32 +94,30 @@ def build_graph(
             ``agent_factory``.
         agent_factory: Function ``(agent_code, retriever, llm_client) ->
             BaseAgent``. Defaults to :func:`_default_agent_factory`,
-            which returns the production A1..A4 classes. Tests override
-            this to inject :class:`FakeAgent` instances.
-
-    Returns:
-        A compiled LangGraph. Invoke it with::
-
-            graph = build_graph(retriever, llm_client)
-            final_state = graph.invoke(
-                {"syllabus_seuid": "...", "syllabus_snapshot": {...},
-                 "course_name": "..."}
-            )
+            which returns the production A1..A4 classes.
+        progress_publisher: Optional ``dict -> None`` callback. When
+            present, the agent / aggregate / synthesize nodes call it
+            to publish lifecycle events (agent_started, agent_completed,
+            agent_failed, aggregation_completed, report_synthesized).
+            See :class:`app.schemas.evaluation_event.ProgressEvent` for
+            the payload contract.
     """
+    publisher: ProgressPublisher = progress_publisher or _noop_publisher
+
     g: StateGraph = StateGraph(EvaluationState)
 
     g.add_node("prepare_context", _prepare_context_node)
     for code in _AGENT_NODE_ORDER:
         g.add_node(
             code,
-            _make_agent_node(code.upper(), retriever, llm_client, agent_factory),
+            _make_agent_node(
+                code.upper(), retriever, llm_client, agent_factory, publisher
+            ),
         )
-    g.add_node("aggregate", _aggregate_node)
-    g.add_node("synthesize", _synthesize_node)
-    g.add_node("persist_stub", _persist_stub_node)
+    g.add_node("aggregate", _make_aggregate_node(publisher))
+    g.add_node("synthesize", _make_synthesize_node(publisher))
+    g.add_node("finalize", _finalize_node)
 
-    # Linear edges. Each agent node feeds the next; the aggregate node
-    # depends on all four agent outputs being present.
     g.add_edge(START, "prepare_context")
     g.add_edge("prepare_context", "a1")
     g.add_edge("a1", "a2")
@@ -123,10 +125,14 @@ def build_graph(
     g.add_edge("a3", "a4")
     g.add_edge("a4", "aggregate")
     g.add_edge("aggregate", "synthesize")
-    g.add_edge("synthesize", "persist_stub")
-    g.add_edge("persist_stub", END)
+    g.add_edge("synthesize", "finalize")
+    g.add_edge("finalize", END)
 
     return g.compile()
+
+
+def _noop_publisher(_event: dict[str, Any]) -> None:
+    return None
 
 
 # === nodes ==================================================================
@@ -140,9 +146,6 @@ def _prepare_context_node(state: EvaluationState) -> dict[str, Any]:
     BEFORE invoking the graph). The orchestrator never touches the DB
     session: this keeps the graph reproducible, easy to mock and
     decoupled from persistence.
-
-    Always sets ``status="running"``, ``started_at`` and initialises
-    the empty maps for the agent contributions.
     """
     syllabus_snapshot = state.get("syllabus_snapshot")
     if not syllabus_snapshot:
@@ -153,7 +156,11 @@ def _prepare_context_node(state: EvaluationState) -> dict[str, Any]:
         )
 
     seuid = state.get("syllabus_seuid", "")
-    course_name = state.get("course_name") or syllabus_snapshot.get("course_name") or "(senza titolo)"
+    course_name = (
+        state.get("course_name")
+        or syllabus_snapshot.get("course_name")
+        or "(senza titolo)"
+    )
 
     logger.info(
         "evaluation_started",
@@ -177,10 +184,13 @@ def _make_agent_node(
     retriever: Any,
     llm_client: Any,
     factory: AgentFactory,
+    publisher: ProgressPublisher,
 ) -> Callable[[EvaluationState], dict[str, Any]]:
     """Build a closure that runs one agent and merges its result into the state."""
 
     def _agent_node(state: EvaluationState) -> dict[str, Any]:
+        seuid = state.get("syllabus_seuid")
+        publisher({"type": "agent_started", "agent_code": agent_code, "seuid": seuid})
         started = time.time()
         try:
             agent = factory(agent_code, retriever, llm_client)
@@ -189,9 +199,18 @@ def _make_agent_node(
             logger.info(
                 "agent_completed",
                 agent_code=agent_code,
-                seuid=state.get("syllabus_seuid"),
+                seuid=seuid,
                 latency_ms=latency_ms,
                 n_judgments=len(output.judgments),
+            )
+            publisher(
+                {
+                    "type": "agent_completed",
+                    "agent_code": agent_code,
+                    "seuid": seuid,
+                    "latency_ms": latency_ms,
+                    "n_judgments": len(output.judgments),
+                }
             )
             return merge_agent_output(state, agent_code, output)
         except Exception as exc:  # noqa: BLE001 — intentional: never break the graph
@@ -199,11 +218,21 @@ def _make_agent_node(
             logger.error(
                 "agent_failed",
                 agent_code=agent_code,
-                seuid=state.get("syllabus_seuid"),
+                seuid=seuid,
                 latency_ms=latency_ms,
                 error_type=type(exc).__name__,
                 error_message=str(exc),
                 exc_info=True,
+            )
+            publisher(
+                {
+                    "type": "agent_failed",
+                    "agent_code": agent_code,
+                    "seuid": seuid,
+                    "latency_ms": latency_ms,
+                    "error_type": type(exc).__name__,
+                    "error_message": str(exc),
+                }
             )
             return merge_agent_error(
                 state, agent_code, f"{type(exc).__name__}: {exc}"
@@ -213,73 +242,87 @@ def _make_agent_node(
     return _agent_node
 
 
-def _aggregate_node(state: EvaluationState) -> dict[str, Any]:
-    """Collapse the four agent outputs into an :class:`AggregatedResult`.
-
-    Status returned by :func:`aggregate` propagates into the graph
-    state, so downstream consumers (and the eventual persistence layer)
-    can read it directly from ``state["status"]``.
-    """
-    agent_outputs = state.get("agent_outputs") or {}
-    agent_errors = state.get("agent_errors") or {}
-    result = aggregate(agent_outputs, agent_errors)
-    logger.info(
-        "aggregation_completed",
-        seuid=state.get("syllabus_seuid"),
-        status=result.status,
-        core_score=result.core_score,
-        coverage=result.coverage,
-        n_na=len(result.na_criteria),
-    )
-    return {"aggregation": result, "status": result.status}
-
-
-def _synthesize_node(state: EvaluationState) -> dict[str, Any]:
-    """Compose the deterministic Markdown report.
-
-    The synthesizer is a pure function: it cannot fail under valid
-    inputs. Defensive try/except still wraps it so an unforeseen bug
-    here doesn't take down the whole graph — instead, it leaves
-    ``final_report=None`` and the persist node will log a warning.
-    """
-    aggregation = state.get("aggregation")
-    if aggregation is None:
-        logger.warning(
-            "synthesize_skipped_missing_aggregation",
+def _make_aggregate_node(
+    publisher: ProgressPublisher,
+) -> Callable[[EvaluationState], dict[str, Any]]:
+    def _aggregate_node(state: EvaluationState) -> dict[str, Any]:
+        agent_outputs = state.get("agent_outputs") or {}
+        agent_errors = state.get("agent_errors") or {}
+        result = aggregate(agent_outputs, agent_errors)
+        logger.info(
+            "aggregation_completed",
             seuid=state.get("syllabus_seuid"),
+            status=result.status,
+            core_score=result.core_score,
+            coverage=result.coverage,
+            n_na=len(result.na_criteria),
         )
-        return {"final_report": None}
+        publisher(
+            {
+                "type": "aggregation_completed",
+                "seuid": state.get("syllabus_seuid"),
+                "status": result.status,
+                "core_score": result.core_score,
+                "coverage": result.coverage,
+                "n_na": len(result.na_criteria),
+            }
+        )
+        return {"aggregation": result, "status": result.status}
 
-    course_name = state.get("course_name", "(senza titolo)")
-    agent_outputs = state.get("agent_outputs") or {}
+    return _aggregate_node
 
-    try:
-        report = synthesize_report(course_name, aggregation, agent_outputs)
-    except Exception as exc:  # noqa: BLE001
-        logger.error(
-            "synthesize_failed",
+
+def _make_synthesize_node(
+    publisher: ProgressPublisher,
+) -> Callable[[EvaluationState], dict[str, Any]]:
+    def _synthesize_node(state: EvaluationState) -> dict[str, Any]:
+        aggregation = state.get("aggregation")
+        if aggregation is None:
+            logger.warning(
+                "synthesize_skipped_missing_aggregation",
+                seuid=state.get("syllabus_seuid"),
+            )
+            return {"final_report": None}
+
+        course_name = state.get("course_name", "(senza titolo)")
+        agent_outputs = state.get("agent_outputs") or {}
+
+        try:
+            report = synthesize_report(course_name, aggregation, agent_outputs)
+        except Exception as exc:  # noqa: BLE001
+            logger.error(
+                "synthesize_failed",
+                seuid=state.get("syllabus_seuid"),
+                error_type=type(exc).__name__,
+                error_message=str(exc),
+                exc_info=True,
+            )
+            return {"final_report": None}
+
+        logger.info(
+            "report_synthesized",
             seuid=state.get("syllabus_seuid"),
-            error_type=type(exc).__name__,
-            error_message=str(exc),
-            exc_info=True,
+            report_chars=len(report),
         )
-        return {"final_report": None}
+        publisher(
+            {
+                "type": "report_synthesized",
+                "seuid": state.get("syllabus_seuid"),
+                "report_chars": len(report),
+            }
+        )
+        return {"final_report": report}
 
-    logger.info(
-        "report_synthesized",
-        seuid=state.get("syllabus_seuid"),
-        report_chars=len(report),
-    )
-    return {"final_report": report}
+    return _synthesize_node
 
 
-def _persist_stub_node(state: EvaluationState) -> dict[str, Any]:
-    """Stub persistence: log a structured event and set ``finished_at``.
+def _finalize_node(state: EvaluationState) -> dict[str, Any]:
+    """Stamp ``finished_at`` on the state.
 
-    Phase 5.4.H will replace this node with one that writes the run to
-    ``EvaluationResult`` (per the expanded schema in Appendix C of the
-    plan). Keeping the stub here means the graph topology is final and
-    the only change later is the body of one node.
+    Persistence happens OUTSIDE the graph — :class:`EvaluationService`
+    reads the final state and writes the row. This node only computes
+    the timestamp so the service can derive ``duration_ms`` from a
+    consistent source.
     """
     aggregation = state.get("aggregation")
     finished_at = datetime.now(timezone.utc)
@@ -289,7 +332,7 @@ def _persist_stub_node(state: EvaluationState) -> dict[str, Any]:
     )
 
     logger.info(
-        "evaluation_persisted_stub",
+        "evaluation_graph_finalize",
         seuid=state.get("syllabus_seuid"),
         status=state.get("status"),
         core_score=aggregation.core_score if aggregation else None,

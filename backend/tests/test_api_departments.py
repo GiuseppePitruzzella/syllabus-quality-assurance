@@ -69,11 +69,3 @@ def test_get_departments_with_data(client, test_db):
     assert data[0]["area"] == "Area scientifica"
 
 
-def test_evaluate_returns_501(client):
-    resp = client.post("/api/evaluate/test-seuid")
-    assert resp.status_code == 501
-
-
-def test_get_evaluation_returns_501(client):
-    resp = client.get("/api/evaluations/test-seuid")
-    assert resp.status_code == 501
