@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from app.scraper.syllabus_detail import parse_syllabus_page
+from app.scraper.syllabus_detail import parse_syllabus_page, scrape_syllabus_detail
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -49,6 +49,8 @@ def test_parse_en_returns_dict(parsed_en):
 
 def test_it_has_all_expected_keys(parsed_it):
     expected_keys = {
+        "learning_outcomes",
+        "learning_outcomes",
         "dublin_knowledge",
         "dublin_applying",
         "dublin_judgement",
@@ -94,6 +96,10 @@ def test_en_has_all_expected_keys(parsed_en):
 # ---------------------------------------------------------------------------
 
 
+def test_it_learning_outcomes_nonempty(parsed_it):
+    assert parsed_it["learning_outcomes"], "learning_outcomes should not be empty (IT)"
+
+
 def test_it_dublin_knowledge_nonempty(parsed_it):
     assert parsed_it["dublin_knowledge"], "dublin_knowledge should not be empty (IT)"
 
@@ -117,6 +123,10 @@ def test_it_dublin_learning_nonempty(parsed_it):
 # ---------------------------------------------------------------------------
 # Dublin Descriptors — English
 # ---------------------------------------------------------------------------
+
+
+def test_en_learning_outcomes_nonempty(parsed_en):
+    assert parsed_en["learning_outcomes"], "learning_outcomes should not be empty (EN)"
 
 
 def test_en_dublin_knowledge_exists(parsed_en):
@@ -218,6 +228,13 @@ def test_en_schedule_has_entries(parsed_en):
     assert len(sched) > 0
 
 
+def test_en_schedule_uses_canonical_keys(parsed_en):
+    sched = parsed_en["schedule"]
+    assert isinstance(sched, list)
+    assert "argomenti" in sched[0]
+    assert "riferimenti_testi" in sched[0]
+
+
 # ---------------------------------------------------------------------------
 # Assessment
 # ---------------------------------------------------------------------------
@@ -244,10 +261,57 @@ def test_en_sample_questions_nonempty(parsed_en):
 # ---------------------------------------------------------------------------
 
 
+def test_learning_outcomes_without_dublin_labels_are_preserved():
+    html = """
+    <html><body>
+      <h2>Expected Learning Outcomes</h2>
+      <p>The course aims to provide theoretical and practical skills.</p>
+      <h2>Course Structure</h2>
+      <p>Lectures and laboratory.</p>
+    </body></html>
+    """
+    result = parse_syllabus_page(html, lang="en")
+    assert result["learning_outcomes"] == (
+        "The course aims to provide theoretical and practical skills."
+    )
+    assert result["dublin_knowledge"] == ""
+
+
+def test_scrape_detail_marks_english_true_when_non_dublin_en_content_exists():
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.responses = [
+                Response("<html><body></body></html>"),
+                Response("""
+                <html><body>
+                  <h2>Expected Learning Outcomes</h2>
+                  <p>English learning outcomes exist but are not split.</p>
+                  <h2>Detailed Course Content</h2>
+                  <p>English content exists.</p>
+                </body></html>
+                """),
+            ]
+
+        def get(self, _url):
+            return self.responses.pop(0)
+
+    result = scrape_syllabus_detail("http://it", "http://en", session=FakeSession())
+    assert result["has_english"] is True
+    assert result["learning_outcomes_en"] == (
+        "English learning outcomes exist but are not split."
+    )
+
+
 def test_empty_html_returns_dict_with_all_keys():
     result = parse_syllabus_page("<html><body></body></html>", lang="it")
     assert isinstance(result, dict)
+    assert "learning_outcomes" in result
     assert "dublin_knowledge" in result
+    assert result["learning_outcomes"] == ""
     assert result["dublin_knowledge"] == ""
     assert result["schedule"] is None
     assert result["assessment_methods"] == ""
@@ -257,3 +321,86 @@ def test_empty_html_en_returns_dict():
     result = parse_syllabus_page("<html><body></body></html>", lang="en")
     assert isinstance(result, dict)
     assert "dublin_knowledge" in result
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.1 — ISSUE-PARSER-001: HTML comment residues
+# ---------------------------------------------------------------------------
+
+
+def test_no_html_comment_close_residues_in_any_field(parsed_it, parsed_en):
+    """ISSUE-PARSER-001 regression guard on the real LM-18 fixture.
+
+    Before the fix the SmartEdu CDATA-wrapped Word/Outlook style block
+    leaked ``-->`` at the head of ``references_it``, ``assessment_methods_it``,
+    ``sample_questions_it`` and the EN counterparts. The fix combines
+    a pre-strip on the raw HTML with a safety net in
+    ``_normalize_inline_text``; this test asserts nothing leaks into
+    any extracted field.
+    """
+    for label, parsed in (("IT", parsed_it), ("EN", parsed_en)):
+        for key, value in parsed.items():
+            if isinstance(value, str):
+                assert "-->" not in value, f"{label}/{key} still leaks '-->'"
+
+
+def test_word_conditional_comments_are_stripped_pre_parse():
+    """ISSUE-PARSER-001: synthetic Word ``<!--[if !supportLists]-->`` is removed."""
+    html = """
+    <html><body>
+      <h2>Contenuti del corso</h2>
+      <p><!--[if !supportLists]--><span>•</span><!--[endif]-->
+         Argomento di prova
+      </p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "-->" not in out["course_content"]
+    assert "<!--" not in out["course_content"]
+    assert "Argomento di prova" in out["course_content"]
+
+
+def test_cdata_wrapped_comment_with_dangling_close_is_cleaned():
+    """ISSUE-PARSER-001: the CDATA-wrapped Word pattern is fully cleaned.
+
+    This is the exact shape that produced the regression on the LM-18
+    syllabi: an outer comment that the HTML parser fails to recognise
+    as a single ``Comment`` node, leaving the closing ``-->`` orphan
+    in the text output.
+    """
+    html = """
+    <html><body>
+      <style class="WebKit-mso-list-quirks-stylesheet"><!--
+        /* css */
+      --></style>
+      <h2>Verifica dell'apprendimento</h2>
+      <p>Esame orale.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "-->" not in out["assessment_methods"]
+    assert "Esame orale." in out["assessment_methods"]
+
+
+def test_adjacent_inline_spans_get_word_boundary():
+    """Side-effect of ISSUE-PARSER-001 cleanup: adjacent ``<span>`` tags
+    no longer collide on the assessment / schedule paths.
+
+    Before the fix those paths used ``get_text(strip=True)`` without a
+    separator, so ``<span>Modalità</span><span>verifica</span>``
+    collapsed to ``Modalitàverifica``. Extending the 001 cleanup to
+    these paths (via ``_extract_readable_text`` + ``_normalize_inline_text``)
+    restored the word boundary as a bonus.
+    """
+    html = """
+    <html><body>
+      <h2>Verifica dell'apprendimento</h2>
+      <h3>Modalità di verifica</h3>
+      <p><span>Esame</span><span>orale</span> di trenta minuti.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    # The two words are kept distinct (the failure mode would be ``Esameorale``).
+    assert "Esameorale" not in out["assessment_methods"]
+    assert "Esame" in out["assessment_methods"]
+    assert "orale" in out["assessment_methods"]
