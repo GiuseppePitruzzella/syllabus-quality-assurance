@@ -50,7 +50,7 @@ logger = structlog.get_logger(__name__)
 # Per-agent prompt_version snapshot baked into every persisted record
 # (D026: each run must be independently reproducible).
 DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
-    "A1": "a1_v4",
+    "A1": "a1_v5",
     "A2": "a2_v1",
     "A3": "a3_v1",
     "A4": "a4_v2",

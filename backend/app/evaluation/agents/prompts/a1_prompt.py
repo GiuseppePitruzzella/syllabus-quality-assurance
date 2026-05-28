@@ -20,7 +20,7 @@ Gli anchor di punteggio per ciascun criterio sono nel blocco "SPECIFICHE CRITERI
 Avvertenze specifiche per A1:
 - Le 9 sezioni obbligatorie da verificare per C1 sono: RA (risultati di apprendimento), PR (prerequisiti), CN (contenuti del corso), MV (modalità di verifica), ED (esempi domande), TD (testi/riferimenti), MS (modalità di svolgimento e metodi didattici), MF (modalità di frequenza), PRG (programmazione).
 - Per C2 il perimetro minimo bilingue è: titolo del corso, risultati di apprendimento, contenuti, modalità di verifica. Il flag "has_english" non basta: verifica i campi "_en" effettivi nel syllabus.
-- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Un elenco nudo di codici di esami è 0; aree tematiche generiche senza ulteriore esplicitazione sono 1; conoscenze e abilità specifiche e utili allo studente sono 2. Le Linee Guida UniCT RACCOMANDANO (non impongono) di esplicitare la gradazione "utili/importanti/indispensabili" e di chiarire la distinzione tra propedeuticità culturali e formali quando previste dal Regolamento didattico; l'assenza di queste due esplicitazioni può abbassare il punteggio rispetto al massimo, ma non lo determina da sola: prerequisiti già specifici e utili allo studente possono ricevere 2 anche senza la gradazione esplicita.
+- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Anche un elenco nudo di codici di esami è 0. Prerequisiti formulati come aree tematiche generiche, tautologici o privi di contenuto specifico restano 0. Il punteggio 1 richiede prerequisiti presenti e specifici in termini di conoscenze, ma senza distinzione esplicita tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche. Il punteggio 2 richiede, oltre alla specificità, la distinzione esplicita tra le due dimensioni (o un'organizzazione equivalente chiaramente separabile). La gradazione utili/importanti/indispensabili è raccomandata dalle LG UniCT ma non è di per sé sufficiente né necessaria per il punteggio massimo.
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto (stringa vuota o null), considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
@@ -50,9 +50,9 @@ A1_CRITERIA_SPECS: list[dict[str, Any]] = [
         "name": "Chiarezza dei prerequisiti",
         "owned_by": "A1",
         "anchors": {
-            "0": "Prerequisiti assenti, o espressi solo come elenco di codici di esami.",
-            "1": "Prerequisiti espressi come aree tematiche generiche, poco utili allo studente per orientarsi.",
-            "2": "Prerequisiti specifici e utili allo studente in termini di conoscenze e abilità. Le Linee Guida UniCT raccomandano di esplicitare la gradazione (utili/importanti/indispensabili) e la distinzione tra propedeuticità culturali e formali quando previste dal Regolamento didattico; l'assenza di queste esplicitazioni può abbassare il punteggio rispetto al massimo ma non lo determina da sola.",
+            "0": "Prerequisiti assenti, generici, tautologici, o formulati principalmente come rimando a insegnamenti specifici.",
+            "1": "Prerequisiti presenti e anche specifici, ma senza distinzione esplicita tra prerequisiti culturali/generali e disciplinari/specialistici.",
+            "2": "Prerequisiti specifici, formulati in termini di conoscenze richieste, e distinti esplicitamente tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche, oppure organizzati in modo equivalente e chiaramente separabile.",
         },
     },
 ]

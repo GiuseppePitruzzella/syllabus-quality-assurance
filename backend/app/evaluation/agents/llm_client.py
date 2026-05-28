@@ -124,7 +124,13 @@ class LLMClient(Protocol):
     use a ``MagicMock`` that returns ``LLMResult``.
     """
 
-    def __call__(self, prompt: str, *, seed: int | None = None) -> LLMResult: ...
+    def __call__(
+        self,
+        prompt: str,
+        *,
+        seed: int | None = None,
+        max_output_tokens: int | None = None,
+    ) -> LLMResult: ...
 
 
 # === Vertex AI implementation ===============================================
@@ -168,8 +174,21 @@ class VertexAILLMClient:
     def project_id(self) -> str:
         return self._project_id
 
-    def __call__(self, prompt: str, *, seed: int | None = None) -> LLMResult:
-        return self._call(prompt, seed)
+    def __call__(
+        self,
+        prompt: str,
+        *,
+        seed: int | None = None,
+        max_output_tokens: int | None = None,
+    ) -> LLMResult:
+        """Generate a response.
+
+        ``max_output_tokens`` overrides ``ScientificConfig.llm_max_output_tokens``
+        for this single call (D030.bis: per-agent runtime override; e.g. A1
+        needs 16384 on long syllabi to avoid MAX_TOKENS truncation). When
+        ``None`` the scientific default is used and behaviour is unchanged.
+        """
+        return self._call(prompt, seed, max_output_tokens)
 
     # ---- internals ----
 
@@ -179,13 +198,23 @@ class VertexAILLMClient:
         retry=retry_if_exception_type(_RETRYABLE_EXCEPTIONS),
         reraise=True,
     )
-    def _call(self, prompt: str, seed: int | None) -> LLMResult:
+    def _call(
+        self,
+        prompt: str,
+        seed: int | None,
+        max_output_tokens: int | None = None,
+    ) -> LLMResult:
         if not prompt or not prompt.strip():
             raise ValueError("prompt must be a non-empty string")
 
+        effective_max_output_tokens = (
+            max_output_tokens
+            if max_output_tokens is not None
+            else self._scientific.llm_max_output_tokens
+        )
         config = GenerationConfig(
             temperature=self._scientific.llm_temperature,
-            max_output_tokens=self._scientific.llm_max_output_tokens,
+            max_output_tokens=effective_max_output_tokens,
             seed=seed,
         )
 
@@ -203,7 +232,7 @@ class VertexAILLMClient:
             "gcp_project_id": self._project_id,
             "gcp_location": self._location,
             "temperature": self._scientific.llm_temperature,
-            "max_output_tokens": self._scientific.llm_max_output_tokens,
+            "max_output_tokens": effective_max_output_tokens,
             "finish_reason": finish_reason_name,
             "prompt_chars": len(prompt),
             "response_chars": len(text),

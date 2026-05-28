@@ -83,6 +83,80 @@ def test_evaluate_runs_retrieval_prompt_llm_and_parsing():
     assert prompts[0].syllabus_seuid == "seuid-1"
 
 
+def test_invoke_llm_does_not_pass_max_output_tokens_by_default():
+    """Without ``max_output_tokens_override`` the base agent must NOT pass
+    the kwarg, so existing fakes / mocks with strict signatures stay compatible.
+    """
+    captured: list[tuple[tuple, dict]] = []
+
+    def llm(prompt, **kwargs):
+        captured.append((prompt, kwargs))
+        return _valid_payload()
+
+    agent = DummyAgent(FakeRetriever(), llm, lambda _: "prompt")
+    assert agent.max_output_tokens_override is None
+    agent._invoke_llm("prompt")
+    assert captured[0][1] == {}  # no kwargs forwarded
+
+
+def test_evaluate_propagates_llm_metadata_into_execution_metadata():
+    """D030.bis traceability: the persisted AgentOutput must carry the
+    effective ``max_output_tokens`` (and the rest of the LLM-side metadata)
+    used for the run, not only the global ScientificConfig default.
+
+    Without this, a per-agent override (``max_output_tokens_override``)
+    is invisible in the persisted record and the audit trail is broken.
+    """
+    from types import SimpleNamespace
+
+    def llm(prompt, **kwargs):
+        return SimpleNamespace(
+            text=_valid_payload(),
+            metadata={
+                "model": "gemini-2.5-flash",
+                "max_output_tokens": 16384,
+                "finish_reason": "STOP",
+                "latency_ms": 42,
+                "prompt_chars": len(prompt),
+                "response_chars": 256,
+            },
+        )
+
+    agent = DummyAgent(FakeRetriever(), llm, lambda _: "prompt")
+    output = agent.evaluate(SimpleNamespace(seuid="s", course_name="c"))
+
+    meta = output.execution_metadata
+    assert meta["max_output_tokens_override"] is None  # DummyAgent has no override
+    assert meta["llm_metadata"]["max_output_tokens"] == 16384
+    assert meta["llm_metadata"]["finish_reason"] == "STOP"
+    assert meta["llm_metadata"]["model"] == "gemini-2.5-flash"
+
+
+def test_evaluate_handles_llm_clients_without_metadata():
+    """Test fakes that return a bare string (or an object without ``metadata``)
+    must not break ``evaluate()``: ``llm_metadata`` is just empty.
+    """
+    agent = DummyAgent(FakeRetriever(), lambda prompt, **kw: _valid_payload(), lambda _: "prompt")
+    output = agent.evaluate(SimpleNamespace(seuid="s", course_name="c"))
+    assert output.execution_metadata["llm_metadata"] == {}
+
+
+def test_invoke_llm_forwards_override_when_set():
+    """When set on the subclass, the override flows to the LLM client."""
+    captured: list[tuple[tuple, dict]] = []
+
+    def llm(prompt, **kwargs):
+        captured.append((prompt, kwargs))
+        return _valid_payload()
+
+    class BumpedAgent(DummyAgent):
+        max_output_tokens_override = 16384
+
+    agent = BumpedAgent(FakeRetriever(), llm, lambda _: "prompt")
+    agent._invoke_llm("prompt")
+    assert captured[0][1] == {"max_output_tokens": 16384}
+
+
 def test_call_llm_retries_until_output_validates():
     responses = iter(["not-json", _valid_payload()])
     agent = DummyAgent(FakeRetriever(), lambda prompt: next(responses), lambda _: "prompt")

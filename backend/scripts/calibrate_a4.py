@@ -87,11 +87,17 @@ class CapturingLLMClient:
         self._inner = inner
         self.calls: list[dict[str, Any]] = []
 
-    def __call__(self, prompt: str, *, seed: int | None = None) -> LLMResult:
+    def __call__(
+        self,
+        prompt: str,
+        *,
+        seed: int | None = None,
+        max_output_tokens: int | None = None,
+    ) -> LLMResult:
         record: dict[str, Any] = {"prompt": prompt, "result": None, "error": None}
         self.calls.append(record)
         try:
-            result = self._inner(prompt, seed=seed)
+            result = self._inner(prompt, seed=seed, max_output_tokens=max_output_tokens)
             record["result"] = result
             return result
         except Exception as exc:

@@ -92,7 +92,26 @@ class CompletenessAgent(BaseAgent):
     #   the student can earn score=2 even without the explicit
     #   gradation. Score=1 now means "generic topic areas, of limited
     #   help to the student" — independent of the gradation question.
-    prompt_version = "a1_v4"
+    # - a1_v5 (Phase 5.4.J): re-tightened C5 to fix a systematic drift
+    #   observed in the E2E calibration (5.4.I) — C5 = 1 → 2 on 3/4
+    #   non-NA syllabi. Score=2 now explicitly requires both specificity
+    #   AND a distinction between conoscenze culturali/generali and
+    #   disciplinari/specialistiche (or equivalent clearly separable
+    #   organisation). Score=1 means "specific but without that
+    #   distinction"; score=0 covers absent / generic / tautological
+    #   prerequisites. The advisory paragraph for C5 in
+    #   ``A1_SPECIFIC_INSTRUCTIONS`` was updated for internal
+    #   consistency with the new anchors. C1 and C2 are unchanged.
+    prompt_version = "a1_v5"
+
+    # D030.bis: A1 needs more headroom than the global 8192 budget on
+    # the longest LM-18 syllabi (e.g. Machine Learning triggered a
+    # MAX_TOKENS truncation in 5.4.I). The override is a runtime
+    # parameter, NOT a change of ``prompt_version`` on its own — the
+    # version bumped to a1_v5 separately because the prompt text was
+    # also modified. The override is captured in
+    # ``execution_metadata.max_output_tokens`` of every A1 run.
+    max_output_tokens_override = 16384
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

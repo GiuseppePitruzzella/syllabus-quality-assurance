@@ -173,7 +173,82 @@ def test_completeness_agent_advertises_correct_codes():
     agent = CompletenessAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A1"
     assert agent.criteria_codes == ["C1", "C2", "C5"]
-    assert agent.prompt_version == "a1_v4"
+    assert agent.prompt_version == "a1_v5"
+
+
+def test_completeness_agent_declares_token_budget_override():
+    """D030.bis: A1 needs 16384 to avoid MAX_TOKENS truncation on long syllabi.
+
+    The override is a class attribute and is independent of
+    ``prompt_version``: the value is captured in the LLM call metadata
+    every time the agent runs, not in the prompt itself.
+    """
+    assert CompletenessAgent.max_output_tokens_override == 16384
+
+
+def test_completeness_agent_passes_token_budget_override_to_llm():
+    """``BaseAgent._invoke_llm`` must forward the override as kwarg."""
+    llm = MagicMock()
+    llm.return_value = MagicMock(text='{"judgments": []}')
+    agent = CompletenessAgent(retriever=MagicMock(), llm_client=llm)
+    agent._invoke_llm("dummy prompt")
+    assert llm.call_args.kwargs.get("max_output_tokens") == 16384
+
+
+def test_completeness_agent_traces_effective_budget_in_execution_metadata():
+    """D030.bis: A1's persisted AgentOutput must carry max_output_tokens=16384.
+
+    Before the micro-fix, the override was applied at the LLM call site
+    but the effective value never made it into the persisted record:
+    ``execution_metadata`` only carried the global ScientificConfig
+    default (8192), breaking the audit trail required to prove what
+    budget actually ran on each evaluation.
+    """
+    from types import SimpleNamespace
+    import json
+
+    JUST = "Giustificazione sufficientemente articolata per superare la validation."
+    payload = json.dumps({
+        "judgments": [
+            {
+                "criterion_code": code,
+                "score": 1,
+                "is_na": False,
+                "justification": JUST,
+                "evidences": [],
+                "confidence": "high",
+            }
+            for code in ("C1", "C2", "C5")
+        ]
+    })
+
+    def llm(prompt, **kwargs):
+        return SimpleNamespace(
+            text=payload,
+            metadata={
+                "model": "gemini-2.5-flash",
+                "max_output_tokens": kwargs.get("max_output_tokens", 8192),
+                "finish_reason": "STOP",
+            },
+        )
+
+    class _NoopRetriever:
+        def retrieve(self, query, criterion, agent):
+            return []
+
+    agent = CompletenessAgent(retriever=_NoopRetriever(), llm_client=llm)
+    output = agent.evaluate(
+        {
+            "seuid": "X",
+            "course_name": "Smoke",
+            "has_english": False,
+            "prerequisites_it": "Algebra lineare.",
+        }
+    )
+    meta = output.execution_metadata
+    assert meta["max_output_tokens_override"] == 16384
+    assert meta["llm_metadata"]["max_output_tokens"] == 16384
+    assert meta["llm_metadata"]["finish_reason"] == "STOP"
 
 
 def test_completeness_agent_uses_a1_prompt_builder():

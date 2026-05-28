@@ -151,6 +151,50 @@ def test_call_passes_temperature_and_max_tokens(monkeypatch):
     assert "seed" not in config_dict  # not provided
 
 
+def test_call_override_max_output_tokens_per_invocation(monkeypatch):
+    """D030.bis: per-call ``max_output_tokens`` overrides the scientific default.
+
+    A1 sets ``max_output_tokens_override=16384`` because the global
+    8192 budget truncates on the longest LM-18 syllabi. The override
+    must reach the ``GenerationConfig`` AND be recorded in
+    ``execution_metadata`` so the persisted run row is traceable.
+    """
+    fake_model = _patch_vertex(monkeypatch, _fake_response())
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+
+    client = VertexAILLMClient(
+        "proj-1",
+        "europe-west1",
+        _scientific(llm_max_output_tokens=8192),
+    )
+    result = client("test", max_output_tokens=16384)
+
+    args, kwargs = fake_model.generate_content.call_args
+    config_dict = kwargs["generation_config"].to_dict()
+    # Override won over the scientific default.
+    assert config_dict["max_output_tokens"] == 16384
+    # And the metadata reflects the actually-used value, not the default.
+    assert result.metadata["max_output_tokens"] == 16384
+
+
+def test_call_uses_scientific_default_when_no_override(monkeypatch):
+    """Without an override the scientific default is honoured (regression guard)."""
+    fake_model = _patch_vertex(monkeypatch, _fake_response())
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+
+    client = VertexAILLMClient(
+        "proj-1",
+        "europe-west1",
+        _scientific(llm_max_output_tokens=8192),
+    )
+    result = client("test")  # no max_output_tokens passed
+
+    args, kwargs = fake_model.generate_content.call_args
+    config_dict = kwargs["generation_config"].to_dict()
+    assert config_dict["max_output_tokens"] == 8192
+    assert result.metadata["max_output_tokens"] == 8192
+
+
 def test_call_passes_seed_when_provided(monkeypatch):
     fake_model = _patch_vertex(monkeypatch, _fake_response())
     from app.evaluation.agents.llm_client import VertexAILLMClient

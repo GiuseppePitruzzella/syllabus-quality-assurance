@@ -32,6 +32,15 @@ class BaseAgent(ABC):
     criteria_codes: list[str]
     prompt_version = "v1"
 
+    # Optional per-agent runtime override for ``llm_max_output_tokens``.
+    # When ``None`` the agent uses ``ScientificConfig.llm_max_output_tokens``
+    # (8192). Set on a subclass to bump the budget for that agent only —
+    # e.g. ``CompletenessAgent.max_output_tokens_override = 16384`` (D030.bis,
+    # avoids MAX_TOKENS truncation on the longest LM-18 syllabi). NOT a
+    # change of ``prompt_version`` on its own; the override is recorded in
+    # the LLM call ``execution_metadata`` for traceability.
+    max_output_tokens_override: int | None = None
+
     def __init__(
         self,
         retriever: Any,
@@ -42,6 +51,12 @@ class BaseAgent(ABC):
         self.llm_client = llm_client
         self.prompt_builder = prompt_builder
         self._last_retry_count = 0
+        # Captured from the last successful LLM call so ``evaluate()`` can
+        # expose it in ``AgentOutput.execution_metadata.llm_metadata`` (D030.bis
+        # traceability: the effective ``max_output_tokens`` and ``finish_reason``
+        # of the run must appear in the persisted record, not only the global
+        # ``ScientificConfig`` default).
+        self._last_llm_metadata: dict[str, Any] = {}
 
     @abstractmethod
     def get_relevant_syllabus_fields(self, syllabus: Any) -> dict[str, Any]:
@@ -71,6 +86,8 @@ class BaseAgent(ABC):
                 "prompt_version": self.prompt_version,
                 "criteria_codes": self.criteria_codes,
                 "retrieved_chunks_count": len(normative_context),
+                "max_output_tokens_override": self.max_output_tokens_override,
+                "llm_metadata": dict(self._last_llm_metadata),
             },
             retrieved_chunks=[
                 _compact_chunk_ref(item) for item in normative_context
@@ -151,14 +168,28 @@ class BaseAgent(ABC):
 
     def _invoke_llm(self, prompt: str) -> str:
         client = self.llm_client
+        # Only pass ``max_output_tokens`` when an override is set. This keeps
+        # test fakes / mocks whose signature doesn't accept the kwarg fully
+        # backward compatible — they only see the extra argument for the one
+        # agent that needs it (A1, D030.bis).
+        kwargs: dict[str, Any] = {}
+        if self.max_output_tokens_override is not None:
+            kwargs["max_output_tokens"] = self.max_output_tokens_override
         if callable(client):
-            result = client(prompt)
+            result = client(prompt, **kwargs)
         elif hasattr(client, "generate"):
-            result = client.generate(prompt)
+            result = client.generate(prompt, **kwargs)
         elif hasattr(client, "invoke"):
-            result = client.invoke(prompt)
+            result = client.invoke(prompt, **kwargs)
         else:
             raise TypeError("llm_client must be callable or expose generate()/invoke()")
+        # Capture the LLM-side metadata so ``evaluate()`` can include the
+        # effective ``max_output_tokens``, ``finish_reason``, ``model``, etc.
+        # in the persisted ``AgentOutput.execution_metadata`` (D030.bis).
+        # ``result`` may be a bare string in test fakes — in that case we
+        # leave the captured metadata empty rather than guess defaults.
+        metadata = getattr(result, "metadata", None)
+        self._last_llm_metadata = dict(metadata) if isinstance(metadata, dict) else {}
         if isinstance(result, str):
             return result
         if hasattr(result, "text"):

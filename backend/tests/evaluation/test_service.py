@@ -23,7 +23,11 @@ from app.evaluation.agents.schemas import (
     RetrievedChunkRef,
 )
 from app.evaluation.aggregator import aggregate
-from app.evaluation.service import EvaluationService, SyllabusNotFoundError
+from app.evaluation.service import (
+    DEFAULT_PROMPT_VERSIONS,
+    EvaluationService,
+    SyllabusNotFoundError,
+)
 from app.evaluation.synthesizer import synthesize_report
 from app.models import CorsoDiLaurea, Department, Syllabus
 
@@ -393,3 +397,18 @@ def test_list_evaluations_for_unknown_seuid_raises(session_factory, fake_setting
     )
     with pytest.raises(SyllabusNotFoundError):
         svc.list_evaluations_for_syllabus("MISSING")
+
+
+def test_default_prompt_versions_track_current_agent_releases():
+    """The dict baked into every persisted record is the policy under test.
+
+    A bump on any agent (e.g. a1_v5 in 5.4.J) must be reflected here so
+    that ``EvaluationResult.prompt_versions`` records the version that
+    actually produced the run. D026 / D043.
+    """
+    assert DEFAULT_PROMPT_VERSIONS == {
+        "A1": "a1_v5",
+        "A2": "a2_v1",
+        "A3": "a3_v1",
+        "A4": "a4_v2",
+    }

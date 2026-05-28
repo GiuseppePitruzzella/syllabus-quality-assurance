@@ -104,7 +104,7 @@ def _make_record(syllabus: Syllabus, **overrides) -> EvaluationResult:
         rag_similarity_threshold=0.6,
         gcp_project_id="test-project",
         gcp_location="europe-west1",
-        prompt_versions={"A1": "a1_v4", "A2": "a2_v1", "A3": "a3_v1", "A4": "a4_v2"},
+        prompt_versions={"A1": "a1_v5", "A2": "a2_v1", "A3": "a3_v1", "A4": "a4_v2"},
         core_score=1.78,
         coverage=1.0,
         criterion_scores={f"C{i}": 2 for i in range(1, 10)},
@@ -131,7 +131,7 @@ def test_evaluation_result_can_be_persisted_with_full_schema(session):
     assert fetched.llm_model == "gemini-2.5-flash"
     assert fetched.embedding_dim == 3072
     assert fetched.gcp_project_id == "test-project"
-    assert fetched.prompt_versions == {"A1": "a1_v4", "A2": "a2_v1", "A3": "a3_v1", "A4": "a4_v2"}
+    assert fetched.prompt_versions == {"A1": "a1_v5", "A2": "a2_v1", "A3": "a3_v1", "A4": "a4_v2"}
     assert fetched.core_score == 1.78
     assert fetched.coverage == 1.0
     assert fetched.criterion_scores == {f"C{i}": 2 for i in range(1, 10)}

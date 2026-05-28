@@ -170,22 +170,50 @@ def test_prompt_accepts_dict_input():
     assert "Some Course" in prompt
 
 
-def test_a1_c5_uses_soft_normative_wording():
-    """C5 narrative must NOT phrase LG UniCT recommendations as obligations.
+def test_a1_c5_anchors_require_explicit_culturali_disciplinari_distinction_for_score_2():
+    """a1_v5: C5 = 2 requires both specificity AND the explicit distinction.
 
-    Methodological correction: the LG UniCT use 'opportuno' / raccomandato',
-    not 'richiesto'. The prompt must reflect that. The previous wording
-    ('le LG UniCT richiedono ...') was too strong and biased the agent
-    against syllabi that had specific prerequisites without the gradation.
+    The 5.4.I E2E calibration found C5 drifting systematically from 1 to 2
+    on 3/4 non-NA syllabi because the a1_v4 anchors let "specific but
+    without the culturali/disciplinari distinction" earn a 2. a1_v5 moves
+    that bar: score=2 now requires both criteria; score=1 explicitly
+    covers the specific-but-no-distinction case.
+    """
+    c5_spec = next(s for s in A1_CRITERIA_SPECS if s["criterion_code"] == "C5")
+    anchor_2 = c5_spec["anchors"]["2"].lower()
+    anchor_1 = c5_spec["anchors"]["1"].lower()
+
+    # Score=2 requires the distinction, in both dimensions.
+    assert "distint" in anchor_2 or "distinzione" in anchor_2
+    assert "cultural" in anchor_2 and "disciplinar" in anchor_2
+
+    # Score=1 covers "specific but no distinction".
+    assert "specifici" in anchor_1
+    assert "senza distinzione" in anchor_1
+
+
+def test_a1_c5_narrative_is_consistent_with_new_anchors():
+    """The narrative paragraph for C5 must match the new a1_v5 anchors.
+
+    a1_v4 said the gradation/distinction "raccomandano (non impongono)";
+    a1_v5 tightens the C5=2 bar but keeps the *gradation* (utili /
+    importanti / indispensabili) as a non-mandatory recommendation.
     """
     spec_text = A1_SPECIFIC_INSTRUCTIONS
-    # The narrative must not assert an obligation on the gradation.
-    assert "richiedono distinzione" not in spec_text
-    # And the C5 anchors must explicitly say the gradation is recommended,
-    # not mandatory.
-    c5_spec = next(s for s in A1_CRITERIA_SPECS if s["criterion_code"] == "C5")
-    score_2_anchor = c5_spec["anchors"]["2"]
-    assert "raccoman" in score_2_anchor.lower() or "non lo determina da sola" in score_2_anchor.lower()
+
+    # The advisory must explicitly say "score 2 requires the distinction".
+    assert "Il punteggio 2 richiede" in spec_text
+    assert "distinzione esplicita" in spec_text
+    assert "cultural" in spec_text and "disciplinar" in spec_text
+
+    # The gradation utili/importanti/indispensabili must still be framed
+    # as recommended, not mandatory.
+    assert "raccomandata" in spec_text or "raccomanda" in spec_text
+    assert "non è di per sé sufficiente né necessaria" in spec_text
+
+    # No lingering a1_v4 softening on the distinction itself.
+    assert "non lo determina da sola" not in spec_text
+    assert "RACCOMANDANO" not in spec_text  # all-caps emphasis from a1_v4
 
 
 def test_build_a1_prompt_defaults_to_a1_criteria_specs_when_empty():
