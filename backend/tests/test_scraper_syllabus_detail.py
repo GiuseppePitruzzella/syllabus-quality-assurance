@@ -383,6 +383,65 @@ def test_cdata_wrapped_comment_with_dangling_close_is_cleaned():
 
 
 # ---------------------------------------------------------------------------
+# Phase 5.4.K.3 — ISSUE-PARSER-003: language-switch anchor
+# ---------------------------------------------------------------------------
+
+
+def test_no_language_switch_marker_in_any_field(parsed_it, parsed_en):
+    """ISSUE-PARSER-003 regression guard on the real LM-18 fixture.
+
+    The ``<a><b>ENGLISH VERSION</b></a>`` button sits outside any H2
+    in the source markup but the section walker captured it as a
+    sibling, leaking ``ENGLISH VERSION`` into ``sample_questions_it``
+    / ``assessment_methods_it``. After the fix neither IT nor EN
+    fields contain either marker (the EN page has an analogous
+    ``ITALIAN VERSION`` link).
+    """
+    markers = ("english version", "italian version")
+    for label, parsed in (("IT", parsed_it), ("EN", parsed_en)):
+        for key, value in parsed.items():
+            if isinstance(value, str):
+                low = value.lower()
+                for marker in markers:
+                    assert marker not in low, (
+                        f"{label}/{key} still contains '{marker}'"
+                    )
+
+
+def test_language_switch_anchor_is_decomposed():
+    """ISSUE-PARSER-003: synthetic language-switch ``<a>`` is removed."""
+    html = """
+    <html><body>
+      <h2>Verifica dell'apprendimento</h2>
+      <p>Esame orale.</p>
+      <a class="btn btn-primary d-print-none my-3"
+         href="/insegnamenti?seuid=XXX&amp;eng"><b>ENGLISH VERSION</b></a>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "english version" not in out["assessment_methods"].lower()
+    assert "Esame orale." in out["assessment_methods"]
+
+
+def test_language_switch_anchor_does_not_strip_real_content():
+    """ISSUE-PARSER-003: only the exact button label is removed.
+
+    A legitimate sentence containing the phrase ``English version`` in
+    flowing text must NOT be touched — only ``<a>`` elements whose
+    full anchor text matches the known button labels are decomposed.
+    """
+    html = (
+        "<html><body><h2>Contenuti del corso</h2>"
+        "<p>The English version of the materials is on the course website.</p>"
+        "</body></html>"
+    )
+    out = parse_syllabus_page(html, lang="it")
+    # The phrase is preserved (the fix only decomposes <a> tags, not text).
+    assert "English version" in out["course_content"]
+    assert "materials" in out["course_content"]
+
+
+# ---------------------------------------------------------------------------
 # Phase 5.4.K.2 — ISSUE-PARSER-002: soft-hyphen word splits
 # ---------------------------------------------------------------------------
 

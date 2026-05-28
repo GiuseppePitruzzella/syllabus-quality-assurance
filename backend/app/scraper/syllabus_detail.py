@@ -77,6 +77,35 @@ _DANGLING_COMMENT_CLOSE_RE = re.compile(r"-->")
 # (the second part wouldn't be on a new line after a soft hyphen).
 _SOFT_HYPHEN_LINEBREAK_RE = re.compile(r"(\w)-\n(\w)")
 
+# Anchor texts of the SmartEdu language-switch button. The button sits
+# outside any H2 in the source markup but the section walker captures
+# it as a stray sibling, ending up at the tail of fields like
+# ``sample_questions_it`` / ``assessment_methods_it`` (ISSUE-PARSER-003).
+_LANGUAGE_SWITCH_ANCHOR_TEXTS: tuple[str, ...] = (
+    "english version",
+    "italian version",
+    "versione inglese",
+    "versione italiana",
+)
+
+
+def _strip_language_switch_anchors(soup: BeautifulSoup) -> None:
+    """Remove the SmartEdu language-switch ``<a>`` button from the soup.
+
+    The button carries text like ``ENGLISH VERSION`` / ``ITALIAN VERSION``
+    and points to the page in the other language. It sits outside any
+    H2 in the source HTML but ``_extract_sections`` collects it as a
+    stray sibling and the text leaks into ``sample_questions`` and
+    ``assessment_methods`` (ISSUE-PARSER-003). Decomposing the anchor
+    in-place removes it before any text extraction runs.
+    """
+    for anchor in soup.find_all("a"):
+        anchor_text = _normalize_inline_text(
+            anchor.get_text(" ", strip=True)
+        ).lower()
+        if anchor_text in _LANGUAGE_SWITCH_ANCHOR_TEXTS:
+            anchor.decompose()
+
 
 def _strip_html_comments(html: str) -> str:
     """Remove HTML comments from raw markup BEFORE handing it to BeautifulSoup.
@@ -327,6 +356,7 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     """
     html = _strip_html_comments(html)
     soup = parse_html(html)
+    _strip_language_switch_anchors(soup)
     sections = _extract_sections(soup, lang)
 
     # Dublin Descriptors from learning outcomes section
