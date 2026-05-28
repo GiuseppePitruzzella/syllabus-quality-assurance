@@ -382,6 +382,30 @@ def test_cdata_wrapped_comment_with_dangling_close_is_cleaned():
     assert "Esame orale." in out["assessment_methods"]
 
 
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.2 — ISSUE-PARSER-002: soft-hyphen word splits
+# ---------------------------------------------------------------------------
+
+
+def test_soft_hyphen_linebreak_is_collapsed():
+    """ISSUE-PARSER-002: ``parola1-\\nparola2`` is rejoined as ``parola1parola2``.
+
+    Word / PDF imports often word-wrap with a soft hyphen at the line
+    break. The conservative fix only collapses the pattern
+    ``\\w-\\n\\w`` so genuine compound words (e.g. ``Marco-Polo``,
+    where the second part is on the same line) are untouched.
+    """
+    html = """
+    <html><body>
+      <h2>Contenuti del corso</h2>
+      <p>Modelli di appren-\ndimento profondo per applicazioni reali.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "apprendimento" in out["course_content"]
+    assert "appren-" not in out["course_content"]
+
+
 def test_adjacent_inline_spans_get_word_boundary():
     """Side-effect of ISSUE-PARSER-001 cleanup: adjacent ``<span>`` tags
     no longer collide on the assessment / schedule paths.

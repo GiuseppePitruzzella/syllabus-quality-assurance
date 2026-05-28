@@ -69,6 +69,13 @@ _DUBLIN_LABELS_EN: list[tuple[str, str]] = [
 
 _HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 _DANGLING_COMMENT_CLOSE_RE = re.compile(r"-->")
+# Word-wrap hyphenation produced when a long word is broken across two
+# lines in the source HTML, e.g. ``appren-\ndimento`` -> ``apprendimento``
+# (ISSUE-PARSER-002). The pattern is conservative: it only fires when a
+# word character is followed by a literal hyphen + newline + word
+# character, never on intentional compound words like ``Marco-Polo``
+# (the second part wouldn't be on a new line after a soft hyphen).
+_SOFT_HYPHEN_LINEBREAK_RE = re.compile(r"(\w)-\n(\w)")
 
 
 def _strip_html_comments(html: str) -> str:
@@ -95,7 +102,9 @@ def _normalize_inline_text(text: str) -> str:
     The dangling ``-->`` strip is the safety net for ISSUE-PARSER-001:
     ``_strip_html_comments`` removes well-formed comments on the raw
     HTML, but pathological CDATA-wrapped patterns can leave an orphan
-    ``-->`` that surfaces in the text.
+    ``-->`` that surfaces in the text. Soft-hyphen line break collapse
+    runs upstream in :func:`_extract_readable_text`, where ``\\n`` is
+    still present (this function operates on a single line at a time).
     """
     text = unicodedata.normalize("NFKC", text.replace("\xa0", " "))
     text = _DANGLING_COMMENT_CLOSE_RE.sub("", text)
@@ -103,8 +112,15 @@ def _normalize_inline_text(text: str) -> str:
 
 
 def _extract_readable_text(tag: Tag) -> str:
-    """Extract text while preserving boundaries between nested tags/list items."""
+    """Extract text while preserving boundaries between nested tags/list items.
+
+    Soft-hyphen line break collapse (ISSUE-PARSER-002) runs on the raw
+    text BEFORE splitting on ``\\n``: once the line is split the regex
+    ``\\w-\\n\\w`` can no longer match. Empty lines (after normalisation)
+    are dropped.
+    """
     raw = tag.get_text("\n", strip=True)
+    raw = _SOFT_HYPHEN_LINEBREAK_RE.sub(r"\1\2", raw)
     lines = []
     for line in raw.splitlines():
         line = _normalize_inline_text(line)
