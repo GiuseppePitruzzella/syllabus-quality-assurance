@@ -86,6 +86,14 @@ _LANGUAGE_SWITCH_ANCHOR_TEXTS: tuple[str, ...] = (
     "italian version",
     "versione inglese",
     "versione italiana",
+    # SmartEdu actually ships the EN page with "VERSIONE IN ITALIANO"
+    # (3 words including the preposition) and the IT page with the
+    # symmetric "ENGLISH VERSION" — the 5.4.K.3 fix missed the former
+    # and the Phase 5.7 validation surfaced 62 leaks across LM-18
+    # ``sample_questions_en`` / ``assessment_methods_en``. The marker
+    # is always inside an ``<a class="btn btn-primary ...">`` button,
+    # confirmed on the Deep Learning EN source (ISSUE-PARSER-005).
+    "versione in italiano",
 )
 
 

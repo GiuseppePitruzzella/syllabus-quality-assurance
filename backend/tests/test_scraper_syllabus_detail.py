@@ -423,6 +423,29 @@ def test_language_switch_anchor_is_decomposed():
     assert "Esame orale." in out["assessment_methods"]
 
 
+def test_versione_in_italiano_anchor_is_decomposed():
+    """ISSUE-PARSER-005: the SmartEdu EN page ships the switch button as
+    ``<b>VERSIONE IN ITALIANO</b>`` (3 words, with the preposition).
+
+    The 5.4.K.3 fix only covered ``italian version`` / ``versione italiana``
+    (no preposition) so the marker leaked into ``sample_questions_en``
+    on 24/30 LM-18 syllabi during the Phase 5.7 validation. The fix
+    extends ``_LANGUAGE_SWITCH_ANCHOR_TEXTS`` to include the
+    with-preposition variant; decompose runs on the same code path.
+    """
+    html = """
+    <html><body>
+      <h2>Learning assessment</h2>
+      <p>Oral examination.</p>
+      <a class="btn btn-primary d-print-none my-3"
+         href="/insegnamenti?seuid=XXX"><b>VERSIONE IN ITALIANO</b></a>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="en")
+    assert "versione in italiano" not in out["assessment_methods"].lower()
+    assert "Oral examination." in out["assessment_methods"]
+
+
 def test_language_switch_anchor_does_not_strip_real_content():
     """ISSUE-PARSER-003: only the exact button label is removed.
 
