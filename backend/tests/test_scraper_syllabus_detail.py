@@ -487,3 +487,63 @@ def test_adjacent_inline_spans_get_word_boundary():
     assert "Esameorale" not in out["assessment_methods"]
     assert "Esame" in out["assessment_methods"]
     assert "orale" in out["assessment_methods"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.4 — ISSUE-PARSER-004: bilingual course title
+# ---------------------------------------------------------------------------
+
+
+def test_course_title_extracted_from_h1_excludes_nested_module(parsed_it, parsed_en):
+    """ISSUE-PARSER-004: ``<h1>NomeCorso<div>Modulo</div></h1>`` -> ``NomeCorso``."""
+    # The current fixture has ``<h1>Deep Learning<div>Module ...</div></h1>``
+    # on both pages.
+    assert parsed_it["course_name"] == "Deep Learning"
+    assert parsed_en["course_name"] == "Deep Learning"
+
+
+def test_h1_with_only_text_yields_clean_title():
+    """ISSUE-PARSER-004: minimal case (``<h1>`` with only text)."""
+    out = parse_syllabus_page(
+        "<html><body><h1>OPTIMIZATION</h1></body></html>", lang="en"
+    )
+    assert out["course_name"] == "OPTIMIZATION"
+
+
+def test_missing_h1_yields_none_course_name():
+    """ISSUE-PARSER-004: pages without ``<h1>`` return ``course_name=None``."""
+    out = parse_syllabus_page("<html><body><p>no heading</p></body></html>", lang="it")
+    assert out["course_name"] is None
+
+
+def test_scrape_syllabus_detail_propagates_bilingual_titles():
+    """ISSUE-PARSER-004 end-to-end through ``scrape_syllabus_detail``.
+
+    The canonical IT title is kept by the list scraper (the detail-page
+    IT title is dropped from the merged dict). The EN title from the
+    EN detail page surfaces as ``course_name_en`` — this is the field
+    the new ``Syllabus.course_name_en`` column persists.
+    """
+
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.responses = iter(
+                [
+                    Response("<html><body><h1>OTTIMIZZAZIONE</h1></body></html>"),
+                    Response("<html><body><h1>OPTIMIZATION</h1></body></html>"),
+                ]
+            )
+
+        def get(self, _url):
+            return next(self.responses)
+
+    result = scrape_syllabus_detail("http://it", "http://en", session=FakeSession())
+    # IT detail-page title is dropped: only the canonical course_name from
+    # the CdL list (set elsewhere) is authoritative.
+    assert "course_name_it" not in result
+    # EN title survives, ready to be persisted on Syllabus.course_name_en.
+    assert result["course_name_en"] == "OPTIMIZATION"

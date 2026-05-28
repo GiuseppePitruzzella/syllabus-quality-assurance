@@ -22,6 +22,8 @@ def _ensure_sqlite_schema_compatibility() -> None:
     columns_to_add = {
         "learning_outcomes_it": "TEXT NOT NULL DEFAULT ''",
         "learning_outcomes_en": "TEXT",
+        # ISSUE-PARSER-004 (Phase 5.4.K): bilingual course title.
+        "course_name_en": "TEXT",
     }
 
     with engine.begin() as conn:

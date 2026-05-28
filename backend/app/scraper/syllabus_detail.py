@@ -89,6 +89,32 @@ _LANGUAGE_SWITCH_ANCHOR_TEXTS: tuple[str, ...] = (
 )
 
 
+def _extract_course_title(soup: BeautifulSoup) -> str | None:
+    """Pull the course title from the first ``<h1>`` on the page.
+
+    SmartEdu nests the module name in a secondary ``<div>`` inside the
+    same ``<h1>``, so we only collect the *direct* text children of the
+    heading. Returns ``None`` if no ``<h1>`` is present.
+
+    This is the input for ISSUE-PARSER-004: the EN page carries the
+    course title in English (e.g. ``OPTIMIZATION``) while the CdL list
+    only knows the IT title (``OTTIMIZZAZIONE``). Until 5.4.K only the
+    IT title was stored, so the EN side was forced to fall back to IT.
+    """
+    h1 = soup.find("h1")
+    if h1 is None:
+        return None
+    direct_text_parts = [
+        str(node)
+        for node in h1.find_all(string=True, recursive=False)
+        if str(node).strip()
+    ]
+    if not direct_text_parts:
+        return None
+    title = _normalize_inline_text(" ".join(direct_text_parts))
+    return title or None
+
+
 def _strip_language_switch_anchors(soup: BeautifulSoup) -> None:
     """Remove the SmartEdu language-switch ``<a>`` button from the soup.
 
@@ -346,6 +372,7 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     """Parse a single syllabus page (IT or EN) and return extracted fields.
 
     Returns a dict with keys:
+        course_name (str | None — from the detail page <h1>),
         learning_outcomes,
         dublin_knowledge, dublin_applying, dublin_judgement,
         dublin_communication, dublin_learning,
@@ -357,6 +384,7 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     html = _strip_html_comments(html)
     soup = parse_html(html)
     _strip_language_switch_anchors(soup)
+    course_title = _extract_course_title(soup)
     sections = _extract_sections(soup, lang)
 
     # Dublin Descriptors from learning outcomes section
@@ -372,6 +400,12 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     assessment = _split_assessment(assess_section["html"], lang)
 
     return {
+        # Course title from the detail page <h1>. The list scraper
+        # (``syllabus_list.py``) populates ``course_name`` from the IT
+        # CdL listing; the detail-page title gives the language-correct
+        # version, e.g. ``OPTIMIZATION`` on the EN page where the IT
+        # listing only had ``OTTIMIZZAZIONE`` (ISSUE-PARSER-004).
+        "course_name": course_title,
         # Raw learning outcomes section, preserved even when it is not split
         # into the five Dublin Descriptor labels.
         "learning_outcomes": lo["text"],
@@ -420,6 +454,14 @@ def scrape_syllabus_detail(
         result[f"{key}_it"] = value
     for key, value in parsed_en.items():
         result[f"{key}_en"] = value
+
+    # The course title is the only field that does NOT follow the
+    # ``*_it`` / ``*_en`` model schema: the canonical title is the IT
+    # ``course_name`` from the CdL listing (set by ``syllabus_list``),
+    # so the detail-page IT title is redundant and is dropped here.
+    # ``course_name_en`` is kept so the API can persist the EN title
+    # alongside the canonical IT one (ISSUE-PARSER-004).
+    result.pop("course_name_it", None)
 
     # has_english: True if any parsed EN field contains real content.
     # Some SmartEdu pages provide English sections without Dublin labels; using

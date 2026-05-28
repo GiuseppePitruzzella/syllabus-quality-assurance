@@ -14,6 +14,11 @@ class Syllabus(Base):
     seuid: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
     course_code: Mapped[str] = mapped_column(Text, nullable=False)
     course_name: Mapped[str] = mapped_column(Text, nullable=False)
+    # English variant of the course title, scraped from the EN detail
+    # page (ISSUE-PARSER-004). Nullable because not every syllabus has
+    # an EN version, and pre-5.4.K rows do not have it populated. When
+    # absent the UI / agents should fall back to ``course_name``.
+    course_name_en: Mapped[str | None] = mapped_column(Text, nullable=True)
     module: Mapped[str | None] = mapped_column(Text, nullable=True)
     teacher: Mapped[str] = mapped_column(Text, nullable=False)
     academic_year: Mapped[str] = mapped_column(Text, nullable=False)
@@ -22,7 +27,8 @@ class Syllabus(Base):
     url_en: Mapped[str] = mapped_column(Text, nullable=False)
     has_english: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
-    # Dublin Descriptors — Italian
+    # Learning outcomes and Dublin Descriptors — Italian
+    learning_outcomes_it: Mapped[str] = mapped_column(Text, nullable=False)
     dublin_knowledge_it: Mapped[str] = mapped_column(Text, nullable=False)
     dublin_applying_it: Mapped[str] = mapped_column(Text, nullable=False)
     dublin_judgement_it: Mapped[str] = mapped_column(Text, nullable=False)
@@ -39,7 +45,8 @@ class Syllabus(Base):
     assessment_methods_it: Mapped[str] = mapped_column(Text, nullable=False)
     sample_questions_it: Mapped[str] = mapped_column(Text, nullable=False)
 
-    # Dublin Descriptors — English
+    # Learning outcomes and Dublin Descriptors — English
+    learning_outcomes_en: Mapped[str | None] = mapped_column(Text, nullable=True)
     dublin_knowledge_en: Mapped[str | None] = mapped_column(Text, nullable=True)
     dublin_applying_en: Mapped[str | None] = mapped_column(Text, nullable=True)
     dublin_judgement_en: Mapped[str | None] = mapped_column(Text, nullable=True)
