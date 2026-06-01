@@ -5,6 +5,9 @@ import type {
   SyllabusDetail,
   Stats,
   JobCreated,
+  EvaluationCreated,
+  EvaluationDetail,
+  EvaluationSummary,
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
@@ -45,3 +48,31 @@ export const scrapeSyllabiList = (cdlId: number) =>
 
 export const scrapeSyllabusDetail = (seuid: string) =>
   fetchApi<SyllabusDetail>(`/scrape/syllabi/${seuid}`, { method: "POST" });
+
+// ---------------------------------------------------------------------------
+// Phase 5.5 — Evaluation endpoints (Phase 5.4.H.2 API surface)
+// ---------------------------------------------------------------------------
+
+/**
+ * Kick off an evaluation. Returns `{evaluation_uuid}` with HTTP 202 —
+ * the run continues asynchronously on the server; subscribe to the SSE
+ * stream (`connectEvaluationSse`) to follow progress in real time.
+ */
+export const startEvaluation = (seuid: string) =>
+  fetchApi<EvaluationCreated>(`/evaluate/${seuid}`, { method: "POST" });
+
+/**
+ * Fetch one evaluation row by UUID. Works for any status:
+ * `pending` / `running` / `completed` / `partial` / `failed`.
+ */
+export const getEvaluation = (evaluationUuid: string) =>
+  fetchApi<EvaluationDetail>(`/evaluations/${evaluationUuid}`);
+
+/**
+ * History of evaluations for a syllabus, most recent first (D038).
+ * Defaults to `limit=20` server-side.
+ */
+export const listEvaluationsForSyllabus = (seuid: string, limit?: number) => {
+  const qs = typeof limit === "number" ? `?limit=${limit}` : "";
+  return fetchApi<EvaluationSummary[]>(`/syllabi/${seuid}/evaluations${qs}`);
+};
