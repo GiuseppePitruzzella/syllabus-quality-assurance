@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
-import { getSyllabus } from "@/lib/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Loader2, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+import { getSyllabus, startEvaluation } from "@/lib/api";
 import type { SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
@@ -22,6 +23,37 @@ import {
 import { DublinDescriptors } from "./DublinDescriptors";
 import { CourseScheduleTable } from "./CourseScheduleTable";
 import { MetadataSidebar } from "./MetadataSidebar";
+
+function EvaluateButton({ seuid }: { seuid: string }) {
+  const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: () => startEvaluation(seuid),
+    onSuccess: (data) => {
+      navigate(`/evaluation/${data.evaluation_uuid}`);
+    },
+    onError: (err) => {
+      toast.error("Avvio valutazione fallito", {
+        description: err instanceof Error ? err.message : String(err),
+      });
+    },
+  });
+
+  return (
+    <Button
+      size="sm"
+      onClick={() => mutation.mutate()}
+      disabled={mutation.isPending}
+      aria-busy={mutation.isPending}
+    >
+      {mutation.isPending ? (
+        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+      ) : (
+        <Sparkles className="h-4 w-4" aria-hidden />
+      )}
+      {mutation.isPending ? "Avvio…" : "Valuta syllabus"}
+    </Button>
+  );
+}
 
 function LangToggle({
   lang,
@@ -121,13 +153,16 @@ export function SyllabusViewer() {
     <div>
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 gap-3">
         <h1 className="text-2xl font-bold">{data.course_name}</h1>
-        <LangToggle
-          lang={lang}
-          setLang={setLang}
-          hasEnglish={data.has_english}
-        />
+        <div className="flex items-center gap-3">
+          <EvaluateButton seuid={data.seuid} />
+          <LangToggle
+            lang={lang}
+            setLang={setLang}
+            hasEnglish={data.has_english}
+          />
+        </div>
       </div>
 
       <div className="flex gap-6">
