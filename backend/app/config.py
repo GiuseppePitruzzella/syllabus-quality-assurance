@@ -69,6 +69,14 @@ class Settings(BaseSettings):
     # observed end-to-end runs (~3-5 min) with comfortable headroom.
     evaluation_timeout_seconds: int = 600
 
+    # === Development frontend ===
+    # Explicit origins keep browser CORS behaviour predictable during the
+    # Vite/FastAPI split-dev setup used for Phase 5.5 UI smoke tests.
+    cors_allowed_origins: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
     # === Logging ===
     log_level: str = "INFO"
 

@@ -52,12 +52,30 @@ def _production_async_service() -> AsyncEvaluationService:
     setup happens on first use rather than at import time. Tests don't
     hit this path — they override the dependency entirely.
     """
-    from app.evaluation.agents.llm_client import LLMClient
+    import chromadb
+
+    from app.config import settings
+    from app.evaluation.agents.llm_client import VertexAILLMClient
     from app.evaluation.orchestrator import build_graph
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
     from app.evaluation.rag.retriever import NormativeRetriever
 
-    retriever = NormativeRetriever()
-    llm_client = LLMClient()
+    project_id, location = settings.require_vertex_ai_config()
+    sci = settings.scientific
+
+    chroma = chromadb.PersistentClient(path=settings.chroma_persist_dir)
+    embeddings = VertexAIEmbeddings(
+        project_id=project_id,
+        location=location,
+        model_name=sci.embedding_model,
+        output_dimensionality=sci.embedding_output_dimensionality,
+    )
+    retriever = NormativeRetriever(chroma, embeddings, sci)
+    llm_client = VertexAILLMClient(
+        project_id=project_id,
+        location=location,
+        scientific=sci,
+    )
 
     def _graph_invoker(
         initial_state: dict[str, Any],
