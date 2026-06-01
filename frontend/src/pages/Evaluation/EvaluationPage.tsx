@@ -8,6 +8,7 @@ import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
+import { EvaluationOutputTabs } from "./EvaluationOutputTabs";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 
@@ -97,11 +98,7 @@ export function EvaluationPage() {
 
       <EvaluationScorePanel data={data} />
 
-      <PlaceholderSection
-        title="Report e syllabus"
-        comingIn="phase-5.5.E"
-        hint="Tabs Report (Markdown) / Syllabus originale / Agent details verranno aggiunti al termine della valutazione."
-      />
+      <EvaluationOutputTabs data={data} />
     </div>
   );
 }
@@ -230,28 +227,6 @@ function StatusPill({ status }: { status: EvaluationStatus }) {
     <Badge variant={c.variant} className={c.extra}>
       {c.label}
     </Badge>
-  );
-}
-
-function PlaceholderSection({
-  title,
-  comingIn,
-  hint,
-}: {
-  title: string;
-  comingIn: string;
-  hint: string;
-}) {
-  return (
-    <section className="rounded-lg border border-dashed bg-muted/30 p-6">
-      <header className="mb-2 flex items-baseline justify-between gap-3">
-        <h2 className="text-base font-medium">{title}</h2>
-        <code className="rounded bg-background px-1.5 py-0.5 text-xs text-muted-foreground">
-          {comingIn}
-        </code>
-      </header>
-      <p className="text-sm text-muted-foreground">{hint}</p>
-    </section>
   );
 }
 
