@@ -4,8 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
+
+import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 
 const TERMINAL_STATUSES = new Set<EvaluationStatus>([
   "completed",
@@ -37,6 +40,15 @@ export function EvaluationPage() {
       return TERMINAL_STATUSES.has(current.status) ? false : POLL_MS;
     },
   });
+
+  // SSE is only meaningful while the run is in flight. Historical
+  // (already terminal) records have no active queue on the backend
+  // (EvaluationRegistry releases it after the terminal event). The
+  // hook must be called unconditionally — gating happens inside via
+  // `enabled` so it stays compatible with React's rules of hooks
+  // when we render an early loading/error state below.
+  const isLive = data ? !TERMINAL_STATUSES.has(data.status) : false;
+  const stream = useEvaluationStream(evaluation_uuid, isLive);
 
   // Update the document title with the course name once we have data.
   useEffect(() => {
@@ -70,16 +82,16 @@ export function EvaluationPage() {
     );
   }
 
-  const isLive = !TERMINAL_STATUSES.has(data.status);
-
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
       <Header data={data} isFetching={isFetching} isLive={isLive} />
 
-      <PlaceholderSection
-        title="Progress timeline"
-        comingIn="phase-5.5.C"
-        hint="Lo stream SSE con gli 8 eventi tipizzati apparirà qui in tempo reale durante la run."
+      <EvaluationProgressTimeline
+        events={stream.events}
+        isLive={isLive}
+        isConnected={stream.isConnected}
+        lastError={stream.lastError}
+        isHistorical={!isLive}
       />
 
       <PlaceholderSection
