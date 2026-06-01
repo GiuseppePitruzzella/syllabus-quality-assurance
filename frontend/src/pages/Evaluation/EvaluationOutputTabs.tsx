@@ -26,23 +26,23 @@ interface Props {
  */
 export function EvaluationOutputTabs({ data }: Props) {
   return (
-    <section className="rounded-lg border bg-card p-6">
-      <Tabs defaultValue="report">
-        <TabsList>
+    <section className="min-w-0 rounded-lg border bg-card p-6">
+      <Tabs defaultValue="report" className="min-w-0">
+        <TabsList className="h-auto max-w-full flex-wrap justify-start overflow-visible">
           <TabsTrigger value="report">Report</TabsTrigger>
           <TabsTrigger value="syllabus">Syllabus originale</TabsTrigger>
           <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="report" className="mt-4">
+        <TabsContent value="report" className="mt-4 min-w-0">
           <ReportPanel data={data} />
         </TabsContent>
 
-        <TabsContent value="syllabus" className="mt-4">
+        <TabsContent value="syllabus" className="mt-4 min-w-0">
           <SyllabusPreview data={data} />
         </TabsContent>
 
-        <TabsContent value="agents" className="mt-4">
+        <TabsContent value="agents" className="mt-4 min-w-0">
           <AgentDetailsPanel data={data} />
         </TabsContent>
       </Tabs>
@@ -73,19 +73,19 @@ function ReportPanel({ data }: { data: EvaluationDetail }) {
  */
 function ReportMarkdown({ source }: { source: string }) {
   return (
-    <div className="max-w-none text-sm leading-relaxed">
+    <div className="max-w-none overflow-visible break-words text-sm leading-relaxed [overflow-wrap:anywhere]">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: (props) => (
             <h1
-              className="mt-6 mb-3 text-xl font-semibold tracking-tight first:mt-0"
+              className="mt-6 mb-3 text-[1.25rem] leading-tight font-semibold tracking-normal first:mt-0"
               {...props}
             />
           ),
           h2: (props) => (
             <h2
-              className="mt-6 mb-2 text-base font-semibold tracking-tight first:mt-0"
+              className="mt-6 mb-2 text-[1rem] leading-snug font-semibold tracking-normal first:mt-0"
               {...props}
             />
           ),
@@ -101,14 +101,16 @@ function ReportMarkdown({ source }: { source: string }) {
               {...props}
             />
           ),
-          p: (props) => <p className="my-2" {...props} />,
+          p: (props) => <p className="my-2 whitespace-normal" {...props} />,
           ul: (props) => (
             <ul className="my-2 list-disc space-y-1 pl-5" {...props} />
           ),
           ol: (props) => (
             <ol className="my-2 list-decimal space-y-1 pl-5" {...props} />
           ),
-          li: (props) => <li className="leading-relaxed" {...props} />,
+          li: (props) => (
+            <li className="min-w-0 leading-relaxed break-words" {...props} />
+          ),
           a: (props) => (
             <a
               className="text-primary underline underline-offset-2 hover:text-primary/80"
@@ -127,7 +129,7 @@ function ReportMarkdown({ source }: { source: string }) {
             const isBlock = /language-/.test(className ?? "");
             return isBlock ? (
               <code
-                className="block overflow-x-auto rounded-md bg-muted px-3 py-2 font-mono text-xs"
+                className="block overflow-x-auto whitespace-pre-wrap rounded-md bg-muted px-3 py-2 font-mono text-xs"
                 {...rest}
               >
                 {children}
@@ -162,7 +164,10 @@ function ReportMarkdown({ source }: { source: string }) {
             />
           ),
           td: (props) => (
-            <td className="border-b px-2 py-1.5 align-top" {...props} />
+            <td
+              className="border-b px-2 py-1.5 align-top break-words"
+              {...props}
+            />
           ),
           hr: () => <hr className="my-4 border-border" />,
         }}

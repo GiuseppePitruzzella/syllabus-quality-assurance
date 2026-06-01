@@ -233,11 +233,11 @@ def test_report_renders_agent_explicit_na_record():
 
 
 # ---------------------------------------------------------------------------
-# Truncation & coverage sanity
+# Full justification & coverage sanity
 # ---------------------------------------------------------------------------
 
 
-def test_long_justifications_are_truncated_in_report():
+def test_long_justifications_are_preserved_in_report():
     long_just = "ABCDEFGHIJ" * 100  # 1000 chars
     outputs = {
         "A1": _output(
@@ -252,10 +252,7 @@ def test_long_justifications_are_truncated_in_report():
     }
     agg = aggregate(outputs, {})
     report = synthesize_report("X", agg, outputs)
-    # ~420 char limit + ellipsis. The full 1000-char justification must not
-    # appear verbatim.
-    assert long_just not in report
-    assert "…" in report
+    assert long_just in report
 
 
 def test_criterion_names_cover_c1_to_c9():

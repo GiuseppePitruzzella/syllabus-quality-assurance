@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader2, Sparkles } from "lucide-react";
+import { ArrowUpRight, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { getSyllabus, startEvaluation } from "@/lib/api";
-import type { SyllabusDetail } from "@/lib/types";
+import {
+  getSyllabus,
+  listEvaluationsForSyllabus,
+  startEvaluation,
+} from "@/lib/api";
+import type {
+  EvaluationStatus,
+  EvaluationSummary,
+  SyllabusDetail,
+} from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -111,6 +120,13 @@ export function SyllabusViewer() {
     enabled: !!seuid,
   });
 
+  const { data: evaluationHistory = [], isLoading: isHistoryLoading } =
+    useQuery({
+      queryKey: ["evaluations", "syllabus", seuid],
+      queryFn: () => listEvaluationsForSyllabus(seuid!, 10),
+      enabled: !!seuid,
+    });
+
   const autoScrape = useAutoScrape(data);
 
   if (isLoading) {
@@ -164,6 +180,11 @@ export function SyllabusViewer() {
           />
         </div>
       </div>
+
+      <EvaluationHistoryList
+        items={evaluationHistory}
+        isLoading={isHistoryLoading}
+      />
 
       <div className="flex gap-6">
         <div className="flex-1 min-w-0">
@@ -250,4 +271,137 @@ export function SyllabusViewer() {
       </div>
     </div>
   );
+}
+
+function EvaluationHistoryList({
+  items,
+  isLoading,
+}: {
+  items: EvaluationSummary[];
+  isLoading: boolean;
+}) {
+  return (
+    <section className="mb-6 rounded-lg border bg-card p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-medium">Valutazioni precedenti</h2>
+          <p className="text-xs text-muted-foreground">
+            Storico delle run salvate per questo syllabus.
+          </p>
+        </div>
+        {isLoading ? (
+          <span className="text-xs text-muted-foreground">caricamento…</span>
+        ) : (
+          <span className="text-xs text-muted-foreground">
+            {items.length} run
+          </span>
+        )}
+      </div>
+
+      {isLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-11 animate-pulse rounded-md bg-muted"
+              aria-hidden
+            />
+          ))}
+        </div>
+      ) : items.length === 0 ? (
+        <p className="rounded-md border border-dashed px-3 py-3 text-sm text-muted-foreground">
+          Nessuna valutazione registrata. Avvia una run con il bottone
+          “Valuta syllabus”.
+        </p>
+      ) : (
+        <ul className="divide-y rounded-md border">
+          {items.map((item) => (
+            <li key={item.evaluation_uuid}>
+              <Link
+                to={`/evaluation/${item.evaluation_uuid}`}
+                className="grid gap-2 px-3 py-2 text-sm transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_auto_auto]"
+              >
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <StatusBadge status={item.status} />
+                    <code className="font-mono text-xs text-muted-foreground">
+                      {item.evaluation_uuid.slice(0, 8)}
+                    </code>
+                  </div>
+                  <p className="mt-1 truncate text-xs text-muted-foreground">
+                    {formatDateTime(item.started_at)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground sm:justify-end">
+                  <span>
+                    CoreScore{" "}
+                    <strong className="font-medium text-foreground tabular-nums">
+                      {typeof item.core_score === "number"
+                        ? item.core_score.toFixed(2)
+                        : "—"}
+                    </strong>
+                  </span>
+                  <span>
+                    Coverage{" "}
+                    <strong className="font-medium text-foreground tabular-nums">
+                      {typeof item.coverage === "number"
+                        ? `${Math.round(item.coverage * 100)}%`
+                        : "—"}
+                    </strong>
+                  </span>
+                </div>
+                <span className="flex items-center gap-1 text-xs text-primary sm:justify-end">
+                  Apri
+                  <ArrowUpRight className="h-3 w-3" aria-hidden />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function StatusBadge({ status }: { status: EvaluationStatus }) {
+  const config: Record<
+    EvaluationStatus,
+    {
+      label: string;
+      className?: string;
+      variant: "default" | "secondary" | "destructive" | "outline";
+    }
+  > = {
+    pending: { label: "in attesa", variant: "secondary" },
+    running: { label: "in esecuzione", variant: "default" },
+    completed: {
+      label: "completata",
+      variant: "outline",
+      className:
+        "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    },
+    partial: {
+      label: "parziale",
+      variant: "outline",
+      className:
+        "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+    },
+    failed: { label: "fallita", variant: "destructive" },
+  };
+  const entry = config[status];
+  return (
+    <Badge variant={entry.variant} className={entry.className}>
+      {entry.label}
+    </Badge>
+  );
+}
+
+function formatDateTime(iso: string): string {
+  return new Date(iso).toLocaleString("it-IT", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }

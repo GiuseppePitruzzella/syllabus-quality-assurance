@@ -133,7 +133,7 @@ def synthesize_report(
             :func:`app.evaluation.aggregator.aggregate`.
         agent_outputs: Map ``agent_code → AgentOutput | None`` produced
             by the orchestrator. Used to look up per-criterion
-            justifications for both the "Punti di forza" and the
+            full justifications for both the "Punti di forza" and the
             "Aree di miglioramento" sections.
 
     Returns:
@@ -243,7 +243,7 @@ def _render_strengths(
     for code, _ in strengths_sorted:
         name = CRITERION_NAMES.get(code, code)
         j = judgments_by_code.get(code, {})
-        just = _truncate(j.get("justification", ""), limit=420)
+        just = _normalize_inline(j.get("justification", ""))
         lines.append(f"- **{code} — {name}** (score 2): {just}")
     return "\n".join(lines) + "\n"
 
@@ -263,7 +263,7 @@ def _render_improvements(
     for code, score in weaknesses_sorted:
         name = CRITERION_NAMES.get(code, code)
         j = judgments_by_code.get(code, {})
-        just = _truncate(j.get("justification", ""), limit=420)
+        just = _normalize_inline(j.get("justification", ""))
         recommendation = CRITERION_RECOMMENDATIONS.get(code, "")
         lines.append(f"- **{code} — {name}** (score {score}): {just}")
         if recommendation:
@@ -303,10 +303,15 @@ def _format_na_record(record: NACriterionRecord) -> str:
     return f"- **{record.criterion_code} — {name}** ({label}): {record.reason}"
 
 
-def _truncate(text: str, *, limit: int) -> str:
+def _normalize_inline(text: str) -> str:
+    """Collapse whitespace while preserving the full justification text.
+
+    The first report synthesizer capped justifications at ~420 chars to
+    keep the Markdown compact. In the frontend this read as a broken /
+    truncated report, especially because the UI already offers tabs and
+    scrollable space. We now keep the full agent justification and let
+    the renderer handle wrapping.
+    """
     if not text:
         return ""
-    cleaned = " ".join(text.split())
-    if len(cleaned) <= limit:
-        return cleaned
-    return cleaned[: limit - 1].rstrip() + "…"
+    return " ".join(text.split())
