@@ -9,6 +9,7 @@ import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
+import { EvaluationScorePanel } from "./EvaluationScorePanel";
 
 const TERMINAL_STATUSES = new Set<EvaluationStatus>([
   "completed",
@@ -94,11 +95,7 @@ export function EvaluationPage() {
         isHistorical={!isLive}
       />
 
-      <PlaceholderSection
-        title="Score panel C1-C9"
-        comingIn="phase-5.5.D"
-        hint="La tabella con i punteggi 0/1/2/NA, CoreScore e coverage si popolerà quando l'aggregation è completata."
-      />
+      <EvaluationScorePanel data={data} />
 
       <PlaceholderSection
         title="Report e syllabus"
