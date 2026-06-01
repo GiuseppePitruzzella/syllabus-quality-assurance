@@ -1,0 +1,652 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+  "elapsed_seconds": 114.41,
+  "evaluation": {
+    "id": 53,
+    "evaluation_uuid": "b3d8936f-3bd0-455e-98fb-4f9786f67b27",
+    "syllabus_id": 26,
+    "syllabus_seuid_snapshot": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+    "course_name_snapshot": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+    "status": "partial",
+    "started_at": "2026-05-29T08:54:44.082723",
+    "finished_at": "2026-05-29T08:56:38.462021",
+    "duration_ms": 114379,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.83,
+    "coverage": 0.6666666666666666,
+    "criterion_scores": {
+      "C1": null,
+      "C2": null,
+      "C5": null,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [
+      {
+        "criterion_code": "C1",
+        "reason": "A1 failed: ValueError: LLM output did not match schema after 3 attempts",
+        "source": "agent_error"
+      },
+      {
+        "criterion_code": "C2",
+        "reason": "A1 failed: ValueError: LLM output did not match schema after 3 attempts",
+        "source": "agent_error"
+      },
+      {
+        "criterion_code": "C5",
+        "reason": "A1 failed: ValueError: LLM output did not match schema after 3 attempts",
+        "source": "agent_error"
+      }
+    ],
+    "agent_outputs": {
+      "A1": null,
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile, utilizzando verbi d'azione che descrivono le conoscenze e le abilità che lo studente acquisirà. Le descrizioni sono dettagliate e fanno riferimento a contenuti specifici del corso, come meccanismi di programmazione avanzata, design pattern e tecnologie middleware. Questo approccio è pienamente coerente con le raccomandazioni normative che richiedono risultati di apprendimento formulati in modo valutabile, superando la genericità e focalizzandosi su esiti osservabili.",
+            "evidences": [
+              {
+                "text": "1. Conoscenza e capacità di comprensione (knowledge and understanding): lo studente conoscerà meccanismi di programmazione avanzata, inclusi programmazione ad aspetti, parallela, asincrona, distribuita. Viene approfondita\nla comprensione dei principali design pattern (autenticazione, autorizzazione, session management, DTO,\nSLOB, circuit breaker) e delle tecnologie middleware (RabbitMQ) utilizzate per garantire scalabilità,\naffidabilità e resilienza nei sistemi software distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "2. Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente avrà la capacità di progettare, integrare e implementare sistemi software distribuiti adottando i\npattern studiati. Saprà utilizzare strumenti e tecnologie (framework per microservizi, sistemi di messaging\ncome RabbitMQ) per implementare soluzioni scalabili e affidabili, gestendo efficacemente lo stato della\nsessione, l’interscambio di dati (DTO) e il salvataggio dei dati (SLOB).",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "3. Autonomia di giudizio (making judgements): Lo studente sarà in grado di valutare in modo autonomo la soluzione architetturale più appropriata per un\ndato contesto applicativo, analizzando vari fattori che incidono e scegliendo in modo adeguato una\nsoluzione.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "4. Abilità comunicative (communication skills): lo studente imparerà a descrivere in linguaggio tecnico le caratteristiche dei sistemi distribuiti e paralleli. Saprà documentare le architetture distribuite e le scelte progettuali adottate.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "5. Capacità di apprendimento (learning skills): lo studente potrà affrontare e risolvere problemi di progettazione e implementazione in ambiti realistici, studiando, valutando e utilizzando, nuove tecnologie per i sistemi distribuiti.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati, sia nella sezione generale dei risultati di apprendimento che nei campi specifici dedicati a ciascun descrittore. Ogni descrittore presenta contenuti specifici e differenziati, descrivendo in dettaglio le competenze che lo studente acquisirà in relazione all'insegnamento. Questo è pienamente conforme alle Linee Guida UniCT che raccomandano una formulazione esplicita e dettagliata per ciascuno dei cinque descrittori, garantendo chiarezza e completezza.",
+            "evidences": [
+              {
+                "text": "lo studente conoscerà meccanismi di programmazione avanzata, inclusi programmazione ad aspetti, parallela, asincrona, distribuita. Viene approfondita\nla comprensione dei principali design pattern (autenticazione, autorizzazione, session management, DTO,\nSLOB, circuit breaker) e delle tecnologie middleware (RabbitMQ) utilizzate per garantire scalabilità,\naffidabilità e resilienza nei sistemi software distribuiti.\n2.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente avrà la capacità di progettare, integrare e implementare sistemi software distribuiti adottando i\npattern studiati. Saprà utilizzare strumenti e tecnologie (framework per microservizi, sistemi di messaging\ncome RabbitMQ) per implementare soluzioni scalabili e affidabili, gestendo efficacemente lo stato della\nsessione, l’interscambio di dati (DTO) e il salvataggio dei dati (SLOB).\n3.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Lo studente sarà in grado di valutare in modo autonomo la soluzione architetturale più appropriata per un\ndato contesto applicativo, analizzando vari fattori che incidono e scegliendo in modo adeguato una\nsoluzione.\n4.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "lo studente imparerà a descrivere in linguaggio tecnico le caratteristiche dei sistemi distribuiti e paralleli. Saprà documentare le architetture distribuite e le scelte progettuali adottate.\n5.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente potrà affrontare e risolvere problemi di progettazione e implementazione in ambiti realistici, studiando, valutando e utilizzando, nuove tecnologie per i sistemi distribuiti.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19990,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29415,
+            "response_chars": 5579,
+            "latency_ms": 19654
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7742714583873749
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7463942766189575
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7463690638542175
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7974608987569809
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7596394717693329
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7531941533088684
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene dettagliata la struttura dell'esame (progetto e colloquio orale) e sono forniti criteri precisi per l'attribuzione del voto, distinguendo tra voti ottimi, intermedi e sufficienti in base alla profondità della conoscenza e alla precisione nell'esposizione. Sono inoltre presenti esempi di domande che riflettono la natura pratica e progettuale della valutazione, in linea con le raccomandazioni normative che richiedono chiarezza e specificità sui criteri di valutazione e sugli elementi di valutazione del colloquio orale.",
+            "evidences": [
+              {
+                "text": "L'esame consiste di un progetto assegnato a singoli studenti o a gruppi di studenti composti al massimo da\ntre persone. Una volta svolto il progetto, e consegnata la documentazione si potrà svolgere una parte orale a\nconclusione dell’esame. Il progetto consiste nella progettazione e implementazione di un piccolo sistema\nsoftware distribuito e/o concorrente che usa una parte delle tecnologie del corso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "L'esame sarà valutato in modo ottimo (28-30 e lode) se si mostrerà di aver acquisito profonda conoscenza e\nprecisione nell’esposizione dei concetti del corso, valutata sia tramite l’analisi del progetto realizzato che\ntramite colloquio orale. Un voto intermedio (24-27) sarà dato nel caso in cui l'esame mostra una\ncomprensione parziale di alcuni argomenti del corso. Uno voto sufficiente (18-23) sarà dato quando pur\nconoscendo parzialmente gli argomenti del corso, questi vengono esposti in modo superficiale o poco\npreciso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Implementare un aspetto software per il caching dei dati\nImplementare una chiamata ad un metodo\nin modo asincrono\nDescrivere la gestione della sessione\nDescrivere il controllo degli accessi tramite design pattern Role-based access control",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La sezione 'course_content_it' offre una panoramica tematica esaustiva, mentre la 'schedule_it' fornisce una dettagliata progressione degli argomenti settimana per settimana, con riferimenti specifici a testi e capitoli. Questa articolazione permette di comprendere appieno la struttura e la profondità del programma, rispondendo pienamente ai requisiti di chiarezza e organizzazione dei contenuti.",
+            "evidences": [
+              {
+                "text": "Il corso affronta in modo approfondito l'ingegneria dei sistemi distribuiti, con particolare attenzione alle architetture a microservizi e ai design pattern fondamentali per costruire sistemi scalabili, resilienti e manutenibili. Dopo una panoramica sui modelli di comunicazione e sulle tecnologie middleware (es. RMI, RabbitMQ, REST), si analizzano i principali design pattern per la separazione di componenti pur garantendo la loro efficace collaborazione (come Proxy, Remote Facade, Session State, DTO, Broker), e i principali design pattern di coordinamento tra servizi (come Saga, Scatter-Gather), utili per gestire transazioni distribuite e flussi asincroni. Ampio spazio è dedicato alla resilienza, attraverso la programmazione asincrona, i pattern come Retry, Circuit Breaker, Bulkhead e Timeout, nonché alla gestione della consistenza e della cache nei contesti distribuiti. Completano il corso alcuni design pattern per garantire la sicurezza a livello di servizio, come i Token, l'autenticazione, l'autorizzazione.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Presentazione del corso con obiettivi. Modularità per sistemi distribuiti e paralleli",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Design pattern Proxy e Reference Monitor",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Architettura distribuita di Blockchain di bitcoin, proprietà",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi enfatizzano la capacità di progettare, implementare e valutare sistemi distribuiti, che è direttamente supportata dai contenuti del corso incentrati su design pattern, tecnologie middleware e programmazione avanzata. I metodi didattici, basati su lezioni frontali e spiegazione di esempi di codice, forniscono le basi teoriche e pratiche. La modalità di verifica, un progetto di 'progettazione e implementazione di un piccolo sistema software distribuito', è perfettamente allineata con gli obiettivi di applicazione e autonomia di giudizio, come evidenziato anche dalle domande d'esempio che richiedono implementazione e descrizione tecnica. Questo allineamento tra tutti gli elementi è un punto di forza del syllabus.",
+            "evidences": [
+              {
+                "text": "lo studente avrà la capacità di progettare, integrare e implementare sistemi software distribuiti adottando i\npattern studiati. Saprà utilizzare strumenti e tecnologie (framework per microservizi, sistemi di messaging\ncome RabbitMQ) per implementare soluzioni scalabili e affidabili, gestendo efficacemente lo stato della\nsessione, l’interscambio di dati (DTO) e il salvataggio dei dati (SLOB).",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lezioni frontali per concetti e soluzioni, spiegazione di esempi di codice per le tecniche esaminate.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Il corso affronta in modo approfondito l'ingegneria dei sistemi distribuiti, con particolare attenzione alle architetture a microservizi e ai design pattern fondamentali per costruire sistemi scalabili, resilienti e manutenibili.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame consiste di un progetto assegnato a singoli studenti o a gruppi di studenti composti al massimo da\ntre persone. ... Il progetto consiste nella progettazione e implementazione di un piccolo sistema\nsoftware distribuito e/o concorrente che usa una parte delle tecnologie del corso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Implementare un aspetto software per il caching dei dati\nImplementare una chiamata ad un metodo\nin modo asincrono",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18223,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 46479,
+            "response_chars": 7099,
+            "latency_ms": 17613
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7389034926891327
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7334340810775757
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7180044949054718
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.752716600894928
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7496979832649231
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7137422561645508
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7564705312252045
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7420822978019714
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7324203848838806
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta una struttura chiara e i riferimenti bibliografici sono ben dettagliati e coerenti con la programmazione del corso, come indicato dal contesto normativo che suggerisce di numerare i testi per richiamarli nella sezione 'Programmazione'. Tuttavia, sono presenti diversi difetti editoriali minori ma diffusi. Si riscontrano refusi ortografici, come 'Uno voto sufficiente' e 'adjustements', e residui di formattazione, come interruzioni di riga (`\\n`) a metà frase in diverse sezioni. Inoltre, i campi dei Descrittori di Dublino (sia in italiano che in inglese) terminano con numeri di elenco residui ('2.', '3.', '4.', '5.'), suggerendo un'imprecisione nel copia-incolla o nella redazione. Questi elementi, pur non compromettendo gravemente la leggibilità, denotano una cura editoriale non ottimale.",
+            "evidences": [
+              {
+                "text": "Viene approfondita\nla comprensione dei principali design pattern",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "distribuiti.\n2.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "Uno voto sufficiente (18-23) sarà dato quando pur\nconoscendo parzialmente gli argomenti del corso, questi vengono esposti in modo superficiale o poco\npreciso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Should remote teaching be needed, then some adjustements to the above might be introduced, while honouring the programme outlined in the syllabus.",
+                "source_field": "teaching_methods_en"
+              },
+              {
+                "text": "Implement a software aspect that caches data\nImplement an asynchronous call to a method",
+                "source_field": "sample_questions_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 13134,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 33187,
+            "response_chars": 1979,
+            "latency_ms": 12959
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7198893129825592
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7057388424873352
+          }
+        ]
+      }
+    },
+    "agent_errors": {
+      "A1": "ValueError: LLM output did not match schema after 3 attempts"
+    },
+    "retrieved_chunks": {
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7742714583873749
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7463942766189575
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7463690638542175
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7974608987569809
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7596394717693329
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7531941533088684
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7389034926891327
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7334340810775757
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7180044949054718
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.752716600894928
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7496979832649231
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7137422561645508
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7564705312252045
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7420822978019714
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7324203848838806
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7198893129825592
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7057388424873352
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO\n\n## Sintesi\n\n- **CoreScore**: 1.83/2.00\n- **Copertura**: 67% (6/9 criteri valutati)\n- **Stato**: partial\n\nLa valutazione è parziale: 6 criteri su 9 hanno ricevuto un punteggio. I criteri non valutati sono elencati nelle note metodologiche con la rispettiva motivazione.\n\n## Punti di forza\n\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile, utilizzando verbi d'azione che descrivono le conoscenze e le abilità che lo studente acquisirà. Le descrizioni sono dettagliate e fanno riferimento a contenuti specifici del corso, come meccanismi di programmazione avanzata, design pattern e tecnologie middleware. Questo approccio è pienamente coerente con le raccomandazioni…\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati, sia nella sezione generale dei risultati di apprendimento che nei campi specifici dedicati a ciascun descrittore. Ogni descrittore presenta contenuti specifici e differenziati, descrivendo in dettaglio le competenze che lo studente acquisirà in relazione all'insegnamento. Questo è pienamente conforme alle Linee Guida UniCT che rac…\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene dettagliata la struttura dell'esame (progetto e colloquio orale) e sono forniti criteri precisi per l'attribuzione del voto, distinguendo tra voti ottimi, intermedi e sufficienti in base alla profondità della conoscenza e alla precisione nell'esposizione. Sono inoltre presenti esempi di domande che riflettono la natura pratic…\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La sezione 'course_content_it' offre una panoramica tematica esaustiva, mentre la 'schedule_it' fornisce una dettagliata progressione degli argomenti settimana per settimana, con riferimenti specifici a testi e capitoli. Questa articolazione permette di comprendere appieno la struttura e la profondità del programma, rispondendo pien…\n- **C8 — Coerenza didattico-valutativa** (score 2): La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi enfatizzano la capacità di progettare, implementare e valutare sistemi distribuiti, che è direttamente supportata dai contenuti del corso incentrati su design pattern, tecnologie middleware e programmazione avanzata. I metodi didattici, basati su lezioni frontali e spiegazione di esempi di codice, forniscono le basi teoriche e pratich…\n\n## Aree di miglioramento\n\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta una struttura chiara e i riferimenti bibliografici sono ben dettagliati e coerenti con la programmazione del corso, come indicato dal contesto normativo che suggerisce di numerare i testi per richiamarli nella sezione 'Programmazione'. Tuttavia, sono presenti diversi difetti editoriali minori ma diffusi. Si riscontrano refusi ortografici, come 'Uno voto sufficiente' e 'adjustements', e residui d…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Criteri non valutati\n\n- **C1 — Completezza strutturale e documentale** (NA tecnico (errore agente)): A1 failed: ValueError: LLM output did not match schema after 3 attempts\n- **C2 — Completezza bilingue** (NA tecnico (errore agente)): A1 failed: ValueError: LLM output did not match schema after 3 attempts\n- **C5 — Chiarezza dei prerequisiti** (NA tecnico (errore agente)): A1 failed: ValueError: LLM output did not match schema after 3 attempts\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T08:54:44.101320+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7"
+    },
+    {
+      "captured_at": "2026-05-29T08:55:47.099960+00:00",
+      "type": "agent_failed",
+      "agent_code": "A1",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "latency_ms": 62816,
+      "error_type": "ValueError",
+      "error_message": "LLM output did not match schema after 3 attempts"
+    },
+    {
+      "captured_at": "2026-05-29T08:55:47.100596+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7"
+    },
+    {
+      "captured_at": "2026-05-29T08:56:07.091784+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "latency_ms": 19991,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T08:56:07.092996+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7"
+    },
+    {
+      "captured_at": "2026-05-29T08:56:25.317200+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "latency_ms": 18224,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:56:25.318817+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7"
+    },
+    {
+      "captured_at": "2026-05-29T08:56:38.454071+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "latency_ms": 13134,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T08:56:38.460051+00:00",
+      "type": "aggregation_completed",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "status": "partial",
+      "core_score": 1.83,
+      "coverage": 0.6666666666666666,
+      "n_na": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:56:38.461437+00:00",
+      "type": "report_synthesized",
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "report_chars": 4447
+    }
+  ]
+}

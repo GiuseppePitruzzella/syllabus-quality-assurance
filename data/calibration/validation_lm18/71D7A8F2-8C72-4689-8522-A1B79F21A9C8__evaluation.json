@@ -1,0 +1,862 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+  "elapsed_seconds": 88.29,
+  "evaluation": {
+    "id": 68,
+    "evaluation_uuid": "279438b9-f90f-4581-b60b-13204c4b3b99",
+    "syllabus_id": 73,
+    "syllabus_seuid_snapshot": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+    "course_name_snapshot": "QUANTUM COMPUTER PROGRAMMING",
+    "status": "completed",
+    "started_at": "2026-05-29T09:16:31.929273",
+    "finished_at": "2026-05-29T09:18:00.200424",
+    "duration_ms": 88271,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.56,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 1,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT. Tuttavia, la sezione relativa agli esempi di domande (`sample_questions_it`) non fornisce esempi concreti, ma si limita a dichiarare che verranno forniti durante le lezioni. Questo rende la compilazione di tale sezione parziale e non sostanziale rispetto al contenuto atteso, impedendo il raggiungimento del punteggio massimo.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): saranno acquisite le conoscenze relative alle principali metodologie per la progettazione di algoritmi quantistici. Nello specifico saranno acquisite le conoscenze relative alle basi della computazione quantistica, ai principali circuiti quantistici, e agli algoritmi quantistici di base. Saranno acquisite le tecniche per l'analisi di complessità di algoritmi quantistici e la loro programmazione attraverso linguaggi dedicati. Il sistema di sviluppo Qiskit verrà usato come strumento principale per presentare l'applicazione dei costrutti e le implementazioni degli algoritmi studiati.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding): saranno acquisite le capacità di risolvere semplici problemi che richiedono la progettazione e l'analisi di soluzioni algoritmiche nel campo della computazione quantistica.\nAutonomia di giudizio (making judgements): lo studente sarà in grado di valutare l'applicabilità di una soluzione quantistica per la risoluzione di un problema computazione oltre ad acquisire la capacità di valutare un algoritmo quantistico in termini di efficienza e possibilità di riutilizzo.\nAbilità comunicative (communication skills): saranno acquisite le necessarie abilità comunicative ed un'adeguata appropriatezza espressiva nella comunicazione di problematiche inerenti gli studi algoritmici nel campo della computazione quantistica, anche ad interlocutori non esperti.\nCapacità di apprendimento (learning skills): lo studente avrà la capacita di adattare le conoscenze acquisite anche a nuovi contesti, nonché di aggiornarsi attraverso la consultazione delle fonti specialistiche del settore del quantum computing.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenze di base della programmazione in Python e del notebook Jupyter.\nElementi di matematica discreta e di algebra lineare\ne di analisi matematica, oltre a\ncompetenze di base di programmazione",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso\nQuantum Computer Programming\noffre una solida introduzione agli algoritmi quantistici, con un approccio orientato all'informatica e alla programmazione. È progettato per studenti che abbiano familiarità con i concetti fondamentali dell'algebra lineare, come vettori e matrici, senza però richiedere conoscenze pregresse in meccanica quantistica o teoria quantistica. Il corso pone particolare enfasi sulla comprensione degli algoritmi quantistici attraverso strumenti matematici familiari agli informatici, evitando complessità legate alla notazione e ai concetti fisici della meccanica quantistica.\nDopo una revisione dei concetti fondamentali di algebra lineare rilevanti per la computazione quantistica, il corso introduce le principali porte logiche quantistiche e sviluppa i calcoli necessari per comprendere e implementare algoritmi come quelli di Deutsch, Jozsa, Simon, e Grover. Verranno illustrati sia gli aspetti teorici sia le applicazioni pratiche, mantenendo le dimostrazioni matematiche concise e accessibili.\nA livello pratico, il corso introduce la piattaforma\nQiskit\n, fornendo agli studenti gli strumenti necessari per programmare e testare algoritmi su veri dispositivi quantistici. Particolare attenzione sarà data all’implementazione dell'algoritmo di ricerca di Grover, utilizzando\nQiskit\nper sperimentazioni su hardware quantistici, permettendo agli studenti di rafforzare le loro competenze attraverso applicazioni reali.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La prova di esame del corso è suddivisa in due parti: una prima prova scritta di laboratorio e una successiva prova orale. Tali prove potranno avere luogo per via telematica, qualora le condizioni lo dovessero richiedere. La prova orale potrà svolgersi il giorno stesso in cui è stata svolta la prova scritta o a distanza di pochi giorni da esso. Tale prova avrà lo scopo di valutare più nel dettaglio la preparazione dello studente, la sua capacità di ragionamento relativamente agli argomenti trattati a lezione, nonché la sua proprietà di linguaggio. La valutazione della prova orale si dovrà intendere ad integrazione del voto ottenuto nella prova scritta e non a suo incremento.\nPer l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n- non approvato: lo studente non ha acquisito i concetti di base e non è in grado di svolgere gli esercizi.\n- 18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di esposizione e di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n- 24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di esposizione e di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n- 28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di esporli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Durante le lezioni verranno svolti degli esercizi simili a quelli che gli studenti dovranno affrontare nel loro esame finale. Ulteriori esercizi verranno resi disponibili nel corso delle lezioni.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "1) Quantum Algorithms via Linear Algebra, di Richard J. Lipton e Kenneth W. Regan. The MIT Press Cambridge, Massachusetts London, England.\n2) Qiskit Textbook, Learn Quantum Computation Using Qiskit, 2020. Disponibile online: http://community.qiskit.org/textbook",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Lezioni frontali.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Per una piena comprensione degli argomenti del corso e delle tecniche illustrate, la frequenza delle lezioni è fortemente consigliata.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Il modello di computazione quantistica\", \"riferimenti_testi\": \"Cap. 1 di 1)\"}, {\"numero\": \"2\", \"argomenti\": \"Numeri e stringhe\", \"riferimenti_testi\": \"Cap. 2 di 1)\"}, {\"numero\": \"3\", \"argomenti\": \"Elementi di Algebra Lineare\", \"riferimenti_testi\": \"Cap. 3 di 1)\"}, {\"numero\": \"4\", \"argomenti\": \"Funzioni booleane e fattibilità\", \"riferimenti_testi\": \"Cap. 4 di 1)\"}, {\"numero\": \"5\", \"argomenti\": \"Elementi di programmazione in Qiskit\", \"riferimenti_testi\": \"Cap. 1-2 di 2)\"}, {\"numero\": \"6\", \"argomenti\": \"Circuiti Quantistici\", \"riferimenti_testi\": \"Cap. 3.1 of 2)\"}, {\"numero\": \"7\", \"argomenti\": \"Matrici speciali\", \"riferimenti_testi\": \"Cap. 5 di 1)\"}, {\"numero\": \"8\", \"argomenti\": \"Quantum Oracles\", \"riferimenti_testi\": \"Cap. 3.2 di 2)\"}, {\"numero\": \"9\", \"argomenti\": \"Procedure ausiliarie\", \"riferimenti_testi\": \"Cap. 6 di 1)\"}, {\"numero\": \"10\", \"argomenti\": \"Algoritmi quantistici elementari\", \"riferimenti_testi\": \"Cap. 7 di 1)\"}, {\"numero\": \"11\", \"argomenti\": \"Quantum Teleportation\", \"riferimenti_testi\": \"Cap. 3.10 di 2)\"}, {\"numero\": \"12\", \"argomenti\": \"Superdense Coding\", \"riferimenti_testi\": \"Cap. 3.11 di 2)\"}, {\"numero\": \"13\", \"argomenti\": \"Algoritmo di Deutsch\", \"riferimenti_testi\": \"Cap. 8 di 1)\"}, {\"numero\": \"14\", \"argomenti\": \"Algoritmo di Deutsch-Jozsa\", \"riferimenti_testi\": \"Cap. 9 di 1) e Cap. 3.2 di 2)\"}, {\"numero\": \"15\", \"argomenti\": \"Algoritmo di Simon\", \"riferimenti_testi\": \"Cap. 10 di 1) 3 Cap. 3.4 di 2)\"}, {\"numero\": \"16\", \"argomenti\": \"Algoritmo di Shor\", \"riferimenti_testi\": \"Cap. 11-12 di 1) e Cap. 3.5-3.6-3.7 di 2)\"}, {\"numero\": \"17\", \"argomenti\": \"Algoritmo di Grover\", \"riferimenti_testi\": \"Cap. 13 di 1) e Cap. 3.8 di 2)\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta la versione inglese per il titolo del corso, i risultati di apprendimento e i contenuti. Tuttavia, la sezione delle modalità di verifica in inglese (`assessment_methods_en`) è incompleta rispetto alla versione italiana, omettendo i criteri di valutazione dettagliati e le indicazioni per studenti con disabilità. Questo rende la completezza bilingue parziale per il perimetro minimo richiesto.",
+            "evidences": [
+              {
+                "text": "QUANTUM COMPUTER PROGRAMMING",
+                "source_field": "course_name"
+              },
+              {
+                "text": "Knowledge and understanding: knowledge of the main methodologies for the design of quantum algorithms will be acquired. Specifically, the knowledge related to the basics of quantum computation, to the main quantum circuits, and to basic quantum algorithms will be acquired. The techniques for the complexity analysis of quantum algorithms and their programming through dedicated languages ​​will be acquired. The Qiskit development system will be used as the main tool to present the application of the constructs and the implementations of the studied algorithms.\nApplying knowledge and understanding: the ability to solve simple problems that require the design and analysis of algorithmic solutions in the field of quantum computation will be acquired.\nMaking judgments: the student will be able to evaluate the applicability of a quantum solution for solving a computational problem as well as acquire the ability to evaluate a quantum algorithm in terms of efficiency and possibility of reuse.\nCommunication skills: the necessary communication skills and adequate expressive appropriateness will be acquired in communicating problems inherent in algorithmic studies in the field of quantum computing, even to non-expert interlocutors.\nLearning skills: the student will have the ability to adapt the knowledge acquired also to new contexts, as well as to update himself by consulting the specialized sources of the quantum computing sector.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The\nQuantum Computer Programming\ncourse provides a comprehensive introduction to quantum algorithms with a focus on computer science and programming. It is designed for students familiar with fundamental linear algebra concepts, such as vectors and matrices, without requiring prior knowledge of quantum mechanics or quantum theory. The course emphasizes understanding quantum algorithms through mathematical tools familiar to computer scientists, avoiding the complexities of quantum mechanics notation and physical concepts.\nAfter a review of essential linear algebra concepts relevant to quantum computing, the course introduces key quantum gates and develops the necessary calculations to understand and implement algorithms such as Deutsch, Jozsa, Simon, and Grover. Both theoretical aspects and practical applications will be covered, with concise and accessible mathematical demonstrations.\nOn the practical side, the course introduces the\nQiskit\nplatform, equipping students with the tools to program and test algorithms on real quantum devices. Particular attention will be given to the implementation of Grover’s search algorithm, using\nQiskit\nfor experimentation on quantum hardware, allowing students to strengthen their skills through real-world applications.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The course examination is divided into two parts: an initial written laboratory test and a subsequent oral test. These tests may take place electronically, should conditions require it. The oral test may take place on the same day as the written test or a few days after it. The purpose of this test will be to assess in more detail the student's preparation, his or her ability to reason with regard to the topics covered in class, as well as his or her property of language. The evaluation of the oral test should be understood as supplementing the grade obtained in the written test and not increasing it.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, indicando conoscenze di base in programmazione Python, Jupyter, matematica discreta, algebra lineare e analisi matematica. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene fornita una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo impedisce il raggiungimento del punteggio massimo.",
+            "evidences": [
+              {
+                "text": "Conoscenze di base della programmazione in Python e del notebook Jupyter.\nElementi di matematica discreta e di algebra lineare\ne di analisi matematica, oltre a\ncompetenze di base di programmazione",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 26652,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 35987,
+            "response_chars": 14564,
+            "latency_ms": 25870
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7291271090507507
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.710431843996048
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7092382311820984
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.3__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.3",
+            "similarity_score": 0.7322361171245575
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.a",
+            "similarity_score": 0.6937410533428192
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7605550438165665
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7350340783596039
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.728555291891098
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo specifico e verificabile. Utilizzano verbi d'azione che indicano chiaramente cosa lo studente sarà in grado di fare o conoscere al termine del corso, come 'risolvere', 'valutare', 'adattare' e 'aggiornarsi'. Le descrizioni vanno oltre la semplice enunciazione di argomenti trattati, specificando le abilità e le conoscenze osservabili.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): saranno acquisite le conoscenze relative alle principali metodologie per la progettazione di algoritmi quantistici. Nello specifico saranno acquisite le conoscenze relative alle basi della computazione quantistica, ai principali circuiti quantistici, e agli algoritmi quantistici di base. Saranno acquisite le tecniche per l'analisi di complessità di algoritmi quantistici e la loro programmazione attraverso linguaggi dedicati. Il sistema di sviluppo Qiskit verrà usato come strumento principale per presentare l'applicazione dei costrutti e le implementazioni degli algoritmi studiati.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): saranno acquisite le capacità di risolvere semplici problemi che richiedono la progettazione e l'analisi di soluzioni algoritmiche nel campo della computazione quantistica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): lo studente sarà in grado di valutare l'applicabilità di una soluzione quantistica per la risoluzione di un problema computazione oltre ad acquisire la capacità di valutare un algoritmo quantistico in termini di efficienza e possibilità di riutilizzo.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills): lo studente avrà la capacita di adattare le conoscenze acquisite anche a nuovi contesti, nonché di aggiornarsi attraverso la consultazione delle fonti specialistiche del settore del quantum computing.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono presenti nella versione italiana e sono articolati con contenuti specifici e differenziati tra loro. Ogni descrittore si concentra su un aspetto distinto dell'apprendimento, evitando ripetizioni o genericità. Sebbene la versione inglese presenti alcune lacune (come il campo 'dublin_judgement_en' vuoto e un errore di copia-incolla in 'dublin_applying_en'), la valutazione per C4 si basa sull'articolazione dei descrittori indipendentemente dalla lingua, e la versione italiana è completa e ben formulata.",
+            "evidences": [
+              {
+                "text": "saranno acquisite le conoscenze relative alle principali metodologie per la progettazione di algoritmi quantistici. Nello specifico saranno acquisite le conoscenze relative alle basi della computazione quantistica, ai principali circuiti quantistici, e agli algoritmi quantistici di base. Saranno acquisite le tecniche per l'analisi di complessità di algoritmi quantistici e la loro programmazione attraverso linguaggi dedicati. Il sistema di sviluppo Qiskit verrà usato come strumento principale per presentare l'applicazione dei costrutti e le implementazioni degli algoritmi studiati.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "saranno acquisite le capacità di risolvere semplici problemi che richiedono la progettazione e l'analisi di soluzioni algoritmiche nel campo della computazione quantistica.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "lo studente sarà in grado di valutare l'applicabilità di una soluzione quantistica per la risoluzione di un problema computazione oltre ad acquisire la capacità di valutare un algoritmo quantistico in termini di efficienza e possibilità di riutilizzo.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "ed un'adeguata appropriatezza espressiva nella comunicazione di problematiche inerenti gli studi algoritmici nel campo della computazione quantistica, anche ad interlocutori non esperti.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente avrà la capacita di adattare le conoscenze acquisite anche a nuovi contesti, nonché di aggiornarsi attraverso la consultazione delle fonti specialistiche del settore del quantum computing.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19724,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29413,
+            "response_chars": 5037,
+            "latency_ms": 19320
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7901157140731812
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7499792277812958
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7463421821594238
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.808162659406662
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7586614489555359
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7551591098308563
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo dettagliato e specifico. Viene chiaramente indicata la suddivisione in prova scritta di laboratorio e prova orale, con la finalità di ciascuna e il loro rapporto per la valutazione finale. Sono inoltre esplicitati i criteri di attribuzione del voto per le diverse fasce di valutazione, fornendo un quadro chiaro delle aspettative. Sebbene non siano presenti esempi di domande diretti nel syllabus, viene specificato che esercizi simili a quelli d'esame verranno svolti e resi disponibili durante le lezioni, rispondendo alla raccomandazione di fornire esempi.",
+            "evidences": [
+              {
+                "text": "La prova di esame del corso è suddivisa in due parti: una prima prova scritta di laboratorio e una successiva prova orale. Tali prove potranno avere luogo per via telematica, qualora le condizioni lo dovessero richiedere. La prova orale potrà svolgersi il giorno stesso in cui è stata svolta la prova scritta o a distanza di pochi giorni da esso. Tale prova avrà lo scopo di valutare più nel dettaglio la preparazione dello studente, la sua capacità di ragionamento relativamente agli argomenti trattati a lezione, nonché la sua proprietà di linguaggio. La valutazione della prova orale si dovrà intendere ad integrazione del voto ottenuto nella prova scritta e non a suo incremento.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n- non approvato: lo studente non ha acquisito i concetti di base e non è in grado di svolgere gli esercizi.\n- 18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di esposizione e di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n- 24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di esposizione e di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n- 28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di esporli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Durante le lezioni verranno svolti degli esercizi simili a quelli che gli studenti dovranno affrontare nel loro esame finale. Ulteriori esercizi verranno resi disponibili nel corso delle lezioni.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro, organizzato e dettagliato. La sezione 'course_content_it' fornisce una descrizione generale degli argomenti, dell'approccio e degli strumenti (Qiskit), mentre la 'schedule_it' elenca in modo schematico ma completo 17 argomenti specifici, con riferimenti ai testi, indicando una progressione logica e una struttura riconoscibile. Questo risponde pienamente al requisito di un programma dettagliato e coerente con gli obiettivi.",
+            "evidences": [
+              {
+                "text": "Il corso Quantum Computer Programming offre una solida introduzione agli algoritmi quantistici, con un approccio orientato all'informatica e alla programmazione. È progettato per studenti che abbiano familiarità con i concetti fondamentali dell'algebra lineare, come vettori e matrici, senza però richiedere conoscenze pregresse in meccanica quantistica o teoria quantistica. Il corso pone particolare enfasi sulla comprensione degli algoritmi quantistici attraverso strumenti matematici familiari agli informatici, evitando complessità legate alla notazione e ai concetti fisici della meccanica quantistica. Dopo una revisione dei concetti fondamentali di algebra lineare rilevanti per la computazione quantistica, il corso introduce le principali porte logiche quantistiche e sviluppa i calcoli necessari per comprendere e implementare algoritmi come quelli di Deutsch, Jozsa, Simon, e Grover. Verranno illustrati sia gli aspetti teorici sia le applicazioni pratiche, mantenendo le dimostrazioni matematiche concise e accessibili. A livello pratico, il corso introduce la piattaforma Qiskit, fornendo agli studenti gli strumenti necessari per programmare e testare algoritmi su veri dispositivi quantistici. Particolare attenzione sarà data all’implementazione dell'algoritmo di ricerca di Grover, utilizzando Qiskit per sperimentazioni su hardware quantistici, permettendo agli studenti di rafforzare le loro competenze attraverso applicazioni reali.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "1: Il modello di computazione quantistica",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "5: Elementi di programmazione in Qiskit",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "17: Algoritmo di Grover",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste un'ottima coerenza tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I risultati di apprendimento enfatizzano la conoscenza e l'applicazione di algoritmi quantistici e la programmazione con Qiskit, che sono pienamente coperti dai contenuti del corso e dalla schedule dettagliata. La prova scritta di laboratorio è specificamente progettata per valutare la capacità di applicare le conoscenze e la programmazione, mentre la prova orale e i relativi criteri di valutazione sono allineati alla verifica della comprensione, del ragionamento critico e delle abilità comunicative. Sebbene i metodi didattici siano genericamente indicati come 'Lezioni frontali', il contesto dei contenuti e delle verifiche implica un approccio che integra teoria e pratica, garantendo un allineamento chiaro tra tutti gli elementi.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): saranno acquisite le conoscenze relative alle principali metodologie per la progettazione di algoritmi quantistici. Nello specifico saranno acquisite le conoscenze relative alle basi della computazione quantistica, ai principali circuiti quantistici, e agli algoritmi quantistici di base. Saranno acquisite le tecniche per l'analisi di complessità di algoritmi quantistici e la loro programmazione attraverso linguaggi dedicati. Il sistema di sviluppo Qiskit verrà usato come strumento principale per presentare l'applicazione dei costrutti e le implementazioni degli algoritmi studiati.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): saranno acquisite le capacità di risolvere semplici problemi che richiedono la progettazione e l'analisi di soluzioni algoritmiche nel campo della computazione quantistica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "A livello pratico, il corso introduce la piattaforma Qiskit, fornendo agli studenti gli strumenti necessari per programmare e testare algoritmi su veri dispositivi quantistici. Particolare attenzione sarà data all’implementazione dell'algoritmo di ricerca di Grover, utilizzando Qiskit per sperimentazioni su hardware quantistici, permettendo agli studenti di rafforzare le loro competenze attraverso applicazioni reali.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La prova di esame del corso è suddivisa in due parti: una prima prova scritta di laboratorio e una successiva prova orale. [...] Tale prova avrà lo scopo di valutare più nel dettaglio la preparazione dello studente, la sua capacità di ragionamento relativamente agli argomenti trattati a lezione, nonché la sua proprietà di linguaggio.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Lezioni frontali.",
+                "source_field": "teaching_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 24237,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 43387,
+            "response_chars": 8549,
+            "latency_ms": 23716
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7804046273231506
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7476096153259277
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.5__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.5",
+            "similarity_score": 0.7449951469898224
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.3__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.3",
+            "similarity_score": 0.747202068567276
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7363335490226746
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7153535187244415
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.762385368347168
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7591204047203064
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.757580891251564
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diversi difetti di cura editoriale che ne compromettono la piena chiarezza e coerenza. Si riscontrano refusi, problemi di formattazione e, in particolare, significative incongruenze tra le versioni italiana e inglese, come la presenza di argomenti in italiano nella sezione inglese del programma e l'errata allocazione di contenuti tra i descrittori di Dublino in inglese. Questi elementi indicano una cura editoriale parziale, non gravemente compromessa ma neanche ottimale.",
+            "evidences": [
+              {
+                "text": "lo studente avrà la capacita di adattare le conoscenze acquisite",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Elementi di matematica discreta e di algebra lineare\ne di analisi matematica, oltre a\ncompetenze di base di programmazione",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Cap. 10 di 1) 3 Cap. 3.4 di 2)",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "the ability to solve simple problems that require the design and analysis of algorithmic solutions in the field of quantum computation will be acquired.\nMaking judgments: the student will be able to evaluate the applicability of a quantum solution for solving a computational problem as well as acquire the ability to evaluate a quantum algorithm in terms of efficiency and possibility of reuse.",
+                "source_field": "dublin_applying_en"
+              },
+              {
+                "text": "Il modello di computazione quantistica",
+                "source_field": "schedule_en[0].argomenti"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 17609,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 30624,
+            "response_chars": 1825,
+            "latency_ms": 17396
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7128852009773254
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.694966048002243
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7291271090507507
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.710431843996048
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7092382311820984
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.3__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.3",
+          "similarity_score": 0.7322361171245575
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.a",
+          "similarity_score": 0.6937410533428192
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7605550438165665
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7350340783596039
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.728555291891098
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7901157140731812
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7499792277812958
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7463421821594238
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.808162659406662
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7586614489555359
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7551591098308563
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7804046273231506
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7476096153259277
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.5__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.5",
+          "similarity_score": 0.7449951469898224
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.3__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.3",
+          "similarity_score": 0.747202068567276
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7363335490226746
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7153535187244415
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.762385368347168
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7591204047203064
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.757580891251564
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7128852009773254
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.694966048002243
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — QUANTUM COMPUTER PROGRAMMING\n\n## Sintesi\n\n- **CoreScore**: 1.56/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo specifico e verificabile. Utilizzano verbi d'azione che indicano chiaramente cosa lo studente sarà in grado di fare o conoscere al termine del corso, come 'risolvere', 'valutare', 'adattare' e 'aggiornarsi'. Le descrizioni vanno oltre la semplice enunciazione di argomenti trattati, specificando le abilità e le conoscenze osservabili.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono presenti nella versione italiana e sono articolati con contenuti specifici e differenziati tra loro. Ogni descrittore si concentra su un aspetto distinto dell'apprendimento, evitando ripetizioni o genericità. Sebbene la versione inglese presenti alcune lacune (come il campo 'dublin_judgement_en' vuoto e un errore di copia-incolla in 'dublin_applying_en'), la valutazione p…\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo dettagliato e specifico. Viene chiaramente indicata la suddivisione in prova scritta di laboratorio e prova orale, con la finalità di ciascuna e il loro rapporto per la valutazione finale. Sono inoltre esplicitati i criteri di attribuzione del voto per le diverse fasce di valutazione, fornendo un quadro chiaro delle aspettative. Sebbene non siano pres…\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro, organizzato e dettagliato. La sezione 'course_content_it' fornisce una descrizione generale degli argomenti, dell'approccio e degli strumenti (Qiskit), mentre la 'schedule_it' elenca in modo schematico ma completo 17 argomenti specifici, con riferimenti ai testi, indicando una progressione logica e una struttura riconoscibile. Questo risponde pienamente al requis…\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste un'ottima coerenza tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I risultati di apprendimento enfatizzano la conoscenza e l'applicazione di algoritmi quantistici e la programmazione con Qiskit, che sono pienamente coperti dai contenuti del corso e dalla schedule dettagliata. La prova scritta di laboratorio è specificamente progettata per valutare…\n\n## Aree di miglioramento\n\n- **C1 — Completezza strutturale e documentale** (score 1): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT. Tuttavia, la sezione relativa agli esempi di domande (`sample_questions_it`) non fornisce esempi concreti, ma si limita a dichiarare che verranno forniti durante le lezioni. Questo rende la compilazione di tale sezione parziale e non sostanziale rispetto al contenuto atteso, impedendo il raggiungimento del punteggio massimo.\n  - *Raccomandazione*: Considera di verificare che tutte e nove le sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) siano compilate con contenuto sostanziale, non solo come intestazione.\n- **C2 — Completezza bilingue** (score 1): Il syllabus presenta la versione inglese per il titolo del corso, i risultati di apprendimento e i contenuti. Tuttavia, la sezione delle modalità di verifica in inglese (`assessment_methods_en`) è incompleta rispetto alla versione italiana, omettendo i criteri di valutazione dettagliati e le indicazioni per studenti con disabilità. Questo rende la completezza bilingue parziale per il perimetro minimo richiesto.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, indicando conoscenze di base in programmazione Python, Jupyter, matematica discreta, algebra lineare e analisi matematica. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene fornita una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo impedisce il raggiungimento del…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diversi difetti di cura editoriale che ne compromettono la piena chiarezza e coerenza. Si riscontrano refusi, problemi di formattazione e, in particolare, significative incongruenze tra le versioni italiana e inglese, come la presenza di argomenti in italiano nella sezione inglese del programma e l'errata allocazione di contenuti tra i descrittori di Dublino in inglese. Questi elementi indicano…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T09:16:31.946108+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8"
+    },
+    {
+      "captured_at": "2026-05-29T09:16:58.599111+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "latency_ms": 26652,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:16:58.609139+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8"
+    },
+    {
+      "captured_at": "2026-05-29T09:17:18.333631+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "latency_ms": 19724,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T09:17:18.334793+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8"
+    },
+    {
+      "captured_at": "2026-05-29T09:17:42.573470+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "latency_ms": 24237,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:17:42.585422+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8"
+    },
+    {
+      "captured_at": "2026-05-29T09:18:00.195338+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "latency_ms": 17609,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T09:18:00.198780+00:00",
+      "type": "aggregation_completed",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T09:18:00.200007+00:00",
+      "type": "report_synthesized",
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "report_chars": 6026
+    }
+  ]
+}

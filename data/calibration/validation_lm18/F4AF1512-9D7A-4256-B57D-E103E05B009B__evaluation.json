@@ -1,0 +1,850 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+  "elapsed_seconds": 77.58,
+  "evaluation": {
+    "id": 67,
+    "evaluation_uuid": "1487f928-d6b4-48aa-b7d5-dd6e2f7382fc",
+    "syllabus_id": 72,
+    "syllabus_seuid_snapshot": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+    "course_name_snapshot": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
+    "status": "completed",
+    "started_at": "2026-05-29T09:15:14.339673",
+    "finished_at": "2026-05-29T09:16:31.910750",
+    "duration_ms": 77571,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.44,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 1,
+      "C8": 2,
+      "C9": 0
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la compilazione del Syllabus (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione contiene informazioni sostanziali e pertinenti, dimostrando una compilazione completa e accurata.",
+            "evidences": [
+              {
+                "text": "Il modulo di Laboratorio approfondisce gli argomenti teorici trattati nel modulo base. I risultati attesi concernono una più profonda conoscenza degli argomenti trattati\nConoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze avanzate che consentano allo studente di valutare le prestazioni di un protocollo distribuito di comunicazione.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per progettare un protocollo di coordinamento distribuito per una Overlay Network. Ciò sarà realizzato con lezioni di laboratorio, aventi come oggetto l'utilizzo del simulatore NS3, allo scopo di valutare le performance di un protocollo.\nAutonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori e/o limiti progettuali presenti in protocolli reali, lo studente sarà in grado di elaborare autonomamente proprie soluzioni, al fine di superare i classici vincoli imposti dalla scalabilità nei sistemi distribuiti.\nAbilità comunicative (communication skills):\nlo studente acquisirà ulteriori abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale protocolli di rete e dei sistemi distribuiti.\nCapacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter valutare nuovi protocolli di rete.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Concetti di base di:\nsistemi operativi\nreti di calcolatori\nprogrammazione in C++",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il modulo di Laboratorio approfondisce gli argomenti teorici trattati\nnel modulo base, Lo scopo del modulo è di approfondire, grazie\nall'utilizzo del simulatore ns3, le caratteristiche implementative dei\nprotocolli esaminati. Inoltre viene posta particolare enfasi alla\nvalutazione delle performance.\nIntroduzione alle simulazioni tempo-descrete\nStrutturazione di un modello: variabili di stato e variabili d'ambiente\nValutazione delle prestazioni in un ambiente di rete\nIl simulatore di rete NS3\nValutazione delle prestazioni di una connessione di rete con TCP Tahoe, TCP Reno, TCP new Reno\nLe prestazioni di TCP in ambiente wireless\nLe MaNET in NS3",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La verifica delle competenze acquisite viene effettuata con la realizzazione di un progetto implementativo realizzato con NS3, assegnato dal docente.\nLo scopo del progetto è di valutare le performance di un protocollo di rete.\nE' possibile realizzare il progetto in gruppo (massimo 3 studenti)\nIn caso di necessità, a seguito di apposite indicazioni da parte degli organi di Ateneo, la verifica potrà essere effettuata in modalità telematica, con le necessarie variazioni rispetto a quanto dichiarato in precedenza.\nGli\nstudenti con disabilità e/o DSA dovranno contattare, con un anticipo di\nalmeno una settimana rispetto alla data dell'esame, la commissione e il\nreferente CInAP\ndel DMI per comunicare che intendono sostenere l'esame fruendo delle\nopportune misure compensative. Tali misure devono essere certificate dal\nCInAP e , ove applicabile, controllate dalla commissione.\nIl voto, congiunto con il modulo teorico, è attribuito\nsecondo il seguente schema:\nNon\napprovato: lo studente non ha acquisito i concetti di base e non è in\ngrado di rispondere ad almeno il 60% delle domande né di svolgere gli\nesercizi teorici e pratici.\n18-20: lo studente dimostra\nuna padronanza appena sufficiente dei concetti base, e/o riesce ad\nimpostare gli esercizi teorico/pratici con molta difficoltà e con vari\nerrori.\n21-24:\nlo studente dimostra una padronanza minima dei concetti di base, le sue\ncapacità di collegamento dei contenuti sono modeste, riesce a\nrisolvere semplici esercizi.\n25-27:\nlo studente dimostra una buona padronanza dei contenuti del corso, le\nsue capacità di collegamento dei contenuti sono buone, risolve gli\nesercizi con pochi errori.\n28-30\ne lode: lo studente ha acquisito tutti i contenuti del corso ed è in\ngrado di padroneggiarli compiutamente e di collegarli con spirito\ncritico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Valutazione delle prestazioni di una rete P2P con Gnutella.\nValutazione delle prestazioni di una rete Manet con DSR.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Manuale di riferimento di NS3",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni di questo modulo vengono svolte principalmente il laboratorio, con l'uso del simulatore NS3.\nGli studenti sono incoraggiati a formare piccoli gruppi di lavoro, per svolgere le esercitazioni proposte.\nIn caso di necessità, a seguito di apposite indicazioni da parte degli organi di Ateneo, l'insegnamento potrà essere impartito in modalità mista o a distanza, con le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto qui riportato.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza delle lezioni rispecchia le modalità e le limitazioni previste dal Manifesto degli studi LM18 per la coorte corrente e dal Regolamento Didattico di Ateneo",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Il simulatore NS3\", \"riferimenti_testi\": \"[1]\"}, {\"numero\": \"2\", \"argomenti\": \"Valutazione delle prestazioni di un protocollo di rete\", \"riferimenti_testi\": \"[1]\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La versione inglese del syllabus è parzialmente presente. Sebbene i risultati di apprendimento e i contenuti del corso siano forniti anche in inglese, mancano la traduzione del titolo del corso (il campo `course_name` è in italiano e non è presente un `course_name_en`) e, in particolare, la sezione relativa alle modalità di verifica (`assessment_methods_en`) risulta vuota. Il perimetro minimo bilingue non è quindi completamente soddisfatto.",
+            "evidences": [
+              {
+                "text": "Knowledge and understanding\n: the aim of the course is to acquire advanced knowledge that allow the student to evaluate the performance of a distributed communication protocol.\nApplying knowledge and understanding\n: student will acquire knowledge usefull to design a distributed coordination protocols specific for an Overlay Network, defining suitable feature to promote collaboration, optimizing , at the same time, the exploitation of the shared resources. For this reason, a part of the course will be held in laboratory, with lessons dedicated to the study of the NS2 simulator, in order to allow performance evaluation of a network protocol.\nMaking judgements\n: the study cases presented, based on real network protocols, will allow the student to discover limits and errors of their design; this will be the basis for autonomously developing of new solutions, going beyond restrictions due to scalability in distributed systems.\nCommunication skills\n: student will acquire advanced communication skills using technical language in the field of network protocols and distributed systems.\nLearning skills\n: the course provides, to the student, teoretical and practical methodologies in order to evaluate new network protocols.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Introduction to discrete-events simulations\nPerformance evaluation in a network\nThe NS3 simulator\nPerformance evaluation of a network connection using TCP Tahoe, TCP Reno, TCP new Reno\nTCP performance in a wireless environment\nSimulations over a MaNET with NS3",
+                "source_field": "course_content_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, indicando aree di conoscenza come 'sistemi operativi', 'reti di calcolatori' e 'programmazione in C++'. Questo è un buon punto di partenza per lo studente. Tuttavia, il syllabus non distingue esplicitamente tra prerequisiti culturali e formali, né fornisce una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Concetti di base di:\nsistemi operativi\nreti di calcolatori\nprogrammazione in C++",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 20129,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 34859,
+            "response_chars": 9681,
+            "latency_ms": 19258
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7151109278202057
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7098609805107117
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7086172699928284
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7274386286735535
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6950636208057404
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7568345218896866
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7283253967761993
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7282872200012207
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, utilizzando verbi d'azione che indicano chiaramente le conoscenze e le abilità che lo studente dovrà acquisire. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e orientate all'azione dello studente, superando la mera descrizione dei contenuti del corso.",
+            "evidences": [
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze avanzate che consentano allo studente di valutare le prestazioni di un protocollo distribuito di comunicazione.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per progettare un protocollo di coordinamento distribuito per una Overlay Network. Ciò sarà realizzato con lezioni di laboratorio, aventi come oggetto l'utilizzo del simulatore NS3, allo scopo di valutare le performance di un protocollo.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Attraverso esempi concreti di errori e/o limiti progettuali presenti in protocolli reali, lo studente sarà in grado di elaborare autonomamente proprie soluzioni, al fine di superare i classici vincoli imposti dalla scalabilità nei sistemi distribuiti.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "lo studente acquisirà ulteriori abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale protocolli di rete e dei sistemi distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter valutare nuovi protocolli di rete.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e compilati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati. I contenuti di ciascun descrittore sono specifici e ben differenziati tra loro, coprendo in modo esaustivo le diverse dimensioni delle competenze attese, come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze avanzate che consentano allo studente di valutare le prestazioni di un protocollo distribuito di comunicazione.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per progettare un protocollo di coordinamento distribuito per una Overlay Network. Ciò sarà realizzato con lezioni di laboratorio, aventi come oggetto l'utilizzo del simulatore NS3, allo scopo di valutare le performance di un protocollo.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori e/o limiti progettuali presenti in protocolli reali, lo studente sarà in grado di elaborare autonomamente proprie soluzioni, al fine di superare i classici vincoli imposti dalla scalabilità nei sistemi distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills):\nlo studente acquisirà ulteriori abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale protocolli di rete e dei sistemi distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter valutare nuovi protocolli di rete.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 14306,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28728,
+            "response_chars": 4438,
+            "latency_ms": 13931
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7979824841022491
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7626577317714691
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7567866742610931
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8158837854862213
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7800412774085999
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7681869715452194
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo specifico, indicando la realizzazione di un progetto implementativo con NS3. Il syllabus include una rubrica dettagliata per l'attribuzione del voto, che specifica i criteri di valutazione per ogni fascia di punteggio, rispondendo pienamente alle raccomandazioni normative sulla chiarezza dei criteri di graduazione dei voti. Gli esempi di domande sono coerenti con la tipologia di verifica (progetto).",
+            "evidences": [
+              {
+                "text": "La verifica delle competenze acquisite viene effettuata con la realizzazione di un progetto implementativo realizzato con NS3, assegnato dal docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto, congiunto con il modulo teorico, è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Valutazione delle prestazioni di una rete P2P con Gnutella.\nValutazione delle prestazioni di una rete Manet con DSR.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presenti e descritti, con un'introduzione che ne chiarisce lo scopo e un elenco di argomenti specifici. Tuttavia, l'organizzazione dei contenuti è principalmente un elenco lineare di temi, senza una scansione tematica o una progressione chiaramente articolata in sezioni o moduli. La programmazione settimanale è molto sintetica e non aggiunge un livello significativo di dettaglio o organizzazione ai contenuti.",
+            "evidences": [
+              {
+                "text": "Il modulo di Laboratorio approfondisce gli argomenti teorici trattati\nnel modulo base, Lo scopo del modulo è di approfondire, grazie\nall'utilizzo del simulatore ns3, le caratteristiche implementative dei\nprotocolli esaminati. Inoltre viene posta particolare enfasi alla\nvalutazione delle performance.\nIntroduzione alle simulazioni tempo-descrete\nStrutturazione di un modello: variabili di stato e variabili d'ambiente\nValutazione delle prestazioni in un ambiente di rete\nIl simulatore di rete NS3\nValutazione delle prestazioni di una connessione di rete con TCP Tahoe, TCP Reno, TCP new Reno\nLe prestazioni di TCP in ambiente wireless\nLe MaNET in NS3",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Il simulatore NS3\", \"riferimenti_testi\": \"[1]\"}, {\"numero\": \"2\", \"argomenti\": \"Valutazione delle prestazioni di un protocollo di rete\", \"riferimenti_testi\": \"[1]\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste un'ottima coerenza tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano la capacità di valutare e progettare protocolli di rete utilizzando il simulatore NS3. I metodi didattici sono incentrati su lezioni di laboratorio con NS3 e lavori di gruppo, supportando direttamente questi obiettivi. I contenuti del corso coprono in dettaglio l'uso del simulatore e la valutazione delle prestazioni. La verifica finale, tramite un progetto implementativo con NS3 per valutare le performance di un protocollo, è perfettamente allineata con tutti gli altri elementi, dimostrando un chiaro allineamento didattico-valutativo.",
+            "evidences": [
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze avanzate che consentano allo studente di valutare le prestazioni di un protocollo distribuito di comunicazione.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per progettare un protocollo di coordinamento distribuito per una Overlay Network. Ciò sarà realizzato con lezioni di laboratorio, aventi come oggetto l'utilizzo del simulatore NS3, allo scopo di valutare le performance di un protocollo.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Le lezioni di questo modulo vengono svolte principalmente il laboratorio, con l'uso del simulatore NS3. Gli studenti sono incoraggiati a formare piccoli gruppi di lavoro, per svolgere le esercitazioni proposte.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Il simulatore di rete NS3\nValutazione delle prestazioni di una connessione di rete con TCP Tahoe, TCP Reno, TCP new Reno\nLe prestazioni di TCP in ambiente wireless\nLe MaNET in NS3",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La verifica delle competenze acquisite viene effettuata con la realizzazione di un progetto implementativo realizzato con NS3, assegnato dal docente. Lo scopo del progetto è di valutare le performance di un protocollo di rete.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18778,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 38659,
+            "response_chars": 6356,
+            "latency_ms": 18210
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.732238233089447
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7307488322257996
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7255536317825317
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7461080551147461
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7281203269958496
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.6860879957675934
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7410194575786591
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7331611514091492
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.7__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.7",
+            "similarity_score": 0.7305431663990021
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 0,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta numerosi difetti editoriali che ne compromettono la chiarezza e la professionalità. Si riscontrano errori grammaticali e di punteggiatura, come la frase incompleta in `dublin_communication_it`. La formattazione è gravemente compromessa in diverse sezioni, con interruzioni di riga inattese che spezzano parole e frasi, rendendo la lettura difficoltosa, come evidente in `assessment_methods_it` e `teaching_methods_en`. Un'incoerenza sostanziale riguarda il simulatore menzionato nella versione inglese dei risultati di apprendimento (`NS2 simulator`), che contrasta con `NS3` citato nel resto del documento, sia in italiano che in inglese. Infine, il riferimento bibliografico è estremamente generico e incompleto, non fornendo dettagli essenziali come autore, anno o editore, come raccomandato dalle linee guida. Questi difetti sono diffusi e sistematici, giustificando un punteggio basso.",
+            "evidences": [
+              {
+                "text": "e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale protocolli di rete e dei sistemi distribuiti.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Non\napprovato: lo studente non ha acquisito i concetti di base e non è in\ngrado di rispondere ad almeno il 60% delle domande né di svolgere gli\nesercizi teorici e pratici.\n18-20: lo studente dimostra\nuna padronanza appena sufficiente dei concetti base, e/o riesce ad\nimpostare gli esercizi teorico/pratici con molta difficoltà e con vari\nerrori.\n21-24:\nlo studente dimostra una padronanza minima dei concetti di base, le sue\ncapacità di collegamento dei contenuti sono modeste, riesce a\nrisolvere semplici esercizi.\n25-27:\nlo studente dimostra una buona padronanza dei contenuti del corso, le\nsue capacità di collegamento dei contenuti sono buone, risolve gli\nesercizi con pochi errori.\n28-30\ne lode: lo studente ha acquisito tutti i contenuti del corso ed è in\ngrado di padroneggiarli compiutamente e di collegarli con spirito\ncritico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Note: should teaching be carried out in mixed mode or remotely, it\nmay be necessary to introduce changes with respect to previous\nstatements, in line with the programme planned and outlined in the\nsyllabus.",
+                "source_field": "teaching_methods_en"
+              },
+              {
+                "text": "student will acquire knowledge usefull to design a distributed coordination protocols specific for an Overlay Network, defining suitable feature to promote collaboration, optimizing , at the same time, the exploitation of the shared resources. For this reason, a part of the course will be held in laboratory, with lessons dedicated to the study of the NS2 simulator, in order to allow performance evaluation of a network protocol.",
+                "source_field": "dublin_applying_en"
+              },
+              {
+                "text": "Manuale di riferimento di NS3",
+                "source_field": "references_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 24327,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 23301,
+            "response_chars": 3325,
+            "latency_ms": 23913
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7021303176879883
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6932216882705688
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7151109278202057
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7098609805107117
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7086172699928284
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7274386286735535
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6950636208057404
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7568345218896866
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7283253967761993
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7282872200012207
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7979824841022491
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7626577317714691
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7567866742610931
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8158837854862213
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7800412774085999
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7681869715452194
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.732238233089447
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7307488322257996
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7255536317825317
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7461080551147461
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7281203269958496
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.6860879957675934
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7410194575786591
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7331611514091492
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.7__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.7",
+          "similarity_score": 0.7305431663990021
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7021303176879883
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6932216882705688
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO\n\n## Sintesi\n\n- **CoreScore**: 1.44/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la compilazione del Syllabus (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione contiene informazioni sostanziali e pertinenti, dimostrando una compilazione completa e accurata.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, utilizzando verbi d'azione che indicano chiaramente le conoscenze e le abilità che lo studente dovrà acquisire. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e orientate all'azione dello studente, superando la mera descrizione dei contenuti del corso.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e compilati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati. I contenuti di ciascun descrittore sono specifici e ben differenziati tra loro, coprendo in modo esaustivo le diverse dimensioni delle competenze attese, come raccomandato dalle Linee Guida UniCT.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo specifico, indicando la realizzazione di un progetto implementativo con NS3. Il syllabus include una rubrica dettagliata per l'attribuzione del voto, che specifica i criteri di valutazione per ogni fascia di punteggio, rispondendo pienamente alle raccomandazioni normative sulla chiarezza dei criteri di graduazione dei voti. Gli esempi di domande sono…\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste un'ottima coerenza tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano la capacità di valutare e progettare protocolli di rete utilizzando il simulatore NS3. I metodi didattici sono incentrati su lezioni di laboratorio con NS3 e lavori di gruppo, supportando direttamente questi obiettivi. I contenuti del corso c…\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): La versione inglese del syllabus è parzialmente presente. Sebbene i risultati di apprendimento e i contenuti del corso siano forniti anche in inglese, mancano la traduzione del titolo del corso (il campo `course_name` è in italiano e non è presente un `course_name_en`) e, in particolare, la sezione relativa alle modalità di verifica (`assessment_methods_en`) risulta vuota. Il perimetro minimo bilingue non è quindi c…\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, indicando aree di conoscenza come 'sistemi operativi', 'reti di calcolatori' e 'programmazione in C++'. Questo è un buon punto di partenza per lo studente. Tuttavia, il syllabus non distingue esplicitamente tra prerequisiti culturali e formali, né fornisce una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C7 — Chiarezza dei contenuti del corso** (score 1): I contenuti del corso sono presenti e descritti, con un'introduzione che ne chiarisce lo scopo e un elenco di argomenti specifici. Tuttavia, l'organizzazione dei contenuti è principalmente un elenco lineare di temi, senza una scansione tematica o una progressione chiaramente articolata in sezioni o moduli. La programmazione settimanale è molto sintetica e non aggiunge un livello significativo di dettaglio o organizz…\n  - *Raccomandazione*: Valuta se i contenuti possano essere organizzati con una scansione tematica più chiara (sezioni, progressione, schedule per lezioni), in modo che lo studente possa orientarsi rapidamente.\n- **C9 — Cura editoriale del syllabus** (score 0): Il syllabus presenta numerosi difetti editoriali che ne compromettono la chiarezza e la professionalità. Si riscontrano errori grammaticali e di punteggiatura, come la frase incompleta in `dublin_communication_it`. La formattazione è gravemente compromessa in diverse sezioni, con interruzioni di riga inattese che spezzano parole e frasi, rendendo la lettura difficoltosa, come evidente in `assessment_methods_it` e `t…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T09:15:14.356249+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B"
+    },
+    {
+      "captured_at": "2026-05-29T09:15:34.485770+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "latency_ms": 20129,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:15:34.490062+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B"
+    },
+    {
+      "captured_at": "2026-05-29T09:15:48.797514+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "latency_ms": 14307,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T09:15:48.798989+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B"
+    },
+    {
+      "captured_at": "2026-05-29T09:16:07.578344+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "latency_ms": 18779,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:16:07.579490+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B"
+    },
+    {
+      "captured_at": "2026-05-29T09:16:31.907404+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "latency_ms": 24327,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T09:16:31.908490+00:00",
+      "type": "aggregation_completed",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T09:16:31.909750+00:00",
+      "type": "report_synthesized",
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "report_chars": 5820
+    }
+  ]
+}

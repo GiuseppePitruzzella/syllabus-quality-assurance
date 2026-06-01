@@ -1,0 +1,858 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+  "elapsed_seconds": 89.33,
+  "evaluation": {
+    "id": 41,
+    "evaluation_uuid": "1946e280-277d-43c0-9c4d-8aad668c2bb6",
+    "syllabus_id": 2,
+    "syllabus_seuid_snapshot": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+    "course_name_snapshot": "ALGORITMI E COMPLESSITA'",
+    "status": "completed",
+    "started_at": "2026-05-29T08:37:05.130828",
+    "finished_at": "2026-05-29T08:38:34.416828",
+    "duration_ms": 89286,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutte le nove sezioni obbligatorie previste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) sono presenti e compilate in modo sostanziale nel syllabus. Ogni sezione contiene informazioni dettagliate e pertinenti, dimostrando una completa aderenza ai requisiti strutturali e documentali.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding)\n: saranno acquisite le conoscenze relative a diverse strutture dati avanzate e alle procedure per la loro gestione, nonché le conoscenze relative ai principali algoritmi fondamentali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Strutture dati elementari e loro manipolazioni (liste, code, pile, alberi, ecc.)\nElementi di matematica discreta, di programmazione I e II, e di analisi matematica.\nAlgoritmi elementari e metodologie di programmazione dinamica e greedy.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Descrizione generale del corso\nVengono presentate e analizzate, anche mediante la tecnica dell'analisi ammortizzata, diverse strutture dati avanzate (quali B-tree, splay tree, heap binomiali e heap di Fibonacci) e le procedure per la loro gestione. Inoltre vengono studiati, progettati e analizzati algoritmi su grafi per la soluzione efficiente di svariati problemi di ottimizzazione.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Modalità di verifica dell'apprendimento\nLa prova d’esame è finalizzata a valutare in modo approfondito la preparazione dello studente, la capacità di analisi e di ragionamento sugli argomenti trattati durante il corso, nonché l’adeguatezza del linguaggio tecnico utilizzato.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "A titolo esemplificativo, ecco alcuni esempi di domande d’esame:\n1.\nSi definisca la struttura dati dei B-tree e si determini il grado minimo di un dato B-tree.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Il libro di testo consigliato è:\nT.H. Cormen, C.E. Leiserson, R.L. Rivest, C. Stein. Introduction to algorithms (Third Edition), The MIT Press, Cambridge - Massachusetts, 2009",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Lezioni frontali\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza delle lezioni non è obbligatoria, ma per una piena comprensione degli argomenti del corso e delle tecniche risolutive illustrate essa è fortemente consigliata.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Analisi ammortizzata. Stack con multipop e contatore binario. Metodi dell'aggregazione, degli accantonamenti e del potenziale. Tabelle dinamiche con inserimenti e cancellazioni.\", \"riferimenti_testi\": \"Capitoli 17.1-17.4 di 1) e materiale didattico integrativo\"}, {\"numero\": \"2\", \"argomenti\": \"B-alberi: applicazioni, altezza, ricerca, inserimenti e cancellazioni\", \"riferimenti_testi\": \"Capitoli 18.1-18.4 di 1) e materiale didattico integrativo\"}, {\"numero\": \"3\", \"argomenti\": \"Splay trees: ricerca, inserimenti e cancellazioni, analisi ammortizzata di m operazioni di cui n sono inserimenti; top-down splay trees\", \"riferimenti_testi\": \"Capitolo 11.5 di 2) e materiale didattico integrativo\"}, {\"numero\": \"4\", \"argomenti\": \"Strutture dati per insiemi disgiunti: unione per ranghi, compressione dei cammini, algoritmo Union-Find, notazione di Knuth, funzione di Ackermann e sua inversa\", \"riferimenti_testi\": \"Capitoli 21.1-21.3 di 1) e materiale didattico integrativo\"}, {\"numero\": \"5\", \"argomenti\": \"Heap binomiali: alberi binomiali, operazioni di inserimento, minimo ed estrazione del minimo, decremento di una chiave, cancellazione di una chiave, unione di due heap binomiali\", \"riferimenti_testi\": \"Materiale didattico integrativo\"}, {\"numero\": \"6\", \"argomenti\": \"Heap di Fibonacci: alberi binomiali non ordinati, operazioni di inserimento, minimo ed estrazione del minimo, decremento di una chiave, cancellazione di una chiave, unione di due heap di Fibonacci, analisi ammortizzata\", \"riferimenti_testi\": \"Capitoli 19.1-19.4 di 1) e materiale didattico integrativo\"}, {\"numero\": \"7\", \"argomenti\": \"Cammini minimi da una singola sorgente. Grafo dei cammini minimi, albero dei cammini minimi, algoritmo generico per i camminimi minimi da singola sorgente, algoritmo di Bellman-Ford, algoritmo di Dijkstra, algoritmo lineare su grafi aciclici.\", \"riferimenti_testi\": \"Materiale didattico integrativo e Capitolo 24 di 1)\"}, {\"numero\": \"8\", \"argomenti\": \"Cammini minimi tra tutte le coppie di nodi in grafi orientati. Algoritmo di Floyd-Warshall, chiusura transitiva, algoritmo di Johnson su grafi sparsi.\", \"riferimenti_testi\": \"Materiale didattico integrativo e Capitolo 25 di 1)\"}, {\"numero\": \"9\", \"argomenti\": \"Alberi ricoprenti minimi. Passi rossi e passi blu, invariante del colore, algoritmi di Boruvka, di Kruskal e di Prim, clustering di massima separazione.\", \"riferimenti_testi\": \"Materiale didattico integrativo e Capitolo 23 di 1)\"}, {\"numero\": \"10\", \"argomenti\": \"Reti di flusso e applicazioni\", \"riferimenti_testi\": \"Capitoli 26.1-26.3 e materiale didattico integrativo\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La maggior parte delle sezioni richieste per il perimetro minimo bilingue (risultati di apprendimento, contenuti, modalità di verifica) sono presenti e tradotte in inglese. Tuttavia, il titolo del corso non è fornito in inglese, compromettendo la completa bilinguità del perimetro minimo.",
+            "evidences": [
+              {
+                "text": "ALGORITMI E COMPLESSITA'",
+                "source_field": "course_name"
+              },
+              {
+                "text": "Knowledge and understanding\n:\nStudents will acquire knowledge of a variety of data structures and their management operations, as well as of the main fundamental algorithms.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "General description\nVarious advanced data structures (such as B-trees, splay trees, binomial heaps, and Fibonacci heaps) and relative operations will be presented and analysed, by means also of the technique of amortized analysis. We shall also study, design, and analyse graph algorithms for the efficient solution of various optimizations problems.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The final exam is essentially written. The verbalization may be preceded by a short discussion on the written assignment and, in doubtful cases, by a short oral test.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, elencando aree di conoscenza fondamentali per il corso. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) raccomandata dalle Linee Guida UniCT. Inoltre, il riferimento a \"programmazione I e II\" potrebbe essere interpretato come un riferimento a insegnamenti specifici, in contrasto con le raccomandazioni normative.",
+            "evidences": [
+              {
+                "text": "Strutture dati elementari e loro manipolazioni (liste, code, pile, alberi, ecc.)\nElementi di matematica discreta, di programmazione I e II, e di analisi matematica.\nAlgoritmi elementari e metodologie di programmazione dinamica e greedy.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 24769,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 42889,
+            "response_chars": 8533,
+            "latency_ms": 23790
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7142244577407837
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7069640755653381
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.698745846748352
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7228621542453766
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.a",
+            "similarity_score": 0.679556131362915
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.755403459072113
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7335677146911621
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7220117449760437
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, descrivendo chiaramente ciò che lo studente sarà in grado di conoscere e fare al termine del corso. Sebbene alcune formulazioni utilizzino un linguaggio passivo (\"saranno acquisite\"), il contenuto è sufficientemente dettagliato e orientato all'apprendimento dello studente, in linea con le indicazioni normative che richiedono che i risultati siano chiari e valutabili.",
+            "evidences": [
+              {
+                "text": "saranno acquisite le conoscenze relative a diverse strutture dati avanzate e alle procedure per la loro gestione, nonché le conoscenze relative ai principali algoritmi fondamentali.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "saranno acquisite le capacità di risolvere problemi di media difficoltà che richiedono la progettazione e l'analisi di soluzioni algoritmiche avanzate.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "lo studente sarà in grado di valutare la qualità di una soluzione algoritmica in termini di efficienza e possibilità di riutilizzo.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "saranno acquisite le necessarie capacità comunicative e un’adeguata padronanza espressiva nella presentazione di problematiche inerenti gli studi algoritmici, anche ad interlocutori non esperti.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente avrà la capacità di adattare le conoscenze acquisite anche a nuovi contesti, nonché di aggiornarsi attraverso la consultazione delle fonti specialistiche del settore algoritmico.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono presenti e articolati in modo specifico e differenziato. Ogni descrittore presenta contenuti distinti che non si sovrappongono o ripetono, fornendo una chiara indicazione delle diverse competenze che lo studente acquisirà. Questo approccio è pienamente coerente con le Linee Guida UniCT che raccomandano una formulazione esplicita e differenziata per ciascun descrittore.",
+            "evidences": [
+              {
+                "text": "saranno acquisite le conoscenze relative a diverse strutture dati avanzate e alle procedure per la loro gestione, nonché le conoscenze relative ai principali algoritmi fondamentali.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "saranno acquisite le capacità di risolvere problemi di media difficoltà che richiedono la progettazione e l'analisi di soluzioni algoritmiche avanzate.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "lo studente sarà in grado di valutare la qualità di una soluzione algoritmica in termini di efficienza e possibilità di riutilizzo.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "saranno acquisite le necessarie capacità comunicative e un’adeguata padronanza espressiva nella presentazione di problematiche inerenti gli studi algoritmici, anche ad interlocutori non esperti.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente avrà la capacità di adattare le conoscenze acquisite anche a nuovi contesti, nonché di aggiornarsi attraverso la consultazione delle fonti specialistiche del settore algoritmico.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 12809,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28149,
+            "response_chars": 3897,
+            "latency_ms": 12363
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7883587777614594
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7577271461486816
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7515526115894318
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.801939845085144
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7712365090847015
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7566591799259186
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Il syllabus include dettagliati criteri di attribuzione del voto per le diverse fasce di punteggio e fornisce un set di esempi di domande che coprono vari aspetti del programma, come raccomandato dalle Linee Guida UniCT e AVA3.",
+            "evidences": [
+              {
+                "text": "La prova d’esame è finalizzata a valutare in modo approfondito la preparazione dello studente, la capacità di analisi e di ragionamento sugli argomenti trattati durante il corso, nonché l’adeguatezza del linguaggio tecnico utilizzato.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n- non approvato: lo studente non ha ancora acquisito i concetti di base e non riesce a svolgere in modo adeguato gli esercizi.\n- 18-23: lo studente dimostra una conoscenza essenziale dei concetti di base; le capacità espositive e di collegamento tra i contenuti sono limitate, ma riesce a risolvere esercizi semplici.\n- 24-27: lo studente dimostra una buona conoscenza dei contenuti del corso, sa esporli in modo chiaro e collegarli tra loro; risolve gli esercizi con pochi errori.\n- 28-30 e lode: lo studente ha acquisito una conoscenza completa dei contenuti, li espone con chiarezza e spirito critico e risolve gli esercizi in modo accurato e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "A titolo esemplificativo, ecco alcuni esempi di domande d’esame:\n1.\nSi definisca la struttura dati dei B-tree e si determini il grado minimo di un dato B-tree.\n2. Illustrare l'esecuzione di una lista di operazioni di ricerca, inserimento e cancellazione di una chiave in un dato B-tree.\n3. Si determini il numero massimo e il numero minimo di nodi che può essere contenuto in un B-tree di data altezza h e di dato grado minimo t.\n4. Si illustri un algoritmo efficiente (anche mediante pseudo-codice) per determinare i cammini minimi da una sorgente assegnata a tutti i nodi da essa raggiungibili in un grafo orientato aciclico con funzione peso a valori reali.\n5. Si definisca il grafo dei cammini minimi di un dato grafo pesato con pesi positivi e si illustri un algoritmo efficiente per calcolarlo.\n6. Si descriva l'algoritmo di Prim (anche mediante il suo pseudo-codice) e lo si applichi ad un dato grafo.\n7. Si descrivano i cosiddetti “passi blu” e “passi rossi” negli algoritmi per il calcolo del minimum spanning tree. Quindi si enunci l’invariante del colore e lo si dimostri limitatamente ai passi blu.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. Il syllabus include una descrizione generale seguita da un programma dettagliato, ulteriormente articolato in una programmazione settimanale che specifica argomenti e riferimenti bibliografici, garantendo una progressione logica e una facile comprensione degli argomenti trattati.",
+            "evidences": [
+              {
+                "text": "Descrizione generale del corso\nVengono presentate e analizzate, anche mediante la tecnica dell'analisi ammortizzata, diverse strutture dati avanzate (quali B-tree, splay tree, heap binomiali e heap di Fibonacci) e le procedure per la loro gestione. Inoltre vengono studiati, progettati e analizzati algoritmi su grafi per la soluzione efficiente di svariati problemi di ottimizzazione.\nPROGRAMMA PARTICOLAREGGIATO DEL CORSO\nAnalisi ammortizzata\nStack con multipop e contatore binario\nMetodi dell'aggregazione, degli accantonamenti e del potenziale\nTabelle dinamiche con inserimenti e cancellazioni\nStrutture dati avanzate\nB-alberi: applicazioni, altezza, ricerca, inserimenti e cancellazioni\nSplay trees: ricerca, inserimenti e cancellazioni, analisi ammortizzata di m operazioni di cui n sono inserimenti; top-down splay trees\nStrutture dati per insiemi disgiunti: unione per ranghi, compressione dei cammini, algoritmo Union-Find, notazione di Knuth, funzione di Ackermann e sua inversa\nHeap binomiali: alberi binomiali, operazioni di inserimento, minimo ed estrazione del minimo, decremento di una chiave, cancellazione di una chiave, unione di due heap binomiali\nHeap di Fibonacci: alberi binomiali non ordinati, operazioni di inserimento, minimo ed estrazione del minimo, decremento di una chiave, cancellazione di una chiave, unione di due heap di Fibonacci, analisi ammortizzata\nCammini minimi da una singola sorgente in grafi orientati\nGrafo dei cammini minimi, albero dei cammini minimi, algoritmo generico per i camminimi minimi da singola sorgente, algoritmo di Bellman-Ford, algoritmo di Dijkstra, algoritmo lineare su grafi aciclici\nCammini minimi tra tutte le coppie di nodi in grafi orientati\nAlgoritmo di Floyd-Warshall, chiusura transitiva, algoritmo di Johnson su grafi sparsi\nAlberi ricoprenti minimi\nPassi rossi e passi blu, invariante del colore, algoritmi di Boruvka, di Kruskal e di Prim, clustering di massima separazione\nReti di flusso e applicazioni\nFlusso reale e flusso netto in una rete di flusso, proprietà del flusso netto, reti con sorgenti e pozzi multipli, notazione di sommatoria implicita, il metodo di Ford-Fulkerson, capacità e rete residue, cammini aumentanti, tagli in reti di flusso, teorema del massimo flusso/minimo taglio, analisi della procedura di Ford-Fulkerson, abbinamento massimo in grafi bipartiti, algoritmo di Edmonds-Karp e sua analisi di complessità, edge-connectivity.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "1. argomenti: Analisi ammortizzata. Stack con multipop e contatore binario. Metodi dell'aggregazione, degli accantonamenti e del potenziale. Tabelle dinamiche con inserimenti e cancellazioni. riferimenti_testi: Capitoli 17.1-17.4 di 1) e materiale didattico integrativo",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "10. argomenti: Reti di flusso e applicazioni riferimenti_testi: Capitoli 26.1-26.3 e materiale didattico integrativo",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste una chiara coerenza tra i risultati di apprendimento attesi, i contenuti del corso e le modalità di verifica. I risultati di apprendimento, in particolare quelli relativi alla conoscenza e all'applicazione, sono direttamente supportati dal programma dettagliato e dalla programmazione. Le modalità di verifica, con la loro enfasi sulla capacità di analisi, ragionamento e risoluzione di esercizi, e gli esempi di domande che richiedono la descrizione e l'applicazione di algoritmi, sono ben allineate con gli obiettivi formativi e i contenuti proposti. Sebbene i metodi didattici siano descritti in modo generico come 'Lezioni frontali', non compromettono la coerenza complessiva, in quanto il resto degli elementi è fortemente allineato.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding)\n: saranno acquisite le conoscenze relative a diverse strutture dati avanzate e alle procedure per la loro gestione, nonché le conoscenze relative ai principali algoritmi fondamentali.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: saranno acquisite le capacità di risolvere problemi di media difficoltà che richiedono la progettazione e l'analisi di soluzioni algoritmiche avanzate.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "PROGRAMMA PARTICOLAREGGIATO DEL CORSO\nAnalisi ammortizzata\n[...] Strutture dati avanzate\nB-alberi: applicazioni, altezza, ricerca, inserimenti e cancellazioni\nSplay trees: ricerca, inserimenti e cancellazioni, analisi ammortizzata di m operazioni di cui n sono inserimenti; top-down splay trees\n[...] Cammini minimi da una singola sorgente in grafi orientati\nGrafo dei cammini minimi, albero dei cammini minimi, algoritmo generico per i camminimi minimi da singola sorgente, algoritmo di Bellman-Ford, algoritmo di Dijkstra, algoritmo lineare su grafi aciclici\n[...] Reti di flusso e applicazioni",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La prova d’esame è finalizzata a valutare in modo approfondito la preparazione dello studente, la capacità di analisi e di ragionamento sugli argomenti trattati durante il corso, nonché l’adeguatezza del linguaggio tecnico utilizzato.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "A titolo esemplificativo, ecco alcuni esempi di domande d’esame:\n[...] 4. Si illustri un algoritmo efficiente (anche mediante pseudo-codice) per determinare i cammini minimi da una sorgente assegnata a tutti i nodi da essa raggiungibili in un grafo orientato aciclico con funzione peso a valori reali.\n5. Si definisca il grafo dei cammini minimi di un dato grafo pesato con pesi positivi e si illustri un algoritmo efficiente per calcolarlo.\n6. Si descriva l'algoritmo di Prim (anche mediante il suo pseudo-codice) e lo si applichi ad un dato grafo.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 21353,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 50399,
+            "response_chars": 9734,
+            "latency_ms": 20661
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7529232054948807
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7514874786138535
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7428810000419617
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7486451268196106
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.733163595199585
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.6963660418987274
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7738896310329437
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7683877497911453
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7575269937515259
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta una cura editoriale discreta, ma con alcune imprecisioni e incongruenze che ne riducono la chiarezza e la coerenza. Si riscontrano errori strutturali nella versione inglese dei descrittori di Dublino, incoerenze nella numerazione dei riferimenti bibliografici tra le versioni italiana e inglese, e alcune ridondanze o omissioni nei riferimenti all'interno della programmazione dettagliata.",
+            "evidences": [
+              {
+                "text": "Students will develop the ability to solve medium-difficulty problems that require the design and analysis of advanced algorithmic solutions.\nMaking judgments\n:\nStudents will be able to evaluate the quality of algorithmic solutions in terms of efficiency and potential for reuse.",
+                "source_field": "dublin_applying_en"
+              },
+              {
+                "text": "Il libro di testo consigliato è:\nT.H. Cormen, C.E. Leiserson, R.L. Rivest, C. Stein. Introduction to algorithms (Third Edition), The MIT Press, Cambridge - Massachusetts, 2009\ndisponibile anche nella traduzione italiana\n1) T.H. Cormen, C.E. Leiserson, R.L. Rivest, C. Stein. Introduzione agli algoritmi e strutture dati 3/ed, McGraw-Hill Italia, 2010.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Textbook\n1) T.H. Cormen, C.E. Leiserson, R.L. Rivest, C. Stein,\nIntroduction to Algorithms\n(3rd Edition), The MIT Press, Cambridge (MA), 2009.\nAvailable also in Italian translation:\nIntroduzione agli algoritmi e strutture dati\n(3a ed.), McGraw-Hill Italia, 2010.",
+                "source_field": "references_en"
+              },
+              {
+                "text": "Capitoli 26.1-26.3 e materiale didattico integrativo",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Verification of learning can also be carried out electronically, should the conditions require it.\nThese examinations may also take place online, should circumstances require it.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 30308,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 36632,
+            "response_chars": 2209,
+            "latency_ms": 30019
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7251561284065247
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6954013705253601
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7142244577407837
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7069640755653381
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.698745846748352
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7228621542453766
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.a",
+          "similarity_score": 0.679556131362915
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.755403459072113
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7335677146911621
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7220117449760437
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7883587777614594
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7577271461486816
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7515526115894318
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.801939845085144
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7712365090847015
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7566591799259186
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7529232054948807
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7514874786138535
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7428810000419617
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7486451268196106
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.733163595199585
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.6963660418987274
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7738896310329437
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7683877497911453
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7575269937515259
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7251561284065247
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6954013705253601
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — ALGORITMI E COMPLESSITA'\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Tutte le nove sezioni obbligatorie previste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) sono presenti e compilate in modo sostanziale nel syllabus. Ogni sezione contiene informazioni dettagliate e pertinenti, dimostrando una completa aderenza ai requisiti strutturali e documentali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, descrivendo chiaramente ciò che lo studente sarà in grado di conoscere e fare al termine del corso. Sebbene alcune formulazioni utilizzino un linguaggio passivo (\"saranno acquisite\"), il contenuto è sufficientemente dettagliato e orientato all'apprendimento dello studente, in linea con le indicazioni normative che richiedono che i r…\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono presenti e articolati in modo specifico e differenziato. Ogni descrittore presenta contenuti distinti che non si sovrappongono o ripetono, fornendo una chiara indicazione delle diverse competenze che lo studente acquisirà. Questo approccio è pienamente coerente con le Linee Guida UniCT che raccomandano una formulazione esplicita e differenziata per ciascun descrittore.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Il syllabus include dettagliati criteri di attribuzione del voto per le diverse fasce di punteggio e fornisce un set di esempi di domande che coprono vari aspetti del programma, come raccomandato dalle Linee Guida UniCT e AVA3.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. Il syllabus include una descrizione generale seguita da un programma dettagliato, ulteriormente articolato in una programmazione settimanale che specifica argomenti e riferimenti bibliografici, garantendo una progressione logica e una facile comprensione degli argomenti trattati.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste una chiara coerenza tra i risultati di apprendimento attesi, i contenuti del corso e le modalità di verifica. I risultati di apprendimento, in particolare quelli relativi alla conoscenza e all'applicazione, sono direttamente supportati dal programma dettagliato e dalla programmazione. Le modalità di verifica, con la loro enfasi sulla capacità di analisi, ragionamento e risoluzione di esercizi, e gli esempi di…\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): La maggior parte delle sezioni richieste per il perimetro minimo bilingue (risultati di apprendimento, contenuti, modalità di verifica) sono presenti e tradotte in inglese. Tuttavia, il titolo del corso non è fornito in inglese, compromettendo la completa bilinguità del perimetro minimo.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, elencando aree di conoscenza fondamentali per il corso. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) raccomandata dalle Linee Guida UniCT. Inoltre, il riferimento a \"programmazione I e II\" potrebbe essere interpretato come un riferimento a insegnam…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta una cura editoriale discreta, ma con alcune imprecisioni e incongruenze che ne riducono la chiarezza e la coerenza. Si riscontrano errori strutturali nella versione inglese dei descrittori di Dublino, incoerenze nella numerazione dei riferimenti bibliografici tra le versioni italiana e inglese, e alcune ridondanze o omissioni nei riferimenti all'interno della programmazione dettagliata.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T08:37:05.155755+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB"
+    },
+    {
+      "captured_at": "2026-05-29T08:37:29.926234+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "latency_ms": 24770,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:37:29.936405+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB"
+    },
+    {
+      "captured_at": "2026-05-29T08:37:42.745917+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "latency_ms": 12809,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T08:37:42.747437+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB"
+    },
+    {
+      "captured_at": "2026-05-29T08:38:04.101864+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "latency_ms": 21354,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:38:04.103658+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB"
+    },
+    {
+      "captured_at": "2026-05-29T08:38:34.412664+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "latency_ms": 30308,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T08:38:34.414044+00:00",
+      "type": "aggregation_completed",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T08:38:34.415816+00:00",
+      "type": "report_synthesized",
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "report_chars": 5434
+    }
+  ]
+}

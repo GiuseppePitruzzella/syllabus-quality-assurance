@@ -1,0 +1,866 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+  "elapsed_seconds": 90.22,
+  "evaluation": {
+    "id": 57,
+    "evaluation_uuid": "80821ad9-4cca-44db-9414-a44a9af9a194",
+    "syllabus_id": 37,
+    "syllabus_seuid_snapshot": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+    "course_name_snapshot": "MULTIMEDIA E LABORATORIO",
+    "status": "completed",
+    "started_at": "2026-05-29T09:01:13.546726",
+    "finished_at": "2026-05-29T09:02:43.745573",
+    "duration_ms": 90198,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.56,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 2,
+      "C5": 1,
+      "C3": 1,
+      "C4": 2,
+      "C6": 2,
+      "C7": 1,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Le informazioni sono chiare e complete per ogni sezione, garantendo una buona completezza strutturale e documentale.",
+            "evidences": [
+              {
+                "text": "Diventare esperto di sistemi multimediali basati su immagini e video, acquisendo le competenze per programmare sistemi di elaborazioni per informazioni di questo tipo.\nObiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi.\nConoscenza e capacità di comprensione (knowledge and understanding): l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno dietro la teoria dei segnali e che stanno alla base del sistema visivo umano, del video e delle immagini digitali, del miglioramento della loro qualità visiva.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze necessarie per acquisire, editare, comprimere e salvare immagini segnali video.\nAutonomia di giudizio (making judgements): Attraverso esempi in aula lo studente sarà messo nelle condizioni di comprendere se le soluzioni da lui proposte soddisfano un certo grado di qualità.\nAbilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e la proprietà di linguaggio tecnico nell'ambito del settore Multimediale.\nCapacità di apprendimento (learning skills): il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa. A tale scopo diversi argomenti saranno trattati a lezione coinvolgendo lo studente nella ricerca di possibili soluzioni a problemi reali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenze di base relative al trattamento di segnali multimediali (es: immagini digitali).",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Valutazione della qualità di una immagine. Criteri oggettivi e soggettivi. PSNR, SSIM, Delta E in CIE L*a*b*.\nFormati delle immagini Raster e vettoriale. Formati delle immagini: BMP, PNG, TIFF, GIF. Compressione e codifiche: Huffman, Golomb, Aritmetica.\nCodifiche LZW, differenziale, RLE, basate su i simboli, sul bit plane. Codifica mediante la trasformata.\nTrasformate Haar, Fourier, DCT.\nLa morfologia matematica applicata alle immagini.\nLa morfologia matematica applicata alle immagini in scala di grigio.\nrestauro di immagini. Modelli di rumore\nFiltri di media aritmetica, geometrica, armonica e contrarmonica. Filtro mediano, minimo, massimo, punto medio, alpha-trimmed. Filtri adattivi. Rumore periodico. Rimozione del rumore nel dominio delle frequenze. Notch filter. Filtro di Wiener.\nFiltraggio nel dominio spaziale. Edge detector. Algoritmo di Canny. Filtraggio nel dominio delle frequenze. Filtraggio di enfasi. Filtraggio omomorfico. Trasformata di Hough.\nSegmentazione delle immagini.\nEsempi di codice in MATLAB\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Per poter accedere all'esame, in accordo con il regolamento, è OBBLIGATORIA la prenotazione sul portale Smart Edu e su qualunque altra piattaforma, come MS Forms, richiesta dal docente per poter ottimizzare la logistica.\nL'esame è un test a risposta multipla su contenuto del corso e integrazione orale.\nSono previste delle in itinere il cui esito positivo esonererà gli studenti dal sostenere la prova d'esame durante gli appelli ufficiali.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente e il referente CInAP del DMI per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.\nLa prova è strutturata in modo che ad ogni studente sia attribuito un voto secondo il seguente schema:\nNon approvato:\nlo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi.\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nL'apprendimento dei contenuti di laboratorio verrà verificata svolgendo un progetto software concordato con il docente.\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Rumore casuale nelle immagini:\nCos’è il rumore casuale nelle immagini? Da cosa può essere introdotto?\nSia P una distribuzione di probabilità di legge P(x)=0.10 per x=0; P(x)=0.25 per x=255; P(x)=0 altrimenti. Dove\nx\nè un valore (intero) di luminanza a 8 bit. Come si chiama il rumore che segue tale distribuzione di probabilità? Discutere del significato della distribuzione descritta.\nCos’è il filtro di media contrarmonica? Com’è definito?\nIl filtro di media contrarmonica può essere utilizzato per attenuare il suddetto rumore con distribuzione P? Se si, spiegare come. Se no, proporre un altro tipo di filtraggio.\nOperatori morfologici:\nCos’è l’elemento strutturante nella morfologia matematica applicata alle immagini?\nA cosa serve l’operatore morfologico Bottom-hat?\nNella definizione dell’operazione di Bottom-hat si utilizza l’operatore di Chiusura. Com’è definita tale operazione di Chiusura? Quali sono i suoi effetti?\nIndicare almeno una proprietà matematica dell’operatore di Chiusura.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "ELABORAZIONE DELLE IMMAGINI DIGITALI, Terza Edizione, Rafael C. Gonzalez, Richard E. Woods, Ediz. Pearson, Prentice Hall",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Didattica Frontale\nSeminari integrativi\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.\nAccesso al materiale didattico fornito dal docente su MS Teams, nel Team \"Multimedia e Laboratorio\", codice:\n28vtwgp\nTutte le comunicazioni avverranno sul canale Telegram ufficiale del corso, pertanto gli studenti sono pregati ad accedere:\nhttps://t.me/+S6Yl1xViNCtJCRmE",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza non è obbligatoria, ma fortemente consigliata.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Restauro e ricostruzione di immagini\",\n      \"riferimenti_testi\": \"Capitolo 5 di \\\"Elaborazione delle Immagini Digitali\\\"\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Morfologia applicata alle immagini digitali\",\n      \"riferimenti_testi\": \"Capitolo 9 di \\\"Elaborazione delle immagini digitali\\\"\"\n    },\n    {\n      \"numero\": \"3\",\n      \"argomenti\": \"La Segmentazione di immagini\",\n      \"riferimenti_testi\": \"Capitolo 10 di \\\"Elaborazione delle immagini digitali\\\"\"\n    },\n    {\n      \"numero\": \"4\",\n      \"argomenti\": \"Codifiche, formati di immagini\",\n      \"riferimenti_testi\": \"Capitolo 8 di \\\"Elaborazione delle immagini digitali\\\"\"\n    }\n  ]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus fornisce una versione inglese completa per tutti gli elementi del perimetro minimo richiesto: risultati di apprendimento, contenuti del corso e modalità di verifica. La presenza del flag 'has_english' è confermata dalla compilazione effettiva dei campi in inglese.",
+            "evidences": [
+              {
+                "text": "Become an expert in multimedia systems concerning images and video, and improve the skills related to multimedia system programming.\nGeneral learning objectives in terms of expected learning outcomes.\nKnowledge and understanding: The aim of the course is to acquire knowledge that will enable the student to understand the theoretical and physical mechanisms behind the signal theory and underlying the human visual system, the formation and processing of video and digital images, enhancing their visual quality.\nAbility to apply knowledge and understanding: the student will acquire the skills needed to acquire, edit, compress and save images and video signal.\nMaking judgments: Through examples in the classroom, the student will be put into the condition of understanding whether the solutions offered by him meet a certain degree of quality.\nCommunication skills: The student will acquire the necessary communication skills and technical language skills in the multimedia field.\nLearning Skills: The aim of the course is to provide the student with the necessary theoretical and practical methodologies to deal with and solve new problems that arise during a work activity. To this end, several topics will be addressed in lesson by involving the student in the search for possible solutions to real problems.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Evaluating the quality of an image. Objective and subjective criteria. PSNR, SSIM, Delta E in CIE L* a* b*.\nRaster and vector image formats. Image formats: BMP, PNG, TIFF, GIF. Compression and Coding: Huffman, Golomb, Arithmetic.\nLZW, differential, RLE, code-based encodings, based on the symbols on the bit plane. Encrypt using the transform.\nTransformed Haar, Fourier, DCT.\nThe mathematical morphology applied to the images.\nThe mathematical morphology applied to the images in gray scale.\nrestoring images. Noise patterns\nArithmetic, geometric, harmonic and harmonic media filters. Median filter, minimum, maximum, midpoint, alpha-trimmed. Adaptive Filters. Periodic noise. Removing noise in the frequency domain. Notch filter. Wiener filter.\nFiltering in Spatial Domain. Edge detector. Canny Algorithm. Filtering in the frequency domain. Stress filtering. Homomorphic filtering. Hough transformed.\nSegmenting Images\nExamples of coding using Matlab\nShould teaching be carried out in mixed mode or remotely, it may be necessary to introduce changes with respect to previous statements, in line with the programme planned and outlined in the syllabus.\nLearning assessment may also be carried out on line, should the conditions require it.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "In order to take the exam, in accordance with the regulations, it is MANDATORY to register on the Smart Edu portal and on any other platform, as MS Forms, required by the instructor to optimize logistics.\nThere will be some mid-term exams. A positive result in these exams will exempt students from taking the final exam during the official examination periods\nThe examination is held in italian language according the rules described in the italian version of this section.\nErasmus students and other non-italian speakers may ask to take an oral exam.\nStudents with disabilities and/or learning disorders (DSA) must contact the instructor and the CInAP representative at DMI well in advance of the exam date to inform them of their intention to take the exam with the appropriate compensatory measures.\nFor the assignment of grades for individual assessments, the following criteria are typically followed:\nFail:\nThe student has not acquired the basic concepts and is unable to complete the exercises.\n18-23: The student demonstrates a minimal mastery of the fundamental concepts; their ability to present and connect content is modest, and they can solve simple exercises.\n24-27: The student shows a good grasp of the course content; their ability to present and connect the content is good, and they solve exercises with few errors.\n28-30 with honors: The student has acquired all course content and can present them comprehensively with a critical perspective; they solve exercises completely and without errors\nThe assessment of learning may also be conducted remotely if the conditions require it.\nLearning will be assessed by completing a software project agreed upon with the instructor.\nThe assessment of learning may also be conducted remotely if the conditions require it.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e formulati in termini di conoscenze specifiche, evitando riferimenti a insegnamenti specifici, il che è positivo. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene indicata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo limita la chiarezza per lo studente.",
+            "evidences": [
+              {
+                "text": "Conoscenze di base relative al trattamento di segnali multimediali (es: immagini digitali).",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 20190,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 39709,
+            "response_chars": 14605,
+            "latency_ms": 19633
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7185937762260437
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.714446097612381
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7134067416191101
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7437035739421844
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6952001452445984
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7613257467746735
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.a__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.a",
+            "similarity_score": 0.727451741695404
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.722864031791687
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La formulazione dei risultati di apprendimento attesi presenta un mix di specificità e generalità, con alcune espressioni che descrivono l'intento del corso piuttosto che l'abilità osservabile dello studente. Sebbene alcuni risultati siano ben formulati e verificabili, altri iniziano con un linguaggio più orientato al corso o sono inizialmente generici prima di specificare il contenuto. Questo non consente di raggiungere il punteggio massimo di 2, che richiede formulazioni sempre specifiche e verificabili in termini di conoscenze e abilità osservabili.",
+            "evidences": [
+              {
+                "text": "Diventare esperto di sistemi multimediali basati su immagini e video, acquisendo le competenze per programmare sistemi di elaborazioni per informazioni di questo tipo.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno dietro la teoria dei segnali e che stanno alla base del sistema visivo umano, del video e delle immagini digitali, del miglioramento della loro qualità visiva.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per acquisire, editare, comprimere e salvare immagini segnali video.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente acquisirà le necessarie abilità comunicative e la proprietà di linguaggio tecnico nell'ambito del settore Multimediale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus articola chiaramente tutti e cinque i Descrittori di Dublino nella sezione dei risultati di apprendimento attesi. Ogni descrittore è presente con una formulazione specifica e differenziata, che ne evidenzia il contenuto distintivo. Le descrizioni non sono generiche o ripetitive tra i vari descrittori, dimostrando una buona coerenza con le raccomandazioni delle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno dietro la teoria dei segnali e che stanno alla base del sistema visivo umano, del video e delle immagini digitali, del miglioramento della loro qualità visiva.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze necessarie per acquisire, editare, comprimere e salvare immagini segnali video.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): Attraverso esempi in aula lo studente sarà messo nelle condizioni di comprendere se le soluzioni da lui proposte soddisfano un certo grado di qualità.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e la proprietà di linguaggio tecnico nell'ambito del settore Multimediale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills): il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa. A tale scopo diversi argomenti saranno trattati a lezione coinvolgendo lo studente nella ricerca di possibili soluzioni a problemi reali.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 21283,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28739,
+            "response_chars": 4589,
+            "latency_ms": 20929
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7970639765262604
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7666426599025726
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7513554692268372
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8217452019453049
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7861628234386444
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7678511887788773
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus descrive in modo chiaro e specifico le modalità di verifica dell'apprendimento. Vengono indicate le tipologie d'esame (test a risposta multipla, integrazione orale, prove in itinere, progetto software per il laboratorio) e, in particolare, è presente una dettagliata rubrica per l'attribuzione del voto che specifica i criteri di valutazione per ogni fascia di punteggio. Inoltre, sono forniti esempi di domande che illustrano il tipo di preparazione richiesta, in linea con le raccomandazioni normative.",
+            "evidences": [
+              {
+                "text": "L'esame è un test a risposta multipla su contenuto del corso e integrazione orale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Sono previste delle in itinere il cui esito positivo esonererà gli studenti dal sostenere la prova d'esame durante gli appelli ufficiali.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "La prova è strutturata in modo che ad ogni studente sia attribuito un voto secondo il seguente schema:\nNon approvato:\nlo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi.\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "L'apprendimento dei contenuti di laboratorio verrà verificata svolgendo un progetto software concordato con il docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Rumore casuale nelle immagini:\nCos’è il rumore casuale nelle immagini? Da cosa può essere introdotto?\nSia P una distribuzione di probabilità di legge P(x)=0.10 per x=0; P(x)=0.25 per x=255; P(x)=0 altrimenti. Dove\nx\nè un valore (intero) di luminanza a 8 bit. Come si chiama il rumore che segue tale distribuzione di probabilità? Discutere del significato della distribuzione descritta.\nCos’è il filtro di media contrarmonica? Com’è definito?\nIl filtro di media contrarmonica può essere utilizzato per attenuare il suddetto rumore con distribuzione P? Se si, spiegare come. Se no, proporre un altro tipo di filtraggio.\nOperatori morfologici:\nCos’è l’elemento strutturante nella morfologia matematica applicata alle immagini?\nA cosa serve l’operatore morfologico Bottom-hat?\nNella definizione dell’operazione di Bottom-hat si utilizza l’operatore di Chiusura. Com’è definita tale operazione di Chiusura? Quali sono i suoi effetti?\nIndicare almeno una proprietà matematica dell’operatore di Chiusura.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il campo 'course_content_it' presenta un elenco dettagliato e specifico degli argomenti, andando oltre una semplice lista di parole chiave e includendo concetti tecnici precisi. Questo contribuisce alla chiarezza dei contenuti. Tuttavia, la sezione 'schedule_it', pur fornendo una minima organizzazione con riferimenti testuali, è molto sintetica (solo 4 voci) e non offre una scansione tematica o una progressione dettagliata che copra l'intero programma del corso. Pertanto, l'organizzazione complessiva e la progressione dei contenuti risultano solo parzialmente articolate.",
+            "evidences": [
+              {
+                "text": "Valutazione della qualità di una immagine. Criteri oggettivi e soggettivi. PSNR, SSIM, Delta E in CIE L*a*b*.\nFormati delle immagini Raster e vettoriale. Formati delle immagini: BMP, PNG, TIFF, GIF. Compressione e codifiche: Huffman, Golomb, Aritmetica.\nCodifiche LZW, differenziale, RLE, basate su i simboli, sul bit plane. Codifica mediante la trasformata.\nTrasformate Haar, Fourier, DCT.\nLa morfologia matematica applicata alle immagini.\nLa morfologia matematica applicata alle immagini in scala di grigio.\nrestauro di immagini. Modelli di rumore\nFiltri di media aritmetica, geometrica, armonica e contrarmonica. Filtro mediano, minimo, massimo, punto medio, alpha-trimmed. Filtri adattivi. Rumore periodico. Rimozione del rumore nel dominio delle frequenze. Notch filter. Filtro di Wiener.\nFiltraggio nel dominio spaziale. Edge detector. Algoritmo di Canny. Filtraggio nel dominio delle frequenze. Filtraggio di enfasi. Filtraggio omomorfico. Trasformata di Hough.\nSegmentazione delle immagini.\nEsempi di codice in MATLAB",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Restauro e ricostruzione di immagini\", \"riferimenti_testi\": \"Capitolo 5 di \\\"Elaborazione delle Immagini Digitali\\\"\"}, {\"numero\": \"2\", \"argomenti\": \"Morfologia applicata alle immagini digitali\", \"riferimenti_testi\": \"Capitolo 9 di \\\"Elaborazione delle immagini digitali\\\"\"}, {\"numero\": \"3\", \"argomenti\": \"La Segmentazione di immagini\", \"riferimenti_testi\": \"Capitolo 10 di \\\"Elaborazione delle immagini digitali\\\"\"}, {\"numero\": \"4\", \"argomenti\": \"Codifiche, formati di immagini\", \"riferimenti_testi\": \"Capitolo 8 di \\\"Elaborazione delle immagini digitali\\\"\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus dimostra una forte coerenza didattico-valutativa. I risultati di apprendimento attesi, in particolare la capacità di applicare conoscenze, l'autonomia di giudizio e le capacità di apprendimento (risolvere autonomamente nuove problematiche), sono ben allineati con i contenuti del corso e, soprattutto, con le modalità di verifica. La previsione di un 'progetto software concordato con il docente' per la verifica dell'apprendimento di laboratorio è un'ottima modalità per accertare le competenze pratiche e di problem-solving, che non sarebbero adeguatamente valutate da un semplice test a risposta multipla. Questo elemento, insieme alla rubrica di valutazione dettagliata, assicura che gli obiettivi formativi siano effettivamente misurati.",
+            "evidences": [
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze necessarie per acquisire, editare, comprimere e salvare immagini segnali video.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): Attraverso esempi in aula lo studente sarà messo nelle condizioni di comprendere se le soluzioni da lui proposte soddisfano un certo grado di qualità.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills): il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa. A tale scopo diversi argomenti saranno trattati a lezione coinvolgendo lo studente nella ricerca di possibili soluzioni a problemi reali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Valutazione della qualità di una immagine. Criteri oggettivi e soggettivi. PSNR, SSIM, Delta E in CIE L*a*b*.\nFormati delle immagini Raster e vettoriale. Formati delle immagini: BMP, PNG, TIFF, GIF. Compressione e codifiche: Huffman, Golomb, Aritmetica.\nCodifiche LZW, differenziale, RLE, basate su i simboli, sul bit plane. Codifica mediante la trasformata.\nTrasformate Haar, Fourier, DCT.\nLa morfologia matematica applicata alle immagini.\nLa morfologia matematica applicata alle immagini in scala di grigio.\nrestauro di immagini. Modelli di rumore\nFiltri di media aritmetica, geometrica, armonica e contrarmonica. Filtro mediano, minimo, massimo, punto medio, alpha-trimmed. Filtri adattivi. Rumore periodico. Rimozione del rumore nel dominio delle frequenze. Notch filter. Filtro di Wiener.\nFiltraggio nel dominio spaziale. Edge detector. Algoritmo di Canny. Filtraggio nel dominio delle frequenze. Filtraggio di enfasi. Filtraggio omomorfico. Trasformata di Hough.\nSegmentazione delle immagini.\nEsempi di codice in MATLAB",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'apprendimento dei contenuti di laboratorio verrà verificata svolgendo un progetto software concordato con il docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "L'esame è un test a risposta multipla su contenuto del corso e integrazione orale.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 27961,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 42614,
+            "response_chars": 9528,
+            "latency_ms": 27356
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.762051448225975
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.5__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.5",
+            "similarity_score": 0.7354874014854431
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7342341542243958
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7535550594329834
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.3__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.3",
+            "similarity_score": 0.7485522329807281
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7352049946784973
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7618128657341003
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7605243027210236
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7595601230859756
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diverse imprecisioni e incoerenze editoriali che ne compromettono la cura complessiva, sebbene non in modo tale da renderlo illeggibile o inutilizzabile. Si riscontrano refusi e formulazioni grammaticalmente deboli in entrambe le versioni (italiana e inglese), frammenti di testo che appaiono fuori contesto o incompleti, e ripetizioni di frasi all'interno delle stesse sezioni. In particolare, la versione inglese mostra un'evidente disorganizzazione nei descrittori di Dublino, con il contenuto di due descrittori (Applying e Judgement) erroneamente inserito nel descrittore Knowledge, lasciando i campi originali vuoti. Anche i riferimenti bibliografici in inglese contengono un'abbreviazione italiana. Questi elementi indicano una mancanza di revisione accurata, ma la struttura generale è presente e le informazioni sono comprensibili.",
+            "evidences": [
+              {
+                "text": "e la proprietà di linguaggio tecnico nell'ambito del settore Multimediale.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "the student will acquire the skills needed to acquire, edit, compress and save images and video signal.\nMaking judgments: Through examples in the classroom, the student will be put into the condition of understanding whether the solutions offered by him meet a certain degree of quality.",
+                "source_field": "dublin_knowledge_en"
+              },
+              {
+                "text": "Sono previste delle in itinere il cui esito positivo esonererà gli studenti dal sostenere la prova d'esame durante gli appelli ufficiali.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Encrypt using the transform.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "Digital Image Processing, Third Edition, Rafael C. Gonzalez, Richard E. Woods, Ediz. Pearson, Prentice Hall",
+                "source_field": "references_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 20725,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29409,
+            "response_chars": 2176,
+            "latency_ms": 20482
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7225953936576843
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7064772248268127
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7185937762260437
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.714446097612381
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7134067416191101
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7437035739421844
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6952001452445984
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7613257467746735
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.a__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.a",
+          "similarity_score": 0.727451741695404
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.722864031791687
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7970639765262604
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7666426599025726
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7513554692268372
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8217452019453049
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7861628234386444
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7678511887788773
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.762051448225975
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.5__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.5",
+          "similarity_score": 0.7354874014854431
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7342341542243958
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7535550594329834
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.3__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.3",
+          "similarity_score": 0.7485522329807281
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7352049946784973
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7618128657341003
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7605243027210236
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7595601230859756
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7225953936576843
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7064772248268127
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — MULTIMEDIA E LABORATORIO\n\n## Sintesi\n\n- **CoreScore**: 1.56/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Le informazioni sono chiare e complete per ogni sezione, garantendo una buona completezza strutturale e documentale.\n- **C2 — Completezza bilingue** (score 2): Il syllabus fornisce una versione inglese completa per tutti gli elementi del perimetro minimo richiesto: risultati di apprendimento, contenuti del corso e modalità di verifica. La presenza del flag 'has_english' è confermata dalla compilazione effettiva dei campi in inglese.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Il syllabus articola chiaramente tutti e cinque i Descrittori di Dublino nella sezione dei risultati di apprendimento attesi. Ogni descrittore è presente con una formulazione specifica e differenziata, che ne evidenzia il contenuto distintivo. Le descrizioni non sono generiche o ripetitive tra i vari descrittori, dimostrando una buona coerenza con le raccomandazioni delle Linee Guida UniCT.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Il syllabus descrive in modo chiaro e specifico le modalità di verifica dell'apprendimento. Vengono indicate le tipologie d'esame (test a risposta multipla, integrazione orale, prove in itinere, progetto software per il laboratorio) e, in particolare, è presente una dettagliata rubrica per l'attribuzione del voto che specifica i criteri di valutazione per ogni fascia di punteggio. Inoltre, sono forniti esempi di dom…\n- **C8 — Coerenza didattico-valutativa** (score 2): Il syllabus dimostra una forte coerenza didattico-valutativa. I risultati di apprendimento attesi, in particolare la capacità di applicare conoscenze, l'autonomia di giudizio e le capacità di apprendimento (risolvere autonomamente nuove problematiche), sono ben allineati con i contenuti del corso e, soprattutto, con le modalità di verifica. La previsione di un 'progetto software concordato con il docente' per la ver…\n\n## Aree di miglioramento\n\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e formulati in termini di conoscenze specifiche, evitando riferimenti a insegnamenti specifici, il che è positivo. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene indicata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo limita la chiarezza per lo studente.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 1): La formulazione dei risultati di apprendimento attesi presenta un mix di specificità e generalità, con alcune espressioni che descrivono l'intento del corso piuttosto che l'abilità osservabile dello studente. Sebbene alcuni risultati siano ben formulati e verificabili, altri iniziano con un linguaggio più orientato al corso o sono inizialmente generici prima di specificare il contenuto. Questo non consente di raggiu…\n  - *Raccomandazione*: Considera di riformulare i risultati di apprendimento in termini di conoscenze e abilità osservabili dello studente, evitando formulazioni che descrivono il corso ('il corso copre...') o espressioni generiche ('lo studente acquisirà conoscenze').\n- **C7 — Chiarezza dei contenuti del corso** (score 1): Il campo 'course_content_it' presenta un elenco dettagliato e specifico degli argomenti, andando oltre una semplice lista di parole chiave e includendo concetti tecnici precisi. Questo contribuisce alla chiarezza dei contenuti. Tuttavia, la sezione 'schedule_it', pur fornendo una minima organizzazione con riferimenti testuali, è molto sintetica (solo 4 voci) e non offre una scansione tematica o una progressione dett…\n  - *Raccomandazione*: Valuta se i contenuti possano essere organizzati con una scansione tematica più chiara (sezioni, progressione, schedule per lezioni), in modo che lo studente possa orientarsi rapidamente.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diverse imprecisioni e incoerenze editoriali che ne compromettono la cura complessiva, sebbene non in modo tale da renderlo illeggibile o inutilizzabile. Si riscontrano refusi e formulazioni grammaticalmente deboli in entrambe le versioni (italiana e inglese), frammenti di testo che appaiono fuori contesto o incompleti, e ripetizioni di frasi all'interno delle stesse sezioni. In particolare, la…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T09:01:13.566486+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB"
+    },
+    {
+      "captured_at": "2026-05-29T09:01:33.757749+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "latency_ms": 20190,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:01:33.763192+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB"
+    },
+    {
+      "captured_at": "2026-05-29T09:01:55.047106+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "latency_ms": 21283,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T09:01:55.047944+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB"
+    },
+    {
+      "captured_at": "2026-05-29T09:02:23.010666+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "latency_ms": 27962,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:02:23.014376+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB"
+    },
+    {
+      "captured_at": "2026-05-29T09:02:43.740291+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "latency_ms": 20725,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T09:02:43.742135+00:00",
+      "type": "aggregation_completed",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T09:02:43.744479+00:00",
+      "type": "report_synthesized",
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "report_chars": 5861
+    }
+  ]
+}
