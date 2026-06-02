@@ -220,3 +220,10 @@ data/batch_results/
 
 # Node
 node_modules/
+# Claude
+CLAUDE.md
+PROGRESS.md
+DECISIONS.md
+DESIGN.md
+HISTORY.md
+AGENTS.md
