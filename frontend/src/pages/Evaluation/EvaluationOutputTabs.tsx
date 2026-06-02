@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { getSyllabus } from "@/lib/api";
 import type {
   AgentOutputDump,
   CriterionJudgmentDump,
   EvaluationDetail,
   RetrievedChunkRef,
+  SyllabusDetail,
 } from "@/lib/types";
 
 interface Props {
@@ -21,10 +26,16 @@ interface Props {
  * synthesised yet, so the layout stays stable across the lifecycle
  * of one evaluation. Each tab handles its own "in attesa" state.
  *
- * The Syllabus tab is intentionally a light preview (course title +
- * deep link). The full side-by-side split view is scope of phase-5.5.H.
+ * Desktop now offers a side-by-side Report/Syllabus view in the Report
+ * tab; mobile and tablet users still use the separate tabs.
  */
 export function EvaluationOutputTabs({ data }: Props) {
+  const syllabusQuery = useQuery({
+    queryKey: ["syllabus", data.syllabus_seuid_snapshot],
+    queryFn: () => getSyllabus(data.syllabus_seuid_snapshot),
+  });
+  const syllabus = syllabusQuery.data ?? null;
+
   return (
     <section className="min-w-0 rounded-lg border bg-card p-6">
       <Tabs defaultValue="report" className="min-w-0">
@@ -35,11 +46,24 @@ export function EvaluationOutputTabs({ data }: Props) {
         </TabsList>
 
         <TabsContent value="report" className="mt-4 min-w-0">
-          <ReportPanel data={data} />
+          <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
+            <ReportPanel data={data} />
+            <div className="hidden min-w-0 xl:block">
+              <SyllabusInlinePanel
+                data={data}
+                syllabus={syllabus}
+                isLoading={syllabusQuery.isLoading}
+              />
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="syllabus" className="mt-4 min-w-0">
-          <SyllabusPreview data={data} />
+          <SyllabusFullPanel
+            data={data}
+            syllabus={syllabus}
+            isLoading={syllabusQuery.isLoading}
+          />
         </TabsContent>
 
         <TabsContent value="agents" className="mt-4 min-w-0">
@@ -79,25 +103,25 @@ function ReportMarkdown({ source }: { source: string }) {
         components={{
           h1: (props) => (
             <h1
-              className="mt-6 mb-3 text-[1.25rem] leading-tight font-semibold tracking-normal first:mt-0"
+              className="!mt-6 !mb-3 !text-[1.25rem] !leading-tight !font-semibold !tracking-normal first:!mt-0"
               {...props}
             />
           ),
           h2: (props) => (
             <h2
-              className="mt-6 mb-2 text-[1rem] leading-snug font-semibold tracking-normal first:mt-0"
+              className="!mt-6 !mb-2 !text-[1rem] !leading-snug !font-semibold !tracking-normal first:!mt-0"
               {...props}
             />
           ),
           h3: (props) => (
             <h3
-              className="mt-4 mb-1.5 text-sm font-semibold tracking-tight first:mt-0"
+              className="!mt-4 !mb-1.5 !text-sm !font-semibold !tracking-normal first:!mt-0"
               {...props}
             />
           ),
           h4: (props) => (
             <h4
-              className="mt-3 mb-1 text-sm font-medium first:mt-0"
+              className="!mt-3 !mb-1 !text-sm !font-medium !tracking-normal first:!mt-0"
               {...props}
             />
           ),
@@ -179,36 +203,219 @@ function ReportMarkdown({ source }: { source: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Syllabus (light preview, full split view is phase-5.5.H)
+// Syllabus split/preview
 // ---------------------------------------------------------------------------
 
-function SyllabusPreview({ data }: { data: EvaluationDetail }) {
+type SyllabusPanelProps = {
+  data: EvaluationDetail;
+  syllabus: SyllabusDetail | null;
+  isLoading: boolean;
+};
+
+function SyllabusInlinePanel({ data, syllabus, isLoading }: SyllabusPanelProps) {
   return (
-    <div className="space-y-3 text-sm">
-      <p className="text-muted-foreground">
-        Il syllabus valutato è disponibile nella pagina dedicata. Lo
-        split view affiancato report/syllabus arriverà in
-        <code className="mx-1">phase-5.5.H</code>.
-      </p>
-      <div className="rounded-md border p-4">
-        <dl className="grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
-          <Field label="Corso">{data.course_name_snapshot}</Field>
-          <Field label="SEUID">
-            <code className="font-mono text-xs">
-              {data.syllabus_seuid_snapshot}
-            </code>
-          </Field>
-        </dl>
-        <div className="mt-4">
-          <Link
-            to={`/syllabus/${data.syllabus_seuid_snapshot}`}
-            className="inline-flex items-center text-sm text-primary underline underline-offset-2 hover:text-primary/80"
-          >
-            Apri syllabus originale →
-          </Link>
-        </div>
+    <aside className="sticky top-20 max-h-[calc(100vh-6rem)] min-w-0 overflow-y-auto rounded-md border bg-background">
+      <SyllabusPanelHeader data={data} compact />
+      <div className="p-4">
+        <SyllabusBody
+          data={data}
+          syllabus={syllabus}
+          isLoading={isLoading}
+          compact
+        />
+      </div>
+    </aside>
+  );
+}
+
+function SyllabusFullPanel({ data, syllabus, isLoading }: SyllabusPanelProps) {
+  return (
+    <div className="min-w-0 rounded-md border">
+      <SyllabusPanelHeader data={data} />
+      <div className="p-4">
+        <SyllabusBody
+          data={data}
+          syllabus={syllabus}
+          isLoading={isLoading}
+        />
       </div>
     </div>
+  );
+}
+
+function SyllabusPanelHeader({
+  data,
+  compact = false,
+}: {
+  data: EvaluationDetail;
+  compact?: boolean;
+}) {
+  return (
+    <header className="flex flex-wrap items-start justify-between gap-3 border-b bg-muted/20 px-4 py-3">
+      <div className="min-w-0">
+        <h3 className="text-sm font-semibold">
+          {compact ? "Syllabus originale" : "Syllabus valutato"}
+        </h3>
+        <p className="mt-0.5 truncate text-xs text-muted-foreground">
+          {data.course_name_snapshot}
+        </p>
+      </div>
+      <Link
+        to={`/syllabus/${data.syllabus_seuid_snapshot}`}
+        className="text-xs text-primary underline underline-offset-2 hover:text-primary/80"
+      >
+        Apri pagina →
+      </Link>
+    </header>
+  );
+}
+
+function SyllabusBody({
+  data,
+  syllabus,
+  isLoading,
+  compact = false,
+}: SyllabusPanelProps & { compact?: boolean }) {
+  const [lang, setLang] = useState<"it" | "en">("it");
+  const hasEnglish = Boolean(syllabus?.has_english);
+  const activeLang = lang === "en" && !hasEnglish ? "it" : lang;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-3" aria-busy>
+        {Array.from({ length: compact ? 4 : 6 }).map((_, i) => (
+          <div key={i} className="space-y-1.5">
+            <div className="h-3 w-24 animate-pulse rounded bg-muted" />
+            <div className="h-12 animate-pulse rounded bg-muted" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (!syllabus) {
+    return (
+      <div className="space-y-3 text-sm">
+        <p className="text-muted-foreground">
+          Non riesco a caricare il contenuto del syllabus in questa vista.
+        </p>
+        <FallbackSyllabusLink data={data} />
+      </div>
+    );
+  }
+
+  const field = (name: string): string => {
+    const key = `${name}_${activeLang}` as keyof SyllabusDetail;
+    return String(syllabus[key] ?? "").trim();
+  };
+
+  const sections = [
+    {
+      title: activeLang === "it" ? "Risultati di apprendimento" : "Learning outcomes",
+      value: field("learning_outcomes"),
+    },
+    {
+      title: activeLang === "it" ? "Contenuto del corso" : "Course content",
+      value: field("course_content"),
+    },
+    {
+      title: activeLang === "it" ? "Prerequisiti" : "Prerequisites",
+      value: field("prerequisites"),
+    },
+    {
+      title: activeLang === "it" ? "Metodi di insegnamento" : "Teaching methods",
+      value: field("teaching_methods"),
+    },
+    {
+      title:
+        activeLang === "it"
+          ? "Modalità di verifica"
+          : "Assessment methods",
+      value: field("assessment_methods"),
+    },
+    {
+      title: activeLang === "it" ? "Riferimenti" : "References",
+      value: field("references"),
+    },
+  ];
+
+  return (
+    <div className="min-w-0 space-y-4 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex rounded-md border bg-muted/30 p-0.5">
+          <Button
+            size="xs"
+            variant={activeLang === "it" ? "secondary" : "ghost"}
+            onClick={() => setLang("it")}
+          >
+            IT
+          </Button>
+          <Button
+            size="xs"
+            variant={activeLang === "en" ? "secondary" : "ghost"}
+            onClick={() => setLang("en")}
+            disabled={!hasEnglish}
+          >
+            EN
+          </Button>
+        </div>
+        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.7rem] text-muted-foreground">
+          {syllabus.seuid.slice(0, 8)}
+        </code>
+      </div>
+
+      <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 xl:grid-cols-1">
+        <Field label="Docente">{syllabus.teacher || "—"}</Field>
+        <Field label="Modulo">{syllabus.module || "—"}</Field>
+      </dl>
+
+      <div className="space-y-3">
+        {sections.map((section) => (
+          <SyllabusTextSection
+            key={section.title}
+            title={section.title}
+            value={section.value}
+            compact={compact}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SyllabusTextSection({
+  title,
+  value,
+  compact,
+}: {
+  title: string;
+  value: string;
+  compact: boolean;
+}) {
+  return (
+    <section className="min-w-0 border-t pt-3 first:border-t-0 first:pt-0">
+      <h4 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h4>
+      <p
+        className={`whitespace-pre-line break-words leading-relaxed text-muted-foreground ${
+          compact ? "text-[0.83rem]" : ""
+        }`}
+      >
+        {value || "—"}
+      </p>
+    </section>
+  );
+}
+
+function FallbackSyllabusLink({ data }: { data: EvaluationDetail }) {
+  return (
+    <Link
+      to={`/syllabus/${data.syllabus_seuid_snapshot}`}
+      className="inline-flex items-center text-sm text-primary underline underline-offset-2 hover:text-primary/80"
+    >
+      Apri syllabus originale →
+    </Link>
   );
 }
 
