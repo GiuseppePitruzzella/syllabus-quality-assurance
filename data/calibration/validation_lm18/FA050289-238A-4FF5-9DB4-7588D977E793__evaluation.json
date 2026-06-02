@@ -1,0 +1,858 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+  "elapsed_seconds": 91.66,
+  "evaluation": {
+    "id": 45,
+    "evaluation_uuid": "c81fed16-68b8-4fb9-91bb-ea330a376fcd",
+    "syllabus_id": 15,
+    "syllabus_seuid_snapshot": "FA050289-238A-4FF5-9DB4-7588D977E793",
+    "course_name_snapshot": "COMPUTER SECURITY E LABORATORIO",
+    "status": "completed",
+    "started_at": "2026-05-29T08:43:12.663200",
+    "finished_at": "2026-05-29T08:44:44.292016",
+    "duration_ms": 91628,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Le informazioni fornite sono chiare e sufficientemente dettagliate per la maggior parte delle sezioni, garantendo una buona completezza strutturale e documentale.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding).\nLo studente acquisisce conoscenza critica dei problemi di sicurezza considerati \"di frontiera\" oggigiorno.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding).\nLo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di penetration testing. Diventa altresì capace di condurre elementari sessioni di analisi formale.\nAutonomia di giudizio (making judgements).\nLo studente diventa un giocatore esperto del “gioco della sicurezza”, ovvero quello di trovare possibili attacchi ad un sistema che dovrebbe essere sicuro, onde poi aggiustare il sistema per proteggerlo dagli attacchi trovati.\nAbilità comunicative (communication skills).\nLo studente familiarizza col lessico tipico della sicurezza informatica, acquisendo la capacità di utilizzare in maniera disambigua le varie sfaccettature del termine “sicurezza” per quanto concerne alcuni argomenti di ricerca, il penetration testing e l'analisi formale.\nCapacità di apprendimento (learning skills).\nLo studente acquisisce la mentalità critica e le capacità metodologiche per affrontare e risolvere i nuovi problemi di sicurezza che gli si possano presentare.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Avere competenze di base di reti di calcolatori, architetture degli elaboratori, sistemi operativi e programmazione web.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso di Computer Security copre un'ampia gamma di argomenti fondamentali per la sicurezza informatica, concentrandosi su tecniche avanzate e protocolli di protezione.\nSi parte con lo studio della crittografia visuale e delle sue applicazioni, una tecnica che permette di nascondere informazioni all'interno di immagini in modo da renderle leggibili solo a chi possiede la chiave appropriata. Segue l'analisi della sicurezza delle smartcard, dispositivi utilizzati per l'autenticazione e la protezione dei dati, approfondendo le vulnerabilità e le misure di sicurezza specifiche.\nIl corso affronta anche la sicurezza nelle reti LAN, con particolare focus sul protocollo Kerberos V, utilizzato per l'autenticazione in rete, garantendo che solo gli utenti autorizzati abbiano accesso alle risorse. Viene trattato il tema del non ripudio, ossia la garanzia che un'azione o una comunicazione non possa essere negata in seguito, studiando in dettaglio i protocolli Zhou-Gollmann, Crispo, e Abadi et al., che forniscono soluzioni a questo problema.\nGli studenti apprendono come analizzare i protocolli di sicurezza utilizzando tecniche avanzate come il model checking, che verifica l'assenza di attacchi a modelli semplificati dei protocolli, il theorem proving, che dimostra la sicurezza di un protocollo tramite ragionamento logico, e ProVerif, uno strumento automatizzato per l'analisi e la verifica dei protocolli crittografici.\nIl corso affronta poi il tema cruciale della\ncompliance di sicurezza\n, con particolare attenzione al\nRegolamento Generale sulla Protezione dei Dati (GDPR)\n. Gli studenti analizzano come i requisiti legali e organizzativi influenzino la progettazione e la gestione dei sistemi informativi sicuri.\nInfine,\nil corso introduce i fondamenti del\npenetration testing\n, illustrando le principali metodologie e fasi di un test di sicurezza etico. Gli studenti apprendono come identificare e sfruttare vulnerabilità in ambienti controllati, utilizzando strumenti e tecniche professionali per valutare la robustezza di sistemi e reti.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Progetto implementativo e colloquio orale: ciascuna delle due prove produrrà un esito in trentesimi; ambedue gli esiti, mediati, concorreranno alla definizione del voto finale.\nLa scala di valutazione è la seguente:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi.\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Esempi: Configurazione di Kerberos ed accesso a risorsa kerberizzata. Analisi del codice di un exploit\nNaturalmente,\nla prova potrà includere anche esercizi su altri argomenti del programma.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "William Stallings: Sicurezza delle reti. Applicazioni e standard\nBruce Schneier: Sicurezza digitale. Miti da sfatare, strategie da adottare\nDispense fornite dal docente durante le lezioni e pubblicate sulla piattaforma didattica",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni sono in forma orale, e vengono completate con numerose applicazioni pratiche in classe.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza ai corsi non è obbligatoria ma è\nfortemente consigliata per via del forte carattere sperimentale ed interattivo.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Crittografia visuale e sue applicazioni\",\n      \"riferimenti_testi\": \"Schneier e dispense\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Sicurezza delle smartcard\",\n      \"riferimenti_testi\": \"Schneier e dispense\"\n    },\n    {\n      \"numero\": \"3\",\n      \"argomenti\": \"Sicurezza su LAN: Kerberos V\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"4\",\n      \"argomenti\": \"Non ripudio: protocollo Zhou-Gollmann\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"5\",\n      \"argomenti\": \"Non ripudio: protocollo Crispo\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"6\",\n      \"argomenti\": \"Non ripudio: protocollo Abadi et al.\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"7\",\n      \"argomenti\": \"Analisi di protocolli: model checking\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"8\",\n      \"argomenti\": \"Analisi di protocolli: theorem proving\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"9\",\n      \"argomenti\": \"Normative sulla sicurezza: il Codice Privacy e la GDPR\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    },\n    {\n      \"numero\": \"10\",\n      \"argomenti\": \"Penetration testing: concetti di base\",\n      \"riferimenti_testi\": \"Stallings e dispense\"\n    }\n  ]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus dichiara la disponibilità della versione inglese (`has_english: true`) e presenta traduzioni complete e dettagliate per i risultati di apprendimento, i contenuti del corso e le modalità di verifica. Tuttavia, il titolo del corso (`course_name`) è fornito solo in italiano e manca la sua traduzione in inglese, non soddisfacendo pienamente il perimetro minimo bilingue richiesto.",
+            "evidences": [
+              {
+                "text": "true",
+                "source_field": "has_english"
+              },
+              {
+                "text": "Knowledge and understanding.\nStudents will get to grips with \"frontier\" security issues such as non-repudiation, penetration testing and formal analysis.\nApplying knowledge and understanding.\nStudents will complete their fundamental security knowledge with the practical applications of the tools for penetration testing and formal analysis.\nMaking judgements.\nStudents will become expert players of the \"security game\", and in particular of the tools to play actively and successfully in a Capture The Flag in the style brought forward by Professor Giovanni Vigna and his team.\nCommunication skills.\nStudents will familiarise with advanced cyber security terms, building their capacity to conjugate penetration testing and formal analysis towards the deployment of secure systems.\nLearning skills.\nStudents will get the critical attitude and competences to tackle and solve advanced security problems are they arise in various forms.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The\nComputer Security\ncourse covers a broad range of fundamental topics in cybersecurity, focusing on advanced protection techniques and security protocols.\nIt begins with the study of\nvisual cryptography\nand its applications — a technique that allows information to be hidden within images, making it readable only to those who possess the appropriate key. This is followed by the analysis of\nsmartcard security\n, devices used for authentication and data protection, with an in-depth look at their specific vulnerabilities and countermeasures.\nThe course also addresses\nLAN network security\n, with a particular focus on the\nKerberos V\nprotocol, used for network authentication to ensure that only authorized users can access resources. The topic of\nnon-repudiation\nis also covered — the guarantee that an action or communication cannot be denied afterward — through the detailed study of the\nZhou-Gollmann\n,\nCrispo\n, and\nAbadi et al.\nprotocols, which provide formal solutions to this issue.\nStudents learn how to\nanalyze security protocols\nusing advanced techniques such as\nmodel checking\n, which verifies the absence of attacks in simplified protocol models;\ntheorem proving\n, which demonstrates protocol security through logical reasoning; and\nProVerif\n, an automated tool for analyzing and verifying cryptographic protocols.\nThe course then examines the crucial topic of\nsecurity compliance\n, with particular attention to the\nGeneral Data Protection Regulation (GDPR)\n. Students analyze how legal and organizational requirements influence the design and management of secure information systems.\nFinally, the course introduces the fundamentals of\npenetration testing\n, illustrating the main methodologies and stages of an ethical security assessment. Students learn how to identify and exploit vulnerabilities in controlled environments, using professional tools and techniques to evaluate the robustness of systems and networks.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "Implementation Project and Oral Examination:\nEach of the two assessments will be graded on a thirty-point scale. The final grade will result from the average of the two marks.\nThe\ngrading scale\nis as follows:\nNot approved:\nthe student has not acquired the basic concepts and is unable to answer at least 60% of the questions or complete the required exercises.\n18–23:\nthe student demonstrates a minimal understanding of the basic concepts, limited ability to connect topics, and can solve only simple exercises.\n24–27:\nthe student shows a good grasp of the course contents, adequate ability to interrelate topics, and completes the exercises with few errors.\n28–30 with distinction:\nthe student has mastered all course contents, demonstrates critical understanding and the ability to make connections across topics, and solves the exercises thoroughly and without mistakes.\nThe\nassessment\nmay also be conducted\nremotely\n, should circumstances require it.\nStudents with\ndisabilities and/or specific learning disorders (SLD)\nare required to contact the instructor, the\nCInAP representative of the DMI\n, and the\nCInAP office\nwell in advance of the exam date to request appropriate compensatory measures.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, indicando aree di conoscenza come 'reti di calcolatori, architetture degli elaboratori, sistemi operativi e programmazione web'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo limita la chiarezza per lo studente rispetto alla natura e al livello di indispensabilità delle conoscenze richieste.",
+            "evidences": [
+              {
+                "text": "Avere competenze di base di reti di calcolatori, architetture degli elaboratori, sistemi operativi e programmazione web.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 26166,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 39599,
+            "response_chars": 14604,
+            "latency_ms": 25599
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7095855176448822
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7020294666290283
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.6951073110103607
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7322028875350952
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6843761801719666
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7642637938261032
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7347611486911774
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7294370234012604
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano verbi d'azione che descrivono conoscenze e abilità osservabili che lo studente acquisirà, andando oltre le descrizioni generiche o del corso. Le formulazioni sono dettagliate per ciascun descrittore di Dublino, indicando cosa lo studente sarà in grado di fare o conoscere al termine del corso.",
+            "evidences": [
+              {
+                "text": "Lo studente acquisisce conoscenza critica dei problemi di sicurezza considerati \"di frontiera\" oggigiorno.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di penetration testing. Diventa altresì capace di condurre elementari sessioni di analisi formale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo studente diventa un giocatore esperto del “gioco della sicurezza”, ovvero quello di trovare possibili attacchi ad un sistema che dovrebbe essere sicuro, onde poi aggiustare il sistema per proteggerlo dagli attacchi trovati.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo studente familiarizza col lessico tipico della sicurezza informatica, acquisendo la capacità di utilizzare in maniera disambigua le varie sfaccettature del termine “sicurezza” per quanto concerne alcuni argomenti di ricerca, il penetration testing e l'analisi formale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo studente acquisisce la mentalità critica e le capacità metodologiche per affrontare e risolvere i nuovi problemi di sicurezza che gli si possano presentare.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati, sia nella sezione generale dei risultati di apprendimento che nei campi specifici dedicati a ciascun descrittore. Le descrizioni sono specifiche e differenziate per ciascun descrittore, evitando ripetizioni o formulazioni generiche, in linea con le raccomandazioni delle Linee Guida UniCT che richiedono una formulazione esplicita per ciascuno dei cinque descrittori.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding).\nLo studente acquisisce conoscenza critica dei problemi di sicurezza considerati \"di frontiera\" oggigiorno.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding).\nLo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di penetration testing. Diventa altresì capace di condurre elementari sessioni di analisi formale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements).\nLo studente diventa un giocatore esperto del “gioco della sicurezza”, ovvero quello di trovare possibili attacchi ad un sistema che dovrebbe essere sicuro, onde poi aggiustare il sistema per proteggerlo dagli attacchi trovati.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills).\nLo studente familiarizza col lessico tipico della sicurezza informatica, acquisendo la capacità di utilizzare in maniera disambigua le varie sfaccettature del termine “sicurezza” per quanto concerne alcuni argomenti di ricerca, il penetration testing e l'analisi formale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills).\nLo studente acquisisce la mentalità critica e le capacità metodologiche per affrontare e risolvere i nuovi problemi di sicurezza che gli si possano presentare.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 12704,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 27809,
+            "response_chars": 4411,
+            "latency_ms": 12306
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7793573141098022
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7582673132419586
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7486512660980225
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8042466938495636
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7721106857061386
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.761771097779274
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene indicata la composizione dell'esame (progetto implementativo e colloquio orale) e come i due esiti concorrono al voto finale. È presente una scala di valutazione dettagliata che specifica i criteri per l'attribuzione del voto per ogni fascia, fornendo un'ottima trasparenza. Inoltre, vengono forniti esempi concreti di domande/esercizi, come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Progetto implementativo e colloquio orale: ciascuna delle due prove produrrà un esito in trentesimi; ambedue gli esiti, mediati, concorreranno alla definizione del voto finale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "La scala di valutazione è la seguente:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi.\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Esempi: Configurazione di Kerberos ed accesso a risorsa kerberizzata. Analisi del codice di un exploit",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La descrizione è articolata in sezioni tematiche che seguono una progressione logica, coprendo un'ampia gamma di argomenti specifici. La presenza di una programmazione dettagliata, che elenca gli argomenti per numero e indica i riferimenti testuali, rafforza ulteriormente la chiarezza e l'organizzazione, rendendo i contenuti facilmente comprensibili e coerenti con gli obiettivi formativi dichiarati.",
+            "evidences": [
+              {
+                "text": "Il corso di Computer Security copre un'ampia gamma di argomenti fondamentali per la sicurezza informatica, concentrandosi su tecniche avanzate e protocolli di protezione.\nSi parte con lo studio della crittografia visuale e delle sue applicazioni, una tecnica che permette di nascondere informazioni all'interno di immagini in modo da renderle leggibili solo a chi possiede la chiave appropriata. Segue l'analisi della sicurezza delle smartcard, dispositivi utilizzati per l'autenticazione e la protezione dei dati, approfondendo le vulnerabilità e le misure di sicurezza specifiche.\nIl corso affronta anche la sicurezza nelle reti LAN, con particolare focus sul protocollo Kerberos V, utilizzato per l'autenticazione in rete, garantendo che solo gli utenti autorizzati abbiano accesso alle risorse. Viene trattato il tema del non ripudio, ossia la garanzia che un'azione o una comunicazione non possa essere negata in seguito, studiando in dettaglio i protocolli Zhou-Gollmann, Crispo, e Abadi et al., che forniscono soluzioni a questo problema.\nGli studenti apprendono come analizzare i protocolli di sicurezza utilizzando tecniche avanzate come il model checking, che verifica l'assenza di attacchi a modelli semplificati dei protocolli, il theorem proving, che dimostra la sicurezza di un protocollo tramite ragionamento logico, e ProVerif, uno strumento automatizzato per l'analisi e la verifica dei protocolli crittografici.\nIl corso affronta poi il tema cruciale della\ncompliance di sicurezza\n, con particolare attenzione al\nRegolamento Generale sulla Protezione dei Dati (GDPR)\n. Gli studenti analizzano come i requisiti legali e organizzativi influenzino la progettazione e la gestione dei sistemi informativi sicuri.\nInfine,\nil corso introduce i fondamenti del\npenetration testing\n, illustrando le principali metodologie e fasi di un test di sicurezza etico. Gli studenti apprendono come identificare e sfruttare vulnerabilità in ambienti controllati, utilizzando strumenti e tecniche professionali per valutare la robustezza di sistemi e reti.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Crittografia visuale e sue applicazioni\", \"riferimenti_testi\": \"Schneier e dispense\"}, {\"numero\": \"2\", \"argomenti\": \"Sicurezza delle smartcard\", \"riferimenti_testi\": \"Schneier e dispense\"}, {\"numero\": \"3\", \"argomenti\": \"Sicurezza su LAN: Kerberos V\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"4\", \"argomenti\": \"Non ripudio: protocollo Zhou-Gollmann\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"5\", \"argomenti\": \"Non ripudio: protocollo Crispo\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"6\", \"argomenti\": \"Non ripudio: protocollo Abadi et al.\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"7\", \"argomenti\": \"Analisi di protocolli: model checking\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"8\", \"argomenti\": \"Analisi di protocolli: theorem proving\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"9\", \"argomenti\": \"Normative sulla sicurezza: il Codice Privacy e la GDPR\", \"riferimenti_testi\": \"Stallings e dispense\"}, {\"numero\": \"10\", \"argomenti\": \"Penetration testing: concetti di base\", \"riferimenti_testi\": \"Stallings e dispense\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi, che enfatizzano la conoscenza critica, la capacità pratica di penetration testing e analisi formale, l'autonomia di giudizio e le abilità comunicative nel lessico specialistico, sono pienamente supportati dai metodi didattici e dai contenuti. Le lezioni con 'numerose applicazioni pratiche' preparano adeguatamente gli studenti per il 'progetto implementativo' e il 'colloquio orale', che sono modalità di verifica ideali per accertare sia le competenze pratiche che quelle teoriche e critiche. L'allineamento tra tutti gli elementi è forte e ben esplicitato.",
+            "evidences": [
+              {
+                "text": "Lo studente acquisisce conoscenza critica dei problemi di sicurezza considerati \"di frontiera\" oggigiorno.\nLo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di penetration testing. Diventa altresì capace di condurre elementari sessioni di analisi formale.\nLo studente diventa un giocatore esperto del “gioco della sicurezza”, ovvero quello di trovare possibili attacchi ad un sistema che dovrebbe essere sicuro, onde poi aggiustare il sistema per proteggerlo dagli attacchi trovati.\nLo studente familiarizza col lessico tipico della sicurezza informatica, acquisendo la capacità di utilizzare in maniera disambigua le varie sfaccettature del termine “sicurezza” per quanto concerne alcuni argomenti di ricerca, il penetration testing e l'analisi formale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le lezioni sono in forma orale, e vengono completate con numerose applicazioni pratiche in classe.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Il corso di Computer Security copre un'ampia gamma di argomenti fondamentali per la sicurezza informatica, concentrandosi su tecniche avanzate e protocolli di protezione.\n...Gli studenti apprendono come analizzare i protocolli di sicurezza utilizzando tecniche avanzate come il model checking, che verifica l'assenza di attacchi a modelli semplificati dei protocolli, il theorem proving, che dimostra la sicurezza di un protocollo tramite ragionamento logico, e ProVerif, uno strumento automatizzato per l'analisi e la verifica dei protocolli crittografici.\n...Infine,\nil corso introduce i fondamenti del\npenetration testing\n, illustrando le principali metodologie e fasi di un test di sicurezza etico. Gli studenti apprendono come identificare e sfruttare vulnerabilità in ambienti controllati, utilizzando strumenti e tecniche professionali per valutare la robustezza di sistemi e reti.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Progetto implementativo e colloquio orale: ciascuna delle due prove produrrà un esito in trentesimi; ambedue gli esiti, mediati, concorreranno alla definizione del voto finale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Esempi: Configurazione di Kerberos ed accesso a risorsa kerberizzata. Analisi del codice di un exploit",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 25693,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 43775,
+            "response_chars": 9548,
+            "latency_ms": 25066
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7447175979614258
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7382141947746277
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.735065221786499
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7459813058376312
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7261366844177246
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.6973247826099396
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.759807363152504
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7591488659381866
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7429648041725159
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diverse imprecisioni e incongruenze editoriali che ne compromettono la cura complessiva, pur rimanendo leggibile e comprensibile. Si riscontrano refusi grammaticali, formattazione incoerente (come i punti iniziali nei descrittori di Dublino) e riferimenti bibliografici parzialmente completi. Inoltre, la versione inglese mostra significative disomogeneità, come la presenza di argomenti in italiano nella sezione del programma e una descrizione diversa per le dispense, indicando una cura editoriale non ottimale nel mantenimento della coerenza tra le due lingue.",
+            "evidences": [
+              {
+                "text": ".\nLo studente acquisisce conoscenza critica dei problemi di sicurezza considerati \"di frontiera\" oggigiorno.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "Si parte con lo studio della crittografia visuale e delle sue applicazioni, una tecnica che permette di nascondere informazioni all'interno di immagini in modo da renderle leggibile solo a chi possiede la chiave appropriata.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Students will get the critical attitude and competences to tackle and solve advanced security problems are they arise in various forms.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "William Stallings: Sicurezza delle reti. Applicazioni e standard\nBruce Schneier: Sicurezza digitale. Miti da sfatare, strategie da adottare\nDispense fornite dal docente durante le lezioni e pubblicate sulla piattaforma didattica",
+                "source_field": "references_it"
+              },
+              {
+                "text": "{ \"numero\": \"1\", \"argomenti\": \"Crittografia visuale e sue applicazioni\", \"riferimenti_testi\": \"Schneier and lecture notes\" }",
+                "source_field": "schedule_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 27006,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29130,
+            "response_chars": 2089,
+            "latency_ms": 26791
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7095359861850739
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7032098770141602
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7095855176448822
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7020294666290283
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.6951073110103607
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7322028875350952
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6843761801719666
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7642637938261032
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7347611486911774
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7294370234012604
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7793573141098022
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7582673132419586
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7486512660980225
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8042466938495636
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7721106857061386
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.761771097779274
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7447175979614258
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7382141947746277
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.735065221786499
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7459813058376312
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7261366844177246
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.6973247826099396
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.759807363152504
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7591488659381866
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7429648041725159
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7095359861850739
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7032098770141602
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — COMPUTER SECURITY E LABORATORIO\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Le informazioni fornite sono chiare e sufficientemente dettagliate per la maggior parte delle sezioni, garantendo una buona completezza strutturale e documentale.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano verbi d'azione che descrivono conoscenze e abilità osservabili che lo studente acquisirà, andando oltre le descrizioni generiche o del corso. Le formulazioni sono dettagliate per ciascun descrittore di Dublino, indicando cosa lo studente sarà in grado di fare o conoscere al termine del corso.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati, sia nella sezione generale dei risultati di apprendimento che nei campi specifici dedicati a ciascun descrittore. Le descrizioni sono specifiche e differenziate per ciascun descrittore, evitando ripetizioni o formulazioni generiche, in linea con le raccomandazioni delle Linee Guida UniCT che richiedono una formulazione esplicita p…\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene indicata la composizione dell'esame (progetto implementativo e colloquio orale) e come i due esiti concorrono al voto finale. È presente una scala di valutazione dettagliata che specifica i criteri per l'attribuzione del voto per ogni fascia, fornendo un'ottima trasparenza. Inoltre, vengono forniti esempi concreti di domande/…\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La descrizione è articolata in sezioni tematiche che seguono una progressione logica, coprendo un'ampia gamma di argomenti specifici. La presenza di una programmazione dettagliata, che elenca gli argomenti per numero e indica i riferimenti testuali, rafforza ulteriormente la chiarezza e l'organizzazione, rendendo i contenuti facilme…\n- **C8 — Coerenza didattico-valutativa** (score 2): La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi, che enfatizzano la conoscenza critica, la capacità pratica di penetration testing e analisi formale, l'autonomia di giudizio e le abilità comunicative nel lessico specialistico, sono pienamente supportati dai metodi didattici e dai contenuti. Le lezioni con 'numerose applicazioni pratiche' preparano adeguatamente gli studenti per il…\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): Il syllabus dichiara la disponibilità della versione inglese (`has_english: true`) e presenta traduzioni complete e dettagliate per i risultati di apprendimento, i contenuti del corso e le modalità di verifica. Tuttavia, il titolo del corso (`course_name`) è fornito solo in italiano e manca la sua traduzione in inglese, non soddisfacendo pienamente il perimetro minimo bilingue richiesto.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, indicando aree di conoscenza come 'reti di calcolatori, architetture degli elaboratori, sistemi operativi e programmazione web'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT. Questo limita la chiarezza per…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diverse imprecisioni e incongruenze editoriali che ne compromettono la cura complessiva, pur rimanendo leggibile e comprensibile. Si riscontrano refusi grammaticali, formattazione incoerente (come i punti iniziali nei descrittori di Dublino) e riferimenti bibliografici parzialmente completi. Inoltre, la versione inglese mostra significative disomogeneità, come la presenza di argomenti in italian…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T08:43:12.682168+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793"
+    },
+    {
+      "captured_at": "2026-05-29T08:43:38.849084+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "latency_ms": 26166,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:43:38.850197+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793"
+    },
+    {
+      "captured_at": "2026-05-29T08:43:51.556883+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "latency_ms": 12705,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T08:43:51.570873+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793"
+    },
+    {
+      "captured_at": "2026-05-29T08:44:17.265215+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "latency_ms": 25693,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:44:17.277279+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793"
+    },
+    {
+      "captured_at": "2026-05-29T08:44:44.284654+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "latency_ms": 27006,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T08:44:44.288873+00:00",
+      "type": "aggregation_completed",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T08:44:44.291330+00:00",
+      "type": "report_synthesized",
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "report_chars": 5737
+    }
+  ]
+}

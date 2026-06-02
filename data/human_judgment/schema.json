@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Human Judgment Export — Phase 5.8 syllabus validation",
+  "description": "Canonical JSON shape for one evaluator's blind judgment on one syllabus. The aggregate script reads CSVs directly for convenience; this schema is the reference format if/when an evaluator prefers to export to JSON for reproducibility.",
+  "type": "object",
+  "required": [
+    "seuid",
+    "course_name",
+    "evaluator_id",
+    "phase",
+    "completed_at",
+    "judgments"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "seuid": {
+      "type": "string"
+    },
+    "course_name": {
+      "type": "string"
+    },
+    "evaluator_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluator_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phase": {
+      "enum": [
+        "blind",
+        "post_hoc"
+      ]
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "judgments": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^C[1-9]$": {
+          "type": "object",
+          "required": [
+            "score",
+            "is_na",
+            "justification"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "score": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "enum": [
+                0,
+                1,
+                2,
+                null
+              ]
+            },
+            "is_na": {
+              "type": "boolean"
+            },
+            "na_reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "justification": {
+              "type": "string"
+            },
+            "evidence_quote": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "overall_notes": {
+      "type": "string"
+    }
+  }
+}

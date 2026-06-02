@@ -12,6 +12,21 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "lxml>=5.0",
     "sse-starlette>=2.0",
+    # === Phase 5: RAG ===
+    "chromadb>=0.4.20",
+    "google-cloud-aiplatform>=1.40.0",
+    # === Phase 5: Agentic ===
+    "langgraph>=0.0.40",
+    "langchain-core>=0.1.0",
+    # === Phase 5: Logging ===
+    "structlog>=24.0.0",
+    # === Phase 5: Rate limiting ===
+    "aiolimiter>=1.1.0",
+    # === Phase 5: CLI ===
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    # === Phase 5: YAML config (tagging rules) ===
+    "pyyaml>=6.0",
 ]
 
 [dependency-groups]

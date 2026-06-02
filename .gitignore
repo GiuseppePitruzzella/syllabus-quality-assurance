@@ -213,5 +213,17 @@ docs/
 # SQLite database
 backend/data/*.db
 
+# Phase 5: vector store, chunk previews, batch results (rebuildable artifacts)
+data/chroma/
+data/chunks_preview.json
+data/batch_results/
+
 # Node
 node_modules/
+# Claude
+CLAUDE.md
+PROGRESS.md
+DECISIONS.md
+DESIGN.md
+HISTORY.md
+AGENTS.md

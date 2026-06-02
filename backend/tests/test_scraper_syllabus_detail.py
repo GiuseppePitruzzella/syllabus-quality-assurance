@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from app.scraper.syllabus_detail import parse_syllabus_page
+from app.scraper.syllabus_detail import parse_syllabus_page, scrape_syllabus_detail
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -49,6 +49,8 @@ def test_parse_en_returns_dict(parsed_en):
 
 def test_it_has_all_expected_keys(parsed_it):
     expected_keys = {
+        "learning_outcomes",
+        "learning_outcomes",
         "dublin_knowledge",
         "dublin_applying",
         "dublin_judgement",
@@ -94,6 +96,10 @@ def test_en_has_all_expected_keys(parsed_en):
 # ---------------------------------------------------------------------------
 
 
+def test_it_learning_outcomes_nonempty(parsed_it):
+    assert parsed_it["learning_outcomes"], "learning_outcomes should not be empty (IT)"
+
+
 def test_it_dublin_knowledge_nonempty(parsed_it):
     assert parsed_it["dublin_knowledge"], "dublin_knowledge should not be empty (IT)"
 
@@ -117,6 +123,10 @@ def test_it_dublin_learning_nonempty(parsed_it):
 # ---------------------------------------------------------------------------
 # Dublin Descriptors — English
 # ---------------------------------------------------------------------------
+
+
+def test_en_learning_outcomes_nonempty(parsed_en):
+    assert parsed_en["learning_outcomes"], "learning_outcomes should not be empty (EN)"
 
 
 def test_en_dublin_knowledge_exists(parsed_en):
@@ -218,6 +228,13 @@ def test_en_schedule_has_entries(parsed_en):
     assert len(sched) > 0
 
 
+def test_en_schedule_uses_canonical_keys(parsed_en):
+    sched = parsed_en["schedule"]
+    assert isinstance(sched, list)
+    assert "argomenti" in sched[0]
+    assert "riferimenti_testi" in sched[0]
+
+
 # ---------------------------------------------------------------------------
 # Assessment
 # ---------------------------------------------------------------------------
@@ -244,10 +261,57 @@ def test_en_sample_questions_nonempty(parsed_en):
 # ---------------------------------------------------------------------------
 
 
+def test_learning_outcomes_without_dublin_labels_are_preserved():
+    html = """
+    <html><body>
+      <h2>Expected Learning Outcomes</h2>
+      <p>The course aims to provide theoretical and practical skills.</p>
+      <h2>Course Structure</h2>
+      <p>Lectures and laboratory.</p>
+    </body></html>
+    """
+    result = parse_syllabus_page(html, lang="en")
+    assert result["learning_outcomes"] == (
+        "The course aims to provide theoretical and practical skills."
+    )
+    assert result["dublin_knowledge"] == ""
+
+
+def test_scrape_detail_marks_english_true_when_non_dublin_en_content_exists():
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.responses = [
+                Response("<html><body></body></html>"),
+                Response("""
+                <html><body>
+                  <h2>Expected Learning Outcomes</h2>
+                  <p>English learning outcomes exist but are not split.</p>
+                  <h2>Detailed Course Content</h2>
+                  <p>English content exists.</p>
+                </body></html>
+                """),
+            ]
+
+        def get(self, _url):
+            return self.responses.pop(0)
+
+    result = scrape_syllabus_detail("http://it", "http://en", session=FakeSession())
+    assert result["has_english"] is True
+    assert result["learning_outcomes_en"] == (
+        "English learning outcomes exist but are not split."
+    )
+
+
 def test_empty_html_returns_dict_with_all_keys():
     result = parse_syllabus_page("<html><body></body></html>", lang="it")
     assert isinstance(result, dict)
+    assert "learning_outcomes" in result
     assert "dublin_knowledge" in result
+    assert result["learning_outcomes"] == ""
     assert result["dublin_knowledge"] == ""
     assert result["schedule"] is None
     assert result["assessment_methods"] == ""
@@ -257,3 +321,252 @@ def test_empty_html_en_returns_dict():
     result = parse_syllabus_page("<html><body></body></html>", lang="en")
     assert isinstance(result, dict)
     assert "dublin_knowledge" in result
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.1 — ISSUE-PARSER-001: HTML comment residues
+# ---------------------------------------------------------------------------
+
+
+def test_no_html_comment_close_residues_in_any_field(parsed_it, parsed_en):
+    """ISSUE-PARSER-001 regression guard on the real LM-18 fixture.
+
+    Before the fix the SmartEdu CDATA-wrapped Word/Outlook style block
+    leaked ``-->`` at the head of ``references_it``, ``assessment_methods_it``,
+    ``sample_questions_it`` and the EN counterparts. The fix combines
+    a pre-strip on the raw HTML with a safety net in
+    ``_normalize_inline_text``; this test asserts nothing leaks into
+    any extracted field.
+    """
+    for label, parsed in (("IT", parsed_it), ("EN", parsed_en)):
+        for key, value in parsed.items():
+            if isinstance(value, str):
+                assert "-->" not in value, f"{label}/{key} still leaks '-->'"
+
+
+def test_word_conditional_comments_are_stripped_pre_parse():
+    """ISSUE-PARSER-001: synthetic Word ``<!--[if !supportLists]-->`` is removed."""
+    html = """
+    <html><body>
+      <h2>Contenuti del corso</h2>
+      <p><!--[if !supportLists]--><span>•</span><!--[endif]-->
+         Argomento di prova
+      </p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "-->" not in out["course_content"]
+    assert "<!--" not in out["course_content"]
+    assert "Argomento di prova" in out["course_content"]
+
+
+def test_cdata_wrapped_comment_with_dangling_close_is_cleaned():
+    """ISSUE-PARSER-001: the CDATA-wrapped Word pattern is fully cleaned.
+
+    This is the exact shape that produced the regression on the LM-18
+    syllabi: an outer comment that the HTML parser fails to recognise
+    as a single ``Comment`` node, leaving the closing ``-->`` orphan
+    in the text output.
+    """
+    html = """
+    <html><body>
+      <style class="WebKit-mso-list-quirks-stylesheet"><!--
+        /* css */
+      --></style>
+      <h2>Verifica dell'apprendimento</h2>
+      <p>Esame orale.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "-->" not in out["assessment_methods"]
+    assert "Esame orale." in out["assessment_methods"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.3 — ISSUE-PARSER-003: language-switch anchor
+# ---------------------------------------------------------------------------
+
+
+def test_no_language_switch_marker_in_any_field(parsed_it, parsed_en):
+    """ISSUE-PARSER-003 regression guard on the real LM-18 fixture.
+
+    The ``<a><b>ENGLISH VERSION</b></a>`` button sits outside any H2
+    in the source markup but the section walker captured it as a
+    sibling, leaking ``ENGLISH VERSION`` into ``sample_questions_it``
+    / ``assessment_methods_it``. After the fix neither IT nor EN
+    fields contain either marker (the EN page has an analogous
+    ``ITALIAN VERSION`` link).
+    """
+    markers = ("english version", "italian version")
+    for label, parsed in (("IT", parsed_it), ("EN", parsed_en)):
+        for key, value in parsed.items():
+            if isinstance(value, str):
+                low = value.lower()
+                for marker in markers:
+                    assert marker not in low, (
+                        f"{label}/{key} still contains '{marker}'"
+                    )
+
+
+def test_language_switch_anchor_is_decomposed():
+    """ISSUE-PARSER-003: synthetic language-switch ``<a>`` is removed."""
+    html = """
+    <html><body>
+      <h2>Verifica dell'apprendimento</h2>
+      <p>Esame orale.</p>
+      <a class="btn btn-primary d-print-none my-3"
+         href="/insegnamenti?seuid=XXX&amp;eng"><b>ENGLISH VERSION</b></a>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "english version" not in out["assessment_methods"].lower()
+    assert "Esame orale." in out["assessment_methods"]
+
+
+def test_versione_in_italiano_anchor_is_decomposed():
+    """ISSUE-PARSER-005: the SmartEdu EN page ships the switch button as
+    ``<b>VERSIONE IN ITALIANO</b>`` (3 words, with the preposition).
+
+    The 5.4.K.3 fix only covered ``italian version`` / ``versione italiana``
+    (no preposition) so the marker leaked into ``sample_questions_en``
+    on 24/30 LM-18 syllabi during the Phase 5.7 validation. The fix
+    extends ``_LANGUAGE_SWITCH_ANCHOR_TEXTS`` to include the
+    with-preposition variant; decompose runs on the same code path.
+    """
+    html = """
+    <html><body>
+      <h2>Learning assessment</h2>
+      <p>Oral examination.</p>
+      <a class="btn btn-primary d-print-none my-3"
+         href="/insegnamenti?seuid=XXX"><b>VERSIONE IN ITALIANO</b></a>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="en")
+    assert "versione in italiano" not in out["assessment_methods"].lower()
+    assert "Oral examination." in out["assessment_methods"]
+
+
+def test_language_switch_anchor_does_not_strip_real_content():
+    """ISSUE-PARSER-003: only the exact button label is removed.
+
+    A legitimate sentence containing the phrase ``English version`` in
+    flowing text must NOT be touched — only ``<a>`` elements whose
+    full anchor text matches the known button labels are decomposed.
+    """
+    html = (
+        "<html><body><h2>Contenuti del corso</h2>"
+        "<p>The English version of the materials is on the course website.</p>"
+        "</body></html>"
+    )
+    out = parse_syllabus_page(html, lang="it")
+    # The phrase is preserved (the fix only decomposes <a> tags, not text).
+    assert "English version" in out["course_content"]
+    assert "materials" in out["course_content"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.2 — ISSUE-PARSER-002: soft-hyphen word splits
+# ---------------------------------------------------------------------------
+
+
+def test_soft_hyphen_linebreak_is_collapsed():
+    """ISSUE-PARSER-002: ``parola1-\\nparola2`` is rejoined as ``parola1parola2``.
+
+    Word / PDF imports often word-wrap with a soft hyphen at the line
+    break. The conservative fix only collapses the pattern
+    ``\\w-\\n\\w`` so genuine compound words (e.g. ``Marco-Polo``,
+    where the second part is on the same line) are untouched.
+    """
+    html = """
+    <html><body>
+      <h2>Contenuti del corso</h2>
+      <p>Modelli di appren-\ndimento profondo per applicazioni reali.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    assert "apprendimento" in out["course_content"]
+    assert "appren-" not in out["course_content"]
+
+
+def test_adjacent_inline_spans_get_word_boundary():
+    """Side-effect of ISSUE-PARSER-001 cleanup: adjacent ``<span>`` tags
+    no longer collide on the assessment / schedule paths.
+
+    Before the fix those paths used ``get_text(strip=True)`` without a
+    separator, so ``<span>Modalità</span><span>verifica</span>``
+    collapsed to ``Modalitàverifica``. Extending the 001 cleanup to
+    these paths (via ``_extract_readable_text`` + ``_normalize_inline_text``)
+    restored the word boundary as a bonus.
+    """
+    html = """
+    <html><body>
+      <h2>Verifica dell'apprendimento</h2>
+      <h3>Modalità di verifica</h3>
+      <p><span>Esame</span><span>orale</span> di trenta minuti.</p>
+    </body></html>
+    """
+    out = parse_syllabus_page(html, lang="it")
+    # The two words are kept distinct (the failure mode would be ``Esameorale``).
+    assert "Esameorale" not in out["assessment_methods"]
+    assert "Esame" in out["assessment_methods"]
+    assert "orale" in out["assessment_methods"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 5.4.K.4 — ISSUE-PARSER-004: bilingual course title
+# ---------------------------------------------------------------------------
+
+
+def test_course_title_extracted_from_h1_excludes_nested_module(parsed_it, parsed_en):
+    """ISSUE-PARSER-004: ``<h1>NomeCorso<div>Modulo</div></h1>`` -> ``NomeCorso``."""
+    # The current fixture has ``<h1>Deep Learning<div>Module ...</div></h1>``
+    # on both pages.
+    assert parsed_it["course_name"] == "Deep Learning"
+    assert parsed_en["course_name"] == "Deep Learning"
+
+
+def test_h1_with_only_text_yields_clean_title():
+    """ISSUE-PARSER-004: minimal case (``<h1>`` with only text)."""
+    out = parse_syllabus_page(
+        "<html><body><h1>OPTIMIZATION</h1></body></html>", lang="en"
+    )
+    assert out["course_name"] == "OPTIMIZATION"
+
+
+def test_missing_h1_yields_none_course_name():
+    """ISSUE-PARSER-004: pages without ``<h1>`` return ``course_name=None``."""
+    out = parse_syllabus_page("<html><body><p>no heading</p></body></html>", lang="it")
+    assert out["course_name"] is None
+
+
+def test_scrape_syllabus_detail_propagates_bilingual_titles():
+    """ISSUE-PARSER-004 end-to-end through ``scrape_syllabus_detail``.
+
+    The canonical IT title is kept by the list scraper (the detail-page
+    IT title is dropped from the merged dict). The EN title from the
+    EN detail page surfaces as ``course_name_en`` — this is the field
+    the new ``Syllabus.course_name_en`` column persists.
+    """
+
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.responses = iter(
+                [
+                    Response("<html><body><h1>OTTIMIZZAZIONE</h1></body></html>"),
+                    Response("<html><body><h1>OPTIMIZATION</h1></body></html>"),
+                ]
+            )
+
+        def get(self, _url):
+            return next(self.responses)
+
+    result = scrape_syllabus_detail("http://it", "http://en", session=FakeSession())
+    # IT detail-page title is dropped: only the canonical course_name from
+    # the CdL list (set elsewhere) is authoritative.
+    assert "course_name_it" not in result
+    # EN title survives, ready to be persisted on Syllabus.course_name_en.
+    assert result["course_name_en"] == "OPTIMIZATION"

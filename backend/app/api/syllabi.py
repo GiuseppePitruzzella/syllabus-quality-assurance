@@ -21,6 +21,7 @@ router = APIRouter(prefix="/api", tags=["syllabi"])
 
 # Italian content fields that must be set to "" when creating from list scraper
 _IT_CONTENT_FIELDS = [
+    "learning_outcomes_it",
     "dublin_knowledge_it",
     "dublin_applying_it",
     "dublin_judgement_it",

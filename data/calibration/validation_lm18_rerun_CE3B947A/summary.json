@@ -1,0 +1,164 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "generated_at": "2026-05-29T10:31:43.718343+00:00",
+  "started_at": "2026-05-29T10:30:17.983918+00:00",
+  "output_dir": "../data/calibration/validation_lm18_rerun_CE3B947A",
+  "totals": {
+    "n_runs": 1,
+    "n_completed": 1,
+    "n_partial": 0,
+    "n_failed": 0
+  },
+  "duration": {
+    "mean_ms": 84122,
+    "median_ms": 84122,
+    "total_seconds": 84.1
+  },
+  "core_score": {
+    "n": 1,
+    "mean": 1.56,
+    "median": 1.56,
+    "stdev": null,
+    "min": 1.56,
+    "max": 1.56,
+    "distribution": {
+      "0.0_0.5": 0,
+      "0.5_1.0": 0,
+      "1.0_1.5": 0,
+      "1.5_2.0": 1,
+      "2.0": 0
+    }
+  },
+  "coverage": {
+    "n": 1,
+    "mean": 1.0,
+    "fully_covered": 1,
+    "below_full": 0
+  },
+  "per_criterion": {
+    "C1": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C2": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 1,
+      "count_score_1": 0,
+      "count_score_2": 0,
+      "mean": 0,
+      "stdev": null
+    },
+    "C3": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C4": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C5": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 1,
+      "count_score_2": 0,
+      "mean": 1,
+      "stdev": null
+    },
+    "C6": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C7": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C8": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 1,
+      "mean": 2,
+      "stdev": null
+    },
+    "C9": {
+      "n_evaluated": 1,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 1,
+      "count_score_2": 0,
+      "mean": 1,
+      "stdev": null
+    }
+  },
+  "outliers": {
+    "low_core_score": [],
+    "incomplete_coverage": [],
+    "non_completed": []
+  },
+  "runs": [
+    {
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "evaluation_uuid": "68cc201c-6dcd-48aa-b00d-c1b7ff8304ec",
+      "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 84122,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 0,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7__evaluation.json",
+        "report_md": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7__report.md"
+      }
+    }
+  ]
+}

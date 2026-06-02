@@ -121,7 +121,7 @@
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
+  text-align: left;
   border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
@@ -265,8 +265,8 @@ code {
 @theme {
   --color-primary: #1B2A4A;
   --color-primary-foreground: #ffffff;
-  --color-accent: #D4A843;
-  --color-accent-foreground: #1B2A4A;
+  --color-accent: #3B82A0;
+  --color-accent-foreground: #ffffff;
   --color-sidebar: #0f1729;
   --color-sidebar-foreground: #e2e8f0;
   --color-sidebar-muted: #94a3b8;

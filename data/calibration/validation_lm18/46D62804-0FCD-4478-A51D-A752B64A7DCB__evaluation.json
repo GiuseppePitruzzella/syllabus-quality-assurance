@@ -1,0 +1,870 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+  "elapsed_seconds": 134.9,
+  "evaluation": {
+    "id": 70,
+    "evaluation_uuid": "e20fd041-e73a-43ca-980e-fe39212eebcd",
+    "syllabus_id": 76,
+    "syllabus_seuid_snapshot": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+    "course_name_snapshot": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+    "status": "completed",
+    "started_at": "2026-05-29T09:19:11.903123",
+    "finished_at": "2026-05-29T09:21:26.789062",
+    "duration_ms": 134885,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 2,
+      "C5": 1,
+      "C3": 2,
+      "C4": 1,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione è compilata in modo sostanziale e fornisce le informazioni attese, garantendo una completa strutturazione documentale del syllabus.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di\ncomprensione (knowledge and understanding): Lo studente acquisisce conoscenza\ncritica relativamente alle attività di vulnerability assessment e penetration\ntesting e comprende come vulnerabilità presenti in hardware e software\npermettano agli attaccanti di manipolarne il comportamento.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Per un’adeguata comprensione dei\ncontenuti del corso sono raccomandati i seguenti prerequisiti:\n·\nFamiliarità con i componenti hardware di base, con i principi di esecuzione\ndelle istruzioni macchina, nonché con la gestione della memoria;\n·\nConoscenza dei principali modelli di comunicazione in rete, dalla\ntrasmissione di pacchetti ai protocolli fondamentali per l'interconnessione tra\ndispositivi;\n·\nSaper realizzare operazioni CRUD su database mediante l’utilizzo di query;\n·\nConoscenza di base dei principali linguaggi di programmazione web, sia\nfront-end che back-end.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso di\nVulnerability Assessment and Penetration Testing (VAPT) fornisce una formazione\nteorica e pratica sulle tecniche per identificare e sfruttare vulnerabilità nei\nsistemi informatici, con attenzione agli aspetti legali. Dopo un'introduzione\nalle differenze tra VA (analisi automatizzata delle vulnerabilità) e PT\n(sfruttamento manuale e contestualizzato delle vulnerabilità), si analizzano\ntutte le fasi di una classica attività di VAPT. Viene anche introdotto l’uso di\nambienti come Kali Linux, utili ma non essenziali per l’attività di VAPT.\nInfatti,\nall'interno del corso vengono dettagliati strumenti e metodologie di\nInformation Gathering e Threat Modeling, per valutare scenari di attacco\nrealistici, nonché tecniche di intrusione, tra cui il Social Engineering e la\nmodifica di exploit esistenti per adattarli a diversi contesti. Viene anche\napprofondita la fase di post-exploitation, discutendo tecniche come il\nmovimento laterale, la privilege escalation, la rimozione dei log, l’evasione\ndi AV/EDR e l’esfiltrazione di dati.\nViene infine\naffrontata la redazione del report tecnico dell'attività svolta, contenente la\ndescrizione delle vulnerabilità emerse e delle possibili mitigazioni.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La verifica dell’apprendimento\nviene effettuata mediante la valutazione di un progetto individuale e di un\ncolloquio orale, in quest’ordine. Per partecipare all'esame è necessario avere effettuato la prenotazione sul portale SmartEdu. Per eventuali problemi tecnici relativi alla prenotazione occorre rivolgersi alla Segreteria didattica.\nDurante il progetto, lo studente\ndeve dimostrare di aver interiorizzato gli argomenti del corso effettuando\nun’attività di VAPT su una macchina di test preventivamente concordata con il\ndocente. Per la valutazione del progetto vengono prese in considerazione la\ncompletezza dell’attività e del relativo report, nonché l’esposizione\ndell’attività da parte dello studente.\nDurante il colloquio orale, lo\nstudente è chiamato a rispondere a domande che possono coprire tutto il\nprogramma trattato a lezione.\nTali prove potranno avere luogo per\nvia telematica, qualora le condizioni lo dovessero richiedere. La prova orale\npotrà svolgersi il giorno stesso in cui viene discusso il progetto.\nLa prova d’esame è finalizzata a\nvalutare in modo approfondito la preparazione dello studente, la capacità di\nanalisi e di ragionamento sugli argomenti trattati durante il corso, nonché\nl’adeguatezza del linguaggio tecnico utilizzato.\nPer\nl'attribuzione del voto si seguiranno di norma i seguenti criteri:\n·\nnon approvato: lo studente non ha acquisito i concetti di base e non\nè in grado di rispondere alle domande.\n·\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue\ncapacità di esposizione e di collegamento dei contenuti sono modeste, riesce a rispondere\na domande semplici.\n·\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue\ncapacità di esposizione e di collegamento dei contenuti sono buone, riesce a\nrispondere alle domande con un buon livello di dettaglio.\n·\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di\nesporli compiutamente e di collegarli con spirito critico; riesce a rispondere\nalle domande dimostrando piena padronanza degli argomenti trattati.\nIl voto finale è calcolato mediante\nla media aritmetica tra la valutazione ricevuta per il progetto e la\nvalutazione ricevuta per il colloquio orale.\nGli studenti con disabilità e/o DSA\ndovranno contattare con sufficiente anticipo rispetto alla data dell'esame il\ndocente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per\ncomunicare che intendono sostenere l'esame fruendo delle opportune misure\ncompensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "·\nSpiegare perché la rimozione di tutti i caratteri\nspeciali dall'input utente potrebbe non proteggere un servizio da SQL\nInjection.\n·\nSpiegare la differenza tra metodologie di VAPT e Kill\nChain.\n·\nSpiegare il funzionamento del tool Sharphound.\n·\nDiscutere il possibile impatto di una Server Side\nRequest Forgery.\n·\nElencare e discutere le possibili mitigazioni per XSS.\n·\nSpiegare le possibili applicazioni del diffing con\nNMap.\nSi precisa che\ntali domande hanno carattere puramente indicativo: le domande effettivamente\nproposte in sede d’esame potranno divergere, anche in modo significativo, da\nquelle riportate in questa lista.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "[1] Peter Kim\n“The Hacker Playbook 3, Practical Guide to Penetration Testing”, 2018, Secure\nPlanet LLC\n[2] Materiale\ndidattico fornito dal docente, reperibile nel canale Teams dell’insegnamento.\nCodice Teams: r1lzo7s.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "L’insegnamento si svolge attraverso\nlezioni frontali e attività pratiche. Le lezioni introdurranno i concetti\nteorici, mentre le attività pratiche ne permetteranno l’applicazione tramite\nesercitazioni e casi studio.\nQualora l'insegnamento venisse\nimpartito in modalità mista o a distanza potranno essere introdotte le\nnecessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di\nrispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Per una\ncomprensione approfondita degli argomenti trattati e delle metodologie\npresentate, si raccomanda vivamente la regolare partecipazione alle lezioni.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Introduzione al VAPT\",\n      \"riferimenti_testi\": \"[1] Capitolo non numerato “Introduction”; [2] Blocco di slide denominato “Introduzione al Corso”\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Fasi degli attacchi informatici\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Fasi dell’Attacco e Tipologie di Attività”.\"\n    },\n    {\n      \"numero\": \"3\",\n      \"argomenti\": \"Attività di sicurezza offensiva\",\n      \"riferimenti_testi\": \"[1] Capitolo non numerato “Introduction”; [2] Blocco di slide denominato “Fasi dell’Attacco e Tipologie di Attività”.\"\n    },\n    {\n      \"numero\": \"4\",\n      \"argomenti\": \"Metodologie per il VAPT\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Metodologie”.\"\n    },\n    {\n      \"numero\": \"5\",\n      \"argomenti\": \"Sistemi Operativi orientati alla sicurezza offensiva\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Distro Offensive\\\"\"\n    },\n    {\n      \"numero\": \"6\",\n      \"argomenti\": \"Information Gathering\",\n      \"riferimenti_testi\": \"[1] Capitolo 2 “Before the Snap – Red Team Recon”; [2] Blocco di slide denominato “Information Gathering e OSINT”\"\n    },\n    {\n      \"numero\": \"7\",\n      \"argomenti\": \"Threat Modeling\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Vulnerability Assessment”\"\n    },\n    {\n      \"numero\": \"8\",\n      \"argomenti\": \"Vulnerability Assessment\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Vulnerability Assessment”\"\n    },\n    {\n      \"numero\": \"9\",\n      \"argomenti\": \"Vulnerabilità web client-side\",\n      \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte I – Web Client Side”\"\n    },\n    {\n      \"numero\": \"10\",\n      \"argomenti\": \"Vulnerabilità web server-side\",\n      \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte III – Web Server Side”\"\n    },\n    {\n      \"numero\": \"11\",\n      \"argomenti\": \"Vulnerabilità su database\",\n      \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte II – Database”\"\n    },\n    {\n      \"numero\": \"12\",\n      \"argomenti\": \"Vulnerabilità su file binari\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Exploitation – Parte IV – Reverse Engineering e Binary Exploitation”\"\n    },\n    {\n      \"numero\": \"13\",\n      \"argomenti\": \"Vulnerabilità su Active Directory\",\n      \"riferimenti_testi\": \"[1] Capitolo 4 “The Drive – Compromising the Network”; [2] Blocco di slide denominato “Exploitation – Parte V – Active Directory”\"\n    },\n    {\n      \"numero\": \"14\",\n      \"argomenti\": \"Azioni di post-exploitation\",\n      \"riferimenti_testi\": \"[1] Capitolo 4 “The Drive – Compromising the Network” e Capitolo 8 “Special Teams – Cracking, Exploits and Tricks”; [2] Blocco di slide denominato “Post-Exploitation e Reporting”\"\n    },\n    {\n      \"numero\": \"15\",\n      \"argomenti\": \"Reporting\",\n      \"riferimenti_testi\": \"[2] Blocco di slide denominato “Post-Exploitation e Reporting”\"\n    }\n  ]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus fornisce la versione inglese per tutte le sezioni richieste dal perimetro minimo: il titolo del corso, i risultati di apprendimento, i contenuti e le modalità di verifica. Il titolo del corso è già in inglese, e le altre sezioni sono tradotte in modo completo e accurato.",
+            "evidences": [
+              {
+                "text": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+                "source_field": "course_name"
+              },
+              {
+                "text": "Knowledge and understanding. Students will get to grips with the vulnerability assessment and penetration testing activity, comprehending how vulnerabilities in hardware and software allow adversaries to manipulate their behaviour.\nApplying knowledge and understanding. Students will acquire practical experience in building a virtual laboratory to conduct VAPT-related experiments. They also become able to indipendently conduct real VAPT sessions.\nMaking judgements. Students will become experts in evaluating the robustness of a given target system by means of the application of relevant tools and of the exploitation of known vulnerabilities. They will be also able to estimate the impact of the performed attacks.\nCommunication skills. Students will familiarise with the concepts of vulnerability assessment and penetration testing, also building up their skills to communicate the outcomes of such activity both orally and in writing.\nLearning skills. Students will get the critical attitude and competences to define and execute sessions of vulnerability assessment and penetration testing, even if the targeted stack is not well-documented.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The Vulnerability Assessment and Penetration Testing (VAPT) course provides theoretical and practical training on techniques to identify and exploit vulnerabilities in information systems, with attention to legal aspects. After an introduction to the differences between VA (automated vulnerability analysis) and PT (manual, contextual exploitation of vulnerabilities), all phases of a typical VAPT engagement are examined. The course also introduces the use of environments such as Kali Linux, which are useful but not essential for VAPT activities.\nSpecifically, the course details tools and methodologies for Information Gathering and Threat Modeling to evaluate realistic attack scenarios, as well as intrusion techniques including Social Engineering and the modification of existing exploits to adapt them to different contexts. The post-exploitation phase is also covered in depth, discussing techniques such as lateral movement, privilege escalation, tampering with logs, AV/EDR evasion, and data exfiltration.\nFinally, the course addresses the preparation of the technical report for the activities performed, containing a description of the discovered vulnerabilities and possible mitigations.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The assessment is carried out through the evaluation of an individual project and an oral exam, in this order. To take the exam, students must register via the SmartEdu portal. For any technical issues related to registration, students should contact the Student Career Office.\nDuring the project, the student must demonstrate having absorbed the course content by performing a VAPT activity on a test machine previously agreed upon with the lecturer. The evaluation of the project takes into account the completeness of the activity and the related report, as well as the student’s presentation of the work.\nDuring the oral exam, the student is required to answer questions that may cover the entirety of the topics discussed during the lectures.\nExaminations may take place remotely, if required by the circumstances. The oral exam may be held on the same day as the project discussion.\nThe examination is aimed at thoroughly evaluating the student’s preparation, analytical and reasoning skills regarding the topics covered during the course, as well as the appropriateness of the technical language used.\nFor the assignment of grades for individual assessments, the following criteria are typically followed:\n- Fail: The student has not acquired the basic concepts and is unable to answer questions or complete the exercises.\n- 18-23: The student demonstrates a minimal mastery of the fundamental concepts; their ability to present and connect content is modest, and they can solve simple exercises.\n- 24-27: The student shows a good grasp of the course content; their ability to present and connect the content is good, and they solve exercises with few errors.\n- 28-30 with honors: The student has acquired all course content and can present them comprehensively with a critical perspective; they solve exercises completely and without errors.\nThe final grade is calculated by averaging the grade obtained during the project and the grade obtained during the oral exam.\nStudents with disabilities and/or learning disorders (DSA) must contact the lecturer, the CInAP representative at DMI (prof. Patrizia Daniele) and the CInAP itself well in advance of the exam date, to inform them of their intention to take the exam with the appropriate compensatory measures.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e formulati in modo specifico, descrivendo le conoscenze attese in termini di abilità e concetti, il che li rende utili allo studente per autovalutarsi. Viene inoltre indicata una gradazione di importanza tramite il termine 'raccomandati'. Tuttavia, non è presente una distinzione esplicita tra prerequisiti 'culturali' e 'formali' come suggerito dalle Linee Guida UniCT per il punteggio massimo, né viene utilizzata la gradazione specifica 'utili', 'importanti' o 'indispensabili'.",
+            "evidences": [
+              {
+                "text": "Per un’adeguata comprensione dei\ncontenuti del corso sono raccomandati i seguenti prerequisiti:\n·\nFamiliarità con i componenti hardware di base, con i principi di esecuzione\ndelle istruzioni macchina, nonché con la gestione della memoria;\n·\nConoscenza dei principali modelli di comunicazione in rete, dalla\ntrasmissione di pacchetti ai protocolli fondamentali per l'interconnessione tra\ndispositivi;\n·\nSaper realizzare operazioni CRUD su database mediante l’utilizzo di query;\n·\nConoscenza di base dei principali linguaggi di programmazione web, sia\nfront-end che back-end.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 69841,
+          "retry_count": 1,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 43090,
+            "response_chars": 17797,
+            "latency_ms": 35395
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7209182977676392
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7194205522537231
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7063994407653809
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7268935441970825
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.a",
+            "similarity_score": 0.6897922158241272
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7711578905582428
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7396630942821503
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7353025078773499
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano verbi d'azione che descrivono le conoscenze e le abilità che lo studente sarà in grado di dimostrare al termine del corso, andando oltre la semplice acquisizione di concetti e indicando capacità pratiche e critiche osservabili.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): Lo studente acquisisce conoscenza critica relativamente alle attività di vulnerability assessment e penetration testing e comprende come vulnerabilità presenti in hardware e software permettano agli attaccanti di manipolarne il comportamento.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): Lo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di vulnerability assessment e penetration testing. Diventa altresì capace di condurre indipendentemente sessioni attive dell'attività di vulnerability assessment e penetration testing.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): Lo studente diventa in grado di valutare la robustezza agli attacchi di un dato sistema informatico, sulla base dello sfruttamento di strumenti opportuni e di vulnerabilità note. Lo studente diventa altresì in grado di stimare l’impatto degli attacchi effettuati.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills): Lo studente familiarizza con i concetti tipici del vulnerability assessment e penetration testing acquisendo la capacità di trasmettere i risultati di una sessione di detta attività sia in forma orale che in forma scritta.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills): Lo studente acquisisce la mentalità critica per riconoscere e sfruttare nuove vulnerabilità, nonché le capacità metodologiche per affrontare e condurre autonomamente sessioni di vulnerability assessment e penetration testing anche su tecnologie poco documentate.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il campo narrativo generale dei risultati di apprendimento (\"learning_outcomes_it\") articola in modo completo e specifico tutti e cinque i Descrittori di Dublino. Tuttavia, i campi individuali dedicati a \"dublin_knowledge_it\" e \"dublin_applying_it\" risultano vuoti. Questo, secondo le regole di valutazione, implica che non tutti i descrittori sono compilati nelle loro sezioni dedicate, rendendo l'articolazione parziale rispetto alla struttura attesa, nonostante il contenuto sia presente altrove.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): Lo studente acquisisce conoscenza critica relativamente alle attività di vulnerability assessment e penetration testing e comprende come vulnerabilità presenti in hardware e software permettano agli attaccanti di manipolarne il comportamento.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): Lo studente acquisisce capacità pratica di costruire un laboratorio virtuale per condurre esperimenti di vulnerability assessment e penetration testing. Diventa altresì capace di condurre indipendentemente sessioni attive dell'attività di vulnerability assessment e penetration testing.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo studente diventa in grado di valutare la robustezza agli attacchi di un\ndato sistema informatico, sulla base dello sfruttamento di strumenti opportuni\ne di vulnerabilità note. Lo studente diventa altresì in grado di stimare\nl’impatto degli attacchi effettuati.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "Lo studente familiarizza con i concetti tipici del vulnerability assessment\ne penetration testing acquisendo la capacità di trasmettere i risultati di una\nsessione di detta attività sia in forma orale che in forma scritta.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Lo studente acquisisce la mentalità critica per riconoscere e sfruttare\nnuove vulnerabilità, nonché le capacità metodologiche per affrontare e condurre\nautonomamente sessioni di vulnerability assessment e penetration testing anche\nsu tecnologie poco documentate.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 23481,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28461,
+            "response_chars": 5180,
+            "latency_ms": 23114
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7867503762245178
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.766451507806778
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7466654181480408
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8061621636152267
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7727484703063965
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.759994775056839
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo molto chiaro e specifico. Il syllabus dettaglia le componenti d'esame (progetto individuale e colloquio orale), i criteri di valutazione per ciascuna prova e i criteri di attribuzione del voto finale, inclusa la formula di calcolo. Sono inoltre forniti esempi di domande, come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "La verifica dell’apprendimento viene effettuata mediante la valutazione di un progetto individuale e di un colloquio orale, in quest’ordine.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Durante il progetto, lo studente deve dimostrare di aver interiorizzato gli argomenti del corso effettuando un’attività di VAPT su una macchina di test preventivamente concordata con il docente. Per la valutazione del progetto vengono prese in considerazione la completezza dell’attività e del relativo report, nonché l’esposizione dell’attività da parte dello studente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Durante il colloquio orale, lo studente è chiamato a rispondere a domande che possono coprire tutto il programma trattato a lezione.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto si seguiranno di norma i seguenti criteri:\n·\nnon approvato: lo studente non ha acquisito i concetti di base e non\nè in grado di rispondere alle domande.\n·\n18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue\ncapacità di esposizione e di collegamento dei contenuti sono modeste, riesce a rispondere\na domande semplici.\n·\n24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue\ncapacità di esposizione e di collegamento dei contenuti sono buone, riesce a\nrispondere alle domande con un buon livello di dettaglio.\n·\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di\nesporli compiutamente e di collegarli con spirito critico; riesce a rispondere\nalle domande dimostrando piena padronanza degli argomenti trattati.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto finale è calcolato mediante\nla media aritmetica tra la valutazione ricevuta per il progetto e la\nvalutazione ricevuta per il colloquio orale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "·\nSpiegare perché la rimozione di tutti i caratteri\nspeciali dall'input utente potrebbe non proteggere un servizio da SQL\nInjection.\n·\nSpiegare la differenza tra metodologie di VAPT e Kill\nChain.\n·\nSpiegare il funzionamento del tool Sharphound.\n·\nDiscutere il possibile impatto di una Server Side\nRequest Forgery.\n·\nElencare e discutere le possibili mitigazioni per XSS.\n·\nSpiegare le possibili applicazioni del diffing con\nNMap.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro, dettagliato e ben organizzato. La sezione 'course_content_it' fornisce una descrizione esaustiva degli argomenti, mentre la 'schedule_it' articola ulteriormente il programma in 15 punti specifici, ciascuno con riferimenti a materiali didattici, garantendo una progressione logica e una chiara comprensione di ciò che verrà trattato. Questo è in linea con le raccomandazioni normative che richiedono contenuti chiaramente illustrati e coerenti con gli obiettivi formativi.",
+            "evidences": [
+              {
+                "text": "Il corso di\nVulnerability Assessment and Penetration Testing (VAPT) fornisce una formazione\nteorica e pratica sulle tecniche per identificare e sfruttare vulnerabilità nei\nsistemi informatici, con attenzione agli aspetti legali. Dopo un'introduzione\nalle differenze tra VA (analisi automatizzata delle vulnerabilità) e PT\n(sfruttamento manuale e contestualizzato delle vulnerabilità), si analizzano\ntutte le fasi di una classica attività di VAPT. Viene anche introdotto l’uso di\nambienti come Kali Linux, utili ma non essenziali per l’attività di VAPT.\nInfatti,\nall'interno del corso vengono dettagliati strumenti e metodologie di\nInformation Gathering e Threat Modeling, per valutare scenari di attacco\nrealistici, nonché tecniche di intrusione, tra cui il Social Engineering e la\nmodifica di exploit esistenti per adattarli a diversi contesti. Viene anche\napprofondita la fase di post-exploitation, discutendo tecniche come il\nmovimento laterale, la privilege escalation, la rimozione dei log, l’evasione\ndi AV/EDR e l’esfiltrazione di dati.\nViene infine\naffrontata la redazione del report tecnico dell'attività svolta, contenente la\ndescrizione delle vulnerabilità emerse e delle possibili mitigazioni.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Conoscenza e capacità di\ncomprensione (knowledge and understanding): Lo studente acquisisce conoscenza\ncritica relativamente alle attività di vulnerability assessment e penetration\ntesting e comprende come vulnerabilità presenti in hardware e software\npermettano agli attaccanti di manipolarne il comportamento.\nCapacità di applicare conoscenza e\ncomprensione (applying knowledge and understanding): Lo studente\nacquisisce capacità pratica di costruire un laboratorio virtuale per condurre\nesperimenti di vulnerability assessment e penetration testing. Diventa altresì\ncapace di condurre indipendentemente sessioni attive dell'attività di\nvulnerability assessment e penetration testing.\nAutonomia di giudizio (making\njudgements): Lo studente diventa in grado di valutare la robustezza agli attacchi di un\ndato sistema informatico, sulla base dello sfruttamento di strumenti opportuni\ne di vulnerabilità note. Lo studente diventa altresì in grado di stimare\nl’impatto degli attacchi effettuati.\nAbilità comunicative (communication\nskills): Lo studente familiarizza con i concetti tipici del vulnerability assessment\ne penetration testing acquisendo la capacità di trasmettere i risultati di una\nsessione di detta attività sia in forma orale che in forma scritta.\nCapacità di apprendimento (learning\nskills): Lo studente acquisisce la mentalità critica per riconoscere e sfruttare\nnuove vulnerabilità, nonché le capacità metodologiche per affrontare e condurre\nautonomamente sessioni di vulnerability assessment e penetration testing anche\nsu tecnologie poco documentate.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Introduzione al VAPT\", \"riferimenti_testi\": \"[1] Capitolo non numerato “Introduction”; [2] Blocco di slide denominato “Introduzione al Corso”\"}, {\"numero\": \"2\", \"argomenti\": \"Fasi degli attacchi informatici\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Fasi dell’Attacco e Tipologie di Attività”\"}, {\"numero\": \"3\", \"argomenti\": \"Attività di sicurezza offensiva\", \"riferimenti_testi\": \"[1] Capitolo non numerato “Introduction”; [2] Blocco di slide denominato “Fasi dell’Attacco e Tipologie di Attività”\"}, {\"numero\": \"4\", \"argomenti\": \"Metodologie per il VAPT\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Metodologie”\"}, {\"numero\": \"5\", \"argomenti\": \"Sistemi Operativi orientati alla sicurezza offensiva\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Distro Offensive\\\"\"}, {\"numero\": \"6\", \"argomenti\": \"Information Gathering\", \"riferimenti_testi\": \"[1] Capitolo 2 “Before the Snap – Red Team Recon”; [2] Blocco di slide denominato “Information Gathering e OSINT”\"}, {\"numero\": \"7\", \"argomenti\": \"Threat Modeling\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Vulnerability Assessment”\"}, {\"numero\": \"8\", \"argomenti\": \"Vulnerability Assessment\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Vulnerability Assessment”\"}, {\"numero\": \"9\", \"argomenti\": \"Vulnerabilità web client-side\", \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte I – Web Client Side”\"}, {\"numero\": \"10\", \"argomenti\": \"Vulnerabilità web server-side\", \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte III – Web Server Side”\"}, {\"numero\": \"11\", \"argomenti\": \"Vulnerabilità su database\", \"riferimenti_testi\": \"[1] Capitolo 3 “The Throw – Web Application Exploitation”; [2] Blocco di slide denominato “Exploitation – Parte II – Database”\"}, {\"numero\": \"12\", \"argomenti\": \"Vulnerabilità su file binari\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Exploitation – Parte IV – Reverse Engineering e Binary Exploitation”\"}, {\"numero\": \"13\", \"argomenti\": \"Vulnerabilità su Active Directory\", \"riferimenti_testi\": \"[1] Capitolo 4 “The Drive – Compromising the Network”; [2] Blocco di slide denominato “Exploitation – Parte V – Active Directory”\"}, {\"numero\": \"14\", \"argomenti\": \"Azioni di post-exploitation\", \"riferimenti_testi\": \"[1] Capitolo 4 “The Drive – Compromising the Network” e Capitolo 8 “Special Teams – Cracking, Exploits and Tricks”; [2] Blocco di slide denominato “Post-Exploitation e Reporting”\"}, {\"numero\": \"15\", \"argomenti\": \"Reporting\", \"riferimenti_testi\": \"[2] Blocco di slide denominato “Post-Exploitation e Reporting”\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi, che spaziano dalla conoscenza teorica alla capacità pratica, all'autonomia di giudizio e alle abilità comunicative, sono pienamente supportati dai metodi didattici che includono lezioni frontali e attività pratiche. Le modalità di verifica, in particolare il progetto individuale con report ed esposizione, sono perfettamente allineate con l'accertamento delle competenze pratiche, di giudizio e comunicative, mentre il colloquio orale verifica la conoscenza e comprensione teorica. Questo allineamento è esplicitamente richiesto dalle normative di riferimento.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di\ncomprensione (knowledge and understanding): Lo studente acquisisce conoscenza\ncritica relativamente alle attività di vulnerability assessment e penetration\ntesting e comprende come vulnerabilità presenti in hardware e software\npermettano agli attaccanti di manipolarne il comportamento.\nCapacità di applicare conoscenza e\ncomprensione (applying knowledge and understanding): Lo studente\nacquisisce capacità pratica di costruire un laboratorio virtuale per condurre\nesperimenti di vulnerability assessment e penetration testing. Diventa altresì\ncapace di condurre indipendentemente sessioni attive dell'attività di\nvulnerability assessment e penetration testing.\nAutonomia di giudizio (making\njudgements): Lo studente diventa in grado di valutare la robustezza agli attacchi di un\ndato sistema informatico, sulla base dello sfruttamento di strumenti opportuni\ne di vulnerabilità note. Lo studente diventa altresì in grado di stimare\nl’impatto degli attacchi effettuati.\nAbilità comunicative (communication\nskills): Lo studente familiarizza con i concetti tipici del vulnerability assessment\ne penetration testing acquisendo la capacità di trasmettere i risultati di una\nsessione di detta attività sia in forma orale che in forma scritta.\nCapacità di apprendimento (learning\nskills): Lo studente acquisisce la mentalità critica per riconoscere e sfruttare\nnuove vulnerabilità, nonché le capacità metodologiche per affrontare e condurre\nautonomamente sessioni di vulnerability assessment e penetration testing anche\nsu tecnologie poco documentate.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "L’insegnamento si svolge attraverso\nlezioni frontali e attività pratiche. Le lezioni introdurranno i concetti\nteorici, mentre le attività pratiche ne permetteranno l’applicazione tramite\nesercitazioni e casi studio.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La verifica dell’apprendimento\nviene effettuata mediante la valutazione di un progetto individuale e di un\ncolloquio orale, in quest’ordine. [...] Durante il progetto, lo studente\ndeve dimostrare di aver interiorizzato gli argomenti del corso effettuando\nun’attività di VAPT su una macchina di test preventivamente concordata con il\ndocente. Per la valutazione del progetto vengono prese in considerazione la\ncompletezza dell’attività e del relativo report, nonché l’esposizione\ndell’attività da parte dello studente.\nDurante il colloquio orale, lo\nstudente è chiamato a rispondere a domande che possono coprire tutto il\nprogramma trattato a lezione.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il corso di\nVulnerability Assessment and Penetration Testing (VAPT) fornisce una formazione\nteorica e pratica sulle tecniche per identificare e sfruttare vulnerabilità nei\nsistemi informatici, con attenzione agli aspetti legali. [...] all'interno del corso vengono dettagliati strumenti e metodologie di\nInformation Gathering e Threat Modeling, per valutare scenari di attacco\nrealistici, nonché tecniche di intrusione, tra cui il Social Engineering e la\nmodifica di exploit esistenti per adattarli a diversi contesti. Viene anche\napprofondita la fase di post-exploitation, discutendo tecniche come il\nmovimento laterale, la privilege escalation, la rimozione dei log, l’evasione\ndi AV/EDR e l’esfiltrazione di dati.\nViene infine\naffrontata la redazione del report tecnico dell'attività svolta, contenente la\ndescrizione delle vulnerabilità emerse e delle possibili mitigazioni.",
+                "source_field": "course_content_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 25598,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 48632,
+            "response_chars": 14533,
+            "latency_ms": 23898
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7443957924842834
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7319581508636475
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.73125159740448
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7532253116369247
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7446134090423584
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7174310088157654
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.759317934513092
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7582173198461533
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7441973090171814
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta alcune carenze nella cura editoriale che ne compromettono parzialmente la leggibilità e la coerenza. Si riscontrano frequenti interruzioni di riga non giustificate all'interno delle frasi, sia nella versione italiana che in quella inglese, e una formattazione non ottimale degli elenchi puntati. È presente un refuso nella versione inglese dei risultati di apprendimento (\"indipendently\" anziché \"independently\") e un'incoerenza linguistica nella programmazione del corso in inglese, dove compare una congiunzione in italiano. Questi elementi indicano una cura editoriale non del tutto accurata, sebbene il documento sia complessivamente comprensibile.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di\ncomprensione (knowledge and understanding): Lo studente acquisisce conoscenza\ncritica relativamente alle attività di vulnerability assessment e penetration\ntesting e comprende come vulnerabilità presenti in hardware e software\npermettano agli attaccanti di manipolarne il comportamento.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "·\nFamiliarità con i componenti hardware di base, con i principi di esecuzione\ndelle istruzioni macchina, nonché con la gestione della memoria;",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "They also become able to indipendently conduct real VAPT sessions.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": ". Students will get to grips with the vulnerability assessment and penetration testing activity, comprehending how vulnerabilities in hardware and software allow adversaries to manipulate their behaviour.",
+                "source_field": "dublin_knowledge_en"
+              },
+              {
+                "text": "[1] Chapter 4 “The Drive – Compromising the Network” e Capitolo 8 “Special Teams – Cracking, Exploits and Tricks”; [2] Online resources",
+                "source_field": "schedule_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 15932,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 34931,
+            "response_chars": 2215,
+            "latency_ms": 15692
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7089501023292542
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6959266662597656
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7209182977676392
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7194205522537231
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7063994407653809
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7268935441970825
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.a",
+          "similarity_score": 0.6897922158241272
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7711578905582428
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7396630942821503
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7353025078773499
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7867503762245178
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.766451507806778
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7466654181480408
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8061621636152267
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7727484703063965
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.759994775056839
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7443957924842834
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7319581508636475
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.73125159740448
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7532253116369247
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7446134090423584
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7174310088157654
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.759317934513092
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7582173198461533
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7441973090171814
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7089501023292542
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6959266662597656
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione è compilata in modo sostanziale e fornisce le informazioni attese, garantendo una completa strutturazione documentale del syllabus.\n- **C2 — Completezza bilingue** (score 2): Il syllabus fornisce la versione inglese per tutte le sezioni richieste dal perimetro minimo: il titolo del corso, i risultati di apprendimento, i contenuti e le modalità di verifica. Il titolo del corso è già in inglese, e le altre sezioni sono tradotte in modo completo e accurato.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano verbi d'azione che descrivono le conoscenze e le abilità che lo studente sarà in grado di dimostrare al termine del corso, andando oltre la semplice acquisizione di concetti e indicando capacità pratiche e critiche osservabili.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo molto chiaro e specifico. Il syllabus dettaglia le componenti d'esame (progetto individuale e colloquio orale), i criteri di valutazione per ciascuna prova e i criteri di attribuzione del voto finale, inclusa la formula di calcolo. Sono inoltre forniti esempi di domande, come raccomandato dalle Linee Guida UniCT.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro, dettagliato e ben organizzato. La sezione 'course_content_it' fornisce una descrizione esaustiva degli argomenti, mentre la 'schedule_it' articola ulteriormente il programma in 15 punti specifici, ciascuno con riferimenti a materiali didattici, garantendo una progressione logica e una chiara comprensione di ciò che verrà trattato. Questo è in linea con le raccoma…\n- **C8 — Coerenza didattico-valutativa** (score 2): La coerenza didattico-valutativa è eccellente. I risultati di apprendimento attesi, che spaziano dalla conoscenza teorica alla capacità pratica, all'autonomia di giudizio e alle abilità comunicative, sono pienamente supportati dai metodi didattici che includono lezioni frontali e attività pratiche. Le modalità di verifica, in particolare il progetto individuale con report ed esposizione, sono perfettamente allineate…\n\n## Aree di miglioramento\n\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e formulati in modo specifico, descrivendo le conoscenze attese in termini di abilità e concetti, il che li rende utili allo studente per autovalutarsi. Viene inoltre indicata una gradazione di importanza tramite il termine 'raccomandati'. Tuttavia, non è presente una distinzione esplicita tra prerequisiti 'culturali' e 'formali' come suggerito dalle Linee Guida UniCT per il punteggio ma…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 1): Il campo narrativo generale dei risultati di apprendimento (\"learning_outcomes_it\") articola in modo completo e specifico tutti e cinque i Descrittori di Dublino. Tuttavia, i campi individuali dedicati a \"dublin_knowledge_it\" e \"dublin_applying_it\" risultano vuoti. Questo, secondo le regole di valutazione, implica che non tutti i descrittori sono compilati nelle loro sezioni dedicate, rendendo l'articolazione parzia…\n  - *Raccomandazione*: Valuta se ciascuno dei cinque Descrittori di Dublino sia articolato con contenuti specifici e differenziati; le Linee Guida UniCT raccomandano una formulazione esplicita per ciascun descrittore.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta alcune carenze nella cura editoriale che ne compromettono parzialmente la leggibilità e la coerenza. Si riscontrano frequenti interruzioni di riga non giustificate all'interno delle frasi, sia nella versione italiana che in quella inglese, e una formattazione non ottimale degli elenchi puntati. È presente un refuso nella versione inglese dei risultati di apprendimento (\"indipendently\" anziché \"i…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T09:19:11.922837+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB"
+    },
+    {
+      "captured_at": "2026-05-29T09:20:21.764445+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "latency_ms": 69841,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:20:21.765679+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB"
+    },
+    {
+      "captured_at": "2026-05-29T09:20:45.247655+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "latency_ms": 23481,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T09:20:45.248504+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB"
+    },
+    {
+      "captured_at": "2026-05-29T09:21:10.847679+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "latency_ms": 25598,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:21:10.849139+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB"
+    },
+    {
+      "captured_at": "2026-05-29T09:21:26.782042+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "latency_ms": 15932,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T09:21:26.783287+00:00",
+      "type": "aggregation_completed",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T09:21:26.788559+00:00",
+      "type": "report_synthesized",
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "report_chars": 5527
+    }
+  ]
+}

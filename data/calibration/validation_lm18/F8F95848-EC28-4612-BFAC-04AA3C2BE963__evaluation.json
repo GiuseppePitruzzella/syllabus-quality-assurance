@@ -1,0 +1,850 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+  "elapsed_seconds": 96.42,
+  "evaluation": {
+    "id": 43,
+    "evaluation_uuid": "2df00060-6b75-4dd1-b379-dbc615df4e4c",
+    "syllabus_id": 7,
+    "syllabus_seuid_snapshot": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+    "course_name_snapshot": "BLOCKCHAIN E CRYPTOCURRENCIES",
+    "status": "completed",
+    "started_at": "2026-05-29T08:40:18.470608",
+    "finished_at": "2026-05-29T08:41:54.874858",
+    "duration_ms": 96404,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.78,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 2,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la compilazione del Syllabus (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Tutte le sezioni sono compilate in modo sostanziale e contengono informazioni pertinenti, garantendo una completa panoramica dell'insegnamento.",
+            "evidences": [
+              {
+                "text": "Obiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi.\nConoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base di Bitcoin e di altre criptovalute; in particolare lo studente acquisirà familiarità anche con i principali strumenti crittografici sottostanti le moderne crittovalute.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare attivamente sistemi basati su blockchain come Bitcoin ed Ethereum.\nAutonomia di giudizio (making judgements):\nAttraverso lo studio di attacchi e di esempi concreti hands-on lo studente acquisirà la capacità di comprendere l’effettiva robustezza delle soluzioni proposte e di utilizzare autonomamente soluzioni in grado di garantire elevati livelli di sicurezza ed affidabilità.\nAbilità comunicative (communication skills):\nlo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale delle moderne crittovalute.\nCapacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti quali blockchain, proof of work e smart contracts.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Il corso presuppone familiarità con la programmazione. Un minimo di background in crittografia è fortemente consigliato.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Negli ultimi dieci anni Bitcoin ed Ethereum sono diventati sistemi da decine (se non centinaia) di miliardi di dollari. Inoltre il potenziale dei cosiddetti decentralized ledgers (blockchain) ha attratto l’interesse di ricercatori e sviluppatori in ambiti che spaziano dalla finanza al voto elettronico, passando per corporate governance e online-gaming. Obiettivo del corso è studiare i concetti fondamentali alla base di tali sistemi: append-only ledgers, consenso decentralizzato, smart contracts e zero-knowledge proof systems. Gli studenti acquisiranno familiarità con il sistema Bitcoin attraverso un approccio concreto che prevede, tra le altre cose, l’approfondimento della programmazione legata a Bitcoin e, soprattutto, ad Ethereum. Infine, una parte del corso ospiterà interventi di esperti che lavorano in aziende legate direttamente o indirettamente al mondo delle criptovalute.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame consiste di una prova di laboratorio seguita da un esame orale.\nProve in itinere\n: E' prevista la possibilità da fare 1 o più prove in itinere sui contenuti teorici del corso.\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nPer partecipare all'esame finale è necessario avere effettuato la prenotazione sul portale SmartEdu. Per eventuali problemi tecnici relativi alla prenotazione occorre rivolgersi alla Segreteria didattica.\nIl voto, congiunto con il modulo di laboratorio, è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Illustrare il funzionamento di hash pointers e di alcune strutture dati ad essi correlati (qauli blockchain o Merkle Tree.)\nEsercizi sugli strumenti e le primitive crittografiche introdotte (es dimostrare che un dato protocollo non è zero knowledge)",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Testo principale\n[1] Arvind Narayanan, Joseph Bonneau, Edward Felten, Andrew Miller, Steven Goldfeder\nBitcoin and Cryptocurrency Technologies: A Comprehensive Introduction\n(Author’s preprint edition disponibile gratuitamente al sito:\nhttps://bitcoinbook.cs.princeton.edu/\n)\nAltre letture consigliate:\n[2] Bitcoin Developer Reference\nhttps://bitcoin.org/en/developer-reference\n[3] Ethereum “white” paper:\nhttps://github.com/ethereum/wiki/wiki/White-Paper\n[4] Ethereum “yellow” paper:\nhttp://gavwood.com/paper.pdf\n[5] Zerocoin: Anonymous Distributed e-cash from Bitcoin.\n[6] Zerocash: Decentralized Anonymous Payments from Bitcoin\n[7] Algorand: Scaling Byzantine Agreements for Cryptocurrencies\n[8] Guida \"Solidity\":\nhttps://solidity.readthedocs.io",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aula con l'ausilio di slide. Le slide non sostituiscono i testi di riferimento, ma, oltre che agevolare la comprensione della lezione, forniscono un dettaglio puntuale sul programma svolto.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Fortemente consigliata.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Introduzione alla Crittografia e alle Cryptocurrencies\", \"riferimenti_testi\": \"Cap. 1 di [1]\"}, {\"numero\": \"2\", \"argomenti\": \"Come Bitcoin realizza decentralizzazione\", \"riferimenti_testi\": \"Cap 2 di [1]\"}, {\"numero\": \"3\", \"argomenti\": \"Meccanica di Bitcoin\", \"riferimenti_testi\": \"Cap. 3 di [1], e pre approfondire [2]\"}, {\"numero\": \"4\", \"argomenti\": \"Come conservare e gestire Bitcoins.\", \"riferimenti_testi\": \"Cap. 4 di [1]\"}, {\"numero\": \"5\", \"argomenti\": \"Privacy e Anonimato e nelle cryptocurrencies.\", \"riferimenti_testi\": \"Cap. 6 di [1] capitolo 6, e per approfondire [5] e [6].\"}, {\"numero\": \"6\", \"argomenti\": \"Altri aspetti di Bitcoin: comunità, politica, controversie ed estensioni\", \"riferimenti_testi\": \"Cap. 7 e 9 di [1]\"}, {\"numero\": \"7\", \"argomenti\": \"Ethereum e Smart contract applications & security\", \"riferimenti_testi\": \"Cap 10 di [1], slides e per approfondire [3] e [4]\"}, {\"numero\": \"8\", \"argomenti\": \"Approcci alternativi a mining e consenso\", \"riferimenti_testi\": \"Cap. 8, slides e per approfondire [7]\"}, {\"numero\": \"9\", \"argomenti\": \"Laboratorio su Ethereum. Smart Contracts, Ethereum Virtual Machine (EVM) e introduzione alla scrittura di Smart Contracts usando il linguaggio Solidity.\", \"riferimenti_testi\": \"[8]\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus fornisce una versione inglese completa per tutti gli elementi del perimetro minimo richiesto: risultati di apprendimento, contenuti del corso e modalità di verifica. La presenza del flag 'has_english: true' è supportata dalla compilazione effettiva dei campi in inglese.",
+            "evidences": [
+              {
+                "text": "In terms of expected results, the goals of this course are\nKnowledge and understanding\n. Students will learn the fundamental ideas and the basic principles underlying Bitcoin and other cryptocurrencies. Students will also get familiarity with the main cryptographic primitives underlying modern cryptocurrencies.\nApplying knowledge and understanding.\nStudents will be able to actively use systems based on blockchain such as Bitcoin and Ethereum.\nMaking judgements\n. By studying attacks and concrete examples students will be able to understand the security of the presented schemes. Moreover they will learn how to use solutions providing high security guarantees.\nCommunication Skills\n. Students will learn how to properly communicate using the technical language of modern cryptocurrencies.\nLearning Skills\n. A goal of this course is to provide a good good theoretical and practical background of modern cryptography. It is expected that students will learn how to autonomously address problems that require the usage of concepts like blockchain, proof of work and smart contracts.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Over the past ten years, Bitcoin and Ethereum have grown into systems worth tens (if not hundreds) of billions of dollars. Moreover, the potential of so-called decentralized ledgers (blockchains) has attracted the interest of researchers and developers in fields ranging from finance to electronic voting, as well as corporate governance and online gaming.\nThe goal of the course is to study the fundamental concepts underlying these systems: append-only ledgers, decentralized consensus, smart contracts, and zero-knowledge proof systems. Students will gain familiarity with the Bitcoin system through a hands-on approach that includes, among other things, an in-depth exploration of programming related to Bitcoin and, above all, Ethereum.\nFinally, part of the course will feature guest lectures by experts working in companies directly or indirectly connected to the world of cryptocurrencies.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "Exam structure\nThe exam consists of a laboratory test followed by an oral examination.\nMid-term tests:\nIt is possible to take one or more mid-term tests covering the theoretical content of the course.\nThe assessment may also be conducted online, should circumstances require it.\nTo take part in the final exam, students must register through the\nSmartEdu\nportal. For any technical issues related to registration, students should contact the Teaching Office (\nSegreteria Didattica\n).\nGrading criteria (including the laboratory module):\nNot approved:\nthe student has not acquired the basic concepts and is unable to answer at least 60% of the questions or complete theoretical and practical exercises.\n18–20:\nthe student demonstrates only a barely sufficient understanding of the basic concepts and/or can approach theoretical/practical exercises only with great difficulty and several errors.\n21–24:\nthe student shows a minimal grasp of the fundamental concepts, has limited ability to connect different topics, and can solve only simple exercises.\n25–27:\nthe student demonstrates a good understanding of the course content, is able to make appropriate connections between topics, and completes exercises with few errors.\n28–30 with honors (\ncum laude\n):\nthe student has fully mastered all course content, can connect topics critically and coherently, and solves exercises completely and without significant errors.\nStudents with disabilities and/or specific learning disorders (SLD)\nmust contact, well in advance of the exam date, the instructor, the CInAP representative for DMI (Prof. Daniele), and the CInAP office to request appropriate compensatory measures.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici in termini di conoscenze richieste, come la familiarità con la programmazione e un background in crittografia. Viene anche indicata una gradazione di importanza ('presuppone' e 'fortemente consigliato'). Tuttavia, il syllabus non distingue esplicitamente tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche, né tra prerequisiti culturali e formali, sebbene siano presenti solo prerequisiti di tipo conoscitivo.",
+            "evidences": [
+              {
+                "text": "Il corso presuppone familiarità con la programmazione. Un minimo di background in crittografia è fortemente consigliato.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 38238,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 39098,
+            "response_chars": 13873,
+            "latency_ms": 37610
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7146628201007843
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7116308212280273
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7057400941848755
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7341784238815308
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.6825497448444366
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7565390765666962
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7215954065322876
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7213181257247925
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, utilizzando un linguaggio centrato sullo studente che descrive le conoscenze e le abilità che lo studente acquisirà. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e verificabili, evitando formulazioni generiche o che descrivono il corso anziché l'apprendimento dello studente, in linea con le raccomandazioni delle Linee Guida UniCT e della Matrice di Tuning che richiedono risultati formulati in modo valutabile.",
+            "evidences": [
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base di Bitcoin e di altre criptovalute; in particolare lo studente acquisirà familiarità anche con i principali strumenti crittografici sottostanti le moderne crittovalute.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per utilizzare attivamente sistemi basati su blockchain come Bitcoin ed Ethereum.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Attraverso lo studio di attacchi e di esempi concreti hands-on lo studente acquisirà la capacità di comprendere l’effettiva robustezza delle soluzioni proposte e di utilizzare autonomamente soluzioni in grado di garantire elevati livelli di sicurezza ed affidabilità.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale delle moderne crittovalute.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti quali blockchain, proof of work e smart contracts.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati nel syllabus. Ogni descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una chiara distinzione tra le diverse tipologie di competenze attese. Questo approccio è pienamente coerente con le Linee Guida UniCT e le Linee guida SUA-CdS che raccomandano una declinazione esplicita e dettagliata di tutti i descrittori per garantire la trasparenza e la comparabilità dei percorsi formativi.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base di Bitcoin e di altre criptovalute; in particolare lo studente acquisirà familiarità anche con i principali strumenti crittografici sottostanti le moderne crittovalute.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare attivamente sistemi basati su blockchain come Bitcoin ed Ethereum.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements):\nAttraverso lo studio di attacchi e di esempi concreti hands-on lo studente acquisirà la capacità di comprendere l’effettiva robustezza delle soluzioni proposte e di utilizzare autonomamente soluzioni in grado di garantire elevati livelli di sicurezza ed affidabilità.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills):\nlo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale delle moderne crittovalute.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti quali blockchain, proof of work e smart contracts.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 17084,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28359,
+            "response_chars": 4955,
+            "latency_ms": 16263
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7871992141008377
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7565064132213593
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7449958324432373
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8133330047130585
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7668573707342148
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7601733356714249
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo specifico e dettagliato. Viene chiaramente indicata la struttura dell'esame (prova di laboratorio seguita da esame orale) e sono forniti criteri di attribuzione del voto molto precisi per ogni fascia di valutazione. Sono inoltre presenti esempi di domande, come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "L'esame consiste di una prova di laboratorio seguita da un esame orale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto, congiunto con il modulo di laboratorio, è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Illustrare il funzionamento di hash pointers e di alcune strutture dati ad essi correlati (qauli blockchain o Merkle Tree.)\nEsercizi sugli strumenti e le primitive crittografiche introdotte (es dimostrare che un dato protocollo non è zero knowledge)",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono chiaramente articolati e organizzati. Oltre a una descrizione generale degli argomenti principali, è presente una programmazione dettagliata che suddivide il corso in 9 punti tematici specifici, ciascuno con riferimenti bibliografici. Questa struttura consente di comprendere la progressione e l'ampiezza dei temi trattati, in linea con le raccomandazioni normative.",
+            "evidences": [
+              {
+                "text": "Obiettivo del corso è studiare i concetti fondamentali alla base di tali sistemi: append-only ledgers, consenso decentralizzato, smart contracts e zero-knowledge proof systems. Gli studenti acquisiranno familiarità con il sistema Bitcoin attraverso un approccio concreto che prevede, tra le altre cose, l’approfondimento della programmazione legata a Bitcoin e, soprattutto, ad Ethereum.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Introduzione alla Crittografia e alle Cryptocurrencies\", \"riferimenti_testi\": \"Cap. 1 di [1]\"}, {\"numero\": \"2\", \"argomenti\": \"Come Bitcoin realizza decentralizzazione\", \"riferimenti_testi\": \"Cap 2 di [1]\"}, {\"numero\": \"3\", \"argomenti\": \"Meccanica di Bitcoin\", \"riferimenti_testi\": \"Cap. 3 di [1], e pre approfondire [2]\"}, {\"numero\": \"4\", \"argomenti\": \"Come conservare e gestire Bitcoins.\", \"riferimenti_testi\": \"Cap. 4 di [1]\"}, {\"numero\": \"5\", \"argomenti\": \"Privacy e Anonimato e nelle cryptocurrencies.\", \"riferimenti_testi\": \"Cap. 6 di [1] capitolo 6, e per approfondire [5] e [6].\"}, {\"numero\": \"6\", \"argomenti\": \"Altri aspetti di Bitcoin: comunità, politica, controversie ed estensioni\", \"riferimenti_testi\": \"Cap. 7 e 9 di [1]\"}, {\"numero\": \"7\", \"argomenti\": \"Ethereum e Smart contract applications & security\", \"riferimenti_testi\": \"Cap 10 di [1], slides e per approfondire [3] e [4]\"}, {\"numero\": \"8\", \"argomenti\": \"Approcci alternativi a mining e consenso\", \"riferimenti_testi\": \"Cap. 8, slides e per approfondire [7]\"}, {\"numero\": \"9\", \"argomenti\": \"Laboratorio su Ethereum. Smart Contracts, Ethereum Virtual Machine (EVM) e introduzione alla scrittura di Smart Contracts usando il linguaggio Solidity.\", \"riferimenti_testi\": \"[8]\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste un forte allineamento tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I risultati di apprendimento enfatizzano la comprensione dei principi, l'applicazione pratica (utilizzare sistemi, programmare) e la capacità di risolvere problemi autonomamente. I contenuti del corso e la programmazione includono specifici argomenti teorici e un 'Laboratorio su Ethereum' per la programmazione di Smart Contracts, che supporta direttamente le abilità pratiche. La modalità di verifica, che include una 'prova di laboratorio' e un 'esame orale' con criteri di valutazione dettagliati, è perfettamente coerente con l'accertamento sia delle conoscenze teoriche che delle capacità applicative e di giudizio, come richiesto dai descrittori di Dublino.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base di Bitcoin e di altre criptovalute; in particolare lo studente acquisirà familiarità anche con i principali strumenti crittografici sottostanti le moderne crittovalute.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare attivamente sistemi basati su blockchain come Bitcoin ed Ethereum.\nAutonomia di giudizio (making judgements):\nAttraverso lo studio di attacchi e di esempi concreti hands-on lo studente acquisirà la capacità di comprendere l’effettiva robustezza delle soluzioni proposte e di utilizzare autonomamente soluzioni in grado di garantire elevati livelli di sicurezza ed affidabilità.\nCapacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti quali blockchain, proof of work e smart contracts.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Obiettivo del corso è studiare i concetti fondamentali alla base di tali sistemi: append-only ledgers, consenso decentralizzato, smart contracts e zero-knowledge proof systems. Gli studenti acquisiranno familiarità con il sistema Bitcoin attraverso un approccio concreto che prevede, tra le altre cose, l’approfondimento della programmazione legata a Bitcoin e, soprattutto, ad Ethereum.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Laboratorio su Ethereum. Smart Contracts, Ethereum Virtual Machine (EVM) e introduzione alla scrittura di Smart Contracts usando il linguaggio Solidity.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "L'esame consiste di una prova di laboratorio seguita da un esame orale.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 22936,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 41382,
+            "response_chars": 7922,
+            "latency_ms": 22363
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7524743229150772
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.5__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.5",
+            "similarity_score": 0.7286349236965179
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7262237966060638
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7540358453989029
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7509884238243103
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7229946255683899
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7591876983642578
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7568968534469604
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7531656920909882
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta una buona struttura generale e un tentativo di completezza, inclusa la versione in lingua inglese. Tuttavia, sono presenti diversi refusi, errori grammaticali e piccole incongruenze redazionali che ne compromettono la cura editoriale complessiva. I riferimenti bibliografici per alcuni articoli scientifici sono incompleti, mancando dettagli essenziali come la rivista, l'anno o le pagine.",
+            "evidences": [
+              {
+                "text": "decina (se non centinaia) di miliardi",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Cap 3 di [1], e pre approfondire [2]",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "qauli blockchain",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "good good theoretical and practical background",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "[5] Zerocoin: Anonymous Distributed e-cash from Bitcoin.",
+                "source_field": "references_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18078,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29455,
+            "response_chars": 1269,
+            "latency_ms": 16918
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7054431140422821
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.686215728521347
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7146628201007843
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7116308212280273
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7057400941848755
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7341784238815308
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.6825497448444366
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7565390765666962
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7215954065322876
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7213181257247925
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7871992141008377
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7565064132213593
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7449958324432373
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8133330047130585
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7668573707342148
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7601733356714249
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7524743229150772
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.5__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.5",
+          "similarity_score": 0.7286349236965179
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7262237966060638
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7540358453989029
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7509884238243103
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7229946255683899
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7591876983642578
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7568968534469604
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7531656920909882
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7054431140422821
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.686215728521347
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — BLOCKCHAIN E CRYPTOCURRENCIES\n\n## Sintesi\n\n- **CoreScore**: 1.78/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la compilazione del Syllabus (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Tutte le sezioni sono compilate in modo sostanziale e contengono informazioni pertinenti, garantendo una completa panoramica dell'insegnamento.\n- **C2 — Completezza bilingue** (score 2): Il syllabus fornisce una versione inglese completa per tutti gli elementi del perimetro minimo richiesto: risultati di apprendimento, contenuti del corso e modalità di verifica. La presenza del flag 'has_english: true' è supportata dalla compilazione effettiva dei campi in inglese.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, utilizzando un linguaggio centrato sullo studente che descrive le conoscenze e le abilità che lo studente acquisirà. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e verificabili, evitando formulazioni generiche o che descrivono il corso anziché l'apprendimento dello studente, in linea con le raccomandazioni delle Line…\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati nel syllabus. Ogni descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una chiara distinzione tra le diverse tipologie di competenze attese. Questo approccio è pienamente coerente con le Linee Guida UniCT e le Linee guida SUA-CdS che raccomandano una declinazione esplicita e dettagliata di tutt…\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo specifico e dettagliato. Viene chiaramente indicata la struttura dell'esame (prova di laboratorio seguita da esame orale) e sono forniti criteri di attribuzione del voto molto precisi per ogni fascia di valutazione. Sono inoltre presenti esempi di domande, come raccomandato dalle Linee Guida UniCT.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono chiaramente articolati e organizzati. Oltre a una descrizione generale degli argomenti principali, è presente una programmazione dettagliata che suddivide il corso in 9 punti tematici specifici, ciascuno con riferimenti bibliografici. Questa struttura consente di comprendere la progressione e l'ampiezza dei temi trattati, in linea con le raccomandazioni normative.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste un forte allineamento tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I risultati di apprendimento enfatizzano la comprensione dei principi, l'applicazione pratica (utilizzare sistemi, programmare) e la capacità di risolvere problemi autonomamente. I contenuti del corso e la programmazione includono specifici argomenti teorici e un 'Laboratorio su…\n\n## Aree di miglioramento\n\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici in termini di conoscenze richieste, come la familiarità con la programmazione e un background in crittografia. Viene anche indicata una gradazione di importanza ('presuppone' e 'fortemente consigliato'). Tuttavia, il syllabus non distingue esplicitamente tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche, né tra prerequisiti culturali e formali, sebben…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta una buona struttura generale e un tentativo di completezza, inclusa la versione in lingua inglese. Tuttavia, sono presenti diversi refusi, errori grammaticali e piccole incongruenze redazionali che ne compromettono la cura editoriale complessiva. I riferimenti bibliografici per alcuni articoli scientifici sono incompleti, mancando dettagli essenziali come la rivista, l'anno o le pagine.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T08:40:18.519356+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963"
+    },
+    {
+      "captured_at": "2026-05-29T08:40:56.759758+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "latency_ms": 38239,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:40:56.765492+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963"
+    },
+    {
+      "captured_at": "2026-05-29T08:41:13.850880+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "latency_ms": 17085,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T08:41:13.852208+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963"
+    },
+    {
+      "captured_at": "2026-05-29T08:41:36.789408+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "latency_ms": 22936,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:41:36.790739+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963"
+    },
+    {
+      "captured_at": "2026-05-29T08:41:54.869329+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "latency_ms": 18078,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T08:41:54.873249+00:00",
+      "type": "aggregation_completed",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T08:41:54.874198+00:00",
+      "type": "report_synthesized",
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "report_chars": 5352
+    }
+  ]
+}

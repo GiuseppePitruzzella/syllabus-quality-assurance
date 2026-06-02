@@ -17,6 +17,21 @@ interface CdlSelectorProps {
   onChange: (id: number | null) => void;
 }
 
+function CdlTypeBadge({ type }: { type: string }) {
+  const isTriennale = type.toLowerCase().includes("triennale");
+  return (
+    <span
+      className={`inline-flex w-14 items-center justify-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+        isTriennale
+          ? "bg-accent/15 text-accent"
+          : "bg-primary/10 text-primary"
+      }`}
+    >
+      {isTriennale ? "L" : "LM"}
+    </span>
+  );
+}
+
 export function CdlSelector({
   departmentId,
   value,
@@ -71,21 +86,30 @@ export function CdlSelector({
     );
   }
 
+  const selected = cdlList.find((c) => c.id === value);
+
   return (
     <Select
-      value={value}
-      onValueChange={(v) => onChange(v)}
+      value={value !== null ? String(value) : null}
+      onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Seleziona CdL..." />
+        <SelectValue placeholder="Seleziona CdL...">
+          {selected && (
+            <span className="flex items-center gap-2">
+              <CdlTypeBadge type={selected.type} />
+              {selected.name}
+            </span>
+          )}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {cdlList.map((cdl) => (
-          <SelectItem key={cdl.id} value={cdl.id}>
-            <span className="text-xs text-muted-foreground mr-1.5">
-              {cdl.type}
+          <SelectItem key={cdl.id} value={String(cdl.id)}>
+            <span className="flex items-center gap-2">
+              <CdlTypeBadge type={cdl.type} />
+              {cdl.name}
             </span>
-            {cdl.name}
           </SelectItem>
         ))}
       </SelectContent>

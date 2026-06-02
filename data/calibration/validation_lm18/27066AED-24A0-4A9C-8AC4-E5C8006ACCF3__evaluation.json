@@ -1,0 +1,874 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+  "elapsed_seconds": 97.14,
+  "evaluation": {
+    "id": 60,
+    "evaluation_uuid": "15d20133-487b-42ba-96f7-1d16255883eb",
+    "syllabus_id": 51,
+    "syllabus_seuid_snapshot": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+    "course_name_snapshot": "Sistemi Cloud",
+    "status": "completed",
+    "started_at": "2026-05-29T09:05:29.717821",
+    "finished_at": "2026-05-29T09:07:06.835755",
+    "duration_ms": 97117,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutte le nove sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) previste dalle Linee Guida UniCT sono presenti e compilate in modo sostanziale nel syllabus fornito. Ogni campo contiene informazioni pertinenti e dettagliate, dimostrando una completa aderenza ai requisiti strutturali e documentali.",
+            "evidences": [
+              {
+                "text": "Obiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi\nConoscenza e capacità di comprensione (knowledge and understanding)\n: verrano acquisite conoscenza e comprensione dei fondamenti concettuali (nozioni di base, principali classi di problemi e soluzioni, aspetti architetturali) riguardanti i sistemi cloud e, più in generale, distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenza delle principali architetture e tecnologie per lo sviluppo dei sistemi distribuiti e Web. Tali conoscenze possono essere acquisite nel relativo insegnamento del corso di laurea triennale in Informatica.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso mira a fornire i fondamenti concettuali essenziali per lo sviluppo di soluzioni e sistemi Cloud e, più in generale, distribuiti. Quale esempio concreto di cloud verrà presentato, sia negli aspetti concettuali che operativi, Amazon AWS, prescelto per la completezza e ricchezza delle soluzioni e dei servizi offerti, che ne fanno un archetipo di cloud commerciale, nonché per la disponibilità di forme di utilizzo educativo gratuito.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame finale consiste in un colloquio orale che verterà sugli argomenti del corso e sull'analisi di un progetto, svolto dallo studente individualmente. La realizzazione del progetto comporterà l'impiego di tecnologie e strumenti presentati nel corso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Gestione di istanze EC2 in AWS.\nGestione di container S3 in AWS.\nGestione delle policy per le autorizzazioni con IAM di AWS.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Documentazione online\n, puntualmente indicata nelle\nNote\ndelle lezioni (pubblicate attraverso la piattaforma Teams d'ateneo o il portale\nStudium\n).\nNote delle lezioni, suddivise in gruppi dal titolo corrispondente agli argomenti elencati alla sezione \"Programmazione\".",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aule-laboratorio, nelle quali gli studenti possono utilizzare i PC disponibili o il proprio portatile. Esse consistono prevalentemente in sessioni\nlive\n, operate dal docente, di utilizzo, amministrazione e sviluppo per il cloud.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza è vivamente raccomandata, dato anche l'orientamento pratico dell'attività didattica, per il raggiungimento di una piena comprensione del materiale oggetto del corso.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "{ \"numero\": \"1\", \"argomenti\": \"Il cloud computing: motivazione e concetti, soluzioni.\", \"riferimenti_testi\": \"2\" }",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La versione inglese è presente e compilata per i risultati di apprendimento, i contenuti del corso e le modalità di verifica, coprendo la maggior parte del perimetro minimo richiesto. Tuttavia, il titolo del corso non è esplicitamente fornito in inglese nel syllabus, nonostante il flag 'has_english' sia impostato su true, indicando una parziale completezza bilingue.",
+            "evidences": [
+              {
+                "text": "General learning objectives expected\nKnowledge and understanding\n: students will acquire a precise knowledge and understanding of the conceptual foundations (i.e., fundamental concepts, problem classes and relevant solutions) pertaining to cloud systems.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "This course aims at delivering the conceptual foundations essential for the development of cloud solutions and systems, and, more generally, distributed systems. As a concrete cloud example, the course will present Amazon AWS, chosen because of its rich and complete range of services and solutions, which make it the archetypal commercial cloud, as well as because of the free credit offered to educational institutions.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The final exam consists of an oral interview covering the topics discussed during the course and the analysis of a project carried out by the student individually.\nThe project must involve the use of the technologies and tools presented during the course.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici in termini di conoscenze richieste, come \"Conoscenza delle principali architetture e tecnologie per lo sviluppo dei sistemi distribuiti e Web\". Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) raccomandata dalle Linee Guida UniCT. Il riferimento a un \"relativo insegnamento del corso di laurea triennale in Informatica\" suggerisce una propedeuticità, ma non ne chiarisce la natura in modo esplicito secondo le indicazioni normative.",
+            "evidences": [
+              {
+                "text": "Conoscenza delle principali architetture e tecnologie per lo sviluppo dei sistemi distribuiti e Web. Tali conoscenze possono essere acquisite nel relativo insegnamento del corso di laurea triennale in Informatica.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19706,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 41201,
+            "response_chars": 6440,
+            "latency_ms": 19132
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7240902483463287
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7163796126842499
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7149949669837952
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7485864162445068
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6850645542144775
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7626264095306396
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7300989925861359
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7300277054309845
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, utilizzando un linguaggio orientato allo studente che descrive le conoscenze e le abilità che lo studente acquisirà. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e verificabili, indicando cosa lo studente sarà in grado di fare o conoscere al termine del corso, in linea con le raccomandazioni del contesto normativo che richiede formulazioni chiare e valutabili.",
+            "evidences": [
+              {
+                "text": "verrano acquisite conoscenza e comprensione dei fondamenti concettuali (nozioni di base, principali classi di problemi e soluzioni, aspetti architetturali) riguardanti i sistemi cloud e, più in generale, distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente sarà in grado di impiegare le soluzioni apprese e applicare i paradigmi acquisiti in contesti e scenari pratici, assimilabili a quelli oggetto del corso (o derivati da essi), tipici dello stato dell'arte della progettazione di sistemi cloud.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente sarà in grado di valutare comparativamente i meriti e i limiti delle soluzioni proposte, nel corso ed in letteratura, per problematiche e scenari tipici della progettazione di sistemi cloud e distribuiti, così da poter affrontare autonomamente le esigenze che gli si presenteranno nell'attività lavorativa come\ncloud engineer/architect\n.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente apprenderà la terminologia specifica dei sistemi cloud e distribuiti e acquisirà le abilità comunicative appropriate per esprimere e discutere, ad un livello tecnico rigoroso, le problematiche di interesse.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente sarà in grado di documentarsi mediante la consultazione della letteratura del settore, al fine di applicarne risultati e soluzioni in contesti concreti, in specie lavorativi, per far fronte alle problematiche progettuali e decisionali che emergono nello sviluppo e nell'implementazione di sistemi cloud.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus articola esplicitamente tutti e cinque i Descrittori di Dublino all'interno della sezione dei risultati di apprendimento attesi. Ogni descrittore è accompagnato da contenuti specifici e differenziati, che non risultano generici o ripetitivi. Sebbene il campo 'dublin_communication_it' sia un frammento, la descrizione completa e ben formulata per le abilità comunicative è presente nel campo 'learning_outcomes_it', dimostrando una piena copertura e coerenza con i requisiti normativi che raccomandano una formulazione esplicita per ciascun descrittore.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding)\n: verrano acquisite conoscenza e comprensione dei fondamenti concettuali (nozioni di base, principali classi di problemi e soluzioni, aspetti architetturali) riguardanti i sistemi cloud e, più in generale, distribuiti.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: lo studente sarà in grado di impiegare le soluzioni apprese e applicare i paradigmi acquisiti in contesti e scenari pratici, assimilabili a quelli oggetto del corso (o derivati da essi), tipici dello stato dell'arte della progettazione di sistemi cloud. Tali capacità saranno ulteriormente coltivate e potenziate grazie alle esercitazioni previste e nel modulo di laboratorio di questo corso.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements)\n: lo studente sarà in grado di valutare comparativamente i meriti e i limiti delle soluzioni proposte, nel corso ed in letteratura, per problematiche e scenari tipici della progettazione di sistemi cloud e distribuiti, così da poter affrontare autonomamente le esigenze che gli si presenteranno nell'attività lavorativa come\ncloud engineer/architect\n.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills)\n: lo studente apprenderà la terminologia specifica dei sistemi cloud e distribuiti e acquisirà le abilità comunicative appropriate per esprimere e discutere, ad un livello tecnico rigoroso, le problematiche di interesse.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills)\n: lo studente sarà in grado di documentarsi mediante la consultazione della letteratura del settore, al fine di applicarne risultati e soluzioni in contesti concreti, in specie lavorativi, per far fronte alle problematiche progettuali e decisionali che emergono nello sviluppo e nell'implementazione di sistemi cloud.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 17919,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 30628,
+            "response_chars": 5510,
+            "latency_ms": 17566
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7995103597640991
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7668257355690002
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7409062385559082
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8194496631622314
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7758711874485016
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.762380838394165
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene dettagliato che l'esame finale consiste in un colloquio orale e nell'analisi di un progetto individuale, con indicazioni precise sugli elementi di valutazione della prova orale e una rubrica dettagliata per l'attribuzione del voto. Sono inoltre forniti esempi concreti di domande, che contribuiscono ulteriormente alla chiarezza delle aspettative.",
+            "evidences": [
+              {
+                "text": "L'esame finale consiste in un colloquio orale che verterà sugli argomenti del corso e sull'analisi di un progetto, svolto dallo studente individualmente. La realizzazione del progetto comporterà l'impiego di tecnologie e strumenti presentati nel corso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Gli elementi di valutazione della prova orale includono la pertinenza delle risposte, la qualità dell'esposizione (compresa la proprietà di linguaggio tecnico), la capacità operativa dimostrata in esempi concreti di attività di gestione di risorse cloud.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto si seguiranno di norma i seguenti criteri:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di risolvere semplici quesiti pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare le soluzioni dei quesiti pratici con molta difficoltà e vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici quesiti pratici.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve i quesiti pratici con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve i quesiti pratici in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Gestione di istanze EC2 in AWS.\nGestione di container S3 in AWS.\nGestione delle policy per le autorizzazioni con IAM di AWS.\nGestione del networking in AWS: subnetting per un applicazione 3-tier sul cloud.\nAttivazione di un pool di istanze EC2 con load balancing elastico e auto-scaling con policy basate su soglie e dotate di funzionalità di notifica SNS.\nContainer e cloud\nOrchestrazione di container",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro e ben organizzato. La sezione 'course_content_it' fornisce una panoramica dettagliata degli argomenti principali e delle tecnologie che verranno trattate, con un focus specifico su Amazon AWS. La 'schedule_it' articola ulteriormente questi contenuti in una progressione logica di 15 argomenti, fornendo una struttura riconoscibile e una scansione tematica che facilita la comprensione del percorso didattico.",
+            "evidences": [
+              {
+                "text": "Il corso mira a fornire i fondamenti concettuali essenziali per lo sviluppo di soluzioni e sistemi Cloud e, più in generale, distribuiti. Quale esempio concreto di cloud verrà presentato, sia negli aspetti concettuali che operativi, Amazon AWS, prescelto per la completezza e ricchezza delle soluzioni e dei servizi offerti, che ne fanno un archetipo di cloud commerciale, nonché per la disponibilità di forme di utilizzo educativo gratuito. Verranno considerati prevalentemente servizi di calcolo (basati su virtualizzazione (IaaS) e di livello piattaforma (PaaS)), storage, networking, controllo dell'accesso; ed architetture con funzionalità di load-balancing ed auto-scaling,\nla Command Line Interface (CLI) di AWS, i contenitori, la loro orchestrazione ed il cloud.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Il cloud computing: motivazione e concetti, soluzioni.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Amazon web services: introduzione e architettura.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Amazon web services: servizi IAM di identificazione e controllo dell'accesso.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Kubernetes e l'orchestrazione dei container.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Temi avanzati sul cloud: big data, machine learning, IOT",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste una chiara coerenza tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano la capacità di applicare conoscenze in contesti pratici e l'autonomia di giudizio, che sono direttamente supportati dai metodi didattici basati su 'sessioni live' in 'aule-laboratorio' e 'esercitazioni'. La verifica tramite 'analisi di un progetto, svolto dallo studente individualmente' e la valutazione della 'capacità operativa dimostrata in esempi concreti' sono perfettamente allineate con l'obiettivo di sviluppare e accertare queste competenze pratiche e di giudizio, come richiesto anche dal contesto normativo (cpds_unict__Quadro C__0).",
+            "evidences": [
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: lo studente sarà in grado di impiegare le soluzioni apprese e applicare i paradigmi acquisiti in contesti e scenari pratici, assimilabili a quelli oggetto del corso (o derivati da essi), tipici dello stato dell'arte della progettazione di sistemi cloud. Tali capacità saranno ulteriormente coltivate e potenziate grazie alle esercitazioni previste e nel modulo di laboratorio di questo corso.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements)\n: lo studente sarà in grado di valutare comparativamente i meriti e i limiti delle soluzioni proposte, nel corso ed in letteratura, per problematiche e scenari tipici della progettazione di sistemi cloud e distribuiti, così da poter affrontare autonomamente le esigenze che gli si presenteranno nell'attività lavorativa come\ncloud engineer/architect\n.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aule-laboratorio, nelle quali gli studenti possono utilizzare i PC disponibili o il proprio portatile. Esse consistono prevalentemente in sessioni\nlive\n, operate dal docente, di utilizzo, amministrazione e sviluppo per il cloud. Come cornice e guida di tali sessioni, vengono proiettate delle note, condivise con gli studenti attraverso la piattaforma Teams d'ateneo o il portale Studium. Nelle esercitazioni, gli studenti sono vivamente incoraggiati a replicare e innovare le sessioni.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "L'esame finale consiste in un colloquio orale che verterà sugli argomenti del corso e sull'analisi di un progetto, svolto dallo studente individualmente. La realizzazione del progetto comporterà l'impiego di tecnologie e strumenti presentati nel corso.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Gli elementi di valutazione della prova orale includono la pertinenza delle risposte, la qualità dell'esposizione (compresa la proprietà di linguaggio tecnico), la capacità operativa dimostrata in esempi concreti di attività di gestione di risorse cloud.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 25212,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 46455,
+            "response_chars": 8382,
+            "latency_ms": 24533
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7345925867557526
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7296674251556396
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.7222557365894318
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.742420107126236
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.741759181022644
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7123311460018158
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7557881474494934
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7473713159561157
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7382986545562744
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diversi refusi e imprecisioni di battitura sia nella versione italiana che in quella inglese, indicando una cura editoriale non ottimale. Si riscontrano inoltre alcuni problemi di formattazione, come interruzioni di riga in punti inappropriati. La sezione relativa ai riferimenti bibliografici è generica e non elenca testi specifici con dettagli completi, e il riferimento numerico '2' presente nella programmazione degli argomenti non trova una chiara corrispondenza o spiegazione nella sezione dei riferimenti, rendendo difficile per lo studente identificare i materiali di studio associati. Nonostante questi difetti, il documento è complessivamente leggibile e comprensibile.",
+            "evidences": [
+              {
+                "text": "verrano acquisite conoscenza e comprensione dei fondamenti concettuali",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "architectures,\nt\nhe AWS Command Line Interface (CLI),\nAWS, containers, their orchestration and the cloud.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "Documentazione online\n, puntualmente indicata nelle\nNote\ndelle lezioni (pubblicate attraverso la piattaforma Teams d'ateneo o il portale\nStudium\n).\nNote delle lezioni, suddivise in gruppi dal titolo corrispondente agli argomenti elencati alla sezione \"Programmazione\".",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Amazon web services: Elastic Load Balacing e Autoscaling.",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "students will become capable to profitaby read and understand the scientific and technical literature in the field of cloud computing, in order to apply its results and solutions to concrete problems arising in the design and implementation of cloud ssytems.",
+                "source_field": "dublin_learning_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 34239,
+          "retry_count": 1,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 32212,
+            "response_chars": 2137,
+            "latency_ms": 17891
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7104671001434326
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.695271372795105
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7240902483463287
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7163796126842499
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7149949669837952
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7485864162445068
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6850645542144775
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7626264095306396
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7300989925861359
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7300277054309845
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7995103597640991
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7668257355690002
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7409062385559082
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8194496631622314
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7758711874485016
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.762380838394165
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7345925867557526
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7296674251556396
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.7222557365894318
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.742420107126236
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.741759181022644
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7123311460018158
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7557881474494934
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7473713159561157
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7382986545562744
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7104671001434326
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.695271372795105
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — Sistemi Cloud\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Tutte le nove sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) previste dalle Linee Guida UniCT sono presenti e compilate in modo sostanziale nel syllabus fornito. Ogni campo contiene informazioni pertinenti e dettagliate, dimostrando una completa aderenza ai requisiti strutturali e documentali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, utilizzando un linguaggio orientato allo studente che descrive le conoscenze e le abilità che lo studente acquisirà. Le descrizioni per ciascun Descrittore di Dublino sono dettagliate e verificabili, indicando cosa lo studente sarà in grado di fare o conoscere al termine del corso, in linea con le raccomandazioni del contesto normativo ch…\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Il syllabus articola esplicitamente tutti e cinque i Descrittori di Dublino all'interno della sezione dei risultati di apprendimento attesi. Ogni descrittore è accompagnato da contenuti specifici e differenziati, che non risultano generici o ripetitivi. Sebbene il campo 'dublin_communication_it' sia un frammento, la descrizione completa e ben formulata per le abilità comunicative è presente nel campo 'learning_outco…\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene dettagliato che l'esame finale consiste in un colloquio orale e nell'analisi di un progetto individuale, con indicazioni precise sugli elementi di valutazione della prova orale e una rubrica dettagliata per l'attribuzione del voto. Sono inoltre forniti esempi concreti di domande, che contribuiscono ulteriormente alla chiarezz…\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro e ben organizzato. La sezione 'course_content_it' fornisce una panoramica dettagliata degli argomenti principali e delle tecnologie che verranno trattate, con un focus specifico su Amazon AWS. La 'schedule_it' articola ulteriormente questi contenuti in una progressione logica di 15 argomenti, fornendo una struttura riconoscibile e una scansione tematica che facili…\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste una chiara coerenza tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano la capacità di applicare conoscenze in contesti pratici e l'autonomia di giudizio, che sono direttamente supportati dai metodi didattici basati su 'sessioni live' in 'aule-laboratorio' e 'esercitazioni'. La verifica tramite 'analisi di un pr…\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): La versione inglese è presente e compilata per i risultati di apprendimento, i contenuti del corso e le modalità di verifica, coprendo la maggior parte del perimetro minimo richiesto. Tuttavia, il titolo del corso non è esplicitamente fornito in inglese nel syllabus, nonostante il flag 'has_english' sia impostato su true, indicando una parziale completezza bilingue.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici in termini di conoscenze richieste, come \"Conoscenza delle principali architetture e tecnologie per lo sviluppo dei sistemi distribuiti e Web\". Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) raccomandata dalle Linee Guida UniCT. Il riferimento a un \"r…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diversi refusi e imprecisioni di battitura sia nella versione italiana che in quella inglese, indicando una cura editoriale non ottimale. Si riscontrano inoltre alcuni problemi di formattazione, come interruzioni di riga in punti inappropriati. La sezione relativa ai riferimenti bibliografici è generica e non elenca testi specifici con dettagli completi, e il riferimento numerico '2' presente ne…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T09:05:29.736813+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3"
+    },
+    {
+      "captured_at": "2026-05-29T09:05:49.444142+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "latency_ms": 19707,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:05:49.450009+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3"
+    },
+    {
+      "captured_at": "2026-05-29T09:06:07.370214+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "latency_ms": 17920,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T09:06:07.371391+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3"
+    },
+    {
+      "captured_at": "2026-05-29T09:06:32.585385+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "latency_ms": 25213,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T09:06:32.592355+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3"
+    },
+    {
+      "captured_at": "2026-05-29T09:07:06.832560+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "latency_ms": 34240,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T09:07:06.833428+00:00",
+      "type": "aggregation_completed",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T09:07:06.834951+00:00",
+      "type": "report_synthesized",
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "report_chars": 5685
+    }
+  ]
+}

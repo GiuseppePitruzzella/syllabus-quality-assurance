@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import unicodedata
 from typing import Any
 
 from bs4 import BeautifulSoup, Tag
@@ -66,6 +67,131 @@ _DUBLIN_LABELS_EN: list[tuple[str, str]] = [
 # ---------------------------------------------------------------------------
 
 
+_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+_DANGLING_COMMENT_CLOSE_RE = re.compile(r"-->")
+# Word-wrap hyphenation produced when a long word is broken across two
+# lines in the source HTML, e.g. ``appren-\ndimento`` -> ``apprendimento``
+# (ISSUE-PARSER-002). The pattern is conservative: it only fires when a
+# word character is followed by a literal hyphen + newline + word
+# character, never on intentional compound words like ``Marco-Polo``
+# (the second part wouldn't be on a new line after a soft hyphen).
+_SOFT_HYPHEN_LINEBREAK_RE = re.compile(r"(\w)-\n(\w)")
+
+# Anchor texts of the SmartEdu language-switch button. The button sits
+# outside any H2 in the source markup but the section walker captures
+# it as a stray sibling, ending up at the tail of fields like
+# ``sample_questions_it`` / ``assessment_methods_it`` (ISSUE-PARSER-003).
+_LANGUAGE_SWITCH_ANCHOR_TEXTS: tuple[str, ...] = (
+    "english version",
+    "italian version",
+    "versione inglese",
+    "versione italiana",
+    # SmartEdu actually ships the EN page with "VERSIONE IN ITALIANO"
+    # (3 words including the preposition) and the IT page with the
+    # symmetric "ENGLISH VERSION" — the 5.4.K.3 fix missed the former
+    # and the Phase 5.7 validation surfaced 62 leaks across LM-18
+    # ``sample_questions_en`` / ``assessment_methods_en``. The marker
+    # is always inside an ``<a class="btn btn-primary ...">`` button,
+    # confirmed on the Deep Learning EN source (ISSUE-PARSER-005).
+    "versione in italiano",
+)
+
+
+def _extract_course_title(soup: BeautifulSoup) -> str | None:
+    """Pull the course title from the first ``<h1>`` on the page.
+
+    SmartEdu nests the module name in a secondary ``<div>`` inside the
+    same ``<h1>``, so we only collect the *direct* text children of the
+    heading. Returns ``None`` if no ``<h1>`` is present.
+
+    This is the input for ISSUE-PARSER-004: the EN page carries the
+    course title in English (e.g. ``OPTIMIZATION``) while the CdL list
+    only knows the IT title (``OTTIMIZZAZIONE``). Until 5.4.K only the
+    IT title was stored, so the EN side was forced to fall back to IT.
+    """
+    h1 = soup.find("h1")
+    if h1 is None:
+        return None
+    direct_text_parts = [
+        str(node)
+        for node in h1.find_all(string=True, recursive=False)
+        if str(node).strip()
+    ]
+    if not direct_text_parts:
+        return None
+    title = _normalize_inline_text(" ".join(direct_text_parts))
+    return title or None
+
+
+def _strip_language_switch_anchors(soup: BeautifulSoup) -> None:
+    """Remove the SmartEdu language-switch ``<a>`` button from the soup.
+
+    The button carries text like ``ENGLISH VERSION`` / ``ITALIAN VERSION``
+    and points to the page in the other language. It sits outside any
+    H2 in the source HTML but ``_extract_sections`` collects it as a
+    stray sibling and the text leaks into ``sample_questions`` and
+    ``assessment_methods`` (ISSUE-PARSER-003). Decomposing the anchor
+    in-place removes it before any text extraction runs.
+    """
+    for anchor in soup.find_all("a"):
+        anchor_text = _normalize_inline_text(
+            anchor.get_text(" ", strip=True)
+        ).lower()
+        if anchor_text in _LANGUAGE_SWITCH_ANCHOR_TEXTS:
+            anchor.decompose()
+
+
+def _strip_html_comments(html: str) -> str:
+    """Remove HTML comments from raw markup BEFORE handing it to BeautifulSoup.
+
+    SmartEdu pages are originally authored in Word/Outlook and inherit
+    CDATA-wrapped comment blocks like ``<!--//--><![CDATA[//><!--...-->``
+    that ``html.parser`` does not always recognise as a single ``Comment``
+    node. The result is that the closing ``-->`` sequence leaks into the
+    text output of ``get_text()`` and ends up in ``references_*``,
+    ``assessment_methods_*`` and ``sample_questions_*``. Pre-stripping the
+    standard ``<!-- ... -->`` form on the raw markup removes the bulk of
+    these wrappers (ISSUE-PARSER-001).
+
+    A safety net at the text level (``_normalize_inline_text``) drops any
+    ``-->`` residue that survives malformed wrappers.
+    """
+    return _HTML_COMMENT_RE.sub("", html)
+
+
+def _normalize_inline_text(text: str) -> str:
+    """Normalize whitespace for stable heading and label matching.
+
+    The dangling ``-->`` strip is the safety net for ISSUE-PARSER-001:
+    ``_strip_html_comments`` removes well-formed comments on the raw
+    HTML, but pathological CDATA-wrapped patterns can leave an orphan
+    ``-->`` that surfaces in the text. Soft-hyphen line break collapse
+    runs upstream in :func:`_extract_readable_text`, where ``\\n`` is
+    still present (this function operates on a single line at a time).
+    """
+    text = unicodedata.normalize("NFKC", text.replace("\xa0", " "))
+    text = _DANGLING_COMMENT_CLOSE_RE.sub("", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _extract_readable_text(tag: Tag) -> str:
+    """Extract text while preserving boundaries between nested tags/list items.
+
+    Soft-hyphen line break collapse (ISSUE-PARSER-002) runs on the raw
+    text BEFORE splitting on ``\\n``: once the line is split the regex
+    ``\\w-\\n\\w`` can no longer match. Empty lines (after normalisation)
+    are dropped.
+    """
+    raw = tag.get_text("\n", strip=True)
+    raw = _SOFT_HYPHEN_LINEBREAK_RE.sub(r"\1\2", raw)
+    lines = []
+    for line in raw.splitlines():
+        line = _normalize_inline_text(line)
+        if line:
+            lines.append(line)
+    return "\n".join(lines)
+
+
 def _extract_sections(soup: BeautifulSoup, lang: str) -> dict[str, dict[str, Any]]:
     """Walk H2 headings and collect content between each pair.
 
@@ -75,7 +201,7 @@ def _extract_sections(soup: BeautifulSoup, lang: str) -> dict[str, dict[str, Any
     sections: dict[str, dict[str, Any]] = {}
 
     for h2 in soup.find_all("h2"):
-        heading_text = h2.get_text(strip=True).lower()
+        heading_text = _normalize_inline_text(h2.get_text(" ", strip=True)).lower()
         field_name = section_map.get(heading_text)
         if field_name is None:
             continue
@@ -88,7 +214,7 @@ def _extract_sections(soup: BeautifulSoup, lang: str) -> dict[str, dict[str, Any
                 break
             if isinstance(sib, Tag):
                 parts_html.append(str(sib))
-                text = sib.get_text(strip=True)
+                text = _extract_readable_text(sib)
                 if text:
                     parts_text.append(text)
 
@@ -109,26 +235,27 @@ def _split_dublin_descriptors(
     We use regex on the plain text to split them.
     """
     labels = _DUBLIN_LABELS_IT if lang == "it" else _DUBLIN_LABELS_EN
-    result: dict[str, str] = {}
+    result: dict[str, str] = {field: "" for field, _ in labels}
 
-    # Build a combined pattern that captures all label positions
-    # We split using the label text (which may include parenthetical English text)
-    for i, (field, pattern) in enumerate(labels):
-        # Build regex to find text between this label and the next
-        if i + 1 < len(labels):
-            next_pattern = labels[i + 1][1]
-            regex = re.compile(
-                pattern + r"[^:]*?:\s*(.*?)\s*(?=" + next_pattern + r")",
-                re.DOTALL | re.IGNORECASE,
-            )
-        else:
-            # Last descriptor: capture until end of text
-            regex = re.compile(
-                pattern + r"[^:]*?:\s*(.*)",
-                re.DOTALL | re.IGNORECASE,
-            )
-        match = regex.search(text)
-        result[field] = match.group(1).strip() if match else ""
+    # Find Dublin labels first, then slice the text between adjacent labels.
+    # This is more robust than requiring a colon after every label: some
+    # SmartEdu pages use rich-text formatting or omit punctuation.
+    alternatives = "|".join(f"(?P<{field}>{pattern})" for field, pattern in labels)
+    label_regex = re.compile(
+        rf"(?:{alternatives})(?:\s*\([^)]*\))?\s*:?\s*",
+        re.DOTALL | re.IGNORECASE,
+    )
+    matches = list(label_regex.finditer(text))
+    if not matches:
+        return result
+
+    for i, match in enumerate(matches):
+        field = match.lastgroup
+        if field is None:
+            continue
+        start = match.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        result[field] = text[start:end].strip(" \n:-")
 
     return result
 
@@ -148,22 +275,40 @@ def _parse_schedule_table(html_fragment: str) -> list[dict[str, str]] | None:
     if header_row is None:
         return None
 
-    raw_headers = [th.get_text(strip=True) for th in header_row.find_all(["th", "td"])]
+    raw_headers = [
+        _normalize_inline_text(th.get_text(" ", strip=True))
+        for th in header_row.find_all(["th", "td"])
+    ]
     if not raw_headers:
         return None
 
-    # Normalize headers: lowercase, replace \xa0 and whitespace, snake_case
+    # Normalize headers to the canonical keys used by the frontend and agents.
     headers: list[str] = []
     for h in raw_headers:
         h = h.replace("\xa0", " ").strip().lower()
         h = re.sub(r"\s+", "_", h)
-        if not h:
+        h = re.sub(r"[^a-z0-9_àèéìòù]+", "", h)
+        if h in {"", "n", "n°", "no", "number", "numero"}:
             h = "numero"
+        elif h in {"argomenti", "argomento", "subjects", "subject", "topics", "topic"}:
+            h = "argomenti"
+        elif h in {
+            "riferimenti_testi",
+            "riferimenti",
+            "testi",
+            "text_references",
+            "textbook_references",
+            "references",
+        }:
+            h = "riferimenti_testi"
         headers.append(h)
 
     rows: list[dict[str, str]] = []
     for tr in table.find_all("tr")[1:]:  # skip header row
-        cells = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
+        cells = [
+            _normalize_inline_text(td.get_text(" ", strip=True))
+            for td in tr.find_all(["td", "th"])
+        ]
         if not cells or all(c == "" for c in cells):
             continue
         # Pad or truncate cells to match headers
@@ -188,13 +333,15 @@ def _split_assessment(html_fragment: str, lang: str) -> dict[str, str]:
     if not h3s:
         # No H3 headings: return entire text as methods
         return {
-            "assessment_methods": soup.get_text(strip=True),
+            "assessment_methods": _normalize_inline_text(
+                soup.get_text(" ", strip=True)
+            ),
             "sample_questions": "",
         }
 
     # Identify which H3 is "methods" and which is "sample questions"
     for h3 in h3s:
-        h3_text = h3.get_text(strip=True).lower()
+        h3_text = _normalize_inline_text(h3.get_text(" ", strip=True)).lower()
 
         # Collect text after this H3 until the next H3 or end
         parts: list[str] = []
@@ -202,7 +349,7 @@ def _split_assessment(html_fragment: str, lang: str) -> dict[str, str]:
             if isinstance(sib, Tag) and sib.name == "h3":
                 break
             if isinstance(sib, Tag):
-                text = sib.get_text(strip=True)
+                text = _extract_readable_text(sib)
                 if text:
                     parts.append(text)
         section_text = "\n".join(parts)
@@ -233,6 +380,8 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     """Parse a single syllabus page (IT or EN) and return extracted fields.
 
     Returns a dict with keys:
+        course_name (str | None — from the detail page <h1>),
+        learning_outcomes,
         dublin_knowledge, dublin_applying, dublin_judgement,
         dublin_communication, dublin_learning,
         teaching_methods, prerequisites, attendance,
@@ -240,7 +389,10 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
         schedule (list[dict] | None),
         assessment_methods, sample_questions
     """
+    html = _strip_html_comments(html)
     soup = parse_html(html)
+    _strip_language_switch_anchors(soup)
+    course_title = _extract_course_title(soup)
     sections = _extract_sections(soup, lang)
 
     # Dublin Descriptors from learning outcomes section
@@ -256,6 +408,15 @@ def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     assessment = _split_assessment(assess_section["html"], lang)
 
     return {
+        # Course title from the detail page <h1>. The list scraper
+        # (``syllabus_list.py``) populates ``course_name`` from the IT
+        # CdL listing; the detail-page title gives the language-correct
+        # version, e.g. ``OPTIMIZATION`` on the EN page where the IT
+        # listing only had ``OTTIMIZZAZIONE`` (ISSUE-PARSER-004).
+        "course_name": course_title,
+        # Raw learning outcomes section, preserved even when it is not split
+        # into the five Dublin Descriptor labels.
+        "learning_outcomes": lo["text"],
         # Dublin Descriptors
         "dublin_knowledge": dublin.get("dublin_knowledge", ""),
         "dublin_applying": dublin.get("dublin_applying", ""),
@@ -302,12 +463,25 @@ def scrape_syllabus_detail(
     for key, value in parsed_en.items():
         result[f"{key}_en"] = value
 
-    # has_english: True if any EN Dublin Descriptor is non-empty
-    dublin_en_keys = [
-        "dublin_knowledge", "dublin_applying", "dublin_judgement",
-        "dublin_communication", "dublin_learning",
-    ]
-    result["has_english"] = any(parsed_en.get(k, "") for k in dublin_en_keys)
+    # The course title is the only field that does NOT follow the
+    # ``*_it`` / ``*_en`` model schema: the canonical title is the IT
+    # ``course_name`` from the CdL listing (set by ``syllabus_list``),
+    # so the detail-page IT title is redundant and is dropped here.
+    # ``course_name_en`` is kept so the API can persist the EN title
+    # alongside the canonical IT one (ISSUE-PARSER-004).
+    result.pop("course_name_it", None)
+
+    # has_english: True if any parsed EN field contains real content.
+    # Some SmartEdu pages provide English sections without Dublin labels; using
+    # only dublin_* would hide an existing English version in the frontend.
+    def _has_content(value: Any) -> bool:
+        if isinstance(value, str):
+            return bool(value.strip())
+        if isinstance(value, list):
+            return len(value) > 0
+        return value is not None
+
+    result["has_english"] = any(_has_content(value) for value in parsed_en.values())
 
     return result
 

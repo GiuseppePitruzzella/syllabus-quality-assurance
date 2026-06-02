@@ -1,0 +1,936 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "generated_at": "2026-05-29T09:21:26.805722+00:00",
+  "started_at": "2026-05-29T08:37:03.618989+00:00",
+  "output_dir": "/Users/giuseppepitruzzella/syllabus-quality-assurance/data/calibration/validation_lm18",
+  "totals": {
+    "n_runs": 30,
+    "n_completed": 29,
+    "n_partial": 1,
+    "n_failed": 0
+  },
+  "duration": {
+    "mean_ms": 88696.5,
+    "median_ms": 86418.0,
+    "total_seconds": 2660.9
+  },
+  "core_score": {
+    "n": 30,
+    "mean": 1.641,
+    "median": 1.67,
+    "stdev": 0.124,
+    "min": 1.44,
+    "max": 1.83,
+    "distribution": {
+      "0.0_0.5": 0,
+      "0.5_1.0": 0,
+      "1.0_1.5": 5,
+      "1.5_2.0": 25,
+      "2.0": 0
+    }
+  },
+  "coverage": {
+    "n": 30,
+    "mean": 0.989,
+    "fully_covered": 29,
+    "below_full": 1
+  },
+  "per_criterion": {
+    "C1": {
+      "n_evaluated": 29,
+      "n_na": 1,
+      "na_rate": 0.033,
+      "count_score_0": 0,
+      "count_score_1": 2,
+      "count_score_2": 27,
+      "mean": 1.931,
+      "stdev": 0.258
+    },
+    "C2": {
+      "n_evaluated": 29,
+      "n_na": 1,
+      "na_rate": 0.033,
+      "count_score_0": 3,
+      "count_score_1": 13,
+      "count_score_2": 13,
+      "mean": 1.345,
+      "stdev": 0.67
+    },
+    "C3": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 7,
+      "count_score_2": 23,
+      "mean": 1.767,
+      "stdev": 0.43
+    },
+    "C4": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 4,
+      "count_score_2": 26,
+      "mean": 1.867,
+      "stdev": 0.346
+    },
+    "C5": {
+      "n_evaluated": 29,
+      "n_na": 1,
+      "na_rate": 0.033,
+      "count_score_0": 0,
+      "count_score_1": 29,
+      "count_score_2": 0,
+      "mean": 1,
+      "stdev": 0.0
+    },
+    "C6": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 2,
+      "count_score_2": 28,
+      "mean": 1.933,
+      "stdev": 0.254
+    },
+    "C7": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 3,
+      "count_score_2": 27,
+      "mean": 1.9,
+      "stdev": 0.305
+    },
+    "C8": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 0,
+      "count_score_1": 0,
+      "count_score_2": 30,
+      "mean": 2,
+      "stdev": 0.0
+    },
+    "C9": {
+      "n_evaluated": 30,
+      "n_na": 0,
+      "na_rate": 0.0,
+      "count_score_0": 1,
+      "count_score_1": 29,
+      "count_score_2": 0,
+      "mean": 0.967,
+      "stdev": 0.183
+    }
+  },
+  "outliers": {
+    "low_core_score": [],
+    "incomplete_coverage": [
+      {
+        "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+        "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+        "coverage": 0.6666666666666666,
+        "n_na": 3
+      }
+    ],
+    "non_completed": [
+      {
+        "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+        "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+        "status": "partial",
+        "agent_errors": {
+          "A1": "ValueError: LLM output did not match schema after 3 attempts"
+        }
+      }
+    ]
+  },
+  "runs": [
+    {
+      "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+      "evaluation_uuid": "1946e280-277d-43c0-9c4d-8aad668c2bb6",
+      "course_name": "ALGORITMI E COMPLESSITA'",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 89286,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "C4EC1456-0EAA-4027-8124-DE01362473AB__evaluation.json",
+        "report_md": "C4EC1456-0EAA-4027-8124-DE01362473AB__report.md"
+      }
+    },
+    {
+      "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "evaluation_uuid": "6af2c385-23bd-457b-8351-1e0def2a0df2",
+      "course_name": "Advanced Computer Graphics",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 104003,
+      "criterion_scores": {
+        "C1": 1,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF__evaluation.json",
+        "report_md": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF__report.md"
+      }
+    },
+    {
+      "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+      "evaluation_uuid": "2df00060-6b75-4dd1-b379-dbc615df4e4c",
+      "course_name": "BLOCKCHAIN E CRYPTOCURRENCIES",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 96404,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "F8F95848-EC28-4612-BFAC-04AA3C2BE963__evaluation.json",
+        "report_md": "F8F95848-EC28-4612-BFAC-04AA3C2BE963__report.md"
+      }
+    },
+    {
+      "seuid": "AC75068C-71BE-4278-9CFE-02EBC624B287",
+      "evaluation_uuid": "c771699a-e217-4dbb-9a69-9fdfbae68072",
+      "course_name": "BLOCKCHAIN E CRYPTOCURRENCIES",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 77737,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "AC75068C-71BE-4278-9CFE-02EBC624B287__evaluation.json",
+        "report_md": "AC75068C-71BE-4278-9CFE-02EBC624B287__report.md"
+      }
+    },
+    {
+      "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+      "evaluation_uuid": "c81fed16-68b8-4fb9-91bb-ea330a376fcd",
+      "course_name": "COMPUTER SECURITY E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 91628,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "FA050289-238A-4FF5-9DB4-7588D977E793__evaluation.json",
+        "report_md": "FA050289-238A-4FF5-9DB4-7588D977E793__report.md"
+      }
+    },
+    {
+      "seuid": "5CCCDB2A-58B8-45A9-8AE9-EA9CE73AA8A3",
+      "evaluation_uuid": "e962481f-29d9-4446-bf89-b259e58c1c51",
+      "course_name": "COMPUTER SECURITY E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 96525,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "5CCCDB2A-58B8-45A9-8AE9-EA9CE73AA8A3__evaluation.json",
+        "report_md": "5CCCDB2A-58B8-45A9-8AE9-EA9CE73AA8A3__report.md"
+      }
+    },
+    {
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "evaluation_uuid": "279fcec6-9591-4d02-b44d-e5dcde751396",
+      "course_name": "COMPUTER VISION",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "duration_ms": 82981,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 1,
+        "C4": 2,
+        "C6": 1,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "89E21813-A17C-4C85-AF65-C295EE11ED59__evaluation.json",
+        "report_md": "89E21813-A17C-4C85-AF65-C295EE11ED59__report.md"
+      }
+    },
+    {
+      "seuid": "DADC30FD-2222-4C43-BAB8-A57D08667196",
+      "evaluation_uuid": "d26b6ba6-8c32-4c5e-8db1-3336597a8e32",
+      "course_name": "CRITTOGRAFIA",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 93493,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "DADC30FD-2222-4C43-BAB8-A57D08667196__evaluation.json",
+        "report_md": "DADC30FD-2222-4C43-BAB8-A57D08667196__report.md"
+      }
+    },
+    {
+      "seuid": "F8FEDEFE-56FC-4031-9E0E-8726B202B9C1",
+      "evaluation_uuid": "fc2b37d1-27a0-4a7b-bfe1-db33c7fd41c8",
+      "course_name": "Computer Security",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 74412,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "F8FEDEFE-56FC-4031-9E0E-8726B202B9C1__evaluation.json",
+        "report_md": "F8FEDEFE-56FC-4031-9E0E-8726B202B9C1__report.md"
+      }
+    },
+    {
+      "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+      "evaluation_uuid": "2f7a6d22-4737-4675-995c-188ce568f23c",
+      "course_name": "Deep Learning",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 81088,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "3540D939-DA16-4C1D-983C-E6B85C403F2F__evaluation.json",
+        "report_md": "3540D939-DA16-4C1D-983C-E6B85C403F2F__report.md"
+      }
+    },
+    {
+      "seuid": "414654A5-811B-4AAB-9031-836CC788F119",
+      "evaluation_uuid": "2bcfa46d-0421-4455-9a34-19080dd68724",
+      "course_name": "Deep Learning",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 83339,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 1,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "414654A5-811B-4AAB-9031-836CC788F119__evaluation.json",
+        "report_md": "414654A5-811B-4AAB-9031-836CC788F119__report.md"
+      }
+    },
+    {
+      "seuid": "1408B85C-60A2-4799-8D51-24AEBC1023D2",
+      "evaluation_uuid": "0a68585c-6503-410a-bba5-9e51aef6728e",
+      "course_name": "Deep Learning",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 87737,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "1408B85C-60A2-4799-8D51-24AEBC1023D2__evaluation.json",
+        "report_md": "1408B85C-60A2-4799-8D51-24AEBC1023D2__report.md"
+      }
+    },
+    {
+      "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+      "evaluation_uuid": "b3d8936f-3bd0-455e-98fb-4f9786f67b27",
+      "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+      "status": "partial",
+      "core_score": 1.83,
+      "coverage": 0.6666666666666666,
+      "duration_ms": 114379,
+      "criterion_scores": {
+        "C1": null,
+        "C2": null,
+        "C5": null,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": {
+        "A1": "ValueError: LLM output did not match schema after 3 attempts"
+      },
+      "n_na": 3,
+      "artifact_files": {
+        "evaluation_json": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7__evaluation.json",
+        "report_md": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7__report.md"
+      }
+    },
+    {
+      "seuid": "9A85B8E4-05CD-4707-897F-51023B5BB46A",
+      "evaluation_uuid": "e2ab8ffc-bf5a-410c-ab84-7d39371c3870",
+      "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 72533,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "9A85B8E4-05CD-4707-897F-51023B5BB46A__evaluation.json",
+        "report_md": "9A85B8E4-05CD-4707-897F-51023B5BB46A__report.md"
+      }
+    },
+    {
+      "seuid": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+      "evaluation_uuid": "880d4e6e-4e53-4b18-a8e4-0903366cd93f",
+      "course_name": "MACHINE LEARNING",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 112299,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 1,
+        "C4": 1,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "FE97232C-4F07-41F8-A82F-FF73592265EC__evaluation.json",
+        "report_md": "FE97232C-4F07-41F8-A82F-FF73592265EC__report.md"
+      }
+    },
+    {
+      "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+      "evaluation_uuid": "8d352138-31f2-4916-8e8a-f390b5744366",
+      "course_name": "MULTIMEDIA E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "duration_ms": 90144,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 1,
+        "C4": 1,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791__evaluation.json",
+        "report_md": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791__report.md"
+      }
+    },
+    {
+      "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+      "evaluation_uuid": "80821ad9-4cca-44db-9414-a44a9af9a194",
+      "course_name": "MULTIMEDIA E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 90198,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 1,
+        "C4": 2,
+        "C6": 2,
+        "C7": 1,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB__evaluation.json",
+        "report_md": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB__report.md"
+      }
+    },
+    {
+      "seuid": "D5CD7C87-9BF4-4E65-9101-A58FB1522C97",
+      "evaluation_uuid": "b0d09bd3-85b2-4ff3-8bd1-cc2616fb0d52",
+      "course_name": "MULTIMEDIA E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "duration_ms": 83071,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 1,
+        "C4": 2,
+        "C6": 1,
+        "C7": 1,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "D5CD7C87-9BF4-4E65-9101-A58FB1522C97__evaluation.json",
+        "report_md": "D5CD7C87-9BF4-4E65-9101-A58FB1522C97__report.md"
+      }
+    },
+    {
+      "seuid": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+      "evaluation_uuid": "5b25d7b8-36de-4d11-a5b2-76ebca4455db",
+      "course_name": "OTTIMIZZAZIONE",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 82814,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3__evaluation.json",
+        "report_md": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3__report.md"
+      }
+    },
+    {
+      "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+      "evaluation_uuid": "15d20133-487b-42ba-96f7-1d16255883eb",
+      "course_name": "Sistemi Cloud",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 97117,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3__evaluation.json",
+        "report_md": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3__report.md"
+      }
+    },
+    {
+      "seuid": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+      "evaluation_uuid": "76d7b839-b70b-4e24-89af-3602ddde4f77",
+      "course_name": "COMPUTER VISION E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 85099,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 1,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778__evaluation.json",
+        "report_md": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778__report.md"
+      }
+    },
+    {
+      "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+      "evaluation_uuid": "7462fb09-db51-4785-8725-898fc6762cf0",
+      "course_name": "COMPUTER VISION E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "duration_ms": 83052,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 0,
+        "C5": 1,
+        "C3": 1,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "88B7C1CE-B595-46A5-A37A-C5414AD807B5__evaluation.json",
+        "report_md": "88B7C1CE-B595-46A5-A37A-C5414AD807B5__report.md"
+      }
+    },
+    {
+      "seuid": "AE4C5A2B-9189-423F-83A0-280C8B1BCEB6",
+      "evaluation_uuid": "8e07e3ff-4be8-456a-aac8-62f0f5c11b58",
+      "course_name": "CRYPTOGRAPHIC ENGINEERING",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 90563,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "AE4C5A2B-9189-423F-83A0-280C8B1BCEB6__evaluation.json",
+        "report_md": "AE4C5A2B-9189-423F-83A0-280C8B1BCEB6__report.md"
+      }
+    },
+    {
+      "seuid": "E6CA35FC-6E63-4B25-BCB8-B73F6461DD31",
+      "evaluation_uuid": "d1438d4e-9b0f-4179-b6cc-e57db410f17e",
+      "course_name": "DEEP LEARNING",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 75972,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "E6CA35FC-6E63-4B25-BCB8-B73F6461DD31__evaluation.json",
+        "report_md": "E6CA35FC-6E63-4B25-BCB8-B73F6461DD31__report.md"
+      }
+    },
+    {
+      "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "evaluation_uuid": "f88eb1ed-7a60-4f7a-87b8-e9567e4aad57",
+      "course_name": "INTERNET OF THINGS",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 68893,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 0,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649__evaluation.json",
+        "report_md": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649__report.md"
+      }
+    },
+    {
+      "seuid": "C6F1C332-B4AC-407B-B9BC-0066EBA4E790",
+      "evaluation_uuid": "6ddefb65-cfd9-46e4-b6f9-ac44dae59166",
+      "course_name": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 83756,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 0,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "C6F1C332-B4AC-407B-B9BC-0066EBA4E790__evaluation.json",
+        "report_md": "C6F1C332-B4AC-407B-B9BC-0066EBA4E790__report.md"
+      }
+    },
+    {
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "evaluation_uuid": "1487f928-d6b4-48aa-b7d5-dd6e2f7382fc",
+      "course_name": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "duration_ms": 77571,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 1,
+        "C8": 2,
+        "C9": 0
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "F4AF1512-9D7A-4256-B57D-E103E05B009B__evaluation.json",
+        "report_md": "F4AF1512-9D7A-4256-B57D-E103E05B009B__report.md"
+      }
+    },
+    {
+      "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+      "evaluation_uuid": "279438b9-f90f-4581-b60b-13204c4b3b99",
+      "course_name": "QUANTUM COMPUTER PROGRAMMING",
+      "status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_ms": 88271,
+      "criterion_scores": {
+        "C1": 1,
+        "C2": 1,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8__evaluation.json",
+        "report_md": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8__report.md"
+      }
+    },
+    {
+      "seuid": "EEA0EC5A-8D82-4B7B-A85C-94DEC5070EEB",
+      "evaluation_uuid": "a160673f-60f3-4ef3-b7d7-7609cf09eb67",
+      "course_name": "SISTEMI CLOUD E LABORATORIO",
+      "status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_ms": 71645,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 2,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "EEA0EC5A-8D82-4B7B-A85C-94DEC5070EEB__evaluation.json",
+        "report_md": "EEA0EC5A-8D82-4B7B-A85C-94DEC5070EEB__report.md"
+      }
+    },
+    {
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "evaluation_uuid": "e20fd041-e73a-43ca-980e-fe39212eebcd",
+      "course_name": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+      "status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_ms": 134885,
+      "criterion_scores": {
+        "C1": 2,
+        "C2": 2,
+        "C5": 1,
+        "C3": 2,
+        "C4": 1,
+        "C6": 2,
+        "C7": 2,
+        "C8": 2,
+        "C9": 1
+      },
+      "agent_errors": null,
+      "n_na": 0,
+      "artifact_files": {
+        "evaluation_json": "46D62804-0FCD-4478-A51D-A752B64A7DCB__evaluation.json",
+        "report_md": "46D62804-0FCD-4478-A51D-A752B64A7DCB__report.md"
+      }
+    }
+  ]
+}

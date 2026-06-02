@@ -1,0 +1,862 @@
+{
+  "phase": "5.7",
+  "mode": "validation_lm18",
+  "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+  "elapsed_seconds": 83.0,
+  "evaluation": {
+    "id": 47,
+    "evaluation_uuid": "279fcec6-9591-4d02-b44d-e5dcde751396",
+    "syllabus_id": 17,
+    "syllabus_seuid_snapshot": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+    "course_name_snapshot": "COMPUTER VISION",
+    "status": "completed",
+    "started_at": "2026-05-29T08:46:20.883570",
+    "finished_at": "2026-05-29T08:47:43.864602",
+    "duration_ms": 82981,
+    "error_message": null,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2"
+    },
+    "core_score": 1.44,
+    "coverage": 1.0,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 1,
+      "C4": 2,
+      "C6": 1,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie previste dalle Linee Guida UniCT per la compilazione del syllabus. Ogni sezione è compilata con contenuti pertinenti, dimostrando una completa aderenza ai requisiti strutturali e documentali. Il contesto normativo (lg_unict__2__0) conferma l'elenco delle sezioni da compilare.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding)\n: l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno alla base di un sistema di visione artificiale\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile\nAutonomia di giudizio (making judgements)\n: Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)\nAbilità comunicative (communication skills)\n: lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi informativi e della comuter vision in particolare.\nCapacità di apprendimento (learning skills)\n: il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa. A tale scopo diversi argomenti saranno trattati a lezione coinvolgendo lo studente nella ricerca di possibili soluzioni a problemi reali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Corsi di base dedicati al trattamento e alla rappresentazione e classificazione e di dati.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso si propone di approfondire teorie e tecniche specificatamente rivolte alla visione artificiale con una serie di applicazioni.\nLa prima parte del corso verterà su: Modelli di Formazione dell’Immagine, Filters and Features: Edges, Texture, Laplacian Pyramid,Corner Detection (Harris, ...), SIFT(Teoria e Applicazioni), Tecniche di Segmentazione\nLa seconda parte del corso è dedicata allo studio di modelli probabilistici applicati alla Visione.Verranno infine presentate una serie di applicazioni: , Face detection and Recognition\nL'ultima parte del corso è dedicata ad un tema \"specialistico\" d'approfondimento.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Colloquio Orale\nProgetto individuale da concordare con il docente\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Dettagli sulle SIFT\nAutocalibrazione\nParametri Intrinseci/Estrinseci della Camera\nAlgoritmo Viola/Jones per il Face Detection\nImage Generation Pipeline\nInterest point detectors\nInterest point descriptors",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "E. Trucco, A. Verri, “Introductory Techniques for 3-D Computer Vision”, Prentice Hall, 1998\nG. Bradski, A. Kaehler, “Learning OpenCV Computer Vision with the OpenCV Library” O'Reilly Media, 2008\nMubarak Shah, \"Fundamentals of Computer Vision\" (pdf), 1997\nR. Hartley and A. Zisserman, “Multiple View Geometry in Computer Vision”, 2004\nD. A. Forsyth, J. Ponce, “Computer Vision a Modern Approach”, Prentice Hall PTR, 2002\nRichard Szeliski, Computer Vision: Algorithms and Application, Springer 2010\nFondamenti di Image Processing - Guida teorico/pratica per l’elaborazione e la codifica di immagini digitali – ISBN: 88-88659-49-8 - EdiArgo 2006\nElaborazione delle Immagini Digitali - R.C. Gonzales, R.E. Woods – Pearson Italia 2008\nAltro materiale didattico\nSito del corso\nhttp://www.dmi.unict.it/~battiato/teaching_research.htm\nMateriale didattico disponibile su Studium",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Lezioni frontali\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Fortemente consigliata",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Fundamental Matrix; Estrinsic and Intrinsic Paramters; Camera Calibration\",\n      \"riferimenti_testi\": \"Capitoli 1-3 Trucco/Verri\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Low Level vision\",\n      \"riferimenti_testi\": \"Forsyth/Ponce, Zseliski\"\n    },\n    {\n      \"numero\": \"3\",\n      \"argomenti\": \"Mid Level vision\",\n      \"riferimenti_testi\": \"Forsyth/Ponce, Zseliski\"\n    },\n    {\n      \"numero\": \"4\",\n      \"argomenti\": \"Face Recognition and Detection\",\n      \"riferimenti_testi\": \"Dispense del docente\"\n    },\n    {\n      \"numero\": \"5\",\n      \"argomenti\": \"SIFT and related issues\",\n      \"riferimenti_testi\": \"Fundamentals of Computer Vision\"\n    }\n  ]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La versione inglese del syllabus è parzialmente presente per il perimetro minimo richiesto. Sebbene il titolo, i risultati di apprendimento e i contenuti siano forniti in inglese, la sezione relativa alle modalità di verifica (`assessment_methods_en`) risulta completamente vuota. I contenuti in inglese presenti sono inoltre significativamente meno dettagliati rispetto alle loro controparti italiane, indicando una completezza parziale.",
+            "evidences": [
+              {
+                "text": "COMPUTER VISION",
+                "source_field": "course_name"
+              },
+              {
+                "text": "To provide an introduction to the computer vision field by presenting the main theroretical basis and related applicative scenario.\nBoth theoretical and prcatical aspects will be introduced.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Image formation\nLow Level Vision: Filters and Features: Edges, Texture, Laplacian Pyramid,Corner Detection (Harris, ...), SIFT\nMid level vision: Segmentation\nCV applicationVideo Stabilization, Face detection and Recognition",
+                "source_field": "course_content_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e formulati in termini di aree tematiche specifiche ('trattamento e alla rappresentazione e classificazione e di dati'), il che li rende utili allo studente per comprendere le conoscenze richieste. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT (lg_unict__3.2__0).",
+            "evidences": [
+              {
+                "text": "Corsi di base dedicati al trattamento e alla rappresentazione e classificazione e di dati.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19419,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 32316,
+            "response_chars": 8338,
+            "latency_ms": 18712
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7024731040000916
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.698851466178894
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.6966678500175476
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7275297045707703
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6825606226921082
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.763843908905983
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7299932837486267
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7236531972885132
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in termini di ciò che lo studente acquisirà o sarà in grado di fare, il che è coerente con le linee guida. Tuttavia, la specificità e la verificabilità variano tra i diversi descrittori. Mentre le capacità di applicazione e autonomia di giudizio sono descritte con azioni concrete e contesti specifici, la conoscenza e comprensione è più generica ('comprendere i meccanismi teorici e fisici') e le abilità comunicative sono formulate in modo molto conciso e poco dettagliato, rendendole meno specifiche e verificabili.",
+            "evidences": [
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno alla base di un sistema di visione artificiale",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi informativi e della comuter vision in particolare.",
+                "source_field": "dublin_communication_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e compilati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati. Ogni descrittore presenta contenuti distinti che, sebbene con diversi livelli di dettaglio e specificità, si riferiscono chiaramente all'ambito di competenza del descrittore stesso. Non si riscontrano significative ripetizioni o sovrapposizioni tra i contenuti dei diversi descrittori, indicando un'articolazione pensata per coprire tutti gli aspetti richiesti dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding)\n: l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno alla base di un sistema di visione artificiale",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements)\n: Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills)\n: lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi informativi e della comuter vision in particolare.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills)\n: il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero sorgere durante una attività lavorativa. A tale scopo diversi argomenti saranno trattati a lezione coinvolgendo lo studente nella ricerca di possibili soluzioni a problemi reali.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19430,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 26651,
+            "response_chars": 4929,
+            "latency_ms": 18973
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8160003423690796
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7804591953754425
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7620500177145004
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8297556042671204
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7872694730758667
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7729604542255402
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono indicate come 'Colloquio Orale' e 'Progetto individuale da concordare con il docente', fornendo una chiara indicazione delle tipologie di prova. La presenza di esempi di domande specifiche è un punto di forza che aumenta la chiarezza. Tuttavia, il syllabus non esplicita i criteri di attribuzione del voto per nessuna delle due modalità di verifica, né fornisce dettagli su come il progetto individuale verrà valutato, come suggerito dalle Linee Guida UniCT per una maggiore specificità.",
+            "evidences": [
+              {
+                "text": "Colloquio Orale\nProgetto individuale da concordare con il docente",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Dettagli sulle SIFT\nAutocalibrazione\nParametri Intrinseci/Estrinseci della Camera\nAlgoritmo Viola/Jones per il Face Detection\nImage Generation Pipeline\nInterest point detectors\nInterest point descriptors",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "medium"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo molto chiaro e ben organizzato, suddivisi in parti tematiche che delineano una progressione logica degli argomenti. La sezione 'schedule_it' fornisce un'articolazione dettagliata degli argomenti per sessione, con riferimenti bibliografici specifici, il che contribuisce significativamente alla chiarezza e all'organizzazione. I contenuti appaiono inoltre coerenti con gli obiettivi formativi dichiarati, che mirano all'acquisizione di conoscenze teoriche e capacità applicative nel campo della visione artificiale.",
+            "evidences": [
+              {
+                "text": "Il corso si propone di approfondire teorie e tecniche specificatamente rivolte alla visione artificiale con una serie di applicazioni.\nLa prima parte del corso verterà su: Modelli di Formazione dell’Immagine, Filters and Features: Edges, Texture, Laplacian Pyramid,Corner Detection (Harris, ...), SIFT(Teoria e Applicazioni), Tecniche di Segmentazione\nLa seconda parte del corso è dedicata allo studio di modelli probabilistici applicati alla Visione.Verranno infine presentate una serie di applicazioni: , Face detection and Recognition\nL'ultima parte del corso è dedicata ad un tema \"specialistico\" d'approfondimento.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere i meccanismi teorici e fisici che stanno alla base di un sistema di visione artificiale",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "SIFT and related issues",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus dimostra un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, in particolare la 'Capacità di applicare conoscenza e comprensione' e l''Autonomia di giudizio', che prevedono la configurazione di sistemi e l'elaborazione autonoma di soluzioni pratiche, sono direttamente supportati dalla modalità di verifica tramite 'Progetto individuale'. Sebbene i metodi didattici siano descritti in modo conciso come 'Lezioni frontali', i risultati di apprendimento menzionano esplicitamente 'lezioni di laboratorio, con esempi pratici', indicando un approccio didattico che supporta le competenze applicative e di giudizio. I contenuti del corso, che includono 'SIFT(Teoria e Applicazioni)' e 'Face detection and Recognition', sono allineati sia con gli obiettivi che con le modalità di verifica.",
+            "evidences": [
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding)\n: lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements)\n: Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Colloquio Orale\nProgetto individuale da concordare con il docente",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Lezioni frontali",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "SIFT(Teoria e Applicazioni)",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Face detection and Recognition",
+                "source_field": "course_content_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 24356,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 34146,
+            "response_chars": 6243,
+            "latency_ms": 23731
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7203955352306366
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7192440927028656
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.5__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.5",
+            "similarity_score": 0.7047223150730133
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7569007873535156
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7384496927261353
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7136494517326355
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7571269273757935
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.7__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.7",
+            "similarity_score": 0.739287406206131
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7366976141929626
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diverse imprecisioni editoriali e refusi distribuiti in più sezioni, sia nella versione italiana che in quella inglese. Si notano errori ortografici come \"sessioen di simulaizoni\" e \"comuter vision\" in italiano, e \"theroretical basis\" e \"prcatical aspects\" in inglese. Inoltre, la coerenza interna dei riferimenti bibliografici è parziale, con abbreviazioni informali (\"Zseliski\") nella programmazione che non corrispondono esattamente ai titoli completi nella sezione bibliografica. La formattazione, in alcuni punti, risulta poco curata, con un uso non ottimale degli a capo e della punteggiatura che incide sulla fluidità di lettura. Nonostante questi difetti, il documento è complessivamente leggibile e comprensibile, ma la cura editoriale non raggiunge un livello ottimale.",
+            "evidences": [
+              {
+                "text": "Attraverso delle vere e proprie sessioen di simulaizoni sul campo, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i principali problemi di carattere pratico e di design di un sistema di visione (setting di parametri, realtime processing, ecc.)",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi informativi e della comuter vision in particolare.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per configurare interamente un sistema, scegliendo la configurazione hw/sw ottimale A tale riguardo una parte del corso consisterà in lezioni di laboratorio, con esempi pratici di configurazione e utilizzo di librerie ad-hoc anche in ambiente mobile",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "To provide an introduction to the computer vision field by presenting the main theroretical basis and related applicative scenario.\nBoth theoretical and prcatical aspects will be introduced.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Low Level vision",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 19725,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 21422,
+            "response_chars": 2424,
+            "latency_ms": 19542
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.715356320142746
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7031594216823578
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7024731040000916
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.698851466178894
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.6966678500175476
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7275297045707703
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6825606226921082
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.763843908905983
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7299932837486267
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7236531972885132
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8160003423690796
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7804591953754425
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7620500177145004
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8297556042671204
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7872694730758667
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7729604542255402
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7203955352306366
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7192440927028656
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.5__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.5",
+          "similarity_score": 0.7047223150730133
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7569007873535156
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7384496927261353
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7136494517326355
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7571269273757935
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.7__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.7",
+          "similarity_score": 0.739287406206131
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7366976141929626
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.715356320142746
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7031594216823578
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — COMPUTER VISION\n\n## Sintesi\n\n- **CoreScore**: 1.44/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie previste dalle Linee Guida UniCT per la compilazione del syllabus. Ogni sezione è compilata con contenuti pertinenti, dimostrando una completa aderenza ai requisiti strutturali e documentali. Il contesto normativo (lg_unict__2__0) conferma l'elenco delle sezioni da compilare.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e compilati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati. Ogni descrittore presenta contenuti distinti che, sebbene con diversi livelli di dettaglio e specificità, si riferiscono chiaramente all'ambito di competenza del descrittore stesso. Non si riscontrano significative ripetizioni o sovrapposizioni t…\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo molto chiaro e ben organizzato, suddivisi in parti tematiche che delineano una progressione logica degli argomenti. La sezione 'schedule_it' fornisce un'articolazione dettagliata degli argomenti per sessione, con riferimenti bibliografici specifici, il che contribuisce significativamente alla chiarezza e all'organizzazione. I contenuti appaiono inoltre coerenti con gli o…\n- **C8 — Coerenza didattico-valutativa** (score 2): Il syllabus dimostra un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, in particolare la 'Capacità di applicare conoscenza e comprensione' e l''Autonomia di giudizio', che prevedono la configurazione di sistemi e l'elaborazione autonoma di soluzioni pratiche, sono direttamente supportati dalla modalità di verifica tramite 'Progetto individuale'. Sebbene i metodi didattici siano descritti…\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): La versione inglese del syllabus è parzialmente presente per il perimetro minimo richiesto. Sebbene il titolo, i risultati di apprendimento e i contenuti siano forniti in inglese, la sezione relativa alle modalità di verifica (`assessment_methods_en`) risulta completamente vuota. I contenuti in inglese presenti sono inoltre significativamente meno dettagliati rispetto alle loro controparti italiane, indicando una co…\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e formulati in termini di aree tematiche specifiche ('trattamento e alla rappresentazione e classificazione e di dati'), il che li rende utili allo studente per comprendere le conoscenze richieste. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato…\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 1): I risultati di apprendimento attesi sono formulati in termini di ciò che lo studente acquisirà o sarà in grado di fare, il che è coerente con le linee guida. Tuttavia, la specificità e la verificabilità variano tra i diversi descrittori. Mentre le capacità di applicazione e autonomia di giudizio sono descritte con azioni concrete e contesti specifici, la conoscenza e comprensione è più generica ('comprendere i mecca…\n  - *Raccomandazione*: Considera di riformulare i risultati di apprendimento in termini di conoscenze e abilità osservabili dello studente, evitando formulazioni che descrivono il corso ('il corso copre...') o espressioni generiche ('lo studente acquisirà conoscenze').\n- **C6 — Modalità di verifica dell'apprendimento** (score 1): Le modalità di verifica dell'apprendimento sono indicate come 'Colloquio Orale' e 'Progetto individuale da concordare con il docente', fornendo una chiara indicazione delle tipologie di prova. La presenza di esempi di domande specifiche è un punto di forza che aumenta la chiarezza. Tuttavia, il syllabus non esplicita i criteri di attribuzione del voto per nessuna delle due modalità di verifica, né fornisce dettagli…\n  - *Raccomandazione*: Considera di esplicitare criteri di attribuzione del voto e/o esempi di domande pertinenti agli obiettivi del corso. Le LG UniCT raccomandano questa esplicitazione come parte della trasparenza della verifica.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diverse imprecisioni editoriali e refusi distribuiti in più sezioni, sia nella versione italiana che in quella inglese. Si notano errori ortografici come \"sessioen di simulaizoni\" e \"comuter vision\" in italiano, e \"theroretical basis\" e \"prcatical aspects\" in inglese. Inoltre, la coerenza interna dei riferimenti bibliografici è parziale, con abbreviazioni informali (\"Zseliski\") nella programmazi…\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n"
+  },
+  "progress_events": [
+    {
+      "captured_at": "2026-05-29T08:46:20.901319+00:00",
+      "type": "agent_started",
+      "agent_code": "A1",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59"
+    },
+    {
+      "captured_at": "2026-05-29T08:46:40.321538+00:00",
+      "type": "agent_completed",
+      "agent_code": "A1",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "latency_ms": 19420,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:46:40.323691+00:00",
+      "type": "agent_started",
+      "agent_code": "A2",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59"
+    },
+    {
+      "captured_at": "2026-05-29T08:46:59.755949+00:00",
+      "type": "agent_completed",
+      "agent_code": "A2",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "latency_ms": 19431,
+      "n_judgments": 2
+    },
+    {
+      "captured_at": "2026-05-29T08:46:59.765154+00:00",
+      "type": "agent_started",
+      "agent_code": "A3",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59"
+    },
+    {
+      "captured_at": "2026-05-29T08:47:24.122301+00:00",
+      "type": "agent_completed",
+      "agent_code": "A3",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "latency_ms": 24356,
+      "n_judgments": 3
+    },
+    {
+      "captured_at": "2026-05-29T08:47:24.129143+00:00",
+      "type": "agent_started",
+      "agent_code": "A4",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59"
+    },
+    {
+      "captured_at": "2026-05-29T08:47:43.856382+00:00",
+      "type": "agent_completed",
+      "agent_code": "A4",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "latency_ms": 19726,
+      "n_judgments": 1
+    },
+    {
+      "captured_at": "2026-05-29T08:47:43.863022+00:00",
+      "type": "aggregation_completed",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "status": "completed",
+      "core_score": 1.44,
+      "coverage": 1.0,
+      "n_na": 0
+    },
+    {
+      "captured_at": "2026-05-29T08:47:43.864039+00:00",
+      "type": "report_synthesized",
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "report_chars": 6265
+    }
+  ]
+}

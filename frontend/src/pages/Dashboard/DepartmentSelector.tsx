@@ -56,17 +56,21 @@ export function DepartmentSelector({
     );
   }
 
+  const selectedName = departments.find((d) => d.id === value)?.name;
+
   return (
     <Select
-      value={value}
-      onValueChange={(v) => onChange(v)}
+      value={value !== null ? String(value) : null}
+      onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Seleziona dipartimento..." />
+        <SelectValue placeholder="Seleziona dipartimento...">
+          {selectedName}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {departments.map((dept) => (
-          <SelectItem key={dept.id} value={dept.id}>
+          <SelectItem key={dept.id} value={String(dept.id)}>
             {dept.name}
           </SelectItem>
         ))}

@@ -1,71 +1,71 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FlaskConical } from "lucide-react";
 import type { SyllabusDetail } from "@/lib/types";
 
 interface MetadataSidebarProps {
   data: SyllabusDetail;
 }
 
-const fields: { label: string; key: keyof SyllabusDetail; suffix?: string }[] =
-  [
-    { label: "Codice", key: "course_code" },
-    { label: "Docente", key: "teacher" },
-    { label: "Anno accademico", key: "academic_year" },
-    { label: "Anno di studio", key: "year_of_study", suffix: "° anno" },
-    { label: "Corso di Laurea", key: "cdl_name" },
-    { label: "Dipartimento", key: "department_name" },
+/**
+ * Phase 5.9.B — full-width metadata strip.
+ *
+ * Replaces the previous right-side Card sidebar with a compact dense
+ * strip below the header. The strip lists the slow-changing facts
+ * about the syllabus (codice, anno accademico, dipartimento, last
+ * scrape) while teacher / CdL / academic year live in the header
+ * subtitle to avoid duplication.
+ *
+ * Component name is preserved (`MetadataSidebar`) so the import in
+ * SyllabusViewer is untouched; semantically it's a strip now.
+ */
+export function MetadataSidebar({ data }: MetadataSidebarProps) {
+  const scrapedAt = data.scraped_at ? new Date(data.scraped_at) : null;
+
+  const fields: { label: string; value: React.ReactNode }[] = [
+    {
+      label: "Codice",
+      value: (
+        <code className="font-mono text-sm">{data.course_code || "—"}</code>
+      ),
+    },
+    { label: "Anno accademico", value: data.academic_year || "—" },
+    {
+      label: "Anno di studio",
+      value: data.year_of_study ? `${data.year_of_study}° anno` : "—",
+    },
+    { label: "Dipartimento", value: data.department_name || "—" },
+    { label: "Corso di laurea", value: data.cdl_name || "—" },
+    {
+      label: "Aggiornato",
+      value: scrapedAt ? formatDate(scrapedAt) : "—",
+    },
   ];
 
-export function MetadataSidebar({ data }: MetadataSidebarProps) {
   return (
-    <Card className="w-72 shrink-0">
-      <CardHeader>
-        <CardTitle>Dettagli</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {fields.map((f) => {
-          const value = data[f.key];
-          return (
-            <div key={f.key}>
-              <p className="text-xs text-muted-foreground">{f.label}</p>
-              <p className="font-medium">
-                {value != null ? `${value}${f.suffix ?? ""}` : "\u2014"}
-              </p>
-            </div>
-          );
-        })}
-        {data.module && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Modulo</p>
-            <Badge variant="secondary">{data.module}</Badge>
+    <section className="rounded-lg border bg-card">
+      <div className="border-b px-4 py-3">
+        <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
+          Metadati
+        </h2>
+      </div>
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 sm:grid-cols-3 lg:grid-cols-6">
+        {fields.map((f) => (
+          <div key={f.label} className="min-w-0">
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {f.label}
+            </dt>
+            <dd className="mt-0.5 truncate text-sm text-foreground">
+              {f.value}
+            </dd>
           </div>
-        )}
-        <div className="pt-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button variant="outline" className="w-full" disabled>
-                    <FlaskConical className="mr-2 h-4 w-4" />
-                    Evaluate
-                  </Button>
-                }
-              />
-              <TooltipContent>
-                Coming soon — Multi-agent evaluation pipeline
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </CardContent>
-    </Card>
+        ))}
+      </dl>
+    </section>
   );
+}
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString("it-IT", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 }
