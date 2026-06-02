@@ -37,15 +37,20 @@ export function EvaluationOutputTabs({ data }: Props) {
   const syllabus = syllabusQuery.data ?? null;
 
   return (
-    <section className="min-w-0 rounded-lg border bg-card p-6">
+    <section className="min-w-0 rounded-lg border bg-card">
       <Tabs defaultValue="report" className="min-w-0">
-        <TabsList className="h-auto max-w-full flex-wrap justify-start overflow-visible">
-          <TabsTrigger value="report">Report</TabsTrigger>
-          <TabsTrigger value="syllabus">Syllabus originale</TabsTrigger>
-          <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
-        </TabsList>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
+          <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
+            Output valutazione
+          </h2>
+          <TabsList className="h-auto max-w-full flex-wrap justify-start overflow-visible">
+            <TabsTrigger value="report">Report</TabsTrigger>
+            <TabsTrigger value="syllabus">Syllabus originale</TabsTrigger>
+            <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
+          </TabsList>
+        </div>
 
-        <TabsContent value="report" className="mt-4 min-w-0">
+        <TabsContent value="report" className="mt-0 min-w-0 p-4">
           <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
             <ReportPanel data={data} />
             <div className="hidden min-w-0 xl:block">
@@ -58,7 +63,7 @@ export function EvaluationOutputTabs({ data }: Props) {
           </div>
         </TabsContent>
 
-        <TabsContent value="syllabus" className="mt-4 min-w-0">
+        <TabsContent value="syllabus" className="mt-0 min-w-0 p-4">
           <SyllabusFullPanel
             data={data}
             syllabus={syllabus}
@@ -66,7 +71,7 @@ export function EvaluationOutputTabs({ data }: Props) {
           />
         </TabsContent>
 
-        <TabsContent value="agents" className="mt-4 min-w-0">
+        <TabsContent value="agents" className="mt-0 min-w-0 p-4">
           <AgentDetailsPanel data={data} />
         </TabsContent>
       </Tabs>
@@ -442,6 +447,16 @@ function Field({
 
 const AGENT_ORDER = ["A1", "A2", "A3", "A4"] as const;
 
+const AGENT_INFO: Record<
+  (typeof AGENT_ORDER)[number],
+  { label: string; criteria: string[] }
+> = {
+  A1: { label: "Completezza documentale", criteria: ["C1", "C2", "C5"] },
+  A2: { label: "Risultati di apprendimento", criteria: ["C3", "C4"] },
+  A3: { label: "Coerenza didattica", criteria: ["C6", "C7", "C8"] },
+  A4: { label: "Cura editoriale", criteria: ["C9"] },
+};
+
 function AgentDetailsPanel({ data }: { data: EvaluationDetail }) {
   const outputs = data.agent_outputs ?? null;
   const errors = data.agent_errors ?? null;
@@ -476,18 +491,39 @@ function AgentCard({
   error: string | null;
 }) {
   const meta = output?.execution_metadata ?? {};
+  const info = (AGENT_INFO as Record<string, { label: string; criteria: string[] }>)[code];
   return (
     <div className="rounded-md border">
-      <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b bg-muted/30 px-4 py-2">
-        <h3 className="text-sm font-semibold">
-          <code className="font-mono">{code}</code>
-          {meta.prompt_version ? (
-            <span className="ml-2 text-xs text-muted-foreground">
-              prompt: {meta.prompt_version}
-            </span>
-          ) : null}
-        </h3>
+      <header className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1 border-b bg-muted/30 px-4 py-3">
+        <div className="min-w-0">
+          <h3 className="!m-0 flex items-baseline gap-2 text-sm font-semibold">
+            <code className="font-mono">{code}</code>
+            {info ? (
+              <span className="font-normal text-foreground/80">
+                · {info.label}
+              </span>
+            ) : null}
+          </h3>
+          <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+            {info ? (
+              <>
+                <span>Criteri:</span>
+                {info.criteria.map((c) => (
+                  <code
+                    key={c}
+                    className="rounded bg-background px-1.5 py-0.5 font-mono text-[10px]"
+                  >
+                    {c}
+                  </code>
+                ))}
+              </>
+            ) : null}
+          </p>
+        </div>
         <div className="text-xs text-muted-foreground">
+          {meta.prompt_version ? (
+            <span>prompt {meta.prompt_version} · </span>
+          ) : null}
           {typeof meta.latency_ms === "number"
             ? `${(meta.latency_ms / 1000).toFixed(1)} s · `
             : ""}
@@ -556,11 +592,11 @@ function JudgmentRow({ judgment }: { judgment: CriterionJudgmentDump }) {
 
 function RetrievedChunksRow({ chunks }: { chunks: RetrievedChunkRef[] }) {
   return (
-    <div className="border-t bg-muted/20 px-4 py-2">
-      <p className="mb-1 text-[0.7rem] uppercase tracking-wide text-muted-foreground">
-        Chunks recuperati (RAG)
-      </p>
-      <ul className="space-y-0.5 text-xs">
+    <details className="border-t bg-muted/20">
+      <summary className="cursor-pointer list-none px-4 py-2 text-[0.7rem] uppercase tracking-wide text-muted-foreground hover:text-foreground">
+        Chunks recuperati (RAG) · {chunks.length}
+      </summary>
+      <ul className="space-y-0.5 px-4 pb-3 text-xs">
         {chunks.map((c, i) => (
           <li
             key={`${c.chunk_id}-${i}`}
@@ -578,7 +614,7 @@ function RetrievedChunksRow({ chunks }: { chunks: RetrievedChunkRef[] }) {
           </li>
         ))}
       </ul>
-    </div>
+    </details>
   );
 }
 

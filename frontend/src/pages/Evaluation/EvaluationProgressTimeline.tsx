@@ -6,49 +6,46 @@ interface Props {
   isConnected: boolean;
   /** Set when the SSE source dropped before a terminal event arrived. */
   lastError: Event | null;
-  /** When true the page shows the placeholder text for historical runs. */
-  isHistorical: boolean;
+  /**
+   * When `true` the timeline renders without the outer
+   * ``<section className="rounded-lg border bg-card">`` wrapper, so it
+   * can be slotted inside another container (e.g. the page-level
+   * collapsible "Timeline esecuzione" panel on historical runs).
+   * Defaults to `false` (= self-contained section).
+   */
+  embedded?: boolean;
 }
 
 /**
- * Phase 5.5.C — vertical timeline of the 8 typed SSE events.
+ * Phase 5.9.C — vertical timeline of the 8 typed SSE events.
  *
  * The component is purely presentational: it does not own the
- * EventSource, that's `useEvaluationStream`'s job. It renders an
- * append-only list with a marker per event, branching the secondary
- * line on `type` for human-readable details (agent code, latency,
- * core score, etc.).
+ * EventSource (that's ``useEvaluationStream``'s job) and it does not
+ * own the "is this run historical or not" decision (that's the page's
+ * job: it picks whether to render this component at all, and whether
+ * to wrap it in a collapsible panel).
+ *
+ * Rendering branches:
+ *   - ``isLive`` + connected     -> green live dot + "live" label
+ *   - ``isLive`` + disconnected  -> grey dot + "disconnesso"
+ *   - ``!isLive``                -> "stream concluso"
+ *   - ``events.length === 0 && !isLive`` -> ``null`` (caller should
+ *     hide the timeline on historical runs with no accumulated
+ *     events; we return null defensively in case it doesn't).
  */
 export function EvaluationProgressTimeline({
   events,
   isLive,
   isConnected,
   lastError,
-  isHistorical,
+  embedded = false,
 }: Props) {
-  if (isHistorical) {
-    return (
-      <section className="rounded-lg border bg-card p-6">
-        <header className="mb-2 flex items-baseline justify-between gap-3">
-          <h2 className="text-base font-medium">Progress timeline</h2>
-          <span className="text-xs text-muted-foreground">storica</span>
-        </header>
-        <p className="text-sm text-muted-foreground">
-          Questa valutazione è già terminata: lo stream SSE non è più
-          disponibile (la coda viene rilasciata dopo la chiusura). Il
-          dato finale è leggibile nella sezione report più sotto.
-        </p>
-      </section>
-    );
+  if (!isLive && events.length === 0) {
+    return null;
   }
 
-  return (
-    <section className="rounded-lg border bg-card p-6">
-      <header className="mb-4 flex items-baseline justify-between gap-3">
-        <h2 className="text-base font-medium">Progress timeline</h2>
-        <LiveIndicator isLive={isLive} isConnected={isConnected} />
-      </header>
-
+  const body = (
+    <>
       {events.length === 0 ? (
         <p className="text-sm text-muted-foreground">
           {isConnected
@@ -64,11 +61,27 @@ export function EvaluationProgressTimeline({
       )}
 
       {lastError ? (
-        <p className="mt-4 rounded-md border border-amber-500/40 bg-amber-500/5 px-3 py-2 text-xs text-amber-700 dark:text-amber-300">
+        <p className="mt-4 rounded-md border border-amber-200 bg-amber-500/5 px-3 py-2 text-xs text-amber-800">
           Connessione SSE interrotta prima dell'evento finale. Il
           polling del record proseguirà fino allo stato terminale.
         </p>
       ) : null}
+    </>
+  );
+
+  if (embedded) {
+    return <div>{body}</div>;
+  }
+
+  return (
+    <section className="rounded-lg border bg-card">
+      <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
+        <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
+          Timeline esecuzione
+        </h2>
+        <LiveIndicator isLive={isLive} isConnected={isConnected} />
+      </div>
+      <div className="p-4">{body}</div>
     </section>
   );
 }
@@ -91,11 +104,12 @@ function LiveIndicator({
       aria-live="polite"
     >
       <span
-        className={`inline-block h-2 w-2 rounded-full ${
-          isConnected
+        className={
+          "inline-block h-2 w-2 rounded-full " +
+          (isConnected
             ? "bg-emerald-500 animate-pulse"
-            : "bg-muted-foreground/40"
-        }`}
+            : "bg-muted-foreground/40")
+        }
         aria-hidden
       />
       {isConnected ? "live" : "disconnesso"}
@@ -107,7 +121,10 @@ function TimelineRow({ event }: { event: EvaluationProgressEvent }) {
   return (
     <li className="relative">
       <span
-        className={`absolute -left-[1.65rem] top-1.5 inline-block h-2.5 w-2.5 rounded-full ring-2 ring-card ${dotColor(event.type)}`}
+        className={
+          "absolute -left-[1.65rem] top-1.5 inline-block h-2.5 w-2.5 rounded-full ring-2 ring-card " +
+          dotColor(event.type)
+        }
         aria-hidden
       />
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
