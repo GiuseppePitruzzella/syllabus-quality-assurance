@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
 import type { SyllabusDetail } from "@/lib/types";
 
 interface DublinDescriptorsProps {
@@ -14,7 +13,7 @@ const descriptors = [
   },
   {
     key: "dublin_applying",
-    it: "Capacita di applicare",
+    it: "Capacità di applicare",
     en: "Applying knowledge",
   },
   {
@@ -24,16 +23,24 @@ const descriptors = [
   },
   {
     key: "dublin_communication",
-    it: "Abilita comunicative",
+    it: "Abilità comunicative",
     en: "Communication skills",
   },
   {
     key: "dublin_learning",
-    it: "Capacita di apprendimento",
+    it: "Capacità di apprendimento",
     en: "Learning skills",
   },
 ];
 
+/**
+ * Phase 5.9.B — restyle from shadcn Card stack to thin-bordered grid.
+ *
+ * Layout collapses to a single full-width card when the syllabus
+ * doesn't have Dublin descriptors split out (the common SmartEdu EN
+ * case where ``learning_outcomes_*`` carries a narrative paragraph
+ * instead of the 5 labeled blocks).
+ */
 export function DublinDescriptors({ data, lang }: DublinDescriptorsProps) {
   const learningOutcomesKey = `learning_outcomes_${lang}` as keyof SyllabusDetail;
   const learningOutcomes = data[learningOutcomesKey] as string | null;
@@ -44,33 +51,42 @@ export function DublinDescriptors({ data, lang }: DublinDescriptorsProps) {
 
   if (!hasDescriptorText && learningOutcomes?.trim()) {
     return (
-      <Card>
-        <CardContent>
-          <p className="text-accent font-medium mb-2">
-            {lang === "it" ? "Risultati di apprendimento" : "Expected learning outcomes"}
-          </p>
-          <p className="text-muted-foreground whitespace-pre-line">
-            {learningOutcomes}
-          </p>
-        </CardContent>
-      </Card>
+      <article className="rounded-lg border bg-card p-4">
+        <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {lang === "it"
+            ? "Risultati di apprendimento"
+            : "Expected learning outcomes"}
+        </h3>
+        <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/90">
+          {learningOutcomes}
+        </p>
+      </article>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       {descriptors.map((d) => {
         const fieldKey = `${d.key}_${lang}` as keyof SyllabusDetail;
-        const value = data[fieldKey] as string | null;
+        const value = (data[fieldKey] as string | null) || "";
+        const hasValue = Boolean(value.trim());
         return (
-          <Card key={d.key}>
-            <CardContent>
-              <p className="text-accent font-medium mb-2">{d[lang]}</p>
-              <p className="text-muted-foreground whitespace-pre-line">
-                {value || "\u2014"}
-              </p>
-            </CardContent>
-          </Card>
+          <article
+            key={d.key}
+            className="rounded-md border bg-card p-3"
+          >
+            <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {d[lang]}
+            </h3>
+            <p
+              className={
+                "whitespace-pre-line text-sm leading-relaxed " +
+                (hasValue ? "text-foreground/90" : "text-muted-foreground")
+              }
+            >
+              {value || "—"}
+            </p>
+          </article>
         );
       })}
     </div>
