@@ -5,9 +5,7 @@ import {
   BarChart3,
   Clock,
   Settings,
-  FlaskConical,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -16,81 +14,91 @@ import {
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
-  { label: "Search", icon: Search, to: "#", enabled: false },
-  { label: "Results", icon: BarChart3, to: "#", enabled: false },
-  { label: "History", icon: Clock, to: "#", enabled: false },
-  { label: "Settings", icon: Settings, to: "#", enabled: false },
+  { label: "Cerca", icon: Search, to: "#", enabled: false },
+  { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
+  { label: "Storico", icon: Clock, to: "#", enabled: false },
+  { label: "Impostazioni", icon: Settings, to: "#", enabled: false },
 ];
 
+/**
+ * Phase 5.9.D — navbar polish.
+ *
+ * The four sibling sections (Cerca / Risultati / Storico / Impostazioni)
+ * are still planned, not implemented. Until they are, the items render
+ * as visibly inert: greyed text, no hover, no underline, a small
+ * "soon" pill on the right and a tooltip that says "Disponibile a
+ * breve". This is the "non fuorvianti" half of the charter rule —
+ * the items advertise the product surface without pretending to be
+ * functional links.
+ *
+ * The previous "Evaluate" disabled CTA on the right side is dropped:
+ * evaluations now have a real entry point on the SyllabusViewer
+ * ("Valuta syllabus"), so the navbar shortcut would have been
+ * redundant and confusing.
+ */
 export function Navbar() {
   const location = useLocation();
 
   return (
-    <header className="fixed left-0 top-0 z-40 flex h-12 w-full items-center justify-between bg-sidebar text-sidebar-foreground border-b border-white/10">
-      <div className="flex items-center h-full">
-        <Link
-          to="/"
-          className="flex items-center h-full px-5 text-xs font-semibold tracking-wide uppercase text-white/90 hover:text-white transition-colors"
-        >
-          Syllabus QA
-        </Link>
+    <header className="fixed left-0 top-0 z-40 flex h-12 w-full items-center bg-sidebar text-sidebar-foreground border-b border-white/10">
+      <Link
+        to="/"
+        className="flex h-full items-center px-5 text-xs font-semibold uppercase tracking-wide text-white/90 transition-colors hover:text-white"
+      >
+        Syllabus QA
+      </Link>
 
-        <div className="w-px h-5 bg-white/15" />
+      <div className="h-5 w-px bg-white/15" />
 
-        <nav className="flex items-center h-full">
-          {navItems.map((item) => {
-            const isActive = item.enabled && location.pathname === item.to;
-            if (!item.enabled) {
-              return (
-                <Tooltip key={item.label}>
-                  <TooltipTrigger
-                    render={
-                      <div className="flex cursor-not-allowed items-center gap-2 h-full px-4 text-xs text-sidebar-muted/40" />
-                    }
-                  >
-                    <item.icon className="h-3.5 w-3.5" />
-                    {item.label}
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">Coming soon</TooltipContent>
-                </Tooltip>
-              );
-            }
-            return (
-              <Link
-                key={item.label}
-                to={item.to}
-                className={`flex items-center gap-2 h-full px-4 text-xs transition-colors border-b-2 ${
-                  isActive
-                    ? "border-white text-white font-medium"
-                    : "border-transparent text-sidebar-muted hover:text-white"
-                }`}
-              >
-                <item.icon className="h-3.5 w-3.5" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-
-      <div className="flex items-center h-full px-5">
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-sidebar-muted/50 h-7 text-xs gap-1.5"
-                disabled
-              />
-            }
-          >
-            <FlaskConical className="h-3.5 w-3.5" />
-            Evaluate
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Coming soon</TooltipContent>
-        </Tooltip>
-      </div>
+      <nav className="flex h-full items-center">
+        {navItems.map((item) => {
+          if (!item.enabled) {
+            return <DisabledNavItem key={item.label} item={item} />;
+          }
+          const isActive = location.pathname === item.to;
+          return (
+            <Link
+              key={item.label}
+              to={item.to}
+              className={
+                "flex h-full items-center gap-2 border-b-2 px-4 text-xs transition-colors " +
+                (isActive
+                  ? "border-white text-white font-medium"
+                  : "border-transparent text-sidebar-muted hover:text-white")
+              }
+            >
+              <item.icon className="h-3.5 w-3.5" aria-hidden />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
     </header>
+  );
+}
+
+function DisabledNavItem({
+  item,
+}: {
+  item: { label: string; icon: typeof LayoutDashboard };
+}) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <span
+            aria-disabled="true"
+            className="flex h-full cursor-not-allowed items-center gap-2 px-4 text-xs text-sidebar-muted/50 select-none"
+          />
+        }
+      >
+        <item.icon className="h-3.5 w-3.5" aria-hidden />
+        {item.label}
+        <span className="ml-1 rounded-sm bg-white/5 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-white/40">
+          soon
+        </span>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">Disponibile a breve</TooltipContent>
+    </Tooltip>
   );
 }

@@ -3,8 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/StatusBadge";
 import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
@@ -180,7 +181,7 @@ function Header({
             {data.course_name_snapshot}
           </h1>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <StatusPill status={data.status} />
+            <StatusBadge status={data.status} animate />
             {startedAt ? (
               <span className="text-xs text-muted-foreground">
                 avviata il {formatDateTime(startedAt)}
@@ -329,43 +330,6 @@ function Field({
       </dt>
       <dd className="mt-0.5 truncate text-xs text-foreground">{children}</dd>
     </div>
-  );
-}
-
-function StatusPill({ status }: { status: EvaluationStatus }) {
-  const config: Record<
-    EvaluationStatus,
-    {
-      label: string;
-      variant: "default" | "secondary" | "destructive" | "outline";
-      extra?: string;
-    }
-  > = {
-    pending: { label: "in attesa", variant: "secondary" },
-    running: {
-      label: "in esecuzione",
-      variant: "default",
-      extra: "animate-pulse",
-    },
-    completed: {
-      label: "completata",
-      variant: "outline",
-      extra:
-        "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-    },
-    partial: {
-      label: "parziale",
-      variant: "outline",
-      extra:
-        "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-    },
-    failed: { label: "fallita", variant: "destructive" },
-  };
-  const c = config[status];
-  return (
-    <Badge variant={c.variant} className={c.extra}>
-      {c.label}
-    </Badge>
   );
 }
 

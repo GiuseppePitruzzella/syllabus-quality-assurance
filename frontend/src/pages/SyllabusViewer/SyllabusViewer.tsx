@@ -8,15 +8,12 @@ import {
   listEvaluationsForSyllabus,
   startEvaluation,
 } from "@/lib/api";
-import type {
-  EvaluationStatus,
-  EvaluationSummary,
-  SyllabusDetail,
-} from "@/lib/types";
+import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/StatusBadge";
 import {
   Tooltip,
   TooltipContent,
@@ -495,39 +492,6 @@ function EvaluationHistoryList({
         )}
       </div>
     </section>
-  );
-}
-
-function StatusBadge({ status }: { status: EvaluationStatus }) {
-  const config: Record<
-    EvaluationStatus,
-    {
-      label: string;
-      className?: string;
-      variant: "default" | "secondary" | "destructive" | "outline";
-    }
-  > = {
-    pending: { label: "in attesa", variant: "secondary" },
-    running: { label: "in esecuzione", variant: "default" },
-    completed: {
-      label: "completata",
-      variant: "outline",
-      className:
-        "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-    },
-    partial: {
-      label: "parziale",
-      variant: "outline",
-      className:
-        "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-    },
-    failed: { label: "fallita", variant: "destructive" },
-  };
-  const entry = config[status];
-  return (
-    <Badge variant={entry.variant} className={entry.className}>
-      {entry.label}
-    </Badge>
   );
 }
 
