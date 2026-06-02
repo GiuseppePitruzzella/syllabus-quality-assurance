@@ -83,6 +83,7 @@ def _make_cdl(db, dept_id, name="Informatica", code="lm-18"):
 
 
 _EMPTY_CONTENT = {
+    "learning_outcomes_it": "",
     "dublin_knowledge_it": "",
     "dublin_applying_it": "",
     "dublin_judgement_it": "",
@@ -235,6 +236,7 @@ def test_get_syllabus_detail(client, test_db):
     assert data["seuid"] == "BEEF-DEAD"
     assert data["course_name"] == "Advanced Computer Graphics"
     # Content fields present in detail
+    assert "learning_outcomes_it" in data
     assert "dublin_knowledge_it" in data
 
 

@@ -26,6 +26,7 @@ class SyllabusListItem(BaseModel):
 class SyllabusDetail(SyllabusListItem):
     """Full schema with all content fields — used for GET /api/syllabi/{seuid}."""
 
+    learning_outcomes_it: str | None = None
     dublin_knowledge_it: str | None = None
     dublin_applying_it: str | None = None
     dublin_judgement_it: str | None = None
@@ -39,6 +40,7 @@ class SyllabusDetail(SyllabusListItem):
     schedule_it: list | None = None
     assessment_methods_it: str | None = None
     sample_questions_it: str | None = None
+    learning_outcomes_en: str | None = None
     dublin_knowledge_en: str | None = None
     dublin_applying_en: str | None = None
     dublin_judgement_en: str | None = None

@@ -78,6 +78,7 @@ def test_syllabus_seuid_unique(db_session):
         cdl_id=cdl.id, seuid="ABC-123", course_code="001", course_name="Test",
         teacher="Prof X", academic_year="2025/2026", year_of_study="1",
         url_it="http://a", url_en="http://b",
+        learning_outcomes_it="",
         dublin_knowledge_it="", dublin_applying_it="", dublin_judgement_it="",
         dublin_communication_it="", dublin_learning_it="",
         teaching_methods_it="", prerequisites_it="", attendance_it="",
