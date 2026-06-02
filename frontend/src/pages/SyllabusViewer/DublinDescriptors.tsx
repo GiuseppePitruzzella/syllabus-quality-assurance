@@ -35,6 +35,28 @@ const descriptors = [
 ];
 
 export function DublinDescriptors({ data, lang }: DublinDescriptorsProps) {
+  const learningOutcomesKey = `learning_outcomes_${lang}` as keyof SyllabusDetail;
+  const learningOutcomes = data[learningOutcomesKey] as string | null;
+  const hasDescriptorText = descriptors.some((d) => {
+    const fieldKey = `${d.key}_${lang}` as keyof SyllabusDetail;
+    return Boolean((data[fieldKey] as string | null)?.trim());
+  });
+
+  if (!hasDescriptorText && learningOutcomes?.trim()) {
+    return (
+      <Card>
+        <CardContent>
+          <p className="text-accent font-medium mb-2">
+            {lang === "it" ? "Risultati di apprendimento" : "Expected learning outcomes"}
+          </p>
+          <p className="text-muted-foreground whitespace-pre-line">
+            {learningOutcomes}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {descriptors.map((d) => {

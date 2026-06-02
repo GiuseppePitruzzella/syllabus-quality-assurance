@@ -31,17 +31,24 @@ export function CourseScheduleTable({ items }: CourseScheduleTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {items.map((item, i) => (
-          <TableRow key={i}>
-            <TableCell>{item.numero}</TableCell>
-            <TableCell className="whitespace-normal">
-              {item.argomenti}
-            </TableCell>
-            <TableCell className="whitespace-normal">
-              {item.riferimenti_testi}
-            </TableCell>
-          </TableRow>
-        ))}
+        {items.map((item, i) => {
+          const topic =
+            item.argomenti ?? item.subjects ?? item.subject ?? item.topics ?? item.topic ?? "";
+          const references =
+            item.riferimenti_testi ??
+            item.text_references ??
+            item.textbook_references ??
+            item.references ??
+            "";
+
+          return (
+            <TableRow key={i}>
+              <TableCell>{item.numero ?? i + 1}</TableCell>
+              <TableCell className="whitespace-normal">{topic || "—"}</TableCell>
+              <TableCell className="whitespace-normal">{references || "—"}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

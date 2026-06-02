@@ -15,8 +15,8 @@ export function EmptyState({
   disabled,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-      <p className="text-muted-foreground mb-4">{message}</p>
+    <div className="flex items-center justify-center gap-4 rounded-lg border border-dashed px-4 py-3">
+      <p className="text-muted-foreground text-sm">{message}</p>
       <Button onClick={onAction} disabled={disabled}>
         <Download className="mr-2 h-4 w-4" />
         {buttonLabel}

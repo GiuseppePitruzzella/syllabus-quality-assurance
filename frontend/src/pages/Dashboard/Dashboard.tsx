@@ -14,19 +14,21 @@ export function Dashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Dipartimento</label>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Dipartimento
+          </label>
           <DepartmentSelector
             value={departmentId}
             onChange={handleDepartmentChange}
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Corso di Laurea</label>
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Corso di Laurea
+          </label>
           <CdlSelector
             departmentId={departmentId}
             value={cdlId}

@@ -6,7 +6,6 @@ import { useScrapeJob } from "@/hooks/useScrapeJob";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrapeProgress } from "@/components/ScrapeProgress";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -72,14 +71,12 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
         onChange={(e) => setSearch(e.target.value)}
         className="max-w-sm"
       />
-      <Table>
+      <Table className="table-fixed w-full">
         <TableHeader>
           <TableRow>
-            <TableHead>Anno</TableHead>
-            <TableHead>Codice</TableHead>
+            <TableHead className="w-12 text-center">Anno</TableHead>
             <TableHead>Insegnamento</TableHead>
-            <TableHead>Modulo</TableHead>
-            <TableHead>Docente</TableHead>
+            <TableHead className="w-48 text-right">Docente</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -89,13 +86,15 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
               className="cursor-pointer"
               onClick={() => navigate(`/syllabus/${syl.seuid}`)}
             >
-              <TableCell>
-                <Badge variant="secondary">{syl.year_of_study}</Badge>
+              <TableCell className="text-center text-muted-foreground text-xs">
+                {syl.year_of_study}
               </TableCell>
-              <TableCell className="font-mono">{syl.course_code}</TableCell>
-              <TableCell className="font-bold">{syl.course_name}</TableCell>
-              <TableCell>{syl.module ?? "—"}</TableCell>
-              <TableCell>{syl.teacher}</TableCell>
+              <TableCell className="font-medium truncate">
+                {syl.course_name}
+              </TableCell>
+              <TableCell className="text-right text-muted-foreground text-sm truncate">
+                {syl.teacher}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
