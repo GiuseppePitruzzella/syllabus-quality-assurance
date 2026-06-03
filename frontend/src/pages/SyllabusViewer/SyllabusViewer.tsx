@@ -42,7 +42,7 @@ function EvaluateButton({ seuid }: { seuid: string }) {
 
   return (
     <Button
-      size="sm"
+      size="lg"
       onClick={() => mutation.mutate()}
       disabled={mutation.isPending}
       aria-busy={mutation.isPending}
