@@ -17,7 +17,7 @@ interface LanguageToggleProps {
 }
 
 const COMMON_BUTTON =
-  "inline-flex h-7 min-w-[3rem] items-center justify-center rounded-md px-3 text-xs font-medium leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
+  "inline-flex h-7 min-w-[3rem] items-center justify-center rounded-lg px-3 text-xs font-medium leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1";
 
 const ACTIVE =
   "bg-primary text-primary-foreground shadow-sm";
@@ -56,7 +56,7 @@ export function LanguageToggle({
     <div
       role="group"
       aria-label={label}
-      className="inline-flex h-9 items-center gap-0.5 rounded-md border bg-card p-1"
+      className="inline-flex h-9 items-center gap-0.5 rounded-xl border bg-card p-1"
     >
       <button
         type="button"
