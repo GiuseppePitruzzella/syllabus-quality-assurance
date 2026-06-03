@@ -12,15 +12,10 @@ import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import {
   Tabs,
   TabsContent,
@@ -62,63 +57,6 @@ function EvaluateButton({ seuid }: { seuid: string }) {
   );
 }
 
-function LangToggle({
-  lang,
-  setLang,
-  hasEnglish,
-}: {
-  lang: "it" | "en";
-  setLang: (l: "it" | "en") => void;
-  hasEnglish: boolean;
-}) {
-  return (
-    <div className="flex h-9 items-center rounded-md border bg-card p-0.5">
-      <button
-        type="button"
-        onClick={() => setLang("it")}
-        className={
-          "rounded-sm px-3 py-1 text-xs font-medium transition-colors " +
-          (lang === "it"
-            ? "bg-primary text-primary-foreground"
-            : "text-muted-foreground hover:text-foreground")
-        }
-      >
-        IT
-      </button>
-      {hasEnglish ? (
-        <button
-          type="button"
-          onClick={() => setLang("en")}
-          className={
-            "rounded-sm px-3 py-1 text-xs font-medium transition-colors " +
-            (lang === "en"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground")
-          }
-        >
-          EN
-        </button>
-      ) : (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <button
-                  type="button"
-                  disabled
-                  className="cursor-not-allowed rounded-sm px-3 py-1 text-xs font-medium text-muted-foreground/40"
-                >
-                  EN
-                </button>
-              }
-            />
-            <TooltipContent>Versione inglese non disponibile</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
-    </div>
-  );
-}
 
 function SourceLink({
   href,
@@ -229,9 +167,9 @@ export function SyllabusViewer() {
             {data.has_english ? (
               <SourceLink href={data.url_en} label="Fonte EN" />
             ) : null}
-            <LangToggle
-              lang={lang}
-              setLang={setLang}
+            <LanguageToggle
+              value={lang}
+              onChange={setLang}
               hasEnglish={data.has_english}
             />
             <EvaluateButton seuid={data.seuid} />

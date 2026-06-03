@@ -21,8 +21,8 @@ export function Dashboard() {
     <div className="mx-auto max-w-6xl space-y-4">
       <PageHeader
         badge="Qualità syllabus"
-        title="Cruscotto didattico"
-        subtitle="Stato dell'archivio, copertura bilingue e revisioni disponibili."
+        title="Syllabus Quality Assurance"
+        subtitle="Strumento di supporto alla revisione della qualità dei syllabus universitari. La piattaforma integra raccolta dei dati, analisi bilingue, valutazione automatica sui criteri C1-C9 e consultazione dei risultati per docente e presidio di qualità."
         actions={
           <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-800">
             <span
