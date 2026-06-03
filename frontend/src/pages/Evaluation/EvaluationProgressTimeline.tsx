@@ -1,3 +1,4 @@
+import { Section } from "@/components/layout/Section";
 import type { EvaluationProgressEvent } from "@/lib/types";
 
 interface Props {
@@ -74,15 +75,12 @@ export function EvaluationProgressTimeline({
   }
 
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-          Timeline esecuzione
-        </h2>
-        <LiveIndicator isLive={isLive} isConnected={isConnected} />
-      </div>
-      <div className="p-4">{body}</div>
-    </section>
+    <Section
+      title="Timeline esecuzione"
+      headerAside={<LiveIndicator isLive={isLive} isConnected={isConnected} />}
+    >
+      {body}
+    </Section>
   );
 }
 

@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Section } from "@/components/layout/Section";
 import { getSyllabus } from "@/lib/api";
 import type {
   AgentOutputDump,
@@ -37,19 +38,19 @@ export function EvaluationOutputTabs({ data }: Props) {
   const syllabus = syllabusQuery.data ?? null;
 
   return (
-    <section className="min-w-0 rounded-lg border bg-card">
-      <Tabs defaultValue="report" className="min-w-0">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
-          <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-            Output valutazione
-          </h2>
+    <Tabs defaultValue="report" className="min-w-0">
+      <Section
+        className="min-w-0"
+        title="Output valutazione"
+        headerAside={
           <TabsList className="h-auto max-w-full flex-wrap justify-start overflow-visible">
             <TabsTrigger value="report">Report</TabsTrigger>
             <TabsTrigger value="syllabus">Syllabus originale</TabsTrigger>
             <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
           </TabsList>
-        </div>
-
+        }
+        padded={false}
+      >
         <TabsContent value="report" className="mt-0 min-w-0 p-4">
           <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
             <ReportPanel data={data} />
@@ -74,8 +75,8 @@ export function EvaluationOutputTabs({ data }: Props) {
         <TabsContent value="agents" className="mt-0 min-w-0 p-4">
           <AgentDetailsPanel data={data} />
         </TabsContent>
-      </Tabs>
-    </section>
+      </Section>
+    </Tabs>
   );
 }
 

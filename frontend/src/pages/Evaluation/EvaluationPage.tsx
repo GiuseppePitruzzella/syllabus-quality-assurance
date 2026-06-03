@@ -4,8 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/StatusBadge";
+import { MetricTile } from "@/components/layout/MetricTile";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
@@ -150,7 +151,7 @@ function Header({
   const naCount = hasScores ? 9 - evaluatedCount : 0;
 
   return (
-    <header className="space-y-5 border-b pb-6">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <Link
           to={`/syllabus/${data.syllabus_seuid_snapshot}`}
@@ -169,18 +170,11 @@ function Header({
         ) : null}
       </div>
 
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="min-w-0">
-          <Badge
-            variant="outline"
-            className="mb-3 border-cyan-200 bg-cyan-500/10 text-cyan-800"
-          >
-            Valutazione
-          </Badge>
-          <h1 className="!my-0 !text-3xl !font-semibold !tracking-normal md:!text-4xl">
-            {data.course_name_snapshot}
-          </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+      <PageHeader
+        badge="Valutazione"
+        title={data.course_name_snapshot}
+        pills={
+          <>
             <StatusBadge status={data.status} animate />
             {startedAt ? (
               <span className="text-xs text-muted-foreground">
@@ -192,50 +186,53 @@ function Header({
                 · durata {durationSec.toFixed(1)} s
               </span>
             ) : null}
+          </>
+        }
+        actions={
+          hasScores ? (
+            <ScoreSummary
+              coreScore={data.core_score}
+              coverage={data.coverage}
+              evaluatedCount={evaluatedCount}
+              naCount={naCount}
+            />
+          ) : null
+        }
+        footer={
+          <div className="space-y-3">
+            {data.status === "failed" && data.error_message ? (
+              <p className="rounded-md border border-rose-200 bg-rose-500/5 px-3 py-2 text-sm text-rose-800">
+                {data.error_message}
+              </p>
+            ) : null}
+            <details className="group">
+              <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
+                Dettagli tecnici
+              </summary>
+              <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-5">
+                <TechField label="Avvio">
+                  {startedAt ? formatDateTime(startedAt) : "—"}
+                </TechField>
+                <TechField label="Fine">
+                  {finishedAt ? formatDateTime(finishedAt) : "—"}
+                </TechField>
+                <TechField label="LLM">{data.llm_model}</TechField>
+                <TechField label="Embedding">
+                  {data.embedding_model} ({data.embedding_dim}d)
+                </TechField>
+                <TechField label="Prompt versions">
+                  <code className="font-mono">
+                    {Object.entries(data.prompt_versions)
+                      .map(([k, v]) => `${k}=${v}`)
+                      .join(" · ")}
+                  </code>
+                </TechField>
+              </dl>
+            </details>
           </div>
-        </div>
-
-        {hasScores ? (
-          <ScoreSummary
-            coreScore={data.core_score}
-            coverage={data.coverage}
-            evaluatedCount={evaluatedCount}
-            naCount={naCount}
-          />
-        ) : null}
-      </div>
-
-      {data.status === "failed" && data.error_message ? (
-        <p className="rounded-md border border-rose-200 bg-rose-500/5 px-3 py-2 text-sm text-rose-800">
-          {data.error_message}
-        </p>
-      ) : null}
-
-      <details className="group">
-        <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-          Dettagli tecnici
-        </summary>
-        <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-5">
-          <Field label="Avvio">
-            {startedAt ? formatDateTime(startedAt) : "—"}
-          </Field>
-          <Field label="Fine">
-            {finishedAt ? formatDateTime(finishedAt) : "—"}
-          </Field>
-          <Field label="LLM">{data.llm_model}</Field>
-          <Field label="Embedding">
-            {data.embedding_model} ({data.embedding_dim}d)
-          </Field>
-          <Field label="Prompt versions">
-            <code className="font-mono">
-              {Object.entries(data.prompt_versions)
-                .map(([k, v]) => `${k}=${v}`)
-                .join(" · ")}
-            </code>
-          </Field>
-        </dl>
-      </details>
-    </header>
+        }
+      />
+    </div>
   );
 }
 
@@ -251,72 +248,36 @@ function ScoreSummary({
   naCount: number;
 }) {
   return (
-    <div className="flex shrink-0 flex-wrap items-stretch gap-3">
-      <Metric
+    <>
+      <MetricTile
         label="CoreScore"
-        value={
-          typeof coreScore === "number" ? coreScore.toFixed(2) : "—"
-        }
+        value={typeof coreScore === "number" ? coreScore.toFixed(2) : "—"}
         suffix="/ 2.00"
-        accent
+        tone="success"
       />
-      <Metric
+      <MetricTile
         label="Coverage"
         value={
           typeof coverage === "number"
             ? `${Math.round(coverage * 100)}%`
             : "—"
         }
+        tone="muted"
       />
-      <Metric label="Valutati" value={String(evaluatedCount)} suffix="/ 9" />
+      <MetricTile
+        label="Valutati"
+        value={String(evaluatedCount)}
+        suffix="/ 9"
+        tone="muted"
+      />
       {naCount > 0 ? (
-        <Metric label="NA" value={String(naCount)} />
+        <MetricTile label="NA" value={String(naCount)} tone="warning" />
       ) : null}
-    </div>
+    </>
   );
 }
 
-function Metric({
-  label,
-  value,
-  suffix,
-  accent,
-}: {
-  label: string;
-  value: string;
-  suffix?: string;
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className={
-        "min-w-[88px] rounded-md border px-3 py-2 " +
-        (accent
-          ? "border-emerald-200 bg-emerald-500/10"
-          : "border-border bg-card")
-      }
-    >
-      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
-      <p
-        className={
-          "text-xl font-semibold tabular-nums leading-none mt-1 " +
-          (accent ? "text-emerald-800" : "text-foreground")
-        }
-      >
-        {value}
-        {suffix ? (
-          <span className="ml-1 text-[10px] font-normal text-muted-foreground">
-            {suffix}
-          </span>
-        ) : null}
-      </p>
-    </div>
-  );
-}
-
-function Field({
+function TechField({
   label,
   children,
 }: {
