@@ -265,7 +265,7 @@ body {
    * inline via Tailwind utilities — see `MetricTile` and
    * `StatusBadge` for the canonical palette.
    */
-  --color-primary: #4F46E5;
+  --color-primary: #6366F1;
   --color-primary-foreground: #ffffff;
   --color-accent: #0E7490;
   --color-accent-foreground: #ffffff;

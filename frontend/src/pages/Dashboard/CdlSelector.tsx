@@ -58,7 +58,7 @@ export function CdlSelector({
   if (departmentId === null) {
     return (
       <Select disabled>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="h-11 w-full rounded-xl bg-card px-4 text-sm font-medium">
           <SelectValue placeholder="Seleziona prima un dipartimento..." />
         </SelectTrigger>
         <SelectContent />
@@ -93,7 +93,7 @@ export function CdlSelector({
       value={value !== null ? String(value) : null}
       onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="h-11 w-full rounded-xl bg-card px-4 text-sm font-medium hover:border-primary/40">
         <SelectValue placeholder="Seleziona CdL...">
           {selected && (
             <span className="flex items-center gap-2">

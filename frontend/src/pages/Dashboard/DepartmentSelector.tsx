@@ -63,7 +63,7 @@ export function DepartmentSelector({
       value={value !== null ? String(value) : null}
       onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="h-11 w-full rounded-xl bg-card px-4 text-sm font-medium hover:border-primary/40">
         <SelectValue placeholder="Seleziona dipartimento...">
           {selectedName}
         </SelectValue>
