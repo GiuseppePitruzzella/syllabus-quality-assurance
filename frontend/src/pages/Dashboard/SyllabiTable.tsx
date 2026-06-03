@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { ArrowRight, RefreshCw, Search } from "lucide-react";
+
 import { getSyllabi, scrapeSyllabiList } from "@/lib/api";
 import { useScrapeJob } from "@/hooks/useScrapeJob";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrapeProgress } from "@/components/ScrapeProgress";
+import { Section } from "@/components/layout/Section";
+import { Toolbar } from "@/components/layout/Toolbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +20,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowRight, RefreshCw, Search } from "lucide-react";
 
 interface SyllabiTableProps {
   cdlId: number | null;
@@ -46,62 +49,74 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
 
   if (cdlId === null) {
     return (
-      <section className="rounded-lg border bg-card">
-        <SectionHeader
-          title="Elenco insegnamenti"
-          subtitle="Nessun corso di laurea selezionato"
-        />
-      </section>
+      <Section
+        title="Elenco insegnamenti"
+        description="Nessun corso di laurea selezionato"
+      >
+        {null}
+      </Section>
     );
   }
 
   if (scrapeJob.status === "running") {
     return (
-      <section className="rounded-lg border bg-card">
-        <SectionHeader title="Elenco insegnamenti" subtitle="Aggiornamento in corso" />
-        <div className="p-4">
-          <ScrapeProgress
-            current={scrapeJob.current}
-            total={scrapeJob.total}
-            message={scrapeJob.message}
-          />
-        </div>
-      </section>
+      <Section
+        title="Elenco insegnamenti"
+        description="Aggiornamento in corso"
+      >
+        <ScrapeProgress
+          current={scrapeJob.current}
+          total={scrapeJob.total}
+          message={scrapeJob.message}
+        />
+      </Section>
     );
   }
 
-  if (!isLoading && syllabi.length === 0 && !search && scrapeJob.status === "idle") {
+  if (
+    !isLoading &&
+    syllabi.length === 0 &&
+    !search &&
+    scrapeJob.status === "idle"
+  ) {
     return (
-      <section className="rounded-lg border bg-card">
-        <SectionHeader title="Elenco insegnamenti" subtitle="Archivio CdL vuoto" />
-        <div className="p-4">
-          <EmptyState
-            message="Nessun syllabus trovato per questo CdL."
-            buttonLabel="Scarica syllabus"
-            onAction={handleScrape}
-          />
-        </div>
-      </section>
+      <Section
+        title="Elenco insegnamenti"
+        description="Archivio CdL vuoto"
+      >
+        <EmptyState
+          message="Nessun syllabus trovato per questo CdL."
+          buttonLabel="Scarica syllabus"
+          onAction={handleScrape}
+        />
+      </Section>
     );
   }
 
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-              Elenco insegnamenti
-            </h2>
-            <Badge variant="outline" className="bg-muted/50">
-              {syllabi.length}
-            </Badge>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {search ? "Risultati filtrati" : "Syllabus disponibili per il CdL"}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
+    <Section
+      title={
+        <span className="flex items-center gap-2">
+          Elenco insegnamenti
+          <Badge variant="outline" className="bg-muted/50">
+            {syllabi.length}
+          </Badge>
+        </span>
+      }
+      description={
+        search ? "Risultati filtrati" : "Syllabus disponibili per il CdL"
+      }
+      padded={false}
+    >
+      <div className="px-4 pt-4">
+        <Toolbar
+          actions={
+            <Button variant="outline" onClick={handleScrape}>
+              <RefreshCw className="h-4 w-4" />
+              Aggiorna elenco
+            </Button>
+          }
+        >
           <div className="relative min-w-64">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -111,11 +126,7 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
               className="pl-8"
             />
           </div>
-          <Button variant="outline" onClick={handleScrape}>
-            <RefreshCw className="h-4 w-4" />
-            Aggiorna elenco
-          </Button>
-        </div>
+        </Toolbar>
       </div>
 
       <Table className="w-full table-fixed">
@@ -177,24 +188,7 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
           )}
         </TableBody>
       </Table>
-    </section>
-  );
-}
-
-function SectionHeader({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <div className="border-b px-4 py-3">
-      <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-        {title}
-      </h2>
-      <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
-    </div>
+    </Section>
   );
 }
 

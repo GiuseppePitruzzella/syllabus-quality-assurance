@@ -133,31 +133,26 @@ body {
   margin: 0;
 }
 
+/* Phase 6.0.A — design-system foundation.
+ *
+ * Global element selectors only set semantic defaults (family, weight,
+ * inherited colour). Sizes / spacing / surface fills stay with the
+ * component, so Tailwind utility classes are not overridden by these
+ * rules and consumers no longer need `!important` (!text-*, !my-0)
+ * to defend themselves. Pre-6.0.A this block hard-coded h1 to 56px
+ * with a 32px vertical margin and gave every <code> a beige
+ * background via the `background` shorthand — both leaked into every
+ * page header and inline code chip in the app.
+ */
+
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--heading);
-  font-weight: 500;
   color: var(--text-h);
+  font-weight: 600;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
 }
@@ -165,16 +160,7 @@ p {
 code,
 .counter {
   font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  color: inherit;
 }
 
 @theme inline {
