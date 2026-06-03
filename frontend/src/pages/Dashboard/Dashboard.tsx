@@ -18,22 +18,28 @@ export function Dashboard() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto max-w-6xl space-y-4">
       <PageHeader
         badge="Qualità syllabus"
         title="Cruscotto didattico"
-        subtitle="Panoramica operativa dei syllabus, dei contenuti bilingui e delle revisioni disponibili."
+        subtitle="Stato dell'archivio, copertura bilingue e revisioni disponibili."
         actions={
-          <span className="rounded-md border border-emerald-200 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-800">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-800">
+            <span
+              className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500"
+              aria-hidden
+            />
             Valutazione attiva
           </span>
         }
       />
 
+      <StatsCards />
+
       <Section title="Selezione corso">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Dipartimento
             </label>
             <DepartmentSelector
@@ -42,7 +48,7 @@ export function Dashboard() {
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Corso di laurea
             </label>
             <CdlSelector
@@ -53,8 +59,6 @@ export function Dashboard() {
           </div>
         </div>
       </Section>
-
-      <StatsCards />
 
       <SyllabiTable cdlId={cdlId} />
     </div>
