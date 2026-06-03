@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 
+import { Section } from "@/components/layout/Section";
 import type {
   CriterionJudgmentDump,
   EvaluationDetail,
@@ -47,18 +48,18 @@ export function EvaluationScorePanel({ data }: Props) {
 
   if (!isAggregationReady) {
     return (
-      <section className="rounded-lg border bg-card">
-        <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-          <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-            Punteggi C1-C9
-          </h2>
+      <Section
+        title="Punteggi C1-C9"
+        headerAside={
           <span className="text-xs text-muted-foreground">in attesa</span>
-        </div>
+        }
+        padded={false}
+      >
         <p className="px-4 py-6 text-sm text-muted-foreground">
           I punteggi saranno disponibili al termine della fase di
           aggregazione (evento <code>aggregation_completed</code>).
         </p>
-      </section>
+      </Section>
     );
   }
 
@@ -84,11 +85,9 @@ export function EvaluationScorePanel({ data }: Props) {
   const anyExpanded = expanded.size > 0;
 
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-          Punteggi C1-C9
-        </h2>
+    <Section
+      title="Punteggi C1-C9"
+      headerAside={
         <button
           type="button"
           onClick={anyExpanded ? collapseAll : expandAll}
@@ -96,9 +95,8 @@ export function EvaluationScorePanel({ data }: Props) {
         >
           {anyExpanded ? "Comprimi tutto" : "Espandi tutto"}
         </button>
-      </div>
-
-      <div className="p-4">
+      }
+    >
         {hasAgentErrors ? (
           <AgentErrorsBanner errors={agentErrors!} />
         ) : null}
@@ -150,8 +148,7 @@ export function EvaluationScorePanel({ data }: Props) {
         {naCriteria.length > 0 ? (
           <NaCriteriaList items={naCriteria} />
         ) : null}
-      </div>
-    </section>
+    </Section>
   );
 }
 

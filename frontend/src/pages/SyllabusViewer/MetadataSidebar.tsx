@@ -1,3 +1,4 @@
+import { Section } from "@/components/layout/Section";
 import type { SyllabusDetail } from "@/lib/types";
 
 interface MetadataSidebarProps {
@@ -40,12 +41,7 @@ export function MetadataSidebar({ data }: MetadataSidebarProps) {
   ];
 
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="border-b px-4 py-3">
-        <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-          Metadati
-        </h2>
-      </div>
+    <Section title="Metadati" padded={false}>
       <dl className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 sm:grid-cols-3 lg:grid-cols-6">
         {fields.map((f) => (
           <div key={f.label} className="min-w-0">
@@ -58,7 +54,7 @@ export function MetadataSidebar({ data }: MetadataSidebarProps) {
           </div>
         ))}
       </dl>
-    </section>
+    </Section>
   );
 }
 

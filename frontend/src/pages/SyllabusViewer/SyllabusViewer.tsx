@@ -11,9 +11,10 @@ import {
 import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { Section } from "@/components/layout/Section";
 import {
   Tooltip,
   TooltipContent,
@@ -206,23 +207,12 @@ export function SyllabusViewer() {
     <div className="mx-auto max-w-6xl space-y-6">
       <Breadcrumb items={breadcrumbItems} />
 
-      {/* Header SaaS */}
-      <header className="flex flex-wrap items-end justify-between gap-4 border-b pb-5">
-        <div className="min-w-0">
-          <Badge
-            variant="outline"
-            className="mb-3 border-cyan-200 bg-cyan-500/10 text-cyan-800"
-          >
-            Syllabus
-          </Badge>
-          <h1 className="!my-0 !text-3xl !font-semibold !tracking-normal md:!text-4xl">
-            {data.course_name}
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            {data.teacher} · {data.cdl_name ?? "CdL"} ·{" "}
-            {data.academic_year}
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+      <PageHeader
+        badge="Syllabus"
+        title={data.course_name}
+        subtitle={`${data.teacher} · ${data.cdl_name ?? "CdL"} · ${data.academic_year}`}
+        pills={
+          <>
             <LanguagePill hasEnglish={data.has_english} />
             {data.year_of_study ? (
               <Pill tone="neutral">Anno {data.year_of_study}</Pill>
@@ -231,21 +221,23 @@ export function SyllabusViewer() {
             {data.course_code ? (
               <Pill tone="muted">Cod. {data.course_code}</Pill>
             ) : null}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <SourceLink href={data.url_it} label="Fonte IT" />
-          {data.has_english ? (
-            <SourceLink href={data.url_en} label="Fonte EN" />
-          ) : null}
-          <LangToggle
-            lang={lang}
-            setLang={setLang}
-            hasEnglish={data.has_english}
-          />
-          <EvaluateButton seuid={data.seuid} />
-        </div>
-      </header>
+          </>
+        }
+        actions={
+          <>
+            <SourceLink href={data.url_it} label="Fonte IT" />
+            {data.has_english ? (
+              <SourceLink href={data.url_en} label="Fonte EN" />
+            ) : null}
+            <LangToggle
+              lang={lang}
+              setLang={setLang}
+              hasEnglish={data.has_english}
+            />
+            <EvaluateButton seuid={data.seuid} />
+          </>
+        }
+      />
 
       {/* Metadata strip (full-width, dense) */}
       <MetadataSidebar data={data} />
@@ -256,20 +248,17 @@ export function SyllabusViewer() {
         isLoading={isHistoryLoading}
       />
 
-      {/* Contenuto syllabus */}
-      <section className="rounded-lg border bg-card">
-        <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-          <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-            Contenuto syllabus
-          </h2>
+      <Section
+        title="Contenuto syllabus"
+        headerAside={
           <span className="text-xs text-muted-foreground">
             Lingua attiva:{" "}
             <strong className="font-medium text-foreground">
               {lang.toUpperCase()}
             </strong>
           </span>
-        </div>
-        <div className="p-4">
+        }
+      >
           <Tabs defaultValue="obiettivi">
             <TabsList>
               <TabsTrigger value="obiettivi">Obiettivi formativi</TabsTrigger>
@@ -331,8 +320,7 @@ export function SyllabusViewer() {
               />
             </TabsContent>
           </Tabs>
-        </div>
-      </section>
+      </Section>
     </div>
   );
 }
@@ -406,27 +394,20 @@ function EvaluationHistoryList({
   isLoading: boolean;
 }) {
   return (
-    <section className="rounded-lg border bg-card">
-      <div className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <div className="min-w-0">
-          <h2 className="!m-0 !text-base !font-semibold !tracking-normal">
-            Valutazioni precedenti
-          </h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            Storico delle run salvate per questo syllabus.
-          </p>
-        </div>
-        {isLoading ? (
+    <Section
+      title="Valutazioni precedenti"
+      description="Storico delle run salvate per questo syllabus."
+      headerAside={
+        isLoading ? (
           <span className="text-xs text-muted-foreground">caricamento…</span>
         ) : (
           <span className="rounded-md border bg-muted px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
             {items.length} run
           </span>
-        )}
-      </div>
-
-      <div className="p-4">
-        {isLoading ? (
+        )
+      }
+    >
+      {isLoading ? (
           <div className="space-y-2">
             {Array.from({ length: 2 }).map((_, i) => (
               <div
@@ -490,8 +471,7 @@ function EvaluationHistoryList({
             ))}
           </ul>
         )}
-      </div>
-    </section>
+    </Section>
   );
 }
 

@@ -1,7 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { getStats } from "@/lib/api";
 import { BookOpen, Building2, GraduationCap, Languages } from "lucide-react";
 
+import { MetricTile } from "@/components/layout/MetricTile";
+import { getStats } from "@/lib/api";
+
+/**
+ * Phase 6.0.C — homepage stats migrated to the MetricTile primitive.
+ *
+ * Tone choices follow the charter:
+ *   - Syllabi   : info     (cyan)   — primary archive counter
+ *   - EN cov.   : success  (emerald)— positive coverage signal
+ *   - CdL       : muted    (card)   — structural counter, no signal
+ *   - Dept.     : muted    (card)   — structural counter, no signal
+ *
+ * Two of the four tiles are intentionally muted: the previous version
+ * coloured all four (cyan/emerald/violet/amber) which read more as
+ * decoration than as semantic. The new palette uses colour only when
+ * it carries meaning ("there are syllabi", "EN coverage is positive").
+ */
 export function StatsCards() {
   const { data: stats } = useQuery({
     queryKey: ["stats"],
@@ -11,62 +27,40 @@ export function StatsCards() {
   if (!stats) return null;
 
   const englishCoverage =
-    stats.syllabi > 0 ? Math.round((stats.with_english / stats.syllabi) * 100) : 0;
-
-  const items = [
-    {
-      label: "Syllabi",
-      value: stats.syllabi,
-      detail: "totali in archivio",
-      icon: BookOpen,
-      tone: "border-cyan-300 bg-cyan-500/10 text-cyan-800",
-    },
-    {
-      label: "Versione EN",
-      value: `${englishCoverage}%`,
-      detail: `${stats.with_english} syllabus bilingui`,
-      icon: Languages,
-      tone: "border-emerald-300 bg-emerald-500/10 text-emerald-800",
-    },
-    {
-      label: "CdL",
-      value: stats.cdl,
-      detail: "corsi di laurea",
-      icon: GraduationCap,
-      tone: "border-violet-300 bg-violet-500/10 text-violet-800",
-    },
-    {
-      label: "Dipartimenti",
-      value: stats.departments,
-      detail: "fonti monitorate",
-      icon: Building2,
-      tone: "border-amber-300 bg-amber-500/10 text-amber-800",
-    },
-  ];
+    stats.syllabi > 0
+      ? Math.round((stats.with_english / stats.syllabi) * 100)
+      : 0;
 
   return (
-    <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {items.map((item) => (
-        <div
-          key={item.label}
-          className="flex items-center gap-3 rounded-lg border bg-card px-4 py-3"
-        >
-          <div className={`rounded-md border p-2 ${item.tone}`}>
-            <item.icon className="h-4 w-4" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {item.label}
-            </p>
-            <p className="text-2xl font-semibold tabular-nums text-foreground">
-              {item.value}
-            </p>
-            <p className="truncate text-xs text-muted-foreground">
-              {item.detail}
-            </p>
-          </div>
-        </div>
-      ))}
-    </section>
+    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <MetricTile
+        label="Syllabi"
+        value={stats.syllabi}
+        hint="totali in archivio"
+        icon={<BookOpen className="h-3.5 w-3.5" aria-hidden />}
+        tone="info"
+      />
+      <MetricTile
+        label="Versione EN"
+        value={`${englishCoverage}%`}
+        hint={`${stats.with_english} bilingui`}
+        icon={<Languages className="h-3.5 w-3.5" aria-hidden />}
+        tone="success"
+      />
+      <MetricTile
+        label="CdL"
+        value={stats.cdl}
+        hint="corsi di laurea"
+        icon={<GraduationCap className="h-3.5 w-3.5" aria-hidden />}
+        tone="muted"
+      />
+      <MetricTile
+        label="Dipartimenti"
+        value={stats.departments}
+        hint="fonti monitorate"
+        icon={<Building2 className="h-3.5 w-3.5" aria-hidden />}
+        tone="muted"
+      />
+    </div>
   );
 }
