@@ -28,7 +28,11 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <TooltipProvider delay={300}>
-          <main className="min-h-screen bg-muted/30">
+          <main className="relative isolate min-h-screen bg-slate-50">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.08),transparent_55%)]"
+            />
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route

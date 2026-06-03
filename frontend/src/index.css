@@ -255,9 +255,19 @@ body {
     @apply font-sans;}}
 
 @theme {
-  --color-primary: #1B2A4A;
+  /* Phase 6.1.C — semantic palette.
+   *
+   *   primary  : indigo-600  -> primary actions / CTA / active toggle
+   *   accent   : teal/cyan   -> data, documents, inert highlights
+   *   sidebar  : slate-950   -> dark app chrome
+   *
+   * Semantic status tones (emerald/amber/rose/cyan/slate) are used
+   * inline via Tailwind utilities — see `MetricTile` and
+   * `StatusBadge` for the canonical palette.
+   */
+  --color-primary: #4F46E5;
   --color-primary-foreground: #ffffff;
-  --color-accent: #3B82A0;
+  --color-accent: #0E7490;
   --color-accent-foreground: #ffffff;
   --color-sidebar: #0f1729;
   --color-sidebar-foreground: #e2e8f0;

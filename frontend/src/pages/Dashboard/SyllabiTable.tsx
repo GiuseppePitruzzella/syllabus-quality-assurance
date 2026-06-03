@@ -145,7 +145,7 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
             <LoadingRows />
           ) : (
             syllabi.map((syl) => (
-              <TableRow key={syl.id} className="hover:bg-cyan-500/5">
+              <TableRow key={syl.id} className="hover:bg-muted/40">
                 <TableCell className="text-center">
                   <Badge
                     variant="outline"

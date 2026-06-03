@@ -34,9 +34,15 @@ export function Dashboard() {
 
   return (
     <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <header className="overflow-hidden rounded-2xl bg-slate-950 text-slate-100">
-        <Navbar />
-        <div className="px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
+      <header className="relative overflow-hidden rounded-2xl bg-slate-950 text-slate-100">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_100%_100%,rgba(16,185,129,0.14),transparent_45%)]"
+        />
+        <div className="relative">
+          <Navbar />
+        </div>
+        <div className="relative px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <span className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-300">
