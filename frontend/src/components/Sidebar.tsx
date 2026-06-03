@@ -29,7 +29,7 @@ export function Navbar() {
   const location = useLocation();
 
   return (
-    <div className="flex h-14 w-full items-center justify-between bg-slate-950 text-slate-100">
+    <div className="flex h-14 w-full items-center justify-between text-slate-100">
       <div className="flex h-full items-center">
         <Link
           to="/"

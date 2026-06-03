@@ -63,7 +63,7 @@ export default function App() {
 function Chromed({ children }: { children: ReactNode }) {
   return (
     <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <header className="overflow-hidden rounded-2xl bg-slate-950">
+      <header className="overflow-hidden rounded-2xl bg-slate-800">
         <Navbar />
       </header>
       {children}

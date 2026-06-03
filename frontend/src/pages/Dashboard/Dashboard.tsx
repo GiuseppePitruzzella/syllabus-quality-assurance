@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Navbar } from "@/components/Sidebar";
 import { Section } from "@/components/layout/Section";
@@ -26,23 +26,26 @@ import { SyllabiTable } from "./SyllabiTable";
 export function Dashboard() {
   const [departmentId, setDepartmentId] = useState<number | null>(null);
   const [cdlId, setCdlId] = useState<number | null>(null);
+  const syllabiRef = useRef<HTMLDivElement>(null);
 
   function handleDepartmentChange(id: number | null) {
     setDepartmentId(id);
     setCdlId(null);
   }
 
+  // Phase 6.1.D — when the user lands on a CdL, bring the syllabi
+  // table into view. Without this, on a dense viewport the selection
+  // sits above the fold and it isn't obvious that 76 rows just loaded.
+  useEffect(() => {
+    if (cdlId === null) return;
+    syllabiRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [cdlId]);
+
   return (
     <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <header className="relative overflow-hidden rounded-2xl bg-slate-950 text-slate-100">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_100%_100%,rgba(16,185,129,0.14),transparent_45%)]"
-        />
-        <div className="relative">
-          <Navbar />
-        </div>
-        <div className="relative px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
+      <header className="overflow-hidden rounded-2xl bg-slate-800 text-slate-100">
+        <Navbar />
+        <div className="px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <span className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-300">
@@ -57,7 +60,7 @@ export function Dashboard() {
                 consultabili.
               </p>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-300 sm:self-end">
+            <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-200 sm:self-end">
               <span
                 aria-hidden
                 className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400"
@@ -94,7 +97,9 @@ export function Dashboard() {
         </div>
       </Section>
 
-      <SyllabiTable cdlId={cdlId} />
+      <div ref={syllabiRef} className="scroll-mt-4">
+        <SyllabiTable cdlId={cdlId} />
+      </div>
     </div>
   );
 }
