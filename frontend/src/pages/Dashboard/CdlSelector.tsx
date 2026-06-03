@@ -1,4 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { GraduationCap } from "lucide-react";
+
 import { getCdl, scrapeCdl } from "@/lib/api";
 import { useScrapeJob } from "@/hooks/useScrapeJob";
 import { EmptyState } from "@/components/EmptyState";
@@ -10,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const TRIGGER_CLASS =
+  "h-12 w-full rounded-xl border-input bg-card px-4 text-sm font-medium shadow-xs transition-all hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:border-primary data-[popup-open]:border-primary data-[popup-open]:ring-2 data-[popup-open]:ring-primary/20 [&_svg]:size-4";
 
 interface CdlSelectorProps {
   departmentId: number | null;
@@ -58,8 +63,15 @@ export function CdlSelector({
   if (departmentId === null) {
     return (
       <Select disabled>
-        <SelectTrigger className="h-11 w-full rounded-xl bg-card px-4 text-sm font-medium">
-          <SelectValue placeholder="Seleziona prima un dipartimento..." />
+        <SelectTrigger
+          aria-label="Corso di laurea"
+          className={TRIGGER_CLASS}
+        >
+          <GraduationCap
+            className="text-muted-foreground"
+            aria-hidden
+          />
+          <SelectValue placeholder="Seleziona prima un dipartimento" />
         </SelectTrigger>
         <SelectContent />
       </Select>
@@ -93,8 +105,15 @@ export function CdlSelector({
       value={value !== null ? String(value) : null}
       onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
-      <SelectTrigger className="h-11 w-full rounded-xl bg-card px-4 text-sm font-medium hover:border-primary/40">
-        <SelectValue placeholder="Seleziona CdL...">
+      <SelectTrigger
+        aria-label="Corso di laurea"
+        className={TRIGGER_CLASS}
+      >
+        <GraduationCap
+          className="text-muted-foreground"
+          aria-hidden
+        />
+        <SelectValue placeholder="Seleziona un corso di laurea">
           {selected && (
             <span className="flex items-center gap-2">
               <CdlTypeBadge type={selected.type} />
