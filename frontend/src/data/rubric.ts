@@ -9,7 +9,7 @@
  * and bump the profile in `profile.ts`.
  *
  * The split between CORE_CRITERIA (C1-C9) and EXTENDED_CRITERIA
- * (E1-E4) is the methodological backbone of the project:
+ * (E1-E5) is the methodological backbone of the project:
  *
  *   - core      enters the `CoreScore` aggregation, all on a 0/1/2
  *               ordinal scale with `NA` reserved for technical

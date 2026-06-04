@@ -17,7 +17,7 @@ import { ValidationSection } from "./ValidationSection";
  *   1. Profilo di valutazione — preset attivo, bloccato per
  *      riproducibilità.
  *   2. Rubrica — C1-C9 (core) chiaramente separati dai criteri
- *      estesi E1-E4 (sperimentali / futuri), con nota esplicita
+ *      estesi E1-E5 (sperimentali / futuri), con nota esplicita
  *      "Non concorrono al CoreScore".
  *   3. Validazione umana — protocollo Phase 5.8.
  */

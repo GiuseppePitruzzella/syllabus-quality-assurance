@@ -19,13 +19,13 @@ import {
  *      mostra codice, area, agente, peso, versione prompt. Cliccando
  *      la riga si espandono descrizione, anchors 0/1/2/NA e note.
  *
- *   2. Criteri estesi E1-E4 — blocco visivamente distinto, sfondo
+ *   2. Criteri estesi E1-E5 — blocco visivamente distinto, sfondo
  *      tono caldo (amber), banner esplicito "Non concorrono al
  *      CoreScore". Niente expand: ogni criterio è una card piatta
  *      con descrizione, prerequisito documentale e status.
  *
  * La separazione è metodologica: il lettore non deve mai poter
- * confondere E1-E4 col nucleo della validazione principale.
+ * confondere E1-E5 col nucleo della validazione principale.
  */
 export function RubricSection() {
   return (
@@ -39,7 +39,7 @@ export function RubricSection() {
       </Section>
 
       <Section
-        title="Criteri estesi E1-E4"
+        title="Criteri estesi E1-E5"
         description="Sperimentali / futuri. Richiedono documenti aggiuntivi non uniformemente disponibili."
         headerAside={
           <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-800">

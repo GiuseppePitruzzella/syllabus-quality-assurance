@@ -39,7 +39,7 @@ export interface EvaluationProfile {
 
 export const ACTIVE_PROFILE: EvaluationProfile = {
   name: "LM-18 / Tesi v1",
-  rubric_label: "C1-C9 (core) + E1-E4 (estesi, sperimentali)",
+  rubric_label: "C1-C9 (core) + E1-E5 (estesi, sperimentali)",
   llm_model: "gemini-2.5-flash",
   embedding_model: "gemini-embedding-001",
   embedding_output_dimensionality: 3072,
