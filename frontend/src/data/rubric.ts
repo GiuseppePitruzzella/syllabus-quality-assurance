@@ -45,13 +45,23 @@ export interface CoreCriterion {
 }
 
 export interface ExtendedCriterion {
-  code: string; // "E1" .. "E4"
+  code: string; // "E1" .. "E5"
   name: string;
   area: string;
   agent: "A2" | "A3" | "A4";
   description: string;
   requires: string; // document(s) that must be available
   status: "futuro" | "sperimentale";
+  /**
+   * True when the criterion can only be evaluated against a local
+   * (department / CdL) document explicitly attached to the run.
+   * Surfaces a `Richiede documento locale` pill in the UI.
+   */
+  local_document?: boolean;
+  /** Rubric anchors 0/1/2/NA when defined for the criterion. */
+  anchors?: Anchor[];
+  /** Methodological notes rendered as a bullet list. */
+  notes?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -256,5 +266,45 @@ export const EXTENDED_CRITERIA: ExtendedCriterion[] = [
       "Verifica l'equivalenza semantica tra versione italiana e inglese, non solo la presenza formale di entrambe (che è C2).",
     requires: "Versione inglese del syllabus presente sul perimetro completo",
     status: "sperimentale",
+  },
+  {
+    code: "E5",
+    name: "Aderenza agli usi dipartimentali / di CdL",
+    area: "Aderenza locale",
+    agent: "A4",
+    description:
+      "Verifica se il syllabus rispetta istruzioni operative locali esplicitamente fornite dal Dipartimento o dal Corso di Studio, come formule standard, preferenze redazionali, struttura dei prerequisiti, criteri di voto, esempi di domande, organizzazione dei testi o modalità di compilazione.",
+    requires:
+      "Documento di usi tipici dipartimentali / di CdL, versionato e citabile.",
+    status: "sperimentale",
+    local_document: true,
+    anchors: [
+      {
+        score: 0,
+        description:
+          "Documento locale disponibile, ma il syllabus disattende indicazioni rilevanti e applicabili.",
+      },
+      {
+        score: 1,
+        description:
+          "Il syllabus aderisce solo parzialmente o in modo non uniforme alle indicazioni locali.",
+      },
+      {
+        score: 2,
+        description:
+          "Il syllabus aderisce in modo sostanziale alle indicazioni locali applicabili.",
+      },
+      {
+        score: "NA",
+        description:
+          "Documento locale assente o non abilitato, oppure indicazioni non pertinenti al syllabus.",
+      },
+    ],
+    notes: [
+      "Non concorre al CoreScore.",
+      "Deve essere NA se il documento locale non è disponibile o non è stato abilitato.",
+      "Non duplica C1-C9: valuta solo istruzioni locali esplicite e applicabili.",
+      "Richiede una fonte documentale locale versionata e citabile.",
+    ],
   },
 ];

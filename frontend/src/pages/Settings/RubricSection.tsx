@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, FlaskConical } from "lucide-react";
+import { ChevronRight, FileText, FlaskConical } from "lucide-react";
 
 import { Section } from "@/components/layout/Section";
 import {
@@ -223,18 +223,28 @@ function ScoreBadge({ score }: { score: Score }) {
 function ExtendedCard({ criterion: c }: { criterion: ExtendedCriterion }) {
   return (
     <div className="rounded-md border border-amber-200 bg-amber-500/[0.04] p-3">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <code className="rounded bg-amber-500/10 px-1.5 py-0.5 font-mono text-xs font-semibold text-amber-900">
           {c.code}
         </code>
         <h4 className="text-sm font-medium text-foreground">{c.name}</h4>
-        <span className="ml-auto rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
-          {c.status}
-        </span>
+        <div className="ml-auto flex flex-wrap items-center gap-1.5">
+          {c.local_document ? (
+            <span className="inline-flex items-center gap-1 rounded-md border border-cyan-300 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cyan-800">
+              <FileText className="h-3 w-3" aria-hidden />
+              Richiede documento locale
+            </span>
+          ) : null}
+          <span className="rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
+            {c.status}
+          </span>
+        </div>
       </div>
+
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
         {c.description}
       </p>
+
       <dl className="mt-3 space-y-1.5 text-xs">
         <div className="flex gap-2">
           <dt className="w-24 shrink-0 font-medium text-muted-foreground">
@@ -255,6 +265,43 @@ function ExtendedCard({ criterion: c }: { criterion: ExtendedCriterion }) {
           <dd className="text-foreground/90">{c.requires}</dd>
         </div>
       </dl>
+
+      {c.anchors ? (
+        <div className="mt-3">
+          <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            Anchors
+          </p>
+          <ul className="space-y-1.5">
+            {c.anchors.map((a) => (
+              <li key={String(a.score)} className="flex items-start gap-2">
+                <ScoreBadge score={a.score} />
+                <span className="text-xs leading-relaxed text-foreground/90">
+                  {a.description}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {c.notes && c.notes.length > 0 ? (
+        <div className="mt-3">
+          <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            Note metodologiche
+          </p>
+          <ul className="space-y-1 text-xs leading-relaxed text-muted-foreground">
+            {c.notes.map((n, i) => (
+              <li key={i} className="flex gap-2">
+                <span
+                  aria-hidden
+                  className="mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/60"
+                />
+                <span>{n}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }
