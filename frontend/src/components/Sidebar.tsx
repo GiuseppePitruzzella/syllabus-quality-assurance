@@ -4,7 +4,7 @@ import { BarChart3, LayoutDashboard, Settings } from "lucide-react";
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
-  { label: "Impostazioni", icon: Settings, to: "#", enabled: false },
+  { label: "Impostazioni", icon: Settings, to: "/settings", enabled: true },
 ];
 
 /**

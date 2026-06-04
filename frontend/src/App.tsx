@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { Navbar } from "@/components/Sidebar";
 import { Dashboard } from "@/pages/Dashboard/Dashboard";
 import { EvaluationPage } from "@/pages/Evaluation/EvaluationPage";
+import { SettingsPage } from "@/pages/Settings/SettingsPage";
 import { SyllabusViewer } from "@/pages/SyllabusViewer/SyllabusViewer";
 
 const queryClient = new QueryClient({
@@ -48,6 +49,14 @@ export default function App() {
                 element={
                   <Chromed>
                     <EvaluationPage />
+                  </Chromed>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <Chromed>
+                    <SettingsPage />
                   </Chromed>
                 }
               />
