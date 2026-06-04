@@ -1,4 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Building2 } from "lucide-react";
+
 import { getDepartments, scrapeDepartments } from "@/lib/api";
 import { useScrapeJob } from "@/hooks/useScrapeJob";
 import { EmptyState } from "@/components/EmptyState";
@@ -10,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const TRIGGER_CLASS =
+  "h-12 w-full rounded-xl border-input bg-card px-4 text-sm font-medium shadow-xs transition-all hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:border-primary data-[popup-open]:border-primary data-[popup-open]:ring-2 data-[popup-open]:ring-primary/20 [&_svg]:size-4";
 
 interface DepartmentSelectorProps {
   value: number | null;
@@ -63,8 +68,15 @@ export function DepartmentSelector({
       value={value !== null ? String(value) : null}
       onValueChange={(v) => onChange(v !== null ? Number(v) : null)}
     >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Seleziona dipartimento...">
+      <SelectTrigger
+        aria-label="Dipartimento"
+        className={TRIGGER_CLASS}
+      >
+        <Building2
+          className="text-muted-foreground"
+          aria-hidden
+        />
+        <SelectValue placeholder="Seleziona un dipartimento">
           {selectedName}
         </SelectValue>
       </SelectTrigger>

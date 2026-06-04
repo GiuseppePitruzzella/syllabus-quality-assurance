@@ -12,15 +12,10 @@ import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import {
   Tabs,
   TabsContent,
@@ -47,7 +42,7 @@ function EvaluateButton({ seuid }: { seuid: string }) {
 
   return (
     <Button
-      size="sm"
+      size="lg"
       onClick={() => mutation.mutate()}
       disabled={mutation.isPending}
       aria-busy={mutation.isPending}
@@ -57,68 +52,11 @@ function EvaluateButton({ seuid }: { seuid: string }) {
       ) : (
         <Sparkles className="h-4 w-4" aria-hidden />
       )}
-      {mutation.isPending ? "Avvio…" : "Valuta syllabus"}
+      {mutation.isPending ? "Avvio…" : "Valuta"}
     </Button>
   );
 }
 
-function LangToggle({
-  lang,
-  setLang,
-  hasEnglish,
-}: {
-  lang: "it" | "en";
-  setLang: (l: "it" | "en") => void;
-  hasEnglish: boolean;
-}) {
-  return (
-    <div className="flex h-9 items-center rounded-md border bg-card p-0.5">
-      <button
-        type="button"
-        onClick={() => setLang("it")}
-        className={
-          "rounded-sm px-3 py-1 text-xs font-medium transition-colors " +
-          (lang === "it"
-            ? "bg-primary text-primary-foreground"
-            : "text-muted-foreground hover:text-foreground")
-        }
-      >
-        IT
-      </button>
-      {hasEnglish ? (
-        <button
-          type="button"
-          onClick={() => setLang("en")}
-          className={
-            "rounded-sm px-3 py-1 text-xs font-medium transition-colors " +
-            (lang === "en"
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground")
-          }
-        >
-          EN
-        </button>
-      ) : (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <button
-                  type="button"
-                  disabled
-                  className="cursor-not-allowed rounded-sm px-3 py-1 text-xs font-medium text-muted-foreground/40"
-                >
-                  EN
-                </button>
-              }
-            />
-            <TooltipContent>Versione inglese non disponibile</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
-    </div>
-  );
-}
 
 function SourceLink({
   href,
@@ -132,7 +70,7 @@ function SourceLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex h-9 items-center gap-1.5 rounded-md border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      className="inline-flex h-9 items-center gap-1.5 rounded-xl border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
     >
       {label}
       <ExternalLink className="h-3 w-3" aria-hidden />
@@ -229,9 +167,9 @@ export function SyllabusViewer() {
             {data.has_english ? (
               <SourceLink href={data.url_en} label="Fonte EN" />
             ) : null}
-            <LangToggle
-              lang={lang}
-              setLang={setLang}
+            <LanguageToggle
+              value={lang}
+              onChange={setLang}
               hasEnglish={data.has_english}
             />
             <EvaluateButton seuid={data.seuid} />
@@ -421,7 +359,7 @@ function EvaluationHistoryList({
           <p className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
             Nessuna valutazione registrata. Avvia una run con{" "}
             <strong className="font-medium text-foreground">
-              Valuta syllabus
+              Valuta
             </strong>
             .
           </p>

@@ -1,59 +1,58 @@
 import { Link, useLocation } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Search,
-  BarChart3,
-  Clock,
-  Settings,
-} from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { BarChart3, LayoutDashboard, Settings } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
-  { label: "Cerca", icon: Search, to: "#", enabled: false },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
-  { label: "Storico", icon: Clock, to: "#", enabled: false },
   { label: "Impostazioni", icon: Settings, to: "#", enabled: false },
 ];
 
 /**
- * Phase 5.9.D — navbar polish.
+ * Phase 6.1.F — premium navbar with centred nav.
  *
- * The four sibling sections (Cerca / Risultati / Storico / Impostazioni)
- * are still planned, not implemented. Until they are, the items render
- * as visibly inert: greyed text, no hover, no underline, a small
- * "soon" pill on the right and a tooltip that says "Disponibile a
- * breve". This is the "non fuorvianti" half of the charter rule —
- * the items advertise the product surface without pretending to be
- * functional links.
+ * Three slots, edge to edge:
+ *   - brand          : left, anchored
+ *   - nav            : absolutely centred to the navbar, independent
+ *                      of brand and profile widths so the items stay
+ *                      visually balanced regardless of who's wider
+ *   - profile mock   : right, anchored
  *
- * The previous "Evaluate" disabled CTA on the right side is dropped:
- * evaluations now have a real entry point on the SyllabusViewer
- * ("Valuta syllabus"), so the navbar shortcut would have been
- * redundant and confusing.
+ * Disabled items (`Risultati`, `Impostazioni`) are simple disabled
+ * spans — no `SOON` pill, no tooltip. Their dim colour is the only
+ * affordance, matching standard form-disabled semantics.
  */
 export function Navbar() {
   const location = useLocation();
 
   return (
-    <header className="fixed left-0 top-0 z-40 flex h-12 w-full items-center bg-sidebar text-sidebar-foreground border-b border-white/10">
+    <div className="relative flex h-14 w-full items-center justify-between text-slate-100">
       <Link
         to="/"
-        className="flex h-full items-center px-5 text-xs font-semibold uppercase tracking-wide text-white/90 transition-colors hover:text-white"
+        className="flex h-full items-center gap-2 px-5 text-sm font-semibold tracking-wide text-white transition-colors hover:text-white/90"
       >
+        <span
+          className="inline-block h-2 w-2 rounded-sm bg-emerald-400"
+          aria-hidden
+        />
         Syllabus QA
       </Link>
 
-      <div className="h-5 w-px bg-white/15" />
-
-      <nav className="flex h-full items-center">
+      <nav
+        className="pointer-events-none absolute left-1/2 top-0 flex h-full -translate-x-1/2 items-center"
+        aria-label="Sezioni"
+      >
         {navItems.map((item) => {
           if (!item.enabled) {
-            return <DisabledNavItem key={item.label} item={item} />;
+            return (
+              <span
+                key={item.label}
+                aria-disabled="true"
+                className="pointer-events-auto flex h-full cursor-not-allowed select-none items-center gap-2 px-4 text-xs text-slate-500"
+              >
+                <item.icon className="h-3.5 w-3.5" aria-hidden />
+                {item.label}
+              </span>
+            );
           }
           const isActive = location.pathname === item.to;
           return (
@@ -61,10 +60,10 @@ export function Navbar() {
               key={item.label}
               to={item.to}
               className={
-                "flex h-full items-center gap-2 border-b-2 px-4 text-xs transition-colors " +
+                "pointer-events-auto flex h-full items-center gap-2 border-b-2 px-4 text-xs transition-colors " +
                 (isActive
-                  ? "border-white text-white font-medium"
-                  : "border-transparent text-sidebar-muted hover:text-white")
+                  ? "border-emerald-400 text-white font-medium"
+                  : "border-transparent text-slate-400 hover:text-white")
               }
             >
               <item.icon className="h-3.5 w-3.5" aria-hidden />
@@ -73,32 +72,29 @@ export function Navbar() {
           );
         })}
       </nav>
-    </header>
+
+      <MockProfile />
+    </div>
   );
 }
 
-function DisabledNavItem({
-  item,
-}: {
-  item: { label: string; icon: typeof LayoutDashboard };
-}) {
+function MockProfile() {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <span
-            aria-disabled="true"
-            className="flex h-full cursor-not-allowed items-center gap-2 px-4 text-xs text-sidebar-muted/50 select-none"
-          />
-        }
+    <div className="flex h-full items-center gap-3 px-5">
+      <div className="hidden text-right sm:block">
+        <p className="text-xs font-medium leading-none text-white">
+          Docente demo
+        </p>
+        <p className="mt-0.5 text-[10px] leading-none text-slate-400">
+          Presidio qualità
+        </p>
+      </div>
+      <span
+        aria-hidden
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/15 text-xs font-medium text-emerald-200"
       >
-        <item.icon className="h-3.5 w-3.5" aria-hidden />
-        {item.label}
-        <span className="ml-1 rounded-sm bg-white/5 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-white/40">
-          soon
-        </span>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">Disponibile a breve</TooltipContent>
-    </Tooltip>
+        DD
+      </span>
+    </div>
   );
 }
