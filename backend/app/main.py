@@ -6,7 +6,16 @@ from sqlalchemy import inspect, text
 
 from app.config import settings
 from app.database import Base, engine
-from app.api import departments, scrape_departments, scrape_stream, evaluation, cdl, syllabi, stats
+from app.api import (
+    cdl,
+    departments,
+    evaluation,
+    local_documents,
+    scrape_departments,
+    scrape_stream,
+    stats,
+    syllabi,
+)
 
 
 def _ensure_sqlite_schema_compatibility() -> None:
@@ -89,3 +98,4 @@ app.include_router(evaluation.router)
 app.include_router(cdl.router)
 app.include_router(syllabi.router)
 app.include_router(stats.router)
+app.include_router(local_documents.router)

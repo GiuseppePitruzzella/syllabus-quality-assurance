@@ -59,6 +59,13 @@ class Settings(BaseSettings):
     normative_corpus_dir: str = str(PROJECT_ROOT / "data" / "normative_corpus")
     tagging_rules_file: str = str(PROJECT_ROOT / "data" / "tagging_rules.yaml")
 
+    # === Local-document registry (Phase 8) ===
+    # Filesystem root for uploads. Per-CdL subdirectory is created on
+    # first upload. Versioning is on disk too: each version of a
+    # document gets its own file, old versions are kept for the
+    # lifetime of any EvaluationResult that referenced them.
+    local_documents_dir: str = str(BACKEND_DATA_DIR / "local_documents")
+
     # === Rate limiting (Vertex AI) ===
     vertex_ai_rpm_limit: int = 30
 
