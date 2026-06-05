@@ -319,3 +319,91 @@ def test_delete_removes_row_and_file(client, test_db, tmp_path):
 def test_delete_404_when_missing(client):
     response = client.delete("/api/local-documents/9999")
     assert response.status_code == 404
+
+
+def test_delete_swallows_unsafe_file_path(client, test_db, tmp_path):
+    """A corrupted `file_path` doesn't let DELETE unlink outside the store."""
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    document_id = response.json()["document"]["id"]
+
+    # Forge an escape attempt by mutating the row directly. The API
+    # never produces such a path itself, but the delete endpoint
+    # must not turn the corrupted value into a filesystem-escape
+    # primitive — the unsafe path is swallowed and the row is still
+    # removed from the DB.
+    outside_target = tmp_path.parent / "must_not_be_unlinked.md"
+    outside_target.write_text("untouched", encoding="utf-8")
+
+    row = (
+        test_db.query(LocalDocument)
+        .filter(LocalDocument.id == document_id)
+        .first()
+    )
+    row.file_path = "../" + outside_target.name
+    test_db.commit()
+
+    res = client.delete(f"/api/local-documents/{document_id}")
+    assert res.status_code == 204
+    assert outside_target.exists()  # the unsafe path was ignored
+    assert (
+        test_db.query(LocalDocument)
+        .filter(LocalDocument.id == document_id)
+        .first()
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# Phase 8.B.1 — max upload size + transaction hardening
+# ---------------------------------------------------------------------------
+
+
+def test_upload_rejects_files_above_max_size(client, test_db, monkeypatch):
+    cdl = _make_cdl(test_db)
+    # Cap at 16 bytes so we can stay tiny in tests; the real default
+    # is 50 MB. Override via monkeypatch keeps the test hermetic.
+    monkeypatch.setattr(settings, "local_documents_max_upload_bytes", 16)
+    payload = b"x" * 32
+    response = _upload(
+        client,
+        cdl.id,
+        file=("big.md", io.BytesIO(payload), "text/markdown"),
+    )
+    assert response.status_code == 413
+    # No row should have been created.
+    assert test_db.query(LocalDocument).count() == 0
+
+
+def test_upload_rolls_back_and_cleans_file_on_commit_failure(
+    client, test_db, tmp_path, monkeypatch,
+):
+    """A commit() failure AFTER the file is on disk leaves no orphans."""
+    cdl = _make_cdl(test_db)
+
+    # Patch Session.commit to raise on the first invocation only — so
+    # the upload path fails at commit time, but later test teardown
+    # / setup that may need commit() still works.
+    import sqlalchemy.orm
+
+    original_commit = sqlalchemy.orm.Session.commit
+    calls = {"n": 0}
+
+    def flaky_commit(self):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("forced commit failure")
+        return original_commit(self)
+
+    monkeypatch.setattr(sqlalchemy.orm.Session, "commit", flaky_commit)
+
+    response = _upload(client, cdl.id)
+    assert response.status_code == 500
+
+    # No row left behind, no file left behind.
+    assert test_db.query(LocalDocument).count() == 0
+    leftovers = list(tmp_path.rglob("*"))
+    leftover_files = [p for p in leftovers if p.is_file()]
+    assert leftover_files == [], (
+        f"orphan file(s) after commit failure: {leftover_files}"
+    )

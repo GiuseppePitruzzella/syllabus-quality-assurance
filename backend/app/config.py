@@ -65,6 +65,12 @@ class Settings(BaseSettings):
     # document gets its own file, old versions are kept for the
     # lifetime of any EvaluationResult that referenced them.
     local_documents_dir: str = str(BACKEND_DATA_DIR / "local_documents")
+    # Hard cap on an individual upload. PDF / DOCX larger than this
+    # are rejected with 413 before any disk write so a runaway file
+    # can't stall the upload endpoint or pin the indexing pipeline
+    # later. 50 MB is well above any realistic syllabus / regulation
+    # document we expect on the LM-18 perimeter.
+    local_documents_max_upload_bytes: int = 50 * 1024 * 1024
 
     # === Rate limiting (Vertex AI) ===
     vertex_ai_rpm_limit: int = 30

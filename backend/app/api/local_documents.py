@@ -1,33 +1,49 @@
-"""Local-document registry API (Phase 8.A).
+"""Local-document registry API (Phase 8.A + 8.B.1 hardening).
 
 This module handles the storage side only — file lands on disk, row
-is persisted, listing / detail work. No text extraction, no
-chunking, no ChromaDB ingestion: those come in Phase 8.B and the
-async job that wraps them in Phase 8.C.
+is persisted, listing / detail work. Text extraction lives in
+`app/local_documents/extractors.py`, the async indexing job that
+calls it will land in Phase 8.C.
 
 The POST response shape (`{ document, job_id }`) is forward-
-compatible with the async indexing job that will land in Phase 8.C:
-today `job_id` is always `null`, but the contract lets the frontend
-attach to a stream once it's there without touching this endpoint.
+compatible with the async indexing job: today `job_id` is always
+`null`, but the contract lets the frontend attach to a stream once
+it's there without touching this endpoint.
 
 Deletion is hard-delete in Phase 8 because no `EvaluationResult`
 references a document yet. From Phase 9 onwards, delete on a
 referenced document will fall back to soft-delete via
 `deleted_at` to preserve historical reproducibility — `deleted_at`
 is already in the schema.
+
+Phase 8.B.1 adds:
+  - Hard cap on upload size (413 before any disk write).
+  - Full transactional hardening of the upload path: any failure
+    after the bytes have been written rolls back the DB row AND
+    removes the on-disk file. Cleanup failures don't shadow the
+    original exception (they are logged but the original is
+    re-raised).
+  - Safe-path resolution on delete so a corrupted `file_path`
+    can't be turned into a filesystem-escape primitive.
 """
 from __future__ import annotations
 
 import hashlib
+import logging
 import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
+from app.local_documents import (
+    ExtractionError,
+    resolve_local_document_path,
+)
 from app.models.cdl import CorsoDiLaurea
 from app.models.local_document import LocalDocument
 from app.schemas.local_document import (
@@ -39,6 +55,8 @@ from app.schemas.local_document import (
     LocalDocumentStatus,
     LocalDocumentUploadResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/local-documents", tags=["local-documents"])
 
@@ -185,6 +203,14 @@ async def upload_local_document(
     content = await file.read()
     if not content:
         raise HTTPException(status_code=422, detail="Uploaded file is empty")
+    if len(content) > settings.local_documents_max_upload_bytes:
+        raise HTTPException(
+            status_code=413,
+            detail=(
+                f"File exceeds max upload size "
+                f"({settings.local_documents_max_upload_bytes} bytes)"
+            ),
+        )
     file_hash = hashlib.sha256(content).hexdigest()
     file_size = len(content)
 
@@ -206,23 +232,38 @@ async def upload_local_document(
         status="uploaded",
         uploaded_at=datetime.now(timezone.utc),
     )
-    db.add(row)
-    db.flush()
+    try:
+        db.add(row)
+        db.flush()
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, detail=f"Failed to persist document row: {e}",
+        ) from e
 
     rel_path = f"{cdl_id}/{row.id}_v{version}{ext}"
     abs_path = Path(settings.local_documents_dir) / rel_path
 
+    file_written = False
     try:
         abs_path.parent.mkdir(parents=True, exist_ok=True)
         abs_path.write_bytes(content)
-    except OSError as e:
+        file_written = True
+        row.file_path = rel_path
+        db.commit()
+    except Exception as e:
+        # Any failure after disk write — including commit() — rolls
+        # back the row AND removes the orphan file. The DB row never
+        # had a real file_path committed; the file (if any) is
+        # unreachable from the registry once we roll back.
         db.rollback()
+        if file_written:
+            _best_effort_unlink(abs_path)
+        if isinstance(e, HTTPException):
+            raise
         raise HTTPException(
-            status_code=500, detail=f"Failed to persist file on disk: {e}",
+            status_code=500, detail=f"Failed to persist document: {e}",
         ) from e
-
-    row.file_path = rel_path
-    db.commit()
     db.refresh(row)
 
     return LocalDocumentUploadResponse(
@@ -309,17 +350,48 @@ def delete_local_document(
     if row is None:
         raise HTTPException(status_code=404, detail="Document not found")
 
-    abs_path = Path(settings.local_documents_dir) / row.file_path
+    # Resolve under the storage root so a hypothetical corrupted
+    # `file_path` can't be used to unlink a file outside the registry.
+    abs_path: Path | None
+    try:
+        abs_path = resolve_local_document_path(
+            row.file_path, settings.local_documents_dir,
+        )
+    except ExtractionError as e:
+        logger.warning(
+            "delete_local_document: unsafe file_path on row %s: %s",
+            row.id, e,
+        )
+        abs_path = None
+
     db.delete(row)
     db.commit()
-    # Best-effort filesystem cleanup. The DB row is already gone; if
-    # the file is missing or unwritable we log via the response but
-    # don't error out (the canonical state lives in the DB).
+    if abs_path is not None:
+        _best_effort_unlink(abs_path)
+
+
+# ---------------------------------------------------------------------------
+# Internals
+# ---------------------------------------------------------------------------
+
+
+def _best_effort_unlink(path: Path) -> None:
+    """Remove a file ignoring missing / locked path.
+
+    Used in two places: cleanup of an orphan after a failed upload
+    commit, and the post-delete file removal. Cleanup failures are
+    logged but never raised — the canonical state of the registry
+    lives in the DB, and an orphan file is recoverable, while a
+    masked original exception is not.
+    """
     try:
-        if abs_path.exists():
-            abs_path.unlink()
-    except OSError:
-        pass
+        if path.exists():
+            path.unlink()
+    except OSError as cleanup_err:
+        logger.warning(
+            "local_documents cleanup: failed to remove %s: %s",
+            path, cleanup_err,
+        )
 
 
 # Re-export so the API module surface stays explicit.
