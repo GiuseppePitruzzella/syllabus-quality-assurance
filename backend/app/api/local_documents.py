@@ -42,8 +42,15 @@ from app.config import settings
 from app.database import get_db
 from app.local_documents import (
     ExtractionError,
+    IndexingError,
+    LocalDocumentIndexingService,
     resolve_local_document_path,
 )
+from app.local_documents.dependencies import (
+    get_external_ingester,
+    get_indexing_service,
+)
+from app.local_documents.ingester import ExternalDocumentIngester
 from app.models.cdl import CorsoDiLaurea
 from app.models.local_document import LocalDocument
 from app.schemas.local_document import (
@@ -323,35 +330,83 @@ def update_enabled_criteria(
     document_id: int,
     payload: LocalDocumentEnabledCriteriaUpdate,
     db: Session = Depends(get_db),
+    service: LocalDocumentIndexingService = Depends(get_indexing_service),
 ) -> LocalDocument:
-    """Replace the `enabled_criteria` list for a document."""
+    """Replace the ``enabled_criteria`` list for a document.
+
+    The Chroma chunks carry the criterion flags as boolean
+    metadata (``tag_E1`` ... ``tag_E5``), which means a change to
+    ``enabled_criteria`` SILENTLY drifts the retrieval surface
+    unless the chunks are rewritten. So:
+
+      - if the document is currently ``indexed``, the new
+        enabled_criteria set triggers an immediate sync reindex,
+        and the response reflects the post-reindex row.
+      - if the document is in any other state (uploaded, failed,
+        in-flight), the DB update happens but no reindex is
+        attempted — the new flags will apply at the next
+        indexing pass.
+
+    The reindex is intentionally synchronous in 8.B.3. Phase 8.C
+    will wrap it in the same async/SSE machinery the upload path
+    uses, and this endpoint will switch to returning a job_id.
+    """
     row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
     if row is None:
         raise HTTPException(status_code=404, detail="Document not found")
-    row.enabled_criteria = list(payload.enabled_criteria)
+
+    new_enabled = list(payload.enabled_criteria)
+    if new_enabled == list(row.enabled_criteria or []):
+        return row  # no-op patch, nothing to reindex
+
+    row.enabled_criteria = new_enabled
     db.commit()
     db.refresh(row)
+
+    if row.status == "indexed":
+        try:
+            service.index_document(row.id)
+        except IndexingError as exc:
+            # Reindex failed -> row already in `failed` via the
+            # service. Surface the failure to the caller so the
+            # UI can show the message immediately.
+            raise HTTPException(
+                status_code=500,
+                detail=f"Reindex after enabled_criteria update failed: {exc}",
+            ) from exc
+        db.refresh(row)
     return row
 
 
 @router.delete("/{document_id}", status_code=204)
 def delete_local_document(
-    document_id: int, db: Session = Depends(get_db),
+    document_id: int,
+    db: Session = Depends(get_db),
+    ingester: ExternalDocumentIngester = Depends(get_external_ingester),
 ) -> None:
     """Hard-delete (Phase 8 only).
 
+    Removes, in this order:
+
+      1. every chunk for ``(document_id, version)`` from the
+         ``external_documents`` Chroma collection — must happen
+         BEFORE the DB row is gone so we still know which version
+         to delete;
+      2. the DB row;
+      3. the file on disk (best-effort).
+
     From Phase 9 onwards, this endpoint will check whether the
-    document is referenced by any `EvaluationResult` and fall back
-    to soft-delete (`deleted_at = now()`) when so. For now, no
-    EvaluationResult ever references a local document, so hard
+    document is referenced by any ``EvaluationResult`` and fall
+    back to soft-delete (``deleted_at = now()``) when so. For now,
+    no EvaluationResult ever references a local document, so hard
     delete is safe.
     """
     row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
     if row is None:
         raise HTTPException(status_code=404, detail="Document not found")
 
-    # Resolve under the storage root so a hypothetical corrupted
-    # `file_path` can't be used to unlink a file outside the registry.
+    # 1) Resolve the on-disk path before touching the DB / Chroma so
+    # any failure here can short-circuit before mutating anything.
     abs_path: Path | None
     try:
         abs_path = resolve_local_document_path(
@@ -364,8 +419,27 @@ def delete_local_document(
         )
         abs_path = None
 
+    # 2) Chroma cleanup. delete_for is best-effort internally
+    # (logs + returns count). A failure here logs but does not
+    # block the DB delete: the DB is the registry's canonical
+    # state, and orphan chunks would be recoverable via a future
+    # `reindex` or `purge` job.
+    document_id_val = row.id
+    version_val = row.version
+    try:
+        ingester.delete_for(document_id_val, version_val)
+    except Exception as exc:
+        logger.warning(
+            "delete_local_document: ingester.delete_for failed "
+            "for id=%s v=%s: %s",
+            document_id_val, version_val, exc,
+        )
+
+    # 3) DB row.
     db.delete(row)
     db.commit()
+
+    # 4) File on disk.
     if abs_path is not None:
         _best_effort_unlink(abs_path)
 

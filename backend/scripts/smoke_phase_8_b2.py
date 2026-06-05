@@ -159,9 +159,12 @@ def _ids_for(collection, document_id: int, version: int) -> list[str]:
 
 def _summarise_chunk(collection, chunk_id: str, expected_dim: int) -> None:
     got = collection.get(ids=[chunk_id], include=["metadatas", "embeddings", "documents"])
-    md = (got.get("metadatas") or [None])[0]
-    emb = (got.get("embeddings") or [None])[0]
-    doc = (got.get("documents") or [None])[0]
+    metadatas = got.get("metadatas")
+    embeddings = got.get("embeddings")
+    documents = got.get("documents")
+    md = metadatas[0] if metadatas is not None and len(metadatas) else None
+    emb = embeddings[0] if embeddings is not None and len(embeddings) else None
+    doc = documents[0] if documents is not None and len(documents) else None
     assert md is not None, f"no metadata for {chunk_id}"
     assert emb is not None, f"no embedding for {chunk_id}"
     assert doc is not None, f"no document for {chunk_id}"

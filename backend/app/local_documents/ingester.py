@@ -157,6 +157,21 @@ class ExternalDocumentIngester:
         )
         return result
 
+    def delete_for(self, document_id: int, version: int) -> int:
+        """Remove every chunk for a (document_id, version) pair.
+
+        Used by ``DELETE /api/local-documents/{id}`` to keep the
+        Chroma collection in sync with the registry: when the
+        registry row goes away, the embedded chunks must go with
+        it. Returns the number of chunks removed.
+
+        Embedding-free: no Vertex AI call. Safe to invoke at boot /
+        on every request without a GCP project configured.
+        """
+        return self._delete_existing(
+            self._get_collection(), document_id, version,
+        )
+
     def collection_count(self) -> int:
         """Number of chunks currently in the collection (diagnostics)."""
         return self._get_collection().count()

@@ -20,6 +20,10 @@ from sqlalchemy.pool import StaticPool
 
 from app.config import settings
 from app.database import Base, get_db
+from app.local_documents.dependencies import (
+    get_external_ingester,
+    get_indexing_service,
+)
 from app.main import app
 from app.models.cdl import CorsoDiLaurea
 from app.models.department import Department
@@ -48,8 +52,76 @@ def test_db():
         Base.metadata.drop_all(engine)
 
 
+class _FakeIngester:
+    """In-memory stand-in for ExternalDocumentIngester.
+
+    Records calls so tests can assert that DELETE goes through
+    `delete_for(...)` and that PATCH goes through the indexing
+    service. The structure mirrors only the methods the endpoints
+    actually touch.
+    """
+
+    def __init__(self) -> None:
+        self.delete_calls: list[tuple[int, int]] = []
+        self.index_calls: list[tuple[int, int]] = []
+
+    def delete_for(self, document_id: int, version: int) -> int:
+        self.delete_calls.append((document_id, version))
+        return 0
+
+
+class _FakeIndexingService:
+    """In-memory stand-in for LocalDocumentIndexingService.
+
+    `index_document(id)` records the call and marks the row as
+    ``indexed``. Tests that need a failure scenario set
+    `raise_on_index = True`.
+    """
+
+    def __init__(self, db) -> None:
+        self._db = db
+        self.calls: list[int] = []
+        self.raise_on_index: bool = False
+
+    def index_document(self, document_id: int):
+        self.calls.append(document_id)
+        if self.raise_on_index:
+            row = self._db.query(LocalDocument).filter(
+                LocalDocument.id == document_id,
+            ).first()
+            if row is not None:
+                row.status = "failed"
+                row.failure_reason = "reindex_failed"
+                self._db.commit()
+            from app.local_documents import IndexingError
+            raise IndexingError("forced failure")
+        row = self._db.query(LocalDocument).filter(
+            LocalDocument.id == document_id,
+        ).first()
+        if row is not None:
+            from datetime import datetime, timezone as _tz
+            row.status = "indexed"
+            row.chunk_count = 1
+            row.indexed_at = datetime.now(_tz.utc)
+            row.failure_reason = None
+            self._db.commit()
+        # The real service returns IngestionResult, but the endpoint
+        # only cares whether it raised; returning None is fine.
+        return None
+
+
 @pytest.fixture
-def client(test_db, tmp_path, monkeypatch):
+def fake_ingester() -> _FakeIngester:
+    return _FakeIngester()
+
+
+@pytest.fixture
+def fake_service(test_db) -> _FakeIndexingService:
+    return _FakeIndexingService(test_db)
+
+
+@pytest.fixture
+def client(test_db, tmp_path, monkeypatch, fake_ingester, fake_service):
     # Redirect uploads under tmp_path so the test never touches the
     # real backend/data/local_documents/ tree.
     monkeypatch.setattr(settings, "local_documents_dir", str(tmp_path))
@@ -61,6 +133,8 @@ def client(test_db, tmp_path, monkeypatch):
             pass
 
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_external_ingester] = lambda: fake_ingester
+    app.dependency_overrides[get_indexing_service] = lambda: fake_service
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
@@ -373,6 +447,131 @@ def test_upload_rejects_files_above_max_size(client, test_db, monkeypatch):
     assert response.status_code == 413
     # No row should have been created.
     assert test_db.query(LocalDocument).count() == 0
+
+
+# ---------------------------------------------------------------------------
+# Phase 8.B.3 — DELETE removes Chroma chunks + PATCH triggers reindex
+# ---------------------------------------------------------------------------
+
+
+def test_delete_calls_ingester_delete_for(client, test_db, fake_ingester):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc = response.json()["document"]
+
+    res = client.delete(f"/api/local-documents/{doc['id']}")
+    assert res.status_code == 204
+    assert fake_ingester.delete_calls == [(doc["id"], doc["version"])]
+
+
+def test_delete_unsafe_file_path_still_calls_chroma_cleanup(
+    client, test_db, tmp_path, fake_ingester,
+):
+    """Even when the file_path escapes the store, the Chroma chunks
+    for the row must still be cleaned up."""
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    document_id = response.json()["document"]["id"]
+    version = response.json()["document"]["version"]
+
+    row = (
+        test_db.query(LocalDocument)
+        .filter(LocalDocument.id == document_id)
+        .first()
+    )
+    row.file_path = "../escape.md"
+    test_db.commit()
+
+    res = client.delete(f"/api/local-documents/{document_id}")
+    assert res.status_code == 204
+    assert fake_ingester.delete_calls == [(document_id, version)]
+
+
+def test_patch_triggers_reindex_when_status_indexed(
+    client, test_db, fake_service,
+):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="sua_cds")
+    doc_id = response.json()["document"]["id"]
+
+    # Mark the row as indexed so PATCH should reindex.
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    row.status = "indexed"
+    row.chunk_count = 5
+    test_db.commit()
+
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": ["E1", "E2"]},
+    )
+    assert patch.status_code == 200
+    assert fake_service.calls == [doc_id]
+    assert patch.json()["enabled_criteria"] == ["E1", "E2"]
+    assert patch.json()["status"] == "indexed"
+
+
+def test_patch_does_not_reindex_when_status_uploaded(
+    client, test_db, fake_service,
+):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="sua_cds")
+    doc_id = response.json()["document"]["id"]
+
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": ["E1", "E2"]},
+    )
+    assert patch.status_code == 200
+    # status was uploaded -> no reindex triggered.
+    assert fake_service.calls == []
+    assert patch.json()["enabled_criteria"] == ["E1", "E2"]
+
+
+def test_patch_is_noop_when_criteria_unchanged(
+    client, test_db, fake_service,
+):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+    current = response.json()["document"]["enabled_criteria"]
+
+    # Mark as indexed: even so, an unchanged set must not reindex.
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    row.status = "indexed"
+    test_db.commit()
+
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": current},
+    )
+    assert patch.status_code == 200
+    assert fake_service.calls == []
+
+
+def test_patch_reindex_failure_surfaces_as_500(
+    client, test_db, fake_service,
+):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    row.status = "indexed"
+    test_db.commit()
+
+    fake_service.raise_on_index = True
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": ["E1", "E3"]},
+    )
+    assert patch.status_code == 500
+    # The row should still carry the new enabled_criteria — the DB
+    # write happens BEFORE the reindex attempt — and the service
+    # stamped a failure status on it.
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    assert row.enabled_criteria == ["E1", "E3"]
+    assert row.status == "failed"
+    assert row.failure_reason == "reindex_failed"
 
 
 def test_upload_rolls_back_and_cleans_file_on_commit_failure(
