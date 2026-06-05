@@ -21,16 +21,26 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-# Soft limit used as the target for paragraph-level packing.
-DEFAULT_MAX_CHARS = 1500
+# Phase 8.B.2: the generic paragraph/line/sentence/hard-cut cascade
+# moved into `app.text_splitting` so the new
+# `ExternalDocumentChunker` can share it byte-for-byte. The corpus
+# Markdown chunker keeps its own H2/H3 boundary detection, section
+# refs and sub-suffixes; only the size-based splitting is shared.
+from app.text_splitting import (
+    DEFAULT_HARD_MAX_CHARS,
+    DEFAULT_MAX_CHARS,
+    merge_noise_subchunks as _merge_noise_subchunks,
+    pack_greedy as _greedy_pack,  # noqa: F401 — re-export for tests/rag/test_chunker.py
+    split_long as _split_long,
+)
 
-# Hard limit. A sub-chunk that exceeds the soft limit but stays under the
-# hard limit is kept whole, on the principle that semantic coherence
-# beats arbitrary numeric thresholds: a 2000-character paragraph that
-# expresses one idea is more useful than two 1000-character halves of
-# the same idea. Only sub-chunks above the hard limit are recursively
-# split into finer pieces (lines, sentences, hard-cut).
-DEFAULT_HARD_MAX_CHARS = 2200
+__all__ = [
+    "Chunk",
+    "MarkdownChunker",
+    "DEFAULT_MAX_CHARS",
+    "DEFAULT_HARD_MAX_CHARS",
+    "extract_section_ref",
+]
 
 # A sub-chunk with fewer than this many alphanumeric characters is treated
 # as noise (table separators, isolated punctuation, single-word fragments
@@ -97,127 +107,6 @@ def extract_section_ref(title: str) -> tuple[str, str]:
     slug = "_".join(words).lower()
     slug = re.sub(r"[^a-z0-9_]", "", slug).strip("_")[:50] or "section"
     return slug, title
-
-
-def _greedy_pack(items: list[str], max_chars: int, separator: str) -> list[str]:
-    """Greedily pack items into sub-chunks of at most ``max_chars`` chars.
-
-    Items longer than ``max_chars`` are emitted as their own sub-chunk
-    (rather than truncated): this preserves semantic units when the
-    caller's split granularity is already as fine as it can go.
-    """
-    sep_len = len(separator)
-    out: list[str] = []
-    current: list[str] = []
-    current_len = 0
-    for item in items:
-        if not item.strip():
-            continue
-        item = item.strip()
-        added_sep = sep_len if current else 0
-        if current and current_len + added_sep + len(item) > max_chars:
-            out.append(separator.join(current))
-            current = [item]
-            current_len = len(item)
-        else:
-            current.append(item)
-            current_len += added_sep + len(item)
-    if current:
-        out.append(separator.join(current))
-    return out
-
-
-_SPLIT_STRATEGIES: list[tuple[str, str]] = [
-    # (regex pattern to split on, separator to rejoin with)
-    (r"\n\s*\n", "\n\n"),  # paragraph
-    (r"\n", "\n"),           # line (handles tables, bullet lists)
-    (r"(?<=[.!?])\s+", " "),   # sentence
-]
-
-
-def _split_long(body: str, max_chars: int, hard_max_chars: int) -> list[str]:
-    """Split a body into sub-chunks of at most ``hard_max_chars`` characters.
-
-    Uses a two-level threshold:
-
-    - ``max_chars`` is the *soft* target used by :func:`_greedy_pack` when
-      grouping items.
-    - ``hard_max_chars`` is the recursion trigger: a sub-chunk that
-      exceeds the soft target but stays under ``hard_max_chars`` is kept
-      whole. Only sub-chunks past the hard limit are split with the next
-      finer strategy.
-
-    Strategies, in order: paragraph (``\\n\\n``) → line (``\\n``) →
-    sentence → hard cut. The line-level fallback is needed for Markdown
-    tables and bullet lists, where rows are the natural unit but blank
-    lines are absent.
-    """
-    if len(body) <= hard_max_chars:
-        return [body]
-
-    for pattern, separator in _SPLIT_STRATEGIES:
-        items = [p for p in re.split(pattern, body) if p.strip()]
-        if len(items) <= 1:
-            continue
-        packed = _greedy_pack(items, max_chars, separator=separator)
-        # Recurse only on sub-chunks past the hard limit.
-        result: list[str] = []
-        for sub in packed:
-            if len(sub) > hard_max_chars and sub != body:
-                result.extend(_split_long(sub, max_chars, hard_max_chars))
-            else:
-                result.append(sub)
-        return result
-
-    # Last resort: hard split at character boundaries.
-    return [body[i : i + hard_max_chars] for i in range(0, len(body), hard_max_chars)]
-
-
-def _alnum_len(s: str) -> int:
-    """Count alphanumeric characters in ``s`` (used to detect noise sub-chunks)."""
-    return sum(1 for ch in s if ch.isalnum())
-
-
-def _merge_noise_subchunks(
-    sub_bodies: list[str], min_alnum: int, max_chars: int
-) -> list[str]:
-    """Merge sub-chunks that are mostly punctuation/whitespace into neighbours.
-
-    Used after :func:`_split_long` to clean up artefacts like isolated
-    table separators (``|``), markdown header dividers (``| :--- |``)
-    or aggressive sentence splits on abbreviations (``E.``).
-
-    A merge is skipped when it would push the receiving sub-chunk past
-    ``max_chars``: this prevents repeated low-content fragments from
-    accumulating into an oversize bag in pathological cases like the
-    DM 1154 ALLEGATO E table (rows of mostly pipes and whitespace).
-    Single-element lists are returned unchanged.
-    """
-    if len(sub_bodies) <= 1:
-        return sub_bodies
-
-    result: list[str] = []
-    for body in sub_bodies:
-        is_noise = _alnum_len(body) < min_alnum
-        if is_noise and result:
-            candidate = result[-1] + "\n" + body
-            if len(candidate) <= max_chars:
-                result[-1] = candidate
-                continue
-            # Cannot merge without overflow; keep noise as its own sub-chunk.
-            result.append(body)
-        elif is_noise:
-            # Noise at the very start: defer, will be merged into next non-noise.
-            result.append(body)
-        elif result and _alnum_len(result[-1]) < min_alnum:
-            candidate = result[-1] + "\n" + body
-            if len(candidate) <= max_chars:
-                result[-1] = candidate
-            else:
-                result.append(body)
-        else:
-            result.append(body)
-    return result
 
 
 def _suffix_for(index: int) -> str:
