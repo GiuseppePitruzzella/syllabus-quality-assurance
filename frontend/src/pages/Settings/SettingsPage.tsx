@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 
 import { ProfileSection } from "./ProfileSection";
 import { RubricSection } from "./RubricSection";
+import { SourcesSection } from "./SourcesSection";
 import { ValidationSection } from "./ValidationSection";
 
 /**
@@ -32,6 +33,7 @@ export function SettingsPage() {
       />
       <ProfileSection />
       <RubricSection />
+      <SourcesSection />
       <ValidationSection />
     </div>
   );

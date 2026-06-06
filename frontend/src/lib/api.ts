@@ -8,6 +8,9 @@ import type {
   EvaluationCreated,
   EvaluationDetail,
   EvaluationSummary,
+  LocalDocument,
+  LocalDocumentStatus,
+  LocalDocumentType,
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
@@ -75,4 +78,39 @@ export const getEvaluation = (evaluationUuid: string) =>
 export const listEvaluationsForSyllabus = (seuid: string, limit?: number) => {
   const qs = typeof limit === "number" ? `?limit=${limit}` : "";
   return fetchApi<EvaluationSummary[]>(`/syllabi/${seuid}/evaluations${qs}`);
+};
+
+// ---------------------------------------------------------------------------
+// Phase 8 — local-document registry
+// ---------------------------------------------------------------------------
+
+export interface LocalDocumentListFilters {
+  cdl_id?: number;
+  document_type?: LocalDocumentType;
+  status?: LocalDocumentStatus;
+  include_deleted?: boolean;
+}
+
+/** List documents, ordered by `uploaded_at desc` server-side. */
+export const listLocalDocuments = (filters: LocalDocumentListFilters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.cdl_id !== undefined) params.set("cdl_id", String(filters.cdl_id));
+  if (filters.document_type) params.set("document_type", filters.document_type);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.include_deleted) params.set("include_deleted", "true");
+  const qs = params.toString();
+  return fetchApi<LocalDocument[]>(`/local-documents${qs ? `?${qs}` : ""}`);
+};
+
+export const getLocalDocument = (id: number) =>
+  fetchApi<LocalDocument>(`/local-documents/${id}`);
+
+/** Hard-delete the document (DB row + file + Chroma chunks). */
+export const deleteLocalDocument = async (id: number): Promise<void> => {
+  const res = await fetch(`${BASE_URL}/local-documents/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status} ${res.statusText}`);
+  }
 };
