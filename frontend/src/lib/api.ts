@@ -105,6 +105,50 @@ export const listLocalDocuments = (filters: LocalDocumentListFilters = {}) => {
 export const getLocalDocument = (id: number) =>
   fetchApi<LocalDocument>(`/local-documents/${id}`);
 
+export interface LocalDocumentUploadResponse {
+  document: LocalDocument;
+  job_id: string | null;
+}
+
+export interface LocalDocumentUploadPayload {
+  cdl_id: number;
+  document_type: LocalDocumentType;
+  academic_year: string;
+  title: string;
+  enabled_criteria?: string[]; // CSV-encoded server-side, omitted -> defaults
+  file: File;
+}
+
+/** Multipart upload + immediate async indexing trigger. */
+export const uploadLocalDocument = async (
+  payload: LocalDocumentUploadPayload,
+): Promise<LocalDocumentUploadResponse> => {
+  const form = new FormData();
+  form.set("cdl_id", String(payload.cdl_id));
+  form.set("document_type", payload.document_type);
+  form.set("academic_year", payload.academic_year);
+  form.set("title", payload.title);
+  if (payload.enabled_criteria && payload.enabled_criteria.length > 0) {
+    form.set("enabled_criteria", payload.enabled_criteria.join(","));
+  }
+  form.set("file", payload.file);
+  const res = await fetch(`${BASE_URL}/local-documents`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) {
+    let detail = `${res.status} ${res.statusText}`;
+    try {
+      const body = await res.json();
+      if (body?.detail) detail = String(body.detail);
+    } catch {
+      /* ignore */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+};
+
 /** Hard-delete the document (DB row + file + Chroma chunks). */
 export const deleteLocalDocument = async (id: number): Promise<void> => {
   const res = await fetch(`${BASE_URL}/local-documents/${id}`, {

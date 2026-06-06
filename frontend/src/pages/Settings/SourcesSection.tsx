@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileText, Loader2, Trash2 } from "lucide-react";
+import { FileText, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Section } from "@/components/layout/Section";
@@ -17,6 +17,14 @@ import {
   STATUS_VISUALS,
   labelForDocumentType,
 } from "@/data/sources";
+import { UploadLocalDocumentModal } from "./UploadLocalDocumentModal";
+
+const IN_FLIGHT_STATUSES: LocalDocumentStatus[] = [
+  "uploaded",
+  "extracting",
+  "chunking",
+  "indexing",
+];
 
 const STATUS_OPTIONS: LocalDocumentStatus[] = [
   "uploaded",
@@ -44,6 +52,7 @@ export function SourcesSection() {
     LocalDocumentType | "all"
   >("all");
   const [status, setStatus] = useState<LocalDocumentStatus | "all">("all");
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -52,9 +61,19 @@ export function SourcesSection() {
     status: status === "all" ? undefined : status,
   };
 
+  // Refetch every 2s while any document is still on its way to
+  // `indexed`. Without it the list shows a stale `extracting` state
+  // until the user reloads.
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["local-documents", filters],
     queryFn: () => listLocalDocuments(filters),
+    refetchInterval: (query) => {
+      const rows = query.state.data ?? [];
+      const anyInFlight = rows.some((d) =>
+        IN_FLIGHT_STATUSES.includes(d.status),
+      );
+      return anyInFlight ? 2000 : false;
+    },
   });
 
   const deleteMutation = useMutation({
@@ -73,15 +92,25 @@ export function SourcesSection() {
   return (
     <Section
       title="Fonti esterne / locali"
-      description="Documenti per i criteri estesi E1-E5. Caricamento e indicizzazione abilitati nei prossimi step."
+      description="Documenti per i criteri estesi E1-E5. Caricamento e indicizzazione automatici."
       headerAside={
-        data ? (
-          <span className="rounded-md border bg-muted/50 px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground">
-            {data.length}
-          </span>
-        ) : null
+        <div className="flex items-center gap-2">
+          {data ? (
+            <span className="rounded-md border bg-muted/50 px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground">
+              {data.length}
+            </span>
+          ) : null}
+          <Button size="sm" onClick={() => setUploadOpen(true)}>
+            <Plus className="h-3.5 w-3.5" aria-hidden />
+            Carica documento
+          </Button>
+        </div>
       }
     >
+      <UploadLocalDocumentModal
+        open={uploadOpen}
+        onOpenChange={setUploadOpen}
+      />
       <div className="space-y-4">
         <FiltersRow
           documentType={documentType}
@@ -363,7 +392,9 @@ function EmptyRegistry({ hasFilters }: { hasFilters: boolean }) {
           : "Nessun documento caricato per i criteri estesi."}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Il caricamento sarà disponibile dal prossimo step (8.D.B).
+        {hasFilters
+          ? "Modifica i filtri o cancellali per vedere tutti i documenti."
+          : "Usa «Carica documento» per indicizzare la prima fonte locale o esterna."}
       </p>
     </div>
   );
