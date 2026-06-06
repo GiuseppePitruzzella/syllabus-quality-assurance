@@ -34,30 +34,38 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+import chromadb
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
+from app.jobs import job_registry
 from app.local_documents import (
     ExtractionError,
-    IndexingError,
-    LocalDocumentIndexingService,
+    IndexingJobScheduler,
     resolve_local_document_path,
 )
 from app.local_documents.dependencies import (
+    get_chroma_client,
     get_external_ingester,
-    get_indexing_service,
+    get_indexing_job_scheduler,
 )
-from app.local_documents.ingester import ExternalDocumentIngester
+from app.local_documents.ingester import (
+    DEFAULT_COLLECTION_NAME as EXTERNAL_COLLECTION_NAME,
+    ExternalDocumentIngester,
+)
 from app.models.cdl import CorsoDiLaurea
 from app.models.local_document import LocalDocument
+from app.schemas.job import JobCreated
 from app.schemas.local_document import (
     ALLOWED_EXTENSIONS,
+    ChunkPreview,
     DEFAULT_ENABLED_CRITERIA,
     DocumentType,
     LocalDocumentEnabledCriteriaUpdate,
+    LocalDocumentPatchResponse,
     LocalDocumentResponse,
     LocalDocumentStatus,
     LocalDocumentUploadResponse,
@@ -175,13 +183,14 @@ async def upload_local_document(
     enabled_criteria: str | None = Form(default=None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
+    scheduler: IndexingJobScheduler = Depends(get_indexing_job_scheduler),
 ) -> LocalDocumentUploadResponse:
-    """Accept a multipart upload, persist file + row.
+    """Accept a multipart upload, persist file + row, schedule indexing.
 
-    Indexing (text extraction → chunking → ChromaDB) is NOT triggered
-    yet. The response shape is forward-compatible: `job_id` is always
-    `None` here; Phase 8.C will populate it with the indexing job's
-    id when the async pipeline is wired in.
+    Phase 8.C: indexing is dispatched asynchronously via the
+    `IndexingJobScheduler`. The response carries the freshly
+    persisted row plus the `job_id` clients can stream progress
+    from at `GET /api/local-documents/stream/{job_id}`.
     """
     if document_type not in _VALID_DOCUMENT_TYPES:
         raise HTTPException(
@@ -273,9 +282,14 @@ async def upload_local_document(
         ) from e
     db.refresh(row)
 
+    # Phase 8.C: auto-trigger async indexing. The scheduler reads
+    # the row from a fresh DB session inside the worker, so it's
+    # safe to dispatch immediately after the commit above.
+    job_id = scheduler.schedule(row.id)
+
     return LocalDocumentUploadResponse(
         document=LocalDocumentResponse.model_validate(row),
-        job_id=None,
+        job_id=job_id,
     )
 
 
@@ -325,31 +339,26 @@ def get_local_document(
     return row
 
 
-@router.patch("/{document_id}", response_model=LocalDocumentResponse)
+@router.patch("/{document_id}", response_model=LocalDocumentPatchResponse)
 def update_enabled_criteria(
     document_id: int,
     payload: LocalDocumentEnabledCriteriaUpdate,
     db: Session = Depends(get_db),
-    service: LocalDocumentIndexingService = Depends(get_indexing_service),
-) -> LocalDocument:
+    scheduler: IndexingJobScheduler = Depends(get_indexing_job_scheduler),
+) -> LocalDocumentPatchResponse:
     """Replace the ``enabled_criteria`` list for a document.
 
+    Phase 8.C: when the document is ``indexed``, the PATCH
+    schedules an async reindex via the same JobScheduler the
+    upload path uses, and the response carries a ``job_id`` the
+    UI can stream from. For any other state, the new flags are
+    persisted and ``job_id`` is ``None`` — the new tags will be
+    picked up at the next indexing pass.
+
     The Chroma chunks carry the criterion flags as boolean
-    metadata (``tag_E1`` ... ``tag_E5``), which means a change to
-    ``enabled_criteria`` SILENTLY drifts the retrieval surface
-    unless the chunks are rewritten. So:
-
-      - if the document is currently ``indexed``, the new
-        enabled_criteria set triggers an immediate sync reindex,
-        and the response reflects the post-reindex row.
-      - if the document is in any other state (uploaded, failed,
-        in-flight), the DB update happens but no reindex is
-        attempted — the new flags will apply at the next
-        indexing pass.
-
-    The reindex is intentionally synchronous in 8.B.3. Phase 8.C
-    will wrap it in the same async/SSE machinery the upload path
-    uses, and this endpoint will switch to returning a job_id.
+    metadata (``tag_E1`` ... ``tag_E5``); a PATCH without reindex
+    would silently drift the retrieval surface, which is why the
+    indexed case is auto-triggered.
     """
     row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
     if row is None:
@@ -357,25 +366,155 @@ def update_enabled_criteria(
 
     new_enabled = list(payload.enabled_criteria)
     if new_enabled == list(row.enabled_criteria or []):
-        return row  # no-op patch, nothing to reindex
+        return LocalDocumentPatchResponse(
+            document=LocalDocumentResponse.model_validate(row),
+            job_id=None,
+        )
 
     row.enabled_criteria = new_enabled
     db.commit()
     db.refresh(row)
 
+    job_id: str | None = None
     if row.status == "indexed":
-        try:
-            service.index_document(row.id)
-        except IndexingError as exc:
-            # Reindex failed -> row already in `failed` via the
-            # service. Surface the failure to the caller so the
-            # UI can show the message immediately.
-            raise HTTPException(
-                status_code=500,
-                detail=f"Reindex after enabled_criteria update failed: {exc}",
-            ) from exc
-        db.refresh(row)
-    return row
+        job_id = scheduler.schedule(row.id)
+
+    return LocalDocumentPatchResponse(
+        document=LocalDocumentResponse.model_validate(row),
+        job_id=job_id,
+    )
+
+
+@router.post(
+    "/{document_id}/reindex",
+    response_model=JobCreated,
+    status_code=202,
+)
+def reindex_local_document(
+    document_id: int,
+    db: Session = Depends(get_db),
+    scheduler: IndexingJobScheduler = Depends(get_indexing_job_scheduler),
+) -> JobCreated:
+    """Manually trigger an async reindex.
+
+    Useful when a previous indexing run ended in ``failed`` and
+    the operator wants to retry without changing
+    ``enabled_criteria``, or when the underlying file has been
+    replaced on disk through another path. Returns a 202 plus
+    the ``job_id`` to stream progress from.
+    """
+    row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+    if row.deleted_at is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="Document is soft-deleted and cannot be reindexed",
+        )
+    job_id = scheduler.schedule(row.id)
+    return JobCreated(job_id=job_id)
+
+
+@router.get("/stream/{job_id}")
+async def stream_indexing_job(job_id: str):
+    """SSE stream of progress / completion events for an indexing job.
+
+    Emits one ``progress`` event per state transition
+    (``extracting``, ``chunking``, ``indexing``), then a terminal
+    ``done`` (with ``scraped`` set to chunk count) or ``error``
+    (with ``message`` set to the failure reason).
+
+    Mirrors `GET /api/scrape/stream/{job_id}` for the scraping
+    jobs — they share the same `job_registry` singleton, so the
+    SSE plumbing is identical.
+    """
+    # Imported lazily to keep test-time import of the router
+    # decoupled from sse-starlette's optional dependencies surface.
+    from sse_starlette.sse import EventSourceResponse
+
+    state = job_registry.get_job(job_id)
+    if state is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    async def event_generator():
+        while True:
+            event = await state.queue.get()
+            if event is None:
+                break  # sentinel: job complete
+            yield {"data": event.model_dump_json()}
+
+    return EventSourceResponse(event_generator())
+
+
+@router.get("/{document_id}/chunks", response_model=list[ChunkPreview])
+def list_chunks_for_document(
+    document_id: int,
+    limit: int = 20,
+    text_preview_chars: int = 240,
+    db: Session = Depends(get_db),
+    chroma: chromadb.api.client.Client = Depends(get_chroma_client),
+) -> list[ChunkPreview]:
+    """Read-only chunk preview for the registry UI.
+
+    Only the chunks belonging to the row's current ``version`` are
+    returned (older versions remain in Chroma for historical
+    EvaluationResult references but the UI shows what's "live").
+    Each entry carries a truncated text preview so the UI doesn't
+    need to ship full chunk bodies on a list view.
+    """
+    if limit <= 0 or limit > 200:
+        raise HTTPException(
+            status_code=422, detail="limit must be in [1, 200]",
+        )
+    if text_preview_chars <= 0 or text_preview_chars > 2000:
+        raise HTTPException(
+            status_code=422,
+            detail="text_preview_chars must be in [1, 2000]",
+        )
+
+    row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    collection = chroma.get_or_create_collection(name=EXTERNAL_COLLECTION_NAME)
+    where = {
+        "$and": [
+            {"document_id": {"$eq": int(row.id)}},
+            {"version": {"$eq": int(row.version)}},
+        ]
+    }
+    try:
+        res = collection.get(
+            where=where, include=["metadatas", "documents"], limit=limit,
+        )
+    except Exception as exc:
+        logger.warning(
+            "list_chunks: chroma get failed for id=%s v=%s: %s",
+            row.id, row.version, exc,
+        )
+        return []
+
+    ids = list(res.get("ids") or [])
+    metadatas = list(res.get("metadatas") or [])
+    documents = list(res.get("documents") or [])
+    out: list[ChunkPreview] = []
+    for chunk_id, md, doc in zip(ids, metadatas, documents):
+        if md is None or doc is None:
+            continue
+        tags = {k: bool(md[k]) for k in md if k.startswith("tag_")}
+        out.append(
+            ChunkPreview(
+                chunk_id=chunk_id,
+                chunk_order=int(md.get("chunk_order", 0)),
+                char_count=int(md.get("char_count", 0)),
+                document_id=int(md.get("document_id", row.id)),
+                version=int(md.get("version", row.version)),
+                text_preview=str(doc)[:text_preview_chars],
+                tags=tags,
+            )
+        )
+    out.sort(key=lambda c: c.chunk_order)
+    return out
 
 
 @router.delete("/{document_id}", status_code=204)

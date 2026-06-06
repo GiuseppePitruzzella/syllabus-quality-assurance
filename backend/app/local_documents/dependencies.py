@@ -37,6 +37,7 @@ from app.local_documents.ingester import (
     EmbeddingsClient,
     ExternalDocumentIngester,
 )
+from app.local_documents.jobs import IndexingJobScheduler
 from app.local_documents.service import LocalDocumentIndexingService
 
 _chroma_client_singleton: chromadb.api.client.Client | None = None
@@ -95,6 +96,17 @@ def get_external_ingester(
     # delete-only path we don't need a real embedder. Passing a
     # never-called stub keeps the type signature happy.
     return ExternalDocumentIngester(chroma, _NoEmbedder())
+
+
+def get_indexing_job_scheduler(
+    chroma: Annotated[chromadb.api.client.Client, Depends(get_chroma_client)],
+    embeddings: Annotated[EmbeddingsClient, Depends(get_embeddings)],
+) -> IndexingJobScheduler:
+    """Scheduler used by upload (auto-trigger), PATCH (auto-reindex),
+    and POST /reindex. Wraps the sync service in a JobRegistry job
+    and streams SSE progress on a dedicated job_id.
+    """
+    return IndexingJobScheduler(chroma, embeddings)
 
 
 def get_indexing_service(

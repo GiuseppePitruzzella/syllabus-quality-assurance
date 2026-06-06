@@ -22,6 +22,7 @@ from app.local_documents.ingester import (
     ExternalDocumentIngester,
     IngestionResult,
 )
+from app.local_documents.jobs import IndexingJobScheduler
 from app.local_documents.service import (
     IndexingError,
     LocalDocumentIndexingService,
@@ -39,4 +40,5 @@ __all__ = [
     "IngestionResult",
     "LocalDocumentIndexingService",
     "IndexingError",
+    "IndexingJobScheduler",
 ]

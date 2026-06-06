@@ -108,3 +108,26 @@ class LocalDocumentEnabledCriteriaUpdate(BaseModel):
         if len(set(v)) != len(v):
             raise ValueError("enabled_criteria must not contain duplicates")
         return v
+
+
+class LocalDocumentPatchResponse(BaseModel):
+    """Response of PATCH /api/local-documents/{id} (Phase 8.C).
+
+    Carries the updated document plus an optional ``job_id`` when
+    the PATCH triggered an async reindex (status was ``indexed``).
+    """
+
+    document: LocalDocumentResponse
+    job_id: str | None = None
+
+
+class ChunkPreview(BaseModel):
+    """Read-only chunk preview for the UI (Phase 8.C)."""
+
+    chunk_id: str
+    chunk_order: int
+    char_count: int
+    document_id: int
+    version: int
+    text_preview: str
+    tags: dict[str, bool]

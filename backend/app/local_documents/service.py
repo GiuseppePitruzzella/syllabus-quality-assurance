@@ -14,6 +14,7 @@ query the Chroma collection directly via a retriever.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from typing import Callable
 
 import structlog
 from sqlalchemy.orm import Session
@@ -61,11 +62,19 @@ class LocalDocumentIndexingService:
         ingester: ExternalDocumentIngester,
         chunker: ExternalDocumentChunker | None = None,
         storage_root: str | None = None,
+        progress_publisher: Callable[[str], None] | None = None,
     ) -> None:
         self._db = db
         self._ingester = ingester
         self._chunker = chunker or ExternalDocumentChunker()
         self._storage_root = storage_root or settings.local_documents_dir
+        # 8.C: synchronous callback notified at every state
+        # transition. Designed for the JobRegistry/SSE wrapper but
+        # introduces no async or SSE dependency at this layer —
+        # any callable is accepted, exceptions raised by the
+        # publisher are swallowed so a flaky observer can never
+        # corrupt the indexing run.
+        self._progress_publisher = progress_publisher
 
     # ------------------------------------------------------------------
 
@@ -164,6 +173,18 @@ class LocalDocumentIndexingService:
         row.failure_reason = None
         self._db.commit()
         self._db.refresh(row)
+        if self._progress_publisher is not None:
+            try:
+                self._progress_publisher(target)
+            except Exception as exc:
+                # A flaky publisher must never break the indexing
+                # run: log and continue.
+                logger.warning(
+                    "local_document_progress_publish_failed",
+                    document_id=row.id,
+                    target=target,
+                    error=str(exc),
+                )
 
     def _mark_failed(self, row: LocalDocument, exc: Exception) -> None:
         reason = str(exc)

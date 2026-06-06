@@ -22,7 +22,7 @@ from app.config import settings
 from app.database import Base, get_db
 from app.local_documents.dependencies import (
     get_external_ingester,
-    get_indexing_service,
+    get_indexing_job_scheduler,
 )
 from app.main import app
 from app.models.cdl import CorsoDiLaurea
@@ -70,44 +70,20 @@ class _FakeIngester:
         return 0
 
 
-class _FakeIndexingService:
-    """In-memory stand-in for LocalDocumentIndexingService.
+class _FakeScheduler:
+    """In-memory stand-in for IndexingJobScheduler.
 
-    `index_document(id)` records the call and marks the row as
-    ``indexed``. Tests that need a failure scenario set
-    `raise_on_index = True`.
+    `schedule(document_id)` records the call and returns a fake
+    job_id. Tests can read `.calls` to assert the upload / PATCH /
+    reindex endpoints dispatched to the scheduler.
     """
 
-    def __init__(self, db) -> None:
-        self._db = db
+    def __init__(self) -> None:
         self.calls: list[int] = []
-        self.raise_on_index: bool = False
 
-    def index_document(self, document_id: int):
+    def schedule(self, document_id: int) -> str:
         self.calls.append(document_id)
-        if self.raise_on_index:
-            row = self._db.query(LocalDocument).filter(
-                LocalDocument.id == document_id,
-            ).first()
-            if row is not None:
-                row.status = "failed"
-                row.failure_reason = "reindex_failed"
-                self._db.commit()
-            from app.local_documents import IndexingError
-            raise IndexingError("forced failure")
-        row = self._db.query(LocalDocument).filter(
-            LocalDocument.id == document_id,
-        ).first()
-        if row is not None:
-            from datetime import datetime, timezone as _tz
-            row.status = "indexed"
-            row.chunk_count = 1
-            row.indexed_at = datetime.now(_tz.utc)
-            row.failure_reason = None
-            self._db.commit()
-        # The real service returns IngestionResult, but the endpoint
-        # only cares whether it raised; returning None is fine.
-        return None
+        return f"job-{document_id}-{len(self.calls)}"
 
 
 @pytest.fixture
@@ -116,12 +92,12 @@ def fake_ingester() -> _FakeIngester:
 
 
 @pytest.fixture
-def fake_service(test_db) -> _FakeIndexingService:
-    return _FakeIndexingService(test_db)
+def fake_scheduler() -> _FakeScheduler:
+    return _FakeScheduler()
 
 
 @pytest.fixture
-def client(test_db, tmp_path, monkeypatch, fake_ingester, fake_service):
+def client(test_db, tmp_path, monkeypatch, fake_ingester, fake_scheduler):
     # Redirect uploads under tmp_path so the test never touches the
     # real backend/data/local_documents/ tree.
     monkeypatch.setattr(settings, "local_documents_dir", str(tmp_path))
@@ -134,7 +110,7 @@ def client(test_db, tmp_path, monkeypatch, fake_ingester, fake_service):
 
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_external_ingester] = lambda: fake_ingester
-    app.dependency_overrides[get_indexing_service] = lambda: fake_service
+    app.dependency_overrides[get_indexing_job_scheduler] = lambda: fake_scheduler
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
@@ -198,12 +174,14 @@ def _upload(client, cdl_id: int, **overrides):
 # ---------------------------------------------------------------------------
 
 
-def test_upload_persists_row_and_file(client, test_db, tmp_path):
+def test_upload_persists_row_and_file(client, test_db, tmp_path, fake_scheduler):
     cdl = _make_cdl(test_db)
     response = _upload(client, cdl.id)
     assert response.status_code == 201, response.text
     body = response.json()
-    assert body["job_id"] is None  # forward-compatible, populated in Phase 8.C
+    # Phase 8.C: upload auto-triggers async indexing via the scheduler.
+    assert isinstance(body["job_id"], str) and body["job_id"]
+    assert fake_scheduler.calls == [body["document"]["id"]]
     doc = body["document"]
     assert doc["cdl_id"] == cdl.id
     assert doc["document_type"] == "usi_dipartimentali"
@@ -357,7 +335,10 @@ def test_patch_updates_enabled_criteria(client, test_db):
         json={"enabled_criteria": ["E1", "E2"]},
     )
     assert patch.status_code == 200
-    assert patch.json()["enabled_criteria"] == ["E1", "E2"]
+    body = patch.json()
+    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    # Row was `uploaded`, no reindex required, job_id stays None.
+    assert body["job_id"] is None
 
 
 def test_patch_rejects_duplicates(client, test_db):
@@ -487,14 +468,16 @@ def test_delete_unsafe_file_path_still_calls_chroma_cleanup(
     assert fake_ingester.delete_calls == [(document_id, version)]
 
 
-def test_patch_triggers_reindex_when_status_indexed(
-    client, test_db, fake_service,
+def test_patch_triggers_async_reindex_when_status_indexed(
+    client, test_db, fake_scheduler,
 ):
     cdl = _make_cdl(test_db)
     response = _upload(client, cdl.id, document_type="sua_cds")
     doc_id = response.json()["document"]["id"]
+    # Upload itself schedules one async indexing pass.
+    assert fake_scheduler.calls == [doc_id]
 
-    # Mark the row as indexed so PATCH should reindex.
+    # Mark the row as indexed so PATCH should re-trigger.
     row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
     row.status = "indexed"
     row.chunk_count = 5
@@ -505,35 +488,43 @@ def test_patch_triggers_reindex_when_status_indexed(
         json={"enabled_criteria": ["E1", "E2"]},
     )
     assert patch.status_code == 200
-    assert fake_service.calls == [doc_id]
-    assert patch.json()["enabled_criteria"] == ["E1", "E2"]
-    assert patch.json()["status"] == "indexed"
+    body = patch.json()
+    # Scheduler hit twice now: initial upload + this PATCH reindex.
+    assert fake_scheduler.calls == [doc_id, doc_id]
+    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert body["job_id"] is not None
 
 
 def test_patch_does_not_reindex_when_status_uploaded(
-    client, test_db, fake_service,
+    client, test_db, fake_scheduler,
 ):
     cdl = _make_cdl(test_db)
     response = _upload(client, cdl.id, document_type="sua_cds")
     doc_id = response.json()["document"]["id"]
+    # Upload's initial schedule.
+    assert fake_scheduler.calls == [doc_id]
 
     patch = client.patch(
         f"/api/local-documents/{doc_id}",
         json={"enabled_criteria": ["E1", "E2"]},
     )
     assert patch.status_code == 200
-    # status was uploaded -> no reindex triggered.
-    assert fake_service.calls == []
-    assert patch.json()["enabled_criteria"] == ["E1", "E2"]
+    body = patch.json()
+    # No further scheduler call since the row is still `uploaded`.
+    assert fake_scheduler.calls == [doc_id]
+    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert body["job_id"] is None
 
 
 def test_patch_is_noop_when_criteria_unchanged(
-    client, test_db, fake_service,
+    client, test_db, fake_scheduler,
 ):
     cdl = _make_cdl(test_db)
     response = _upload(client, cdl.id)
     doc_id = response.json()["document"]["id"]
     current = response.json()["document"]["enabled_criteria"]
+    # Upload's initial schedule.
+    assert fake_scheduler.calls == [doc_id]
 
     # Mark as indexed: even so, an unchanged set must not reindex.
     row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
@@ -545,33 +536,139 @@ def test_patch_is_noop_when_criteria_unchanged(
         json={"enabled_criteria": current},
     )
     assert patch.status_code == 200
-    assert fake_service.calls == []
+    body = patch.json()
+    assert fake_scheduler.calls == [doc_id]  # unchanged
+    assert body["job_id"] is None
 
 
-def test_patch_reindex_failure_surfaces_as_500(
-    client, test_db, fake_service,
-):
+# ---------------------------------------------------------------------------
+# Phase 8.C — POST /reindex + GET /chunks
+# ---------------------------------------------------------------------------
+
+
+def test_post_reindex_schedules_job(client, test_db, fake_scheduler):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+    # Reset scheduler calls after the upload's initial dispatch.
+    fake_scheduler.calls.clear()
+
+    res = client.post(f"/api/local-documents/{doc_id}/reindex")
+    assert res.status_code == 202
+    body = res.json()
+    assert isinstance(body["job_id"], str) and body["job_id"]
+    assert fake_scheduler.calls == [doc_id]
+
+
+def test_post_reindex_404_when_missing(client):
+    res = client.post("/api/local-documents/9999/reindex")
+    assert res.status_code == 404
+
+
+def test_post_reindex_409_when_soft_deleted(client, test_db):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    from datetime import datetime, timezone as _tz
+    row.deleted_at = datetime.now(_tz.utc)
+    test_db.commit()
+
+    res = client.post(f"/api/local-documents/{doc_id}/reindex")
+    assert res.status_code == 409
+
+
+def test_get_chunks_returns_chroma_payload(client, test_db, tmp_path, monkeypatch):
+    """GET /chunks returns the chunk preview for the current version."""
+    import chromadb
+
+    from app.local_documents.dependencies import get_chroma_client
+
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+    version = response.json()["document"]["version"]
+
+    # Wire an ephemeral Chroma + pre-populate it with two chunks
+    # so the endpoint has something to read.
+    chroma = chromadb.EphemeralClient()
+    try:
+        chroma.delete_collection("external_documents")
+    except Exception:
+        pass
+    collection = chroma.get_or_create_collection("external_documents")
+    collection.upsert(
+        ids=[
+            f"external_{doc_id}_v{version}__chunk_0000",
+            f"external_{doc_id}_v{version}__chunk_0001",
+        ],
+        documents=["Body of chunk one.", "Body of chunk two."],
+        metadatas=[
+            {
+                "document_id": doc_id,
+                "version": version,
+                "cdl_id": cdl.id,
+                "chunk_order": 0,
+                "char_count": 18,
+                "tag_E1": False, "tag_E2": False, "tag_E3": False,
+                "tag_E4": False, "tag_E5": True,
+            },
+            {
+                "document_id": doc_id,
+                "version": version,
+                "cdl_id": cdl.id,
+                "chunk_order": 1,
+                "char_count": 18,
+                "tag_E1": False, "tag_E2": False, "tag_E3": False,
+                "tag_E4": False, "tag_E5": True,
+            },
+        ],
+        embeddings=[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]],
+    )
+
+    app.dependency_overrides[get_chroma_client] = lambda: chroma
+    try:
+        res = client.get(f"/api/local-documents/{doc_id}/chunks?limit=10")
+        assert res.status_code == 200, res.text
+        items = res.json()
+        assert len(items) == 2
+        # Sorted by chunk_order asc.
+        assert items[0]["chunk_order"] == 0
+        assert items[1]["chunk_order"] == 1
+        assert items[0]["tags"] == {
+            "tag_E1": False, "tag_E2": False, "tag_E3": False,
+            "tag_E4": False, "tag_E5": True,
+        }
+        assert items[0]["text_preview"].startswith("Body of chunk")
+        assert items[0]["document_id"] == doc_id
+        assert items[0]["version"] == version
+    finally:
+        try:
+            chroma.delete_collection("external_documents")
+        except Exception:
+            pass
+        app.dependency_overrides.pop(get_chroma_client, None)
+
+
+def test_get_chunks_404_when_document_missing(client):
+    res = client.get("/api/local-documents/9999/chunks")
+    assert res.status_code == 404
+
+
+def test_get_chunks_validates_limit(client, test_db):
     cdl = _make_cdl(test_db)
     response = _upload(client, cdl.id)
     doc_id = response.json()["document"]["id"]
 
-    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
-    row.status = "indexed"
-    test_db.commit()
+    res = client.get(f"/api/local-documents/{doc_id}/chunks?limit=0")
+    assert res.status_code == 422
+    res = client.get(f"/api/local-documents/{doc_id}/chunks?limit=999")
+    assert res.status_code == 422
 
-    fake_service.raise_on_index = True
-    patch = client.patch(
-        f"/api/local-documents/{doc_id}",
-        json={"enabled_criteria": ["E1", "E3"]},
-    )
-    assert patch.status_code == 500
-    # The row should still carry the new enabled_criteria — the DB
-    # write happens BEFORE the reindex attempt — and the service
-    # stamped a failure status on it.
-    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
-    assert row.enabled_criteria == ["E1", "E3"]
-    assert row.status == "failed"
-    assert row.failure_reason == "reindex_failed"
+
+def test_get_stream_404_for_unknown_job(client):
+    res = client.get("/api/local-documents/stream/does-not-exist")
+    assert res.status_code == 404
 
 
 def test_upload_rolls_back_and_cleans_file_on_commit_failure(
