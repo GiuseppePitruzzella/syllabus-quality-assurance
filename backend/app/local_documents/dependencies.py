@@ -99,7 +99,7 @@ def get_external_ingester(
     return ExternalDocumentIngester(chroma, _NoEmbedder())
 
 
-def get_indexing_job_scheduler(
+async def get_indexing_job_scheduler(
     chroma: Annotated[chromadb.api.client.Client, Depends(get_chroma_client)],
     embeddings: Annotated[EmbeddingsClient, Depends(get_embeddings)],
 ) -> IndexingJobScheduler:
@@ -107,16 +107,12 @@ def get_indexing_job_scheduler(
     and POST /reindex. Wraps the sync service in a JobRegistry job
     and streams SSE progress on a dedicated job_id.
 
-    The running event loop is captured here so the worker thread
-    can publish events via `call_soon_threadsafe`. FastAPI resolves
-    dependencies in the request's async context so
-    `asyncio.get_running_loop()` is always valid here, even when
-    the endpoint itself is a sync `def`.
+    The provider itself must be async so FastAPI resolves it on the
+    request event loop rather than in the AnyIO worker thread used
+    by sync endpoints. Capturing that loop here lets PATCH and
+    POST /reindex schedule work safely via `call_soon_threadsafe`.
     """
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = None
+    loop = asyncio.get_running_loop()
     return IndexingJobScheduler(chroma, embeddings, loop=loop)
 
 

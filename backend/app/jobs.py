@@ -15,6 +15,8 @@ class JobState:
 class JobRegistry:
     """In-memory registry of active scraping jobs."""
 
+    _CLEANUP_DELAY_SECONDS: float = 600.0
+
     def __init__(self) -> None:
         self._jobs: dict[str, JobState] = {}
 
@@ -38,14 +40,18 @@ class JobRegistry:
         if state:
             state.completed_at = datetime.now(timezone.utc)
             loop.call_soon_threadsafe(state.queue.put_nowait, None)
-            # Schedule cleanup after 10 minutes
+            # A timer handle is sufficient here; unlike a sleeping
+            # Task it does not produce "Task was destroyed but it is
+            # pending" warnings when a short-lived TestClient loop
+            # closes before the 10-minute grace period expires.
             loop.call_soon_threadsafe(
-                lambda: asyncio.ensure_future(self._cleanup_after(job_id, delay=600))
+                lambda: loop.call_later(
+                    self._CLEANUP_DELAY_SECONDS,
+                    self._jobs.pop,
+                    job_id,
+                    None,
+                )
             )
-
-    async def _cleanup_after(self, job_id: str, delay: float) -> None:
-        await asyncio.sleep(delay)
-        self._jobs.pop(job_id, None)
 
 
 # Singleton instance
