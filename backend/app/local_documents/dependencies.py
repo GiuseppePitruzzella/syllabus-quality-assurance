@@ -24,6 +24,7 @@ tests.
 """
 from __future__ import annotations
 
+import asyncio
 from typing import Annotated
 
 import chromadb
@@ -105,8 +106,18 @@ def get_indexing_job_scheduler(
     """Scheduler used by upload (auto-trigger), PATCH (auto-reindex),
     and POST /reindex. Wraps the sync service in a JobRegistry job
     and streams SSE progress on a dedicated job_id.
+
+    The running event loop is captured here so the worker thread
+    can publish events via `call_soon_threadsafe`. FastAPI resolves
+    dependencies in the request's async context so
+    `asyncio.get_running_loop()` is always valid here, even when
+    the endpoint itself is a sync `def`.
     """
-    return IndexingJobScheduler(chroma, embeddings)
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+    return IndexingJobScheduler(chroma, embeddings, loop=loop)
 
 
 def get_indexing_service(

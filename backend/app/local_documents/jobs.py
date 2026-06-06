@@ -54,10 +54,17 @@ class IndexingJobScheduler:
         self,
         chroma_client: chromadb.api.client.Client,
         embeddings: EmbeddingsClient,
+        loop: asyncio.AbstractEventLoop | None = None,
         db_session_factory: Callable[[], object] = SessionLocal,
     ) -> None:
         self._chroma_client = chroma_client
         self._embeddings = embeddings
+        # The loop is captured at scheduler construction time. The
+        # dependency provider obtains it from the request's async
+        # context so a worker thread spawned by `loop.run_in_executor`
+        # can publish back via `call_soon_threadsafe` even though
+        # the thread itself has no loop.
+        self._loop = loop
         self._db_session_factory = db_session_factory
 
     def schedule(self, document_id: int) -> str:
@@ -80,7 +87,7 @@ class IndexingJobScheduler:
         schedules the registry-side cleanup (10 min default).
         """
         job_id = job_registry.create_job()
-        loop = asyncio.get_event_loop()
+        loop = self._loop if self._loop is not None else asyncio.get_event_loop()
 
         chroma_client = self._chroma_client
         embeddings = self._embeddings
