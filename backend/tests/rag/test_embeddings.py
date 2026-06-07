@@ -12,6 +12,24 @@ from unittest.mock import MagicMock
 
 import pytest
 from google.api_core.exceptions import ResourceExhausted, ServiceUnavailable
+from google.genai import errors as genai_errors
+
+
+def _client_error(code: int) -> genai_errors.ClientError:
+    """Construct a `ClientError` mimicking a Gen AI SDK HTTP error.
+
+    `ClientError.__init__(code, response_json, response=None)`
+    populates the `code` attribute the retry predicate inspects.
+    """
+    return genai_errors.ClientError(
+        code, {"error": {"code": code, "status": "TEST", "message": "test"}}, None,
+    )
+
+
+def _server_error(code: int = 503) -> genai_errors.ServerError:
+    return genai_errors.ServerError(
+        code, {"error": {"code": code, "status": "TEST", "message": "test"}}, None,
+    )
 
 
 def _patch_genai(
@@ -207,6 +225,118 @@ def test_embed_propagates_after_exhausting_retries(monkeypatch):
     with pytest.raises(ServiceUnavailable):
         emb.embed_query("x")
     assert fake_models.embed_content.call_count == 3
+
+
+def test_embed_retries_on_client_error_429(monkeypatch):
+    """ClientError(429) (rate limit) must be retried — regression guard.
+
+    The new SDK surfaces rate-limit errors as `ClientError(code=429)`,
+    distinct from the legacy `ResourceExhausted` path. Without an
+    explicit `code == 429` check in the retry predicate, a real
+    429 would NOT be retried.
+    """
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+
+    call_count = {"n": 0}
+
+    def _flaky(*_args, **_kwargs):
+        call_count["n"] += 1
+        if call_count["n"] < 3:
+            raise _client_error(429)
+        emb = MagicMock()
+        emb.values = [0.5] * 3072
+        response = MagicMock()
+        response.embeddings = [emb]
+        return response
+
+    fake_models.embed_content.side_effect = _flaky
+    monkeypatch.setattr(
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
+    )
+
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
+    out = emb.embed_query("text")
+    assert len(out) == 3072
+    assert call_count["n"] == 3
+
+
+@pytest.mark.parametrize("code", [400, 403, 404])
+def test_embed_does_not_retry_on_non_429_client_error(monkeypatch, code):
+    """Non-429 4xx must NOT be retried (invalid argument, forbidden, etc.)."""
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+    fake_models.embed_content.side_effect = _client_error(code)
+    monkeypatch.setattr(
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
+    )
+
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
+    with pytest.raises(genai_errors.ClientError):
+        emb.embed_query("x")
+    # Single attempt only — no retry on permanent 4xx.
+    assert fake_models.embed_content.call_count == 1
+
+
+def test_embed_retries_on_genai_server_error(monkeypatch):
+    """ServerError (5xx from the new SDK) is retried."""
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+
+    call_count = {"n": 0}
+
+    def _flaky(*_args, **_kwargs):
+        call_count["n"] += 1
+        if call_count["n"] < 3:
+            raise _server_error(503)
+        emb = MagicMock()
+        emb.values = [0.5] * 3072
+        response = MagicMock()
+        response.embeddings = [emb]
+        return response
+
+    fake_models.embed_content.side_effect = _flaky
+    monkeypatch.setattr(
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
+    )
+
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
+    out = emb.embed_query("text")
+    assert len(out) == 3072
+    assert call_count["n"] == 3
+
+
+def test_client_constructed_with_api_version_v1(monkeypatch):
+    """genai.Client must be constructed with HttpOptions(api_version='v1').
+
+    Pinning the stable surface protects EvaluationResult
+    reproducibility — beta endpoints can shift response shape and
+    finish-reason sets between runs.
+    """
+    fake_constructor = MagicMock(return_value=MagicMock())
+    monkeypatch.setattr(
+        "app.evaluation.rag.embeddings.genai.Client", fake_constructor,
+    )
+
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    VertexAIEmbeddings(project_id="test", location="europe-west1")
+
+    _args, kwargs = fake_constructor.call_args
+    assert kwargs.get("vertexai") is True
+    assert kwargs.get("project") == "test"
+    assert kwargs.get("location") == "europe-west1"
+    http_options = kwargs.get("http_options")
+    assert http_options is not None, "HttpOptions must be passed to the client"
+    assert http_options.api_version == "v1"
 
 
 def test_properties_expose_config(monkeypatch):

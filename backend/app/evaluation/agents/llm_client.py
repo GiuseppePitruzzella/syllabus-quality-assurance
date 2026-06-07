@@ -39,7 +39,7 @@ from google.genai import errors as genai_errors
 from google.genai import types as genai_types
 from tenacity import (
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
     wait_exponential,
 )
@@ -48,16 +48,29 @@ from app.config import ScientificConfig
 
 logger = structlog.get_logger(__name__)
 
-# Transient errors retried with exponential backoff. Both the legacy
-# ``google.api_core`` family (still raised by the underlying Vertex
-# backend in many cases) and the new SDK's ``ServerError`` (5xx)
-# qualify. ``ClientError`` 4xx is intentionally NOT retried.
-_RETRYABLE_EXCEPTIONS = (
-    ResourceExhausted,
-    ServiceUnavailable,
-    DeadlineExceeded,
-    genai_errors.ServerError,
-)
+
+def _is_retryable_error(exc: BaseException) -> bool:
+    """Decide which exceptions deserve a back-off retry.
+
+    Mirrors the embeddings client policy (see
+    ``app/evaluation/rag/embeddings.py::_is_retryable_error``):
+
+    - ``ServerError`` (5xx from the Gen AI SDK) -> retry.
+    - ``ClientError`` -> retry ONLY when the HTTP code is 429
+      (rate limit). The new SDK surfaces quota / rate-limit as
+      ``ClientError(code=429)``, so without this check a real 429
+      would NOT be retried.
+    - Legacy ``google.api_core`` quota / availability exceptions
+      are still propagated by the Vertex backend in many cases,
+      so they remain retryable as a defensive fallback.
+    """
+    if isinstance(exc, (ResourceExhausted, ServiceUnavailable, DeadlineExceeded)):
+        return True
+    if isinstance(exc, genai_errors.ServerError):
+        return True
+    if isinstance(exc, genai_errors.ClientError):
+        return getattr(exc, "code", None) == 429
+    return False
 
 # Finish-reason buckets. ``STOP`` is the only success state.
 # ``MAX_TOKENS`` means the JSON likely got truncated; the agent layer
@@ -170,10 +183,16 @@ class VertexAILLMClient:
                 "and call Settings.require_vertex_ai_config()). No fallback "
                 "to `gcloud config` per D027."
             )
+        # Pin the stable API surface (``v1``). Without this, the
+        # client may target beta endpoints, which can shift the
+        # generation contract (finish-reason set, prompt_feedback
+        # shape) between runs and hurt the reproducibility
+        # guarantees of the EvaluationResult.
         self._client = genai.Client(
             vertexai=True,
             project=project_id,
             location=location,
+            http_options=genai_types.HttpOptions(api_version="v1"),
         )
         self._project_id = project_id
         self._location = location
@@ -211,7 +230,7 @@ class VertexAILLMClient:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=1, min=1, max=16),
-        retry=retry_if_exception_type(_RETRYABLE_EXCEPTIONS),
+        retry=retry_if_exception(_is_retryable_error),
         reraise=True,
     )
     def _call(

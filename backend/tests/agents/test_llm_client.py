@@ -18,8 +18,21 @@ from google.api_core.exceptions import (
     ResourceExhausted,
     ServiceUnavailable,
 )
+from google.genai import errors as genai_errors
 
 from app.config import ScientificConfig
+
+
+def _client_error(code: int) -> genai_errors.ClientError:
+    return genai_errors.ClientError(
+        code, {"error": {"code": code, "status": "TEST", "message": "test"}}, None,
+    )
+
+
+def _server_error(code: int = 503) -> genai_errors.ServerError:
+    return genai_errors.ServerError(
+        code, {"error": {"code": code, "status": "TEST", "message": "test"}}, None,
+    )
 
 
 def _scientific(**overrides) -> ScientificConfig:
@@ -389,6 +402,93 @@ def test_all_transient_exceptions_are_retried(monkeypatch, exc_cls):
     with pytest.raises(exc_cls):
         client("hi")
     assert fake_models.generate_content.call_count == 3
+
+
+# ---------------------------------------------------------------------------
+# New SDK retry semantics (ClientError 429 + ServerError + HttpOptions v1)
+# ---------------------------------------------------------------------------
+
+
+def test_retries_on_client_error_429(monkeypatch):
+    """ClientError(429) (rate limit) must be retried — regression guard.
+
+    The new SDK surfaces rate-limit errors as
+    ``ClientError(code=429)``, distinct from the legacy
+    ``ResourceExhausted`` path. Without an explicit ``code == 429``
+    check in the retry predicate, a real 429 would NOT be retried.
+    """
+    call_count = {"n": 0}
+
+    def _flaky(*_args, **_kwargs):
+        call_count["n"] += 1
+        if call_count["n"] < 3:
+            raise _client_error(429)
+        return _fake_response(text="finally")
+
+    _patch_genai(monkeypatch, _flaky)
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+
+    client = VertexAILLMClient("p", "europe-west1", _scientific())
+    result = client("hi")
+    assert result.text == "finally"
+    assert call_count["n"] == 3
+
+
+@pytest.mark.parametrize("code", [400, 403, 404])
+def test_does_not_retry_on_non_429_client_error(monkeypatch, code):
+    """Non-429 4xx must NOT be retried (invalid argument, forbidden, etc.)."""
+    fake_models = _patch_genai(monkeypatch, _client_error(code))
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+
+    client = VertexAILLMClient("p", "europe-west1", _scientific())
+    with pytest.raises(genai_errors.ClientError):
+        client("hi")
+    # Single attempt only — no retry on permanent 4xx.
+    assert fake_models.generate_content.call_count == 1
+
+
+def test_retries_on_genai_server_error(monkeypatch):
+    """ServerError (5xx from the new SDK) is retried."""
+    call_count = {"n": 0}
+
+    def _flaky(*_args, **_kwargs):
+        call_count["n"] += 1
+        if call_count["n"] < 3:
+            raise _server_error(503)
+        return _fake_response(text="finally")
+
+    _patch_genai(monkeypatch, _flaky)
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+
+    client = VertexAILLMClient("p", "europe-west1", _scientific())
+    result = client("hi")
+    assert result.text == "finally"
+    assert call_count["n"] == 3
+
+
+def test_client_constructed_with_api_version_v1(monkeypatch):
+    """genai.Client must be constructed with HttpOptions(api_version='v1').
+
+    Pinning the stable surface protects EvaluationResult
+    reproducibility — beta endpoints can shift the generation
+    contract (finish-reason set, prompt_feedback shape) between
+    runs.
+    """
+    fake_constructor = MagicMock(return_value=MagicMock())
+    monkeypatch.setattr(
+        "app.evaluation.agents.llm_client.genai.Client", fake_constructor,
+    )
+
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+    VertexAILLMClient("p", "europe-west1", _scientific())
+
+    _args, kwargs = fake_constructor.call_args
+    assert kwargs.get("vertexai") is True
+    assert kwargs.get("project") == "p"
+    assert kwargs.get("location") == "europe-west1"
+    http_options = kwargs.get("http_options")
+    assert http_options is not None, "HttpOptions must be passed to the client"
+    assert http_options.api_version == "v1"
 
 
 # ---------------------------------------------------------------------------
