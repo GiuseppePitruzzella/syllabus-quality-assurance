@@ -262,6 +262,9 @@ function DocumentRow({
   const reindexState = useLocalDocumentIndexingProgress(reindexJobId, {
     onDone: () => {
       queryClient.invalidateQueries({ queryKey: ["local-documents"] });
+      queryClient.invalidateQueries({
+        queryKey: ["local-document-chunks", doc.id],
+      });
       toast.success("Reindicizzazione completata", {
         description: doc.title,
       });
