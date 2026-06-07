@@ -42,6 +42,7 @@ even when the script aborts mid-flight.
 from __future__ import annotations
 
 import io
+import json
 import sys
 import time
 from pathlib import Path
@@ -74,6 +75,7 @@ SMOKE_TEXT = (
 ).encode("utf-8")
 
 CDL_ID = 3  # LM-18 Informatica (per CLAUDE.md)
+STREAM_TIMEOUT = 60
 
 
 # ---------------------------------------------------------------------------
@@ -103,6 +105,27 @@ def _tags_for(collection, chunk_id: str) -> dict[str, bool]:
         return {}
     md = metadatas[0]
     return {k: md[k] for k in sorted(md) if k.startswith("tag_")}
+
+
+def _consume_stream(client: TestClient, job_id: str) -> list[dict]:
+    """Drain a Phase 8.C indexing stream through its terminal event."""
+    events: list[dict] = []
+    with client.stream(
+        "GET",
+        f"/api/local-documents/stream/{job_id}",
+        timeout=STREAM_TIMEOUT,
+    ) as response:
+        assert response.status_code == 200, response.text
+        for raw in response.iter_lines():
+            line = raw.decode() if isinstance(raw, bytes) else raw
+            line = line.strip()
+            if not line.startswith("data:"):
+                continue
+            event = json.loads(line[len("data:"):].strip())
+            events.append(event)
+            if event.get("type") in ("done", "error"):
+                break
+    return events
 
 
 # ---------------------------------------------------------------------------
@@ -210,13 +233,22 @@ def main() -> int:
         )
         assert patch.status_code == 200, patch.text
         patched = patch.json()
+        patched_document = patched["document"]
+        patch_job_id = patched["job_id"]
         print(
-            f"   status={patched['status']} "
-            f"enabled_criteria={patched['enabled_criteria']} "
-            f"chunk_count={patched['chunk_count']}"
+            f"   status={patched_document['status']} "
+            f"enabled_criteria={patched_document['enabled_criteria']} "
+            f"chunk_count={patched_document['chunk_count']} "
+            f"job_id={patch_job_id}"
         )
-        assert patched["enabled_criteria"] == ["E4", "E5"]
-        assert patched["status"] == "indexed"
+        assert patched_document["enabled_criteria"] == ["E4", "E5"]
+        assert patched_document["status"] == "indexed"
+        assert isinstance(patch_job_id, str) and patch_job_id
+
+        events = _consume_stream(client, patch_job_id)
+        event_types = [event["type"] for event in events]
+        print(f"   PATCH SSE events: {event_types}")
+        assert event_types == ["progress", "progress", "progress", "done"]
 
         v1_ids_after = _ids_for(collection, document_id, version)
         # Same number of chunks, same ids (deterministic), no duplicates.
