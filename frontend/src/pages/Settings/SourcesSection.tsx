@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, FileText, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Check, Eye, FileText, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { CriteriaPicker } from "@/components/CriteriaPicker";
@@ -24,6 +24,7 @@ import {
   STATUS_VISUALS,
   labelForDocumentType,
 } from "@/data/sources";
+import { ChunksPreviewModal } from "./ChunksPreviewModal";
 import { UploadLocalDocumentModal } from "./UploadLocalDocumentModal";
 
 const IN_FLIGHT_STATUSES: LocalDocumentStatus[] = [
@@ -60,6 +61,7 @@ export function SourcesSection() {
   >("all");
   const [status, setStatus] = useState<LocalDocumentStatus | "all">("all");
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [chunksDoc, setChunksDoc] = useState<LocalDocument | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -118,6 +120,13 @@ export function SourcesSection() {
         open={uploadOpen}
         onOpenChange={setUploadOpen}
       />
+      <ChunksPreviewModal
+        doc={chunksDoc}
+        open={chunksDoc !== null}
+        onOpenChange={(open) => {
+          if (!open) setChunksDoc(null);
+        }}
+      />
       <div className="space-y-4">
         <FiltersRow
           documentType={documentType}
@@ -142,6 +151,7 @@ export function SourcesSection() {
                 isDeleting={
                   deleteMutation.isPending && deleteMutation.variables === doc.id
                 }
+                onPreviewChunks={() => setChunksDoc(doc)}
               />
             ))}
           </ul>
@@ -232,10 +242,12 @@ function DocumentRow({
   doc,
   onDelete,
   isDeleting,
+  onPreviewChunks,
 }: {
   doc: LocalDocument;
   onDelete: () => void;
   isDeleting: boolean;
+  onPreviewChunks: () => void;
 }) {
   const visual = STATUS_VISUALS[doc.status];
   const queryClient = useQueryClient();
@@ -316,6 +328,18 @@ function DocumentRow({
           <StatusBadge tone={visual.tone} inFlight={visual.in_flight}>
             {visual.label}
           </StatusBadge>
+          {!editing && doc.status === "indexed" ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onPreviewChunks}
+              disabled={isReindexing || patchMutation.isPending || isDeleting}
+              aria-label={`Anteprima chunk di ${doc.title}`}
+            >
+              <Eye className="h-3.5 w-3.5" aria-hidden />
+              Chunk
+            </Button>
+          ) : null}
           {!editing ? (
             <Button
               variant="outline"

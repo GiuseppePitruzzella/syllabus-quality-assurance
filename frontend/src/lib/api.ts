@@ -9,6 +9,7 @@ import type {
   EvaluationDetail,
   EvaluationSummary,
   LocalDocument,
+  LocalDocumentChunkPreview,
   LocalDocumentStatus,
   LocalDocumentType,
 } from "./types";
@@ -177,6 +178,22 @@ export const uploadLocalDocument = async (
     throw new Error(detail);
   }
   return res.json();
+};
+
+/** Read-only chunk preview for the current version of the document.
+ *  Sorted by `chunk_order` server-side. */
+export const getLocalDocumentChunks = (
+  id: number,
+  options: { limit?: number; text_preview_chars?: number } = {},
+) => {
+  const params = new URLSearchParams();
+  if (options.limit) params.set("limit", String(options.limit));
+  if (options.text_preview_chars)
+    params.set("text_preview_chars", String(options.text_preview_chars));
+  const qs = params.toString();
+  return fetchApi<LocalDocumentChunkPreview[]>(
+    `/local-documents/${id}/chunks${qs ? `?${qs}` : ""}`,
+  );
 };
 
 /** Hard-delete the document (DB row + file + Chroma chunks). */
