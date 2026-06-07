@@ -119,6 +119,36 @@ export interface LocalDocumentUploadPayload {
   file: File;
 }
 
+export interface LocalDocumentPatchResponse {
+  document: LocalDocument;
+  job_id: string | null;
+}
+
+/** Replace `enabled_criteria` on a document. Schedules an async
+ *  reindex when the row is already `indexed`; otherwise the DB
+ *  update is recorded and `job_id` stays `null`. */
+export const patchLocalDocumentCriteria = async (
+  id: number,
+  enabled_criteria: string[],
+): Promise<LocalDocumentPatchResponse> => {
+  const res = await fetch(`${BASE_URL}/local-documents/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled_criteria }),
+  });
+  if (!res.ok) {
+    let detail = `${res.status} ${res.statusText}`;
+    try {
+      const body = await res.json();
+      if (body?.detail) detail = String(body.detail);
+    } catch {
+      /* ignore */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+};
+
 /** Multipart upload + immediate async indexing trigger. */
 export const uploadLocalDocument = async (
   payload: LocalDocumentUploadPayload,

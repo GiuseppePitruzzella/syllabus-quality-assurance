@@ -4,12 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
+import { CriteriaPicker } from "@/components/CriteriaPicker";
 import { Button } from "@/components/ui/button";
-import {
-  DOCUMENT_TYPES,
-  STATUS_VISUALS,
-  labelForDocumentType,
-} from "@/data/sources";
+import { DOCUMENT_TYPES, STATUS_VISUALS } from "@/data/sources";
 import { getCdl, getDepartments, uploadLocalDocument } from "@/lib/api";
 import {
   connectLocalDocumentIndexingStream,
@@ -20,7 +17,6 @@ import type {
   LocalDocumentType,
 } from "@/lib/types";
 
-const ALL_CRITERIA: ExtendedCriterionCode[] = ["E1", "E2", "E3", "E4", "E5"];
 const ALLOWED_EXTENSIONS = [".pdf", ".docx", ".html", ".htm", ".md"];
 
 type Stage =
@@ -421,68 +417,6 @@ function FieldFile({
         {file ? ` · ${(file.size / 1024).toFixed(1)} kB` : ""}
       </p>
     </label>
-  );
-}
-
-function CriteriaPicker({
-  value,
-  onChange,
-  defaultsFor,
-  disabled,
-}: {
-  value: ExtendedCriterionCode[];
-  onChange: (v: ExtendedCriterionCode[]) => void;
-  defaultsFor: LocalDocumentType;
-  disabled?: boolean;
-}) {
-  const defaults =
-    DOCUMENT_TYPES.find((t) => t.code === defaultsFor)?.default_enabled ?? [];
-  const toggle = (code: ExtendedCriterionCode) => {
-    if (disabled) return;
-    onChange(
-      value.includes(code) ? value.filter((c) => c !== code) : [...value, code],
-    );
-  };
-  return (
-    <div>
-      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        Criteri estesi abilitati
-      </p>
-      <div className="mt-1 flex flex-wrap items-center gap-1.5">
-        {ALL_CRITERIA.map((code) => {
-          const active = value.includes(code);
-          const isDefault = defaults.includes(code);
-          return (
-            <button
-              key={code}
-              type="button"
-              onClick={() => toggle(code)}
-              aria-pressed={active}
-              disabled={disabled}
-              className={
-                "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase transition-colors disabled:opacity-50 " +
-                (active
-                  ? "border-amber-300 bg-amber-500/15 text-amber-900"
-                  : "border-border bg-card text-muted-foreground hover:border-amber-300 hover:bg-amber-500/10 hover:text-amber-900")
-              }
-            >
-              {code}
-              {isDefault ? (
-                <span
-                  aria-label="default per il tipo selezionato"
-                  className="text-[8px] font-medium normal-case text-current/70"
-                >
-                  •
-                </span>
-              ) : null}
-            </button>
-          );
-        })}
-        <span className="ml-1 text-[10px] text-muted-foreground">
-          default per «{labelForDocumentType(defaultsFor)}»: {defaults.join(", ") || "—"}
-        </span>
-      </div>
-    </div>
   );
 }
 

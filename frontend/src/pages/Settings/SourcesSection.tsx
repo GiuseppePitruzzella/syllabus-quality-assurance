@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FileText, Loader2, Plus, Trash2 } from "lucide-react";
+import { Check, FileText, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
+import { CriteriaPicker } from "@/components/CriteriaPicker";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
-import { deleteLocalDocument, listLocalDocuments } from "@/lib/api";
+import { useLocalDocumentIndexingProgress } from "@/hooks/useLocalDocumentIndexingProgress";
+import {
+  deleteLocalDocument,
+  listLocalDocuments,
+  patchLocalDocumentCriteria,
+} from "@/lib/api";
 import type {
+  ExtendedCriterionCode,
   LocalDocument,
   LocalDocumentStatus,
   LocalDocumentType,
@@ -231,6 +238,63 @@ function DocumentRow({
   isDeleting: boolean;
 }) {
   const visual = STATUS_VISUALS[doc.status];
+  const queryClient = useQueryClient();
+
+  const [editing, setEditing] = useState(false);
+  const [draftCriteria, setDraftCriteria] = useState<ExtendedCriterionCode[]>(
+    doc.enabled_criteria,
+  );
+  // Active reindex job_id (when the PATCH triggered an async run).
+  const [reindexJobId, setReindexJobId] = useState<string | null>(null);
+
+  const reindexState = useLocalDocumentIndexingProgress(reindexJobId, {
+    onDone: () => {
+      queryClient.invalidateQueries({ queryKey: ["local-documents"] });
+      toast.success("Reindicizzazione completata", {
+        description: doc.title,
+      });
+      setReindexJobId(null);
+    },
+    onError: (e) => {
+      queryClient.invalidateQueries({ queryKey: ["local-documents"] });
+      toast.error("Reindicizzazione fallita", { description: e.message });
+      setReindexJobId(null);
+    },
+  });
+
+  const patchMutation = useMutation({
+    mutationFn: () => patchLocalDocumentCriteria(doc.id, draftCriteria),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["local-documents"] });
+      setEditing(false);
+      if (res.job_id) {
+        setReindexJobId(res.job_id);
+        toast.info("Reindicizzazione avviata", { description: doc.title });
+      } else {
+        toast.success("Criteri aggiornati", { description: doc.title });
+      }
+    },
+    onError: (err) => {
+      toast.error("Aggiornamento criteri fallito", {
+        description: err instanceof Error ? err.message : String(err),
+      });
+    },
+  });
+
+  function startEdit() {
+    setDraftCriteria(doc.enabled_criteria);
+    setEditing(true);
+  }
+  function cancelEdit() {
+    setDraftCriteria(doc.enabled_criteria);
+    setEditing(false);
+  }
+  const hasChanges =
+    draftCriteria.length !== doc.enabled_criteria.length ||
+    !draftCriteria.every((c) => doc.enabled_criteria.includes(c));
+
+  const isReindexing = reindexState.kind === "in_progress";
+
   return (
     <li className="rounded-lg border bg-card px-4 py-3">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -252,11 +316,23 @@ function DocumentRow({
           <StatusBadge tone={visual.tone} inFlight={visual.in_flight}>
             {visual.label}
           </StatusBadge>
+          {!editing ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={startEdit}
+              disabled={isReindexing || patchMutation.isPending || isDeleting}
+              aria-label={`Modifica criteri di ${doc.title}`}
+            >
+              <Pencil className="h-3.5 w-3.5" aria-hidden />
+              Modifica
+            </Button>
+          ) : null}
           <Button
             variant="outline"
             size="sm"
             onClick={onDelete}
-            disabled={isDeleting}
+            disabled={isDeleting || isReindexing || patchMutation.isPending}
             aria-busy={isDeleting}
             aria-label={`Elimina ${doc.title}`}
           >
@@ -277,19 +353,23 @@ function DocumentRow({
           </span>
         </Field>
         <Field label="Criteri">
-          {doc.enabled_criteria.length > 0 ? (
-            <span className="flex flex-wrap gap-1">
-              {doc.enabled_criteria.map((c) => (
-                <code
-                  key={c}
-                  className="rounded bg-amber-500/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-900"
-                >
-                  {c}
-                </code>
-              ))}
-            </span>
+          {!editing ? (
+            doc.enabled_criteria.length > 0 ? (
+              <span className="flex flex-wrap gap-1">
+                {doc.enabled_criteria.map((c) => (
+                  <code
+                    key={c}
+                    className="rounded bg-amber-500/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-900"
+                  >
+                    {c}
+                  </code>
+                ))}
+              </span>
+            ) : (
+              <span className="text-muted-foreground">—</span>
+            )
           ) : (
-            <span className="text-muted-foreground">—</span>
+            <span className="text-muted-foreground">in modifica</span>
           )}
         </Field>
         <Field label="Hash">
@@ -308,7 +388,58 @@ function DocumentRow({
         </Field>
       </dl>
 
-      {doc.status === "failed" && doc.failure_reason ? (
+      {editing ? (
+        <div className="mt-3 space-y-3 rounded-md border border-amber-200 bg-amber-500/[0.04] p-3">
+          <CriteriaPicker
+            value={draftCriteria}
+            onChange={setDraftCriteria}
+            disabled={patchMutation.isPending}
+            label="Modifica criteri estesi"
+          />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-[11px] text-muted-foreground">
+              {hasChanges
+                ? doc.status === "indexed"
+                  ? "Il salvataggio avvia una reindicizzazione automatica."
+                  : "Il salvataggio aggiorna i criteri; la reindicizzazione avverrà al prossimo run."
+                : "Nessuna modifica."}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={cancelEdit}
+                disabled={patchMutation.isPending}
+              >
+                <X className="h-3.5 w-3.5" aria-hidden />
+                Annulla
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => patchMutation.mutate()}
+                disabled={!hasChanges || patchMutation.isPending}
+                aria-busy={patchMutation.isPending}
+              >
+                {patchMutation.isPending ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+                ) : (
+                  <Check className="h-3.5 w-3.5" aria-hidden />
+                )}
+                Salva
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {reindexState.kind === "in_progress" ? (
+        <div className="mt-3 flex items-center gap-2 rounded-md border border-cyan-300 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-900">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+          Reindicizzazione: {STATUS_VISUALS[reindexState.stage as LocalDocumentStatus]?.label ?? reindexState.stage}
+        </div>
+      ) : null}
+
+      {!editing && doc.status === "failed" && doc.failure_reason ? (
         <p className="mt-3 rounded-md border border-rose-300 bg-rose-500/10 px-3 py-2 text-xs leading-relaxed text-rose-800">
           {doc.failure_reason}
         </p>
