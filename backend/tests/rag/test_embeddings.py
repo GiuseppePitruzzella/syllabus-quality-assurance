@@ -1,7 +1,10 @@
-"""Unit tests for the Vertex AI embeddings wrapper.
+"""Unit tests for the Gen AI SDK embeddings wrapper.
 
-The tests mock the Vertex AI ``TextEmbeddingModel`` so they run offline
-and incur no API cost.
+The tests mock ``google.genai.Client`` so they run offline and
+incur no API cost. The public surface of :class:`VertexAIEmbeddings`
+is unchanged after the SDK migration, so test intent is the same as
+before — only the mock surface has been adapted from
+``TextEmbeddingModel.from_pretrained`` to ``genai.Client``.
 """
 from __future__ import annotations
 
@@ -11,34 +14,43 @@ import pytest
 from google.api_core.exceptions import ResourceExhausted, ServiceUnavailable
 
 
-def _patch_vertex(monkeypatch, fake_embeddings: list[list[float]] | Exception | None = None):
-    """Return a fake TextEmbeddingModel set up to return fake embeddings.
+def _patch_genai(
+    monkeypatch,
+    fake_embeddings: list[float] | Exception | None = None,
+):
+    """Patch ``genai.Client`` so no real Vertex call is issued.
 
-    If ``fake_embeddings`` is an Exception, ``get_embeddings`` raises it.
+    When ``fake_embeddings`` is an Exception it is raised by every
+    ``embed_content`` call; otherwise the call returns a response
+    object whose ``.embeddings[0].values`` is ``fake_embeddings``
+    (defaulting to a 3072-long vector).
     """
-    fake_model = MagicMock()
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+
     if isinstance(fake_embeddings, Exception):
-        fake_model.get_embeddings.side_effect = fake_embeddings
+        fake_models.embed_content.side_effect = fake_embeddings
     else:
-        # Each call returns a list with one TextEmbedding-like object.
         def _fake_call(*_args, **_kwargs):
             vec = fake_embeddings if fake_embeddings is not None else [0.1] * 3072
             emb = MagicMock()
             emb.values = vec
-            return [emb]
+            response = MagicMock()
+            response.embeddings = [emb]
+            return response
 
-        fake_model.get_embeddings.side_effect = _fake_call
+        fake_models.embed_content.side_effect = _fake_call
 
     monkeypatch.setattr(
-        "app.evaluation.rag.embeddings.TextEmbeddingModel.from_pretrained",
-        MagicMock(return_value=fake_model),
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
     )
-    monkeypatch.setattr("app.evaluation.rag.embeddings.vertexai.init", MagicMock())
-    return fake_model
+    return fake_models
 
 
 def test_init_rejects_empty_project_id(monkeypatch):
-    _patch_vertex(monkeypatch)
+    _patch_genai(monkeypatch)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     with pytest.raises(ValueError, match="project_id"):
@@ -46,16 +58,16 @@ def test_init_rejects_empty_project_id(monkeypatch):
 
 
 def test_embed_documents_empty_list_returns_empty(monkeypatch):
-    fake = _patch_vertex(monkeypatch)
+    fake = _patch_genai(monkeypatch)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
     assert emb.embed_documents([]) == []
-    fake.get_embeddings.assert_not_called()
+    fake.embed_content.assert_not_called()
 
 
 def test_embed_documents_calls_api_per_text(monkeypatch):
-    fake = _patch_vertex(monkeypatch, fake_embeddings=[0.5] * 3072)
+    fake = _patch_genai(monkeypatch, fake_embeddings=[0.5] * 3072)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
@@ -63,46 +75,46 @@ def test_embed_documents_calls_api_per_text(monkeypatch):
     assert len(out) == 3
     assert all(len(v) == 3072 for v in out)
     # gemini-embedding-001 batch size = 1, so 3 inputs => 3 API calls
-    assert fake.get_embeddings.call_count == 3
+    assert fake.embed_content.call_count == 3
 
 
 def test_embed_documents_uses_retrieval_document_task_type(monkeypatch):
-    fake = _patch_vertex(monkeypatch, fake_embeddings=[0.5] * 3072)
+    fake = _patch_genai(monkeypatch, fake_embeddings=[0.5] * 3072)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
     emb.embed_documents(["hello"])
-    args, _ = fake.get_embeddings.call_args
-    inputs = args[0]
-    assert len(inputs) == 1
-    assert inputs[0].task_type == "RETRIEVAL_DOCUMENT"
+    _args, kwargs = fake.embed_content.call_args
+    assert kwargs["contents"] == "hello"
+    assert kwargs["config"].task_type == "RETRIEVAL_DOCUMENT"
 
 
 def test_embed_query_uses_retrieval_query_task_type(monkeypatch):
-    fake = _patch_vertex(monkeypatch, fake_embeddings=[0.5] * 3072)
+    fake = _patch_genai(monkeypatch, fake_embeddings=[0.5] * 3072)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
     out = emb.embed_query("query?")
     assert len(out) == 3072
-    args, _ = fake.get_embeddings.call_args
-    assert args[0][0].task_type == "RETRIEVAL_QUERY"
+    _args, kwargs = fake.embed_content.call_args
+    assert kwargs["contents"] == "query?"
+    assert kwargs["config"].task_type == "RETRIEVAL_QUERY"
 
 
 def test_embed_passes_output_dimensionality(monkeypatch):
-    fake = _patch_vertex(monkeypatch, fake_embeddings=[0.5] * 768)
+    fake = _patch_genai(monkeypatch, fake_embeddings=[0.5] * 768)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(
         project_id="test", location="europe-west1", output_dimensionality=768
     )
     emb.embed_query("q")
-    _, kwargs = fake.get_embeddings.call_args
-    assert kwargs["output_dimensionality"] == 768
+    _args, kwargs = fake.embed_content.call_args
+    assert kwargs["config"].output_dimensionality == 768
 
 
 def test_embed_rejects_empty_text(monkeypatch):
-    _patch_vertex(monkeypatch)
+    _patch_genai(monkeypatch)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
@@ -113,8 +125,8 @@ def test_embed_rejects_empty_text(monkeypatch):
 
 
 def test_embed_raises_on_dimension_mismatch(monkeypatch):
-    """If Vertex AI returns the wrong dimension, fail loudly."""
-    _patch_vertex(monkeypatch, fake_embeddings=[0.1] * 768)  # claimed 3072, got 768
+    """If the SDK returns the wrong dimension, fail loudly."""
+    _patch_genai(monkeypatch, fake_embeddings=[0.1] * 768)  # claimed 3072, got 768
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(
@@ -126,7 +138,9 @@ def test_embed_raises_on_dimension_mismatch(monkeypatch):
 
 def test_embed_retries_on_resource_exhausted(monkeypatch):
     """Retry logic: ResourceExhausted (429) is retried up to 3 times."""
-    fake_model = MagicMock()
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
 
     call_count = {"n": 0}
 
@@ -136,18 +150,20 @@ def test_embed_retries_on_resource_exhausted(monkeypatch):
             raise ResourceExhausted("rate limited")
         emb = MagicMock()
         emb.values = [0.5] * 3072
-        return [emb]
+        response = MagicMock()
+        response.embeddings = [emb]
+        return response
 
-    fake_model.get_embeddings.side_effect = _flaky
+    fake_models.embed_content.side_effect = _flaky
     monkeypatch.setattr(
-        "app.evaluation.rag.embeddings.TextEmbeddingModel.from_pretrained",
-        MagicMock(return_value=fake_model),
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
     )
-    monkeypatch.setattr("app.evaluation.rag.embeddings.vertexai.init", MagicMock())
 
-    # Tenacity's wait_exponential is configured at class-definition time;
-    # the first retry waits ~1s, the second ~4s. We accept the short wait
-    # rather than introduce a complex monkeypatch on the bound decorator.
+    # Tenacity's wait_exponential is configured at class-definition
+    # time; the first retry waits ~1s, the second ~4s. We accept the
+    # short wait rather than introduce a complex monkeypatch on the
+    # bound decorator.
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
@@ -158,41 +174,43 @@ def test_embed_retries_on_resource_exhausted(monkeypatch):
 
 def test_embed_does_not_retry_on_value_error(monkeypatch):
     """Permanent errors (ValueError, etc.) are not retried."""
-    fake_model = MagicMock()
-    fake_model.get_embeddings.side_effect = ValueError("invalid")
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+    fake_models.embed_content.side_effect = ValueError("invalid")
     monkeypatch.setattr(
-        "app.evaluation.rag.embeddings.TextEmbeddingModel.from_pretrained",
-        MagicMock(return_value=fake_model),
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
     )
-    monkeypatch.setattr("app.evaluation.rag.embeddings.vertexai.init", MagicMock())
 
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
     with pytest.raises(ValueError):
         emb.embed_query("x")
     # Single attempt only
-    assert fake_model.get_embeddings.call_count == 1
+    assert fake_models.embed_content.call_count == 1
 
 
 def test_embed_propagates_after_exhausting_retries(monkeypatch):
-    """After 3 retries, ResourceExhausted propagates."""
-    fake_model = MagicMock()
-    fake_model.get_embeddings.side_effect = ServiceUnavailable("down")
+    """After 3 retries, ServiceUnavailable propagates."""
+    fake_client = MagicMock()
+    fake_models = MagicMock()
+    fake_client.models = fake_models
+    fake_models.embed_content.side_effect = ServiceUnavailable("down")
     monkeypatch.setattr(
-        "app.evaluation.rag.embeddings.TextEmbeddingModel.from_pretrained",
-        MagicMock(return_value=fake_model),
+        "app.evaluation.rag.embeddings.genai.Client",
+        MagicMock(return_value=fake_client),
     )
-    monkeypatch.setattr("app.evaluation.rag.embeddings.vertexai.init", MagicMock())
 
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
     emb = VertexAIEmbeddings(project_id="test", location="europe-west1")
     with pytest.raises(ServiceUnavailable):
         emb.embed_query("x")
-    assert fake_model.get_embeddings.call_count == 3
+    assert fake_models.embed_content.call_count == 3
 
 
 def test_properties_expose_config(monkeypatch):
-    _patch_vertex(monkeypatch)
+    _patch_genai(monkeypatch)
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
 
     emb = VertexAIEmbeddings(

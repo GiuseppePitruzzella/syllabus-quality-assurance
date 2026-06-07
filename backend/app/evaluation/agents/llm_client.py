@@ -1,21 +1,26 @@
-"""Vertex AI generative LLM client for the evaluation agents.
+"""Gen AI SDK LLM client for the evaluation agents.
 
-Wraps ``vertexai.generative_models.GenerativeModel`` for ``gemini-2.5-flash``
-(or whatever ``ScientificConfig.llm_model`` points to) with:
+Migrated to ``google-genai`` (Vertex AI backend) from the deprecated
+``vertexai.generative_models.GenerativeModel``, which is removed on
+2026-06-24. The public surface of :class:`VertexAILLMClient` is
+unchanged by design — the migration is infrastructural, not a
+functional change. ``BaseAgent`` consumes the result via
+``hasattr(result, "text")`` and the typed ``LLMResult.metadata``
+dict, both untouched.
 
-- typed errors mapped from the response ``FinishReason`` enum, so the
-  agent layer can decide how to react (safety block -> NA technical;
-  truncated output -> retry once with a hint; transient failure -> the
-  client retries with exponential backoff);
-- rich metadata returned alongside the text (model name, project id,
-  temperature, finish reason, latency in ms) so the agent can persist
-  everything that is needed to reproduce the run (D026, D027);
-- duck-typed ``__call__`` returning :class:`LLMResult`. ``BaseAgent``
-  already extracts ``.text`` via ``hasattr(result, "text")`` so no
-  changes to the agent are required.
+Preserved invariants:
 
-The client never falls back on ``gcloud config`` for the GCP project
-ID: it requires it explicitly, in line with D027.
+- Typed errors mapped from the response ``FinishReason`` (safety
+  block -> NA technical; truncated output -> retry once with a
+  hint; transient failure -> retried with exponential backoff).
+- Rich metadata for ``execution_metadata`` of ``AgentOutput`` (model
+  name, project id, location, temperature, max_output_tokens,
+  finish reason, prompt/response sizes, latency).
+- No fallback on ``gcloud config`` for the GCP project id (D027).
+- Retry policy: 3 attempts, exponential backoff (1s, 4s, 16s) on
+  ``ResourceExhausted`` / ``ServiceUnavailable`` /
+  ``DeadlineExceeded`` (legacy backend exceptions) and on the new
+  SDK's ``google.genai.errors.ServerError`` family.
 """
 from __future__ import annotations
 
@@ -24,31 +29,40 @@ from dataclasses import dataclass, field
 from typing import Any, Protocol
 
 import structlog
-import vertexai
+from google import genai
 from google.api_core.exceptions import (
     DeadlineExceeded,
     ResourceExhausted,
     ServiceUnavailable,
 )
+from google.genai import errors as genai_errors
+from google.genai import types as genai_types
 from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
 )
-from vertexai.generative_models import GenerationConfig, GenerativeModel
 
 from app.config import ScientificConfig
 
 logger = structlog.get_logger(__name__)
 
-# Transient errors retried with exponential backoff.
-_RETRYABLE_EXCEPTIONS = (ResourceExhausted, ServiceUnavailable, DeadlineExceeded)
+# Transient errors retried with exponential backoff. Both the legacy
+# ``google.api_core`` family (still raised by the underlying Vertex
+# backend in many cases) and the new SDK's ``ServerError`` (5xx)
+# qualify. ``ClientError`` 4xx is intentionally NOT retried.
+_RETRYABLE_EXCEPTIONS = (
+    ResourceExhausted,
+    ServiceUnavailable,
+    DeadlineExceeded,
+    genai_errors.ServerError,
+)
 
-# Finish-reason buckets. ``STOP`` is the only success state. ``MAX_TOKENS``
-# means the JSON likely got truncated; the agent layer handles it as a
-# parsing failure (see BaseAgent retry loop). All other reasons either
-# block on safety or signal a model malfunction.
+# Finish-reason buckets. ``STOP`` is the only success state.
+# ``MAX_TOKENS`` means the JSON likely got truncated; the agent layer
+# handles it as a parsing failure (see BaseAgent retry loop). All
+# other reasons either block on safety or signal a model malfunction.
 _FINISH_OK = {"STOP"}
 _FINISH_TRUNCATED = {"MAX_TOKENS"}
 _FINISH_SAFETY = {"SAFETY", "BLOCKLIST", "PROHIBITED_CONTENT", "SPII", "RECITATION"}
@@ -137,12 +151,11 @@ class LLMClient(Protocol):
 
 
 class VertexAILLMClient:
-    """Generate text with Vertex AI ``GenerativeModel``.
+    """Generate text with the Gen AI SDK (Vertex AI backend).
 
-    The class is intentionally thin: no caching, no rate limiting (a
-    shared rate-limited wrapper lives in Phase 5.4 alongside the embedding
-    client). Construction calls ``vertexai.init(project, location)``,
-    which is idempotent.
+    Public surface (constructor signature, ``__call__``, ``model_name``,
+    ``project_id``) matches the pre-migration class exactly. Callers
+    do not need to change.
     """
 
     def __init__(
@@ -157,12 +170,15 @@ class VertexAILLMClient:
                 "and call Settings.require_vertex_ai_config()). No fallback "
                 "to `gcloud config` per D027."
             )
-        vertexai.init(project=project_id, location=location)
+        self._client = genai.Client(
+            vertexai=True,
+            project=project_id,
+            location=location,
+        )
         self._project_id = project_id
         self._location = location
         self._scientific = scientific
         self._model_name = scientific.llm_model
-        self._model = GenerativeModel(scientific.llm_model)
 
     # ---- public API ----
 
@@ -212,14 +228,18 @@ class VertexAILLMClient:
             if max_output_tokens is not None
             else self._scientific.llm_max_output_tokens
         )
-        config = GenerationConfig(
+        config = genai_types.GenerateContentConfig(
             temperature=self._scientific.llm_temperature,
             max_output_tokens=effective_max_output_tokens,
             seed=seed,
         )
 
         started = time.time()
-        response = self._model.generate_content(prompt, generation_config=config)
+        response = self._client.models.generate_content(
+            model=self._model_name,
+            contents=prompt,
+            config=config,
+        )
         latency_ms = int((time.time() - started) * 1000)
 
         finish_reason_name = _finish_reason_name(response)
@@ -304,14 +324,14 @@ def _prompt_block_reason(response: Any) -> str | None:
 def _safe_extract_text(response: Any) -> str:
     """Read ``response.text`` defensively.
 
-    Vertex's accessor raises if the response has no candidates or if
-    the candidate has no usable text part. We've already validated
-    ``finish_reason`` upstream, so most failures are surfaced as
-    LLMEmptyResponseError.
+    The Gen AI SDK's accessor raises if the response has no candidates
+    or if the candidate has no usable text part. We've already
+    validated ``finish_reason`` upstream, so most failures here are
+    surfaced as ``LLMEmptyResponseError``.
     """
     try:
         text = response.text
-    except Exception as exc:  # noqa: BLE001 — Vertex raises various exception types
+    except Exception as exc:  # noqa: BLE001 — SDK raises various exception types
         raise LLMEmptyResponseError(f"could not extract text: {exc}") from exc
     if not isinstance(text, str):
         raise LLMEmptyResponseError(f"text is not a string: {type(text).__name__}")
