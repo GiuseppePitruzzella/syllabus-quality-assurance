@@ -14,7 +14,20 @@ dependencies = [
     "sse-starlette>=2.0",
     # === Phase 5: RAG ===
     "chromadb>=0.4.20",
-    "google-cloud-aiplatform>=1.40.0",
+    # Google Gen AI SDK (Vertex AI backend). Replaces the deprecated
+    # `vertexai.language_models` (embeddings) and `vertexai.generative_-
+    # models` (LLM) modules of `google-cloud-aiplatform`, both removed
+    # on 2026-06-24. See:
+    # https://docs.cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk
+    "google-genai>=1.0.0",
+    # ``google.api_core.exceptions.*`` lives here, not in
+    # ``google-cloud-aiplatform``. Kept as a direct dependency
+    # because the Vertex HTTP backend still propagates
+    # ``ResourceExhausted`` / ``ServiceUnavailable`` /
+    # ``DeadlineExceeded`` in many transient failure paths, and
+    # both client retry policies depend on them as a defensive
+    # fallback alongside ``google.genai.errors.ServerError``.
+    "google-api-core>=2.0",
     # === Phase 5: Agentic ===
     "langgraph>=0.0.40",
     "langchain-core>=0.1.0",
