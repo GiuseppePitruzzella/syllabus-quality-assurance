@@ -94,3 +94,72 @@ export function connectEvaluationSse(
 
   return () => source.close();
 }
+
+// ---------------------------------------------------------------------------
+// Phase 8.D.B — local-document indexing job stream
+// ---------------------------------------------------------------------------
+
+/** Stages emitted by the backend's `LocalDocumentIndexingService`. */
+export type LocalDocumentProgressStage =
+  | "extracting"
+  | "chunking"
+  | "indexing";
+
+/**
+ * Subscribe to `GET /api/local-documents/stream/{job_id}`.
+ *
+ * The backend emits:
+ *   - `progress` events with `message` set to the stage name
+ *     (`extracting` -> `chunking` -> `indexing`);
+ *   - one terminal `done` (with `scraped` set to chunk count) OR
+ *     `error` (with `message` set to the failure reason).
+ *
+ * Both terminal events automatically close the stream and call
+ * `onClose`. Returns a disposer for early cancellation.
+ */
+export function connectLocalDocumentIndexingStream(
+  jobId: string,
+  handlers: {
+    onProgress: (stage: LocalDocumentProgressStage | string) => void;
+    onDone: (event: { chunks_written: number }) => void;
+    onError: (event: { message: string }) => void;
+    onClose?: () => void;
+  },
+): () => void {
+  const source = new EventSource(
+    `${BASE_URL}/local-documents/stream/${jobId}`,
+  );
+
+  source.onmessage = (e) => {
+    let data: SseEvent;
+    try {
+      data = JSON.parse(e.data) as SseEvent;
+    } catch {
+      return;
+    }
+    switch (data.type) {
+      case "progress":
+        if (data.message) handlers.onProgress(data.message);
+        break;
+      case "done":
+        handlers.onDone({ chunks_written: data.scraped ?? 0 });
+        source.close();
+        handlers.onClose?.();
+        break;
+      case "error":
+        handlers.onError({
+          message: data.message ?? "Errore sconosciuto",
+        });
+        source.close();
+        handlers.onClose?.();
+        break;
+    }
+  };
+
+  source.onerror = () => {
+    source.close();
+    handlers.onClose?.();
+  };
+
+  return () => source.close();
+}

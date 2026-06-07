@@ -27,6 +27,11 @@ dependencies = [
     "rich>=13.0.0",
     # === Phase 5: YAML config (tagging rules) ===
     "pyyaml>=6.0",
+    # === Phase 8: multipart upload for the local-document registry ===
+    "python-multipart>=0.0.20",
+    # === Phase 8.B.1: text extractors for the registry ===
+    "pdfplumber>=0.11",
+    "python-docx>=1.1",
 ]
 
 [dependency-groups]
@@ -35,6 +40,8 @@ dev = [
     "pytest-asyncio>=0.25",
     "httpx>=0.28",
     "ruff>=0.11",
+    # === Phase 8.B.1: synth PDFs for extractor tests ===
+    "reportlab>=4.0",
 ]
 
 [tool.pytest.ini_options]

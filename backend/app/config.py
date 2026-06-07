@@ -59,6 +59,19 @@ class Settings(BaseSettings):
     normative_corpus_dir: str = str(PROJECT_ROOT / "data" / "normative_corpus")
     tagging_rules_file: str = str(PROJECT_ROOT / "data" / "tagging_rules.yaml")
 
+    # === Local-document registry (Phase 8) ===
+    # Filesystem root for uploads. Per-CdL subdirectory is created on
+    # first upload. Versioning is on disk too: each version of a
+    # document gets its own file, old versions are kept for the
+    # lifetime of any EvaluationResult that referenced them.
+    local_documents_dir: str = str(BACKEND_DATA_DIR / "local_documents")
+    # Hard cap on an individual upload. PDF / DOCX larger than this
+    # are rejected with 413 before any disk write so a runaway file
+    # can't stall the upload endpoint or pin the indexing pipeline
+    # later. 50 MB is well above any realistic syllabus / regulation
+    # document we expect on the LM-18 perimeter.
+    local_documents_max_upload_bytes: int = 50 * 1024 * 1024
+
     # === Rate limiting (Vertex AI) ===
     vertex_ai_rpm_limit: int = 30
 

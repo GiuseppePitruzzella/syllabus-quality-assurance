@@ -47,3 +47,14 @@ async def test_complete_job(registry):
     # A sentinel None should be in the queue to signal end
     sentinel = await asyncio.wait_for(state.queue.get(), timeout=1.0)
     assert sentinel is None
+
+
+@pytest.mark.asyncio
+async def test_complete_job_removes_state_after_cleanup_delay(registry):
+    registry._CLEANUP_DELAY_SECONDS = 0
+    job_id = registry.create_job()
+
+    registry.complete(job_id, asyncio.get_running_loop())
+    await asyncio.sleep(0.01)
+
+    assert registry.get_job(job_id) is None

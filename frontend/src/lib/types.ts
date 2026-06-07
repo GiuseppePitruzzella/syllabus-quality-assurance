@@ -218,6 +218,68 @@ export type EvaluationEventType =
   | "evaluation_completed"
   | "error";
 
+// ---------------------------------------------------------------------------
+// Phase 8 — local-document registry
+// ---------------------------------------------------------------------------
+
+/** Closed enum for document_type. Mirrors backend `DocumentType` literal. */
+export type LocalDocumentType =
+  | "regolamento_didattico"
+  | "sua_cds"
+  | "piano_studi"
+  | "manifesto"
+  | "propedeuticita"
+  | "metadati_ufficiali"
+  | "usi_dipartimentali"
+  | "linee_guida_cdl"
+  | "template_locale"
+  | "nota_presidio";
+
+/** Closed enum for the lifecycle status. */
+export type LocalDocumentStatus =
+  | "uploaded"
+  | "extracting"
+  | "chunking"
+  | "indexing"
+  | "indexed"
+  | "failed";
+
+/** Closed enum for the extended criterion codes. */
+export type ExtendedCriterionCode = "E1" | "E2" | "E3" | "E4" | "E5";
+
+/** Mirror of `LocalDocumentResponse` in the backend. */
+export interface LocalDocument {
+  id: number;
+  cdl_id: number;
+  document_type: LocalDocumentType;
+  academic_year: string;
+  title: string;
+  normalized_title: string;
+  file_path: string;
+  file_extension: string;
+  file_hash: string;
+  file_size: number;
+  version: number;
+  enabled_criteria: ExtendedCriterionCode[];
+  status: LocalDocumentStatus;
+  chunk_count: number | null;
+  failure_reason: string | null;
+  uploaded_at: string;
+  indexed_at: string | null;
+  deleted_at: string | null;
+}
+
+/** Mirror of `ChunkPreview` (used by 8.D.D, declared here for symmetry). */
+export interface LocalDocumentChunkPreview {
+  chunk_id: string;
+  chunk_order: number;
+  char_count: number;
+  document_id: number;
+  version: number;
+  text_preview: string;
+  tags: Record<string, boolean>;
+}
+
 /**
  * Flat shape mirroring `app/schemas/evaluation_event.py::ProgressEvent`.
  * All per-type fields are optional; consumers branch on `type`.
