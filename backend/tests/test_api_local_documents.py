@@ -858,3 +858,169 @@ def test_patch_rejects_any_criterion_on_context_only_type(client, test_db):
     )
     assert patch.status_code == 422
     assert "does not serve" in patch.json()["detail"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 9.B.3 — soft-delete fallback when referenced by an EvaluationResult
+# ---------------------------------------------------------------------------
+
+
+def _make_evaluation_for_softdelete_test(db, cdl):
+    """Local helper: minimal Syllabus + EvaluationResult so the
+    soft-delete branch has something to point at."""
+    from datetime import datetime, timezone as _tz
+    from app.models import EvaluationResult, Syllabus
+
+    syl = Syllabus(
+        cdl_id=cdl.id,
+        seuid="lm18-soft-test",
+        course_code="X-1",
+        course_name="X",
+        teacher="t",
+        academic_year="2025-2026",
+        year_of_study="1",
+        url_it="https://x/it",
+        url_en="https://x/en",
+        has_english=True,
+        learning_outcomes_it="",
+        dublin_knowledge_it="",
+        dublin_applying_it="",
+        dublin_judgement_it="",
+        dublin_communication_it="",
+        dublin_learning_it="",
+        teaching_methods_it="",
+        prerequisites_it="",
+        attendance_it="",
+        course_content_it="",
+        references_it="",
+        assessment_methods_it="",
+        sample_questions_it="",
+        scraped_at=datetime.now(_tz.utc),
+    )
+    db.add(syl)
+    db.commit()
+    db.refresh(syl)
+
+    ev = EvaluationResult(
+        evaluation_uuid="soft-test-uuid",
+        syllabus_id=syl.id,
+        syllabus_seuid_snapshot=syl.seuid,
+        course_name_snapshot=syl.course_name,
+        status="completed",
+        llm_model="gemini-2.5-flash",
+        embedding_model="gemini-embedding-001",
+        embedding_dim=3072,
+        llm_temperature=0.1,
+        llm_max_output_tokens=8192,
+        rag_top_k=5,
+        rag_final_k=3,
+        rag_similarity_threshold=0.6,
+        gcp_project_id="p",
+        gcp_location="europe-west1",
+    )
+    db.add(ev)
+    db.commit()
+    db.refresh(ev)
+    return ev
+
+
+def test_delete_hard_when_not_referenced(client, test_db, fake_ingester):
+    """A document with no audit references is hard-deleted as before."""
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id)
+    doc_id = response.json()["document"]["id"]
+
+    res = client.delete(f"/api/local-documents/{doc_id}")
+    assert res.status_code == 204
+    # Hard path: ingester called, row removed.
+    assert fake_ingester.delete_calls != []
+    assert (
+        test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+        is None
+    )
+
+
+def test_delete_soft_when_referenced(client, test_db, fake_ingester):
+    """A document referenced by an EvaluationResult is soft-deleted:
+    deleted_at is set, the file and Chroma chunks are preserved,
+    and the ingester is NOT called."""
+    from app.models import EvaluationExternalDocument
+
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="usi_dipartimentali")
+    doc_id = response.json()["document"]["id"]
+    doc_version = response.json()["document"]["version"]
+
+    # Wire an audit reference.
+    ev = _make_evaluation_for_softdelete_test(test_db, cdl)
+    test_db.add(
+        EvaluationExternalDocument(
+            evaluation_result_id=ev.id,
+            local_document_id=doc_id,
+            criterion_code="E5",
+            document_version_snapshot=doc_version,
+            file_hash_snapshot="h",
+            document_type_snapshot="usi_dipartimentali",
+            resolution_reason="academic_year_match",
+        )
+    )
+    test_db.commit()
+
+    res = client.delete(f"/api/local-documents/{doc_id}")
+    assert res.status_code == 204
+
+    # Row is still there with deleted_at set.
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    assert row is not None
+    assert row.deleted_at is not None
+
+    # Ingester NOT called — chunks preserved.
+    assert fake_ingester.delete_calls == []
+
+    # Audit reference still there — soft-delete preserves the link.
+    refs = (
+        test_db.query(EvaluationExternalDocument)
+        .filter(EvaluationExternalDocument.local_document_id == doc_id)
+        .all()
+    )
+    assert len(refs) == 1
+
+
+def test_delete_soft_is_idempotent(client, test_db):
+    """Calling DELETE twice on a referenced document returns 204
+    both times and does not touch the existing deleted_at."""
+    from datetime import datetime as _dt, timezone as _tz
+    from app.models import EvaluationExternalDocument
+
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="usi_dipartimentali")
+    doc_id = response.json()["document"]["id"]
+    ev = _make_evaluation_for_softdelete_test(test_db, cdl)
+    test_db.add(
+        EvaluationExternalDocument(
+            evaluation_result_id=ev.id,
+            local_document_id=doc_id,
+            criterion_code="E5",
+            document_version_snapshot=1,
+            file_hash_snapshot="h",
+            document_type_snapshot="usi_dipartimentali",
+            resolution_reason="academic_year_match",
+        )
+    )
+    test_db.commit()
+
+    # First delete sets deleted_at.
+    res1 = client.delete(f"/api/local-documents/{doc_id}")
+    assert res1.status_code == 204
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    first_ts = row.deleted_at
+    assert first_ts is not None
+
+    # Second delete is a no-op (deleted_at unchanged).
+    res2 = client.delete(f"/api/local-documents/{doc_id}")
+    assert res2.status_code == 204
+    row = test_db.query(LocalDocument).filter(LocalDocument.id == doc_id).first()
+    assert row is not None
+    assert row.deleted_at == first_ts
+    # Sanity: the timestamp didn't go backwards or forward.
+    _ = _dt.now(_tz.utc)

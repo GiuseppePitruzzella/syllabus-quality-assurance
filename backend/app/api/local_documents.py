@@ -47,6 +47,7 @@ from app.local_documents import (
     IndexingJobScheduler,
     resolve_local_document_path,
 )
+from app.models.evaluation_external_document import EvaluationExternalDocument
 from app.local_documents.dependencies import (
     get_chroma_client,
     get_external_ingester,
@@ -569,29 +570,55 @@ def delete_local_document(
     db: Session = Depends(get_db),
     ingester: ExternalDocumentIngester = Depends(get_external_ingester),
 ) -> None:
-    """Hard-delete (Phase 8 only).
+    """Delete (or archive when referenced).
 
-    Removes, in this order:
+    Phase 9.B.3: when at least one ``EvaluationResult`` references
+    the document via ``evaluation_external_documents``, the
+    endpoint falls back to a soft-delete (``deleted_at = now()``)
+    instead of hard-deleting the row. The on-disk file AND the
+    Chroma chunks are PRESERVED in that case so the historical
+    evaluation stays reproducible byte-for-byte. The resolver in
+    9.B.2 already filters out rows whose ``deleted_at is not None``,
+    so a soft-deleted document is invisible to future runs but
+    still present for audit.
 
-      1. every chunk for ``(document_id, version)`` from the
-         ``external_documents`` Chroma collection — must happen
-         BEFORE the DB row is gone so we still know which version
-         to delete;
-      2. the DB row;
-      3. the file on disk (best-effort).
+    When no run references the document, the endpoint hard-deletes
+    in the original Phase 8 order:
 
-    From Phase 9 onwards, this endpoint will check whether the
-    document is referenced by any ``EvaluationResult`` and fall
-    back to soft-delete (``deleted_at = now()``) when so. For now,
-    no EvaluationResult ever references a local document, so hard
-    delete is safe.
+      1. resolve and validate the on-disk path;
+      2. delete every chunk for ``(document_id, version)`` from the
+         ``external_documents`` Chroma collection;
+      3. delete the DB row;
+      4. unlink the file on disk (best-effort).
+
+    The DB-level RESTRICT on ``local_document_id`` is the last line
+    of defence: a forced hard-delete on a referenced row would
+    surface as an IntegrityError; this endpoint avoids it
+    application-side by switching to soft-delete first.
     """
     row = db.query(LocalDocument).filter(LocalDocument.id == document_id).first()
     if row is None:
         raise HTTPException(status_code=404, detail="Document not found")
 
-    # 1) Resolve the on-disk path before touching the DB / Chroma so
-    # any failure here can short-circuit before mutating anything.
+    # 1) Decide the delete mode by inspecting the audit table.
+    referenced = (
+        db.query(EvaluationExternalDocument)
+        .filter(EvaluationExternalDocument.local_document_id == row.id)
+        .first()
+        is not None
+    )
+
+    if referenced:
+        # Soft-delete: set deleted_at, keep the file and the Chroma
+        # chunks alive. The 204 status code is preserved so clients
+        # don't have to branch.
+        if row.deleted_at is None:
+            row.deleted_at = datetime.now(timezone.utc)
+            db.commit()
+        return
+
+    # 2) Hard-delete path — the registry row has no historical
+    # references, so the file and chunks can be removed.
     abs_path: Path | None
     try:
         abs_path = resolve_local_document_path(
@@ -604,11 +631,6 @@ def delete_local_document(
         )
         abs_path = None
 
-    # 2) Chroma cleanup. delete_for is best-effort internally
-    # (logs + returns count). A failure here logs but does not
-    # block the DB delete: the DB is the registry's canonical
-    # state, and orphan chunks would be recoverable via a future
-    # `reindex` or `purge` job.
     document_id_val = row.id
     version_val = row.version
     try:
@@ -620,11 +642,9 @@ def delete_local_document(
             document_id_val, version_val, exc,
         )
 
-    # 3) DB row.
     db.delete(row)
     db.commit()
 
-    # 4) File on disk.
     if abs_path is not None:
         _best_effort_unlink(abs_path)
 
