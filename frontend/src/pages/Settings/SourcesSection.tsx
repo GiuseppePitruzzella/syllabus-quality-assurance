@@ -420,6 +420,7 @@ function DocumentRow({
           <CriteriaPicker
             value={draftCriteria}
             onChange={setDraftCriteria}
+            defaultsFor={doc.document_type}
             disabled={patchMutation.isPending}
             label="Modifica criteri estesi"
           />

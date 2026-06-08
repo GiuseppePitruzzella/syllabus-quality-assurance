@@ -54,17 +54,24 @@ export function UploadLocalDocumentModal({ open, onOpenChange }: Props) {
   const [stage, setStage] = useState<Stage>({ kind: "idle" });
 
   // Criteria are derived from `documentType` unless the user
-  // explicitly overrides them. No `useEffect` -> no cascading
-  // renders, and `documentType` changes flow through immediately.
-  const [criteriaOverride, setCriteriaOverride] = useState<
-    ExtendedCriterionCode[] | null
-  >(null);
+  // explicitly overrides them. Tracking the override against its
+  // owning type prevents a carry-over of E1 (set while
+  // documentType was `sua_cds`) onto a later switch to
+  // `usi_dipartimentali` — which would round-trip a 422 from the
+  // backend's `ALLOWED_CRITERIA_BY_DOCUMENT_TYPE` guard.
+  const [criteriaOverride, setCriteriaOverride] = useState<{
+    type: LocalDocumentType;
+    value: ExtendedCriterionCode[];
+  } | null>(null);
   const defaultsForType = useMemo(
     () =>
       DOCUMENT_TYPES.find((t) => t.code === documentType)?.default_enabled ?? [],
     [documentType],
   );
-  const criteria: ExtendedCriterionCode[] = criteriaOverride ?? [...defaultsForType];
+  const criteria: ExtendedCriterionCode[] =
+    criteriaOverride && criteriaOverride.type === documentType
+      ? criteriaOverride.value
+      : [...defaultsForType];
 
   // Reset everything when modal closes. Calling setState in an
   // effect is intentional here: the modal is mounted under
@@ -281,7 +288,9 @@ export function UploadLocalDocumentModal({ open, onOpenChange }: Props) {
 
             <CriteriaPicker
               value={criteria}
-              onChange={(next) => setCriteriaOverride(next)}
+              onChange={(next) =>
+                setCriteriaOverride({ type: documentType, value: next })
+              }
               defaultsFor={documentType}
               disabled={isBusy}
             />
