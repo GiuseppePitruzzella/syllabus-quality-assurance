@@ -60,6 +60,7 @@ from app.models.cdl import CorsoDiLaurea
 from app.models.local_document import LocalDocument
 from app.schemas.job import JobCreated
 from app.schemas.local_document import (
+    ALLOWED_CRITERIA_BY_DOCUMENT_TYPE,
     ALLOWED_EXTENSIONS,
     ChunkPreview,
     DEFAULT_ENABLED_CRITERIA,
@@ -147,6 +148,12 @@ def _parse_enabled_criteria(
 
     The field is optional. If absent or empty, the default mapping
     for `document_type` is used (see `DEFAULT_ENABLED_CRITERIA`).
+    Any explicitly-passed list must be a subset of
+    ``ALLOWED_CRITERIA_BY_DOCUMENT_TYPE[document_type]`` — Phase 9.A
+    enforces the document-to-criterion contract server-side to
+    keep the registry's semantics tight: a ``manifesto`` cannot
+    silently be PATCHed into serving E5 just because the previous
+    Phase 8 default map permitted it.
     """
     if raw is None or raw.strip() == "":
         return list(DEFAULT_ENABLED_CRITERIA[document_type])
@@ -162,7 +169,41 @@ def _parse_enabled_criteria(
             status_code=422,
             detail="enabled_criteria must not contain duplicates",
         )
+    _assert_criteria_allowed_for_type(parts, document_type)
     return parts
+
+
+def _assert_criteria_allowed_for_type(
+    criteria: list[str], document_type: str,
+) -> None:
+    """Reject criteria that the document type cannot serve.
+
+    Used by both POST upload (via :func:`_parse_enabled_criteria`)
+    and PATCH (after the Pydantic-level enum check). Returns
+    silently when the list is fully allowed; raises 422 with the
+    offending codes otherwise. An empty allowed-set for the type
+    means the document is registry-only (e.g. ``piano_studi``)
+    and rejects any enabled criterion.
+    """
+    allowed = set(ALLOWED_CRITERIA_BY_DOCUMENT_TYPE.get(document_type, []))
+    not_allowed = [c for c in criteria if c not in allowed]
+    if not not_allowed:
+        return
+    if not allowed:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                f"document_type {document_type!r} does not serve any "
+                f"extended criterion; got {not_allowed}"
+            ),
+        )
+    raise HTTPException(
+        status_code=422,
+        detail=(
+            f"criteria {not_allowed} are not allowed for document_type "
+            f"{document_type!r}; allowed: {sorted(allowed)}"
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -370,6 +411,11 @@ def update_enabled_criteria(
             document=LocalDocumentResponse.model_validate(row),
             job_id=None,
         )
+
+    # Phase 9.A: enforce the document-to-criterion contract on PATCH
+    # too — Pydantic validates each item is a valid E* code but
+    # cannot know which codes are admissible for this row's type.
+    _assert_criteria_allowed_for_type(new_enabled, row.document_type)
 
     row.enabled_criteria = new_enabled
     db.commit()

@@ -48,7 +48,9 @@ export interface ExtendedCriterion {
   code: string; // "E1" .. "E5"
   name: string;
   area: string;
-  agent: "A2" | "A3" | "A4";
+  /** Phase 9.A consolidates A5 as the single agent for all
+   *  extended criteria — dispatcher with handler-per-criterion. */
+  agent: "A5";
   description: string;
   requires: string; // document(s) that must be available
   status: "futuro" | "sperimentale";
@@ -222,7 +224,12 @@ export const CORE_CRITERIA: CoreCriterion[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Extended — E1..E4 (NON entrano nel CoreScore)
+// Extended — E1..E5 (NON entrano nel CoreScore)
+//
+// Phase 9.A — single agent for all extended criteria (`A5
+// ExternalConsistencyAgent`) with dispatcher + handler-per-criterion.
+// Each criterion lists its 0/1/2/NA anchors so the rubric surface in
+// Settings doesn't differ between core and extended.
 // ---------------------------------------------------------------------------
 
 export const EXTENDED_CRITERIA: ExtendedCriterion[] = [
@@ -230,48 +237,154 @@ export const EXTENDED_CRITERIA: ExtendedCriterion[] = [
     code: "E1",
     name: "Allineamento con SUA-CdS",
     area: "Allineamento documentale",
-    agent: "A2",
+    agent: "A5",
     description:
       "Verifica la coerenza sostantiva tra i risultati del syllabus e i quadri A4.b.2 e A4.c della SUA-CdS.",
-    requires: "SUA-CdS del CdS di appartenenza",
+    requires: "SUA-CdS del CdS di appartenenza (registry, tipo `sua_cds`)",
     status: "sperimentale",
+    anchors: [
+      {
+        score: 0,
+        description:
+          "Contraddizioni sostanziali o marcato disallineamento rispetto agli obiettivi e risultati applicabili della SUA-CdS.",
+      },
+      {
+        score: 1,
+        description:
+          "Allineamento parziale o prevalentemente implicito, con lacune o tracciabilità debole.",
+      },
+      {
+        score: 2,
+        description:
+          "Allineamento sostanziale e chiaramente tracciabile.",
+      },
+      {
+        score: "NA",
+        description:
+          "SUA-CdS assente, non abilitata o priva di informazioni applicabili.",
+      },
+    ],
+    notes: [
+      "Non concorre al CoreScore.",
+      "Servito da A5 via retrieval Chroma su collection `external_documents` filtrata per `cdl_id` + `tag_E1`.",
+    ],
   },
   {
     code: "E2",
     name: "Allineamento con Matrice di Tuning",
     area: "Allineamento documentale",
-    agent: "A2",
+    agent: "A5",
     description:
       "Verifica la coerenza tra risultati attesi del syllabus e ruolo dell'insegnamento nella matrice delle corrispondenze.",
     requires:
-      "Matrice di Tuning del CdS — non disponibile per LM-18 al momento.",
+      "Matrice di Tuning del CdS (registry, tipo `matrice_tuning`) — non disponibile per LM-18 al momento.",
     status: "futuro",
+    anchors: [
+      {
+        score: 0,
+        description:
+          "Il syllabus contraddice le competenze o il contributo assegnato all'insegnamento.",
+      },
+      {
+        score: 1,
+        description:
+          "Contributo parziale, implicito o incompleto.",
+      },
+      {
+        score: 2,
+        description:
+          "Contributo chiaramente coerente con competenze e ruolo assegnati.",
+      },
+      {
+        score: "NA",
+        description:
+          "Matrice assente, non abilitata o insegnamento non rappresentato.",
+      },
+    ],
+    notes: [
+      "Non concorre al CoreScore.",
+      "Per LM-18 oggi `NA` permanente: la Matrice di Tuning non è ancora compilata.",
+    ],
   },
   {
     code: "E3",
     name: "Coerenza con Regolamento didattico",
     area: "Allineamento documentale",
-    agent: "A3",
+    agent: "A5",
     description:
       "Controlla la coerenza tra programma, CFU, prerequisiti e modalità di verifica rispetto al Regolamento didattico del CdS.",
-    requires: "Regolamento didattico del CdS",
+    requires: "Regolamento didattico del CdS (registry, tipo `regolamento_didattico`)",
     status: "sperimentale",
+    anchors: [
+      {
+        score: 0,
+        description:
+          "Contraddice vincoli o indicazioni esplicite applicabili.",
+      },
+      {
+        score: 1,
+        description:
+          "Generalmente compatibile, ma presenta ambiguità, incompletezze o divergenze parziali.",
+      },
+      {
+        score: 2,
+        description:
+          "Coerente con tutte le indicazioni esplicite applicabili.",
+      },
+      {
+        score: "NA",
+        description:
+          "Regolamento assente, non abilitato o senza indicazioni pertinenti.",
+      },
+    ],
+    notes: [
+      "Non concorre al CoreScore.",
+      "Phase 9.A: il tipo `regolamento_didattico` serve E3 (non più E1 come in Phase 8).",
+    ],
   },
   {
     code: "E4",
     name: "Coerenza cross-lingua",
     area: "Bilinguismo avanzato",
-    agent: "A4",
+    agent: "A5",
     description:
       "Verifica l'equivalenza semantica tra versione italiana e inglese, non solo la presenza formale di entrambe (che è C2).",
-    requires: "Versione inglese del syllabus presente sul perimetro completo",
+    requires:
+      "Versione EN del syllabus stesso (campi `*_en`). Nessun documento dal registry — è l'unico criterio esteso che usa il syllabus come fonte.",
     status: "sperimentale",
+    anchors: [
+      {
+        score: 0,
+        description:
+          "Contraddizioni sostanziali, cambi di significato o ampie sezioni mancanti.",
+      },
+      {
+        score: 1,
+        description:
+          "Equivalenza generale con omissioni o derive terminologiche rilevanti.",
+      },
+      {
+        score: 2,
+        description:
+          "Equivalenza semantica sostanziale e terminologia coerente.",
+      },
+      {
+        score: "NA",
+        description:
+          "Versione inglese assente o contenuto insufficiente per il confronto.",
+      },
+    ],
+    notes: [
+      "Non concorre al CoreScore.",
+      "Caso speciale: A5 non usa retrieval ChromaDB per E4; legge direttamente i campi `*_en` del syllabus.",
+      "NA quando `has_english=False` o quando il perimetro EN è inadeguato al confronto.",
+    ],
   },
   {
     code: "E5",
     name: "Aderenza agli usi dipartimentali / di CdL",
     area: "Aderenza locale",
-    agent: "A4",
+    agent: "A5",
     description:
       "Verifica se il syllabus rispetta istruzioni operative locali esplicitamente fornite dal Dipartimento o dal Corso di Studio, come formule standard, preferenze redazionali, struttura dei prerequisiti, criteri di voto, esempi di domande, organizzazione dei testi o modalità di compilazione.",
     requires:

@@ -214,15 +214,21 @@ def test_upload_increments_version_on_same_normalized_title(client, test_db):
 
 
 def test_upload_explicit_enabled_criteria_overrides_default(client, test_db):
+    """Explicit `enabled_criteria` wins over the default mapping,
+    provided every code is allowed for the document type."""
     cdl = _make_cdl(test_db)
     response = _upload(
         client,
         cdl.id,
-        document_type="sua_cds",
-        enabled_criteria="E1,E2",
+        document_type="usi_dipartimentali",
+        # Default for `usi_dipartimentali` is ["E5"]; we pass the
+        # same value explicitly here just to exercise the
+        # form-field branch of the parser. The point is that the
+        # value the server records matches what the client sent.
+        enabled_criteria="E5",
     )
     assert response.status_code == 201
-    assert response.json()["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert response.json()["document"]["enabled_criteria"] == ["E5"]
 
 
 def test_upload_rejects_unknown_document_type(client, test_db):
@@ -326,17 +332,21 @@ def test_detail_404_when_missing(client):
 
 
 def test_patch_updates_enabled_criteria(client, test_db):
+    """PATCH replaces enabled_criteria with a value that is still
+    allowed for the document type (Phase 9.A contract). The
+    transition exercised is `usi_dipartimentali` from default
+    `["E5"]` to the empty list — both members of the allowed set."""
     cdl = _make_cdl(test_db)
-    response = _upload(client, cdl.id, document_type="sua_cds")
+    response = _upload(client, cdl.id, document_type="usi_dipartimentali")
     document_id = response.json()["document"]["id"]
 
     patch = client.patch(
         f"/api/local-documents/{document_id}",
-        json={"enabled_criteria": ["E1", "E2"]},
+        json={"enabled_criteria": []},
     )
     assert patch.status_code == 200
     body = patch.json()
-    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert body["document"]["enabled_criteria"] == []
     # Row was `uploaded`, no reindex required, job_id stays None.
     assert body["job_id"] is None
 
@@ -472,7 +482,7 @@ def test_patch_triggers_async_reindex_when_status_indexed(
     client, test_db, fake_scheduler,
 ):
     cdl = _make_cdl(test_db)
-    response = _upload(client, cdl.id, document_type="sua_cds")
+    response = _upload(client, cdl.id, document_type="usi_dipartimentali")
     doc_id = response.json()["document"]["id"]
     # Upload itself schedules one async indexing pass.
     assert fake_scheduler.calls == [doc_id]
@@ -483,15 +493,18 @@ def test_patch_triggers_async_reindex_when_status_indexed(
     row.chunk_count = 5
     test_db.commit()
 
+    # Phase 9.A: the PATCH must stay inside the row's allowed set.
+    # For `usi_dipartimentali` the only legal move is between
+    # `["E5"]` and `[]`; we exercise the "drop E5" transition.
     patch = client.patch(
         f"/api/local-documents/{doc_id}",
-        json={"enabled_criteria": ["E1", "E2"]},
+        json={"enabled_criteria": []},
     )
     assert patch.status_code == 200
     body = patch.json()
     # Scheduler hit twice now: initial upload + this PATCH reindex.
     assert fake_scheduler.calls == [doc_id, doc_id]
-    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert body["document"]["enabled_criteria"] == []
     assert body["job_id"] is not None
 
 
@@ -499,20 +512,20 @@ def test_patch_does_not_reindex_when_status_uploaded(
     client, test_db, fake_scheduler,
 ):
     cdl = _make_cdl(test_db)
-    response = _upload(client, cdl.id, document_type="sua_cds")
+    response = _upload(client, cdl.id, document_type="usi_dipartimentali")
     doc_id = response.json()["document"]["id"]
     # Upload's initial schedule.
     assert fake_scheduler.calls == [doc_id]
 
     patch = client.patch(
         f"/api/local-documents/{doc_id}",
-        json={"enabled_criteria": ["E1", "E2"]},
+        json={"enabled_criteria": []},
     )
     assert patch.status_code == 200
     body = patch.json()
     # No further scheduler call since the row is still `uploaded`.
     assert fake_scheduler.calls == [doc_id]
-    assert body["document"]["enabled_criteria"] == ["E1", "E2"]
+    assert body["document"]["enabled_criteria"] == []
     assert body["job_id"] is None
 
 
@@ -703,3 +716,145 @@ def test_upload_rolls_back_and_cleans_file_on_commit_failure(
     assert leftover_files == [], (
         f"orphan file(s) after commit failure: {leftover_files}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase 9.A — document-to-criterion contract enforcement
+# ---------------------------------------------------------------------------
+
+
+def test_default_subset_of_allowed_invariant():
+    """For every document_type, DEFAULT ⊆ ALLOWED. Regression guard."""
+    from app.schemas.local_document import (
+        ALLOWED_CRITERIA_BY_DOCUMENT_TYPE,
+        DEFAULT_ENABLED_CRITERIA,
+    )
+    assert set(DEFAULT_ENABLED_CRITERIA.keys()) == set(
+        ALLOWED_CRITERIA_BY_DOCUMENT_TYPE.keys()
+    ), "default/allowed maps must cover the same document types"
+    for doc_type, defaults in DEFAULT_ENABLED_CRITERIA.items():
+        allowed = set(ALLOWED_CRITERIA_BY_DOCUMENT_TYPE[doc_type])
+        not_allowed = [d for d in defaults if d not in allowed]
+        assert not_allowed == [], (
+            f"document_type {doc_type!r}: default {defaults} contains "
+            f"criteria not in allowed set {sorted(allowed)}: {not_allowed}"
+        )
+
+
+def test_phase_9_a_default_mapping_matches_contract():
+    """Phase 9.A: the consolidated default mapping. Documents the
+    intentional shape of the contract — if any of these break, the
+    map was edited without a corresponding update to
+    `docs/progettazione.md`."""
+    from app.schemas.local_document import DEFAULT_ENABLED_CRITERIA
+    assert DEFAULT_ENABLED_CRITERIA == {
+        "regolamento_didattico": ["E3"],
+        "sua_cds": ["E1"],
+        "matrice_tuning": ["E2"],
+        "piano_studi": [],
+        "manifesto": [],
+        "propedeuticita": [],
+        "metadati_ufficiali": [],
+        "usi_dipartimentali": ["E5"],
+        "linee_guida_cdl": ["E5"],
+        "template_locale": ["E5"],
+        "nota_presidio": ["E5"],
+    }
+
+
+def test_upload_default_for_matrice_tuning_is_e2(client, test_db):
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="matrice_tuning")
+    assert response.status_code == 201
+    assert response.json()["document"]["enabled_criteria"] == ["E2"]
+    assert response.json()["document"]["document_type"] == "matrice_tuning"
+
+
+def test_upload_default_for_regolamento_didattico_is_e3(client, test_db):
+    """Phase 9.A correction: regolamento didattico → E3 (was E1)."""
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type="regolamento_didattico")
+    assert response.status_code == 201
+    assert response.json()["document"]["enabled_criteria"] == ["E3"]
+
+
+@pytest.mark.parametrize(
+    "doc_type",
+    ["piano_studi", "manifesto", "propedeuticita", "metadati_ufficiali"],
+)
+def test_upload_default_is_empty_for_context_only_types(client, test_db, doc_type):
+    """Phase 9.A: types kept in the registry as context only auto-
+    enable zero criteria; they need an explicit (allowed) PATCH to
+    serve anything — and today there are no allowed criteria for
+    them, so the registry treats them as inert."""
+    cdl = _make_cdl(test_db)
+    response = _upload(client, cdl.id, document_type=doc_type)
+    assert response.status_code == 201
+    assert response.json()["document"]["enabled_criteria"] == []
+
+
+@pytest.mark.parametrize(
+    "doc_type, bad_code",
+    [
+        ("usi_dipartimentali", "E1"),
+        ("usi_dipartimentali", "E3"),
+        ("sua_cds", "E2"),
+        ("sua_cds", "E5"),
+        ("regolamento_didattico", "E1"),
+        ("matrice_tuning", "E1"),
+    ],
+)
+def test_upload_rejects_criterion_not_allowed_for_type(
+    client, test_db, doc_type, bad_code,
+):
+    cdl = _make_cdl(test_db)
+    response = _upload(
+        client, cdl.id, document_type=doc_type, enabled_criteria=bad_code,
+    )
+    assert response.status_code == 422
+    body = response.json()
+    assert "not allowed" in body["detail"]
+
+
+@pytest.mark.parametrize(
+    "doc_type",
+    ["piano_studi", "manifesto", "propedeuticita", "metadati_ufficiali"],
+)
+def test_upload_rejects_any_criterion_on_context_only_type(
+    client, test_db, doc_type,
+):
+    """Context-only types reject every E* on upload."""
+    cdl = _make_cdl(test_db)
+    response = _upload(
+        client, cdl.id, document_type=doc_type, enabled_criteria="E5",
+    )
+    assert response.status_code == 422
+    assert "does not serve" in response.json()["detail"]
+
+
+def test_patch_rejects_criterion_not_allowed_for_type(client, test_db):
+    """A `usi_dipartimentali` row cannot be PATCHed onto E1."""
+    cdl = _make_cdl(test_db)
+    upload = _upload(client, cdl.id, document_type="usi_dipartimentali")
+    doc_id = upload.json()["document"]["id"]
+
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": ["E1"]},
+    )
+    assert patch.status_code == 422
+    assert "not allowed" in patch.json()["detail"]
+
+
+def test_patch_rejects_any_criterion_on_context_only_type(client, test_db):
+    """A `piano_studi` row cannot be PATCHed onto any criterion."""
+    cdl = _make_cdl(test_db)
+    upload = _upload(client, cdl.id, document_type="piano_studi")
+    doc_id = upload.json()["document"]["id"]
+
+    patch = client.patch(
+        f"/api/local-documents/{doc_id}",
+        json={"enabled_criteria": ["E5"]},
+    )
+    assert patch.status_code == 422
+    assert "does not serve" in patch.json()["detail"]

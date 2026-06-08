@@ -222,10 +222,12 @@ export type EvaluationEventType =
 // Phase 8 — local-document registry
 // ---------------------------------------------------------------------------
 
-/** Closed enum for document_type. Mirrors backend `DocumentType` literal. */
+/** Closed enum for document_type. Mirrors backend `DocumentType` literal.
+ *  Phase 9.A adds `matrice_tuning` as the sole source of E2. */
 export type LocalDocumentType =
   | "regolamento_didattico"
   | "sua_cds"
+  | "matrice_tuning"
   | "piano_studi"
   | "manifesto"
   | "propedeuticita"
