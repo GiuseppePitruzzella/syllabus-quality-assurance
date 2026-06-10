@@ -76,14 +76,25 @@ class ExtendedCriterionJudgment(BaseModel):
     not produce a numeric score without grounding it on both
     sides.
 
-    E4 is special-cased: the second side is the syllabus's own
-    ``*_en`` field, which is itself recorded as ``source_field``
-    (e.g. ``"learning_outcomes_en"``). So E4 numeric judgments
-    require at least two distinct ``source_field`` values — one
-    from the IT side and one from the EN side.
+    E4 (cross-lingua) tightening, per 9.C clarification: a
+    numeric score requires at least one **paired** evidence —
+    two ``source_field`` values that share the same prefix and
+    differ only in the ``_it`` / ``_en`` suffix (e.g.
+    ``learning_outcomes_it`` + ``learning_outcomes_en``).
+    Unrelated IT/EN fields (e.g. ``learning_outcomes_it`` +
+    ``prerequisites_en``) do NOT count — they don't actually
+    demonstrate cross-lingua coherence.
 
     NA judgments (``is_na=True``) are exempt from the dual-source
-    rule.
+    rule. For E4 in particular, the absence of an EN counterpart
+    can itself be the reason for the NA, so requiring a paired
+    evidence on NA would be self-defeating.
+
+    Technical-vs-semantic NA invariants:
+      - ``is_na_technical=True`` is only valid alongside
+        ``is_na=True``;
+      - ``is_na=False`` requires ``is_na_technical=False``
+        explicitly (no NA flag carried on a numeric judgment).
     """
 
     criterion_code: ExtendedCriterionCode
@@ -91,11 +102,12 @@ class ExtendedCriterionJudgment(BaseModel):
     is_na: bool = False
     na_reason: str | None = None
     # ``is_na_technical`` flag: when True, the NA was forced by
-    # the resolver (no applicable document) or by repeated
-    # validation failures in the handler — NOT by a semantic
-    # judgment of "non-applicable content". The report can show
-    # both NA paths but the calibration in 9.F treats them
-    # separately.
+    # a handler crash, repeated validation failure or retrieval
+    # failure — NOT by the resolver (which produces semantic NA
+    # via "document missing / not enabled / not applicable") and
+    # NOT by the handler deciding the content is genuinely
+    # non-applicable. The report can show both NA paths but the
+    # 9.F calibration treats them separately.
     is_na_technical: bool = False
     justification: str = Field(..., min_length=20)
     evidences: list[ExtendedEvidence] = Field(default_factory=list)
@@ -112,8 +124,9 @@ class ExtendedCriterionJudgment(BaseModel):
         if self.score is None:
             raise ValueError("score is required when is_na=false")
         if self.is_na_technical:
+            # is_na=False AND is_na_technical=True is a contradiction.
             raise ValueError(
-                "is_na_technical can only be set together with is_na=true",
+                "is_na_technical=true requires is_na=true",
             )
         return self
 
@@ -124,25 +137,22 @@ class ExtendedCriterionJudgment(BaseModel):
         For E1/E2/E3/E5: at least one syllabus evidence (source_field)
         AND at least one external-document evidence (source_document_id).
 
-        For E4: at least one IT-side syllabus evidence AND at least
-        one EN-side syllabus evidence. Heuristic: source_field
-        ending in ``_it`` vs ``_en``.
+        For E4: at least one *paired* IT/EN evidence — two
+        source_field values that share the same prefix and only
+        differ in the trailing ``_it`` / ``_en`` (see
+        :func:`_e4_paired_prefix`). Two unrelated IT/EN fields
+        (e.g. ``learning_outcomes_it`` + ``prerequisites_en``) do
+        not count.
         """
         if self.is_na or self.score is None:
             return self
         if self.criterion_code == "E4":
-            it_evidence = any(
-                ev.source_field and ev.source_field.endswith("_it")
-                for ev in self.evidences
-            )
-            en_evidence = any(
-                ev.source_field and ev.source_field.endswith("_en")
-                for ev in self.evidences
-            )
-            if not (it_evidence and en_evidence):
+            paired = _e4_paired_prefix(self.evidences)
+            if paired is None:
                 raise ValueError(
-                    "E4 numeric judgments require at least one IT-side "
-                    "and one EN-side syllabus evidence",
+                    "E4 numeric judgments require a paired syllabus "
+                    "evidence: same prefix on _it and _en sides "
+                    "(e.g. learning_outcomes_it + learning_outcomes_en).",
                 )
             return self
         # E1 / E2 / E3 / E5
@@ -156,6 +166,28 @@ class ExtendedCriterionJudgment(BaseModel):
                 "evidence (syllabus + external document)",
             )
         return self
+
+
+def _e4_paired_prefix(evidences: list[ExtendedEvidence]) -> str | None:
+    """Return the common prefix when at least one IT/EN pair exists.
+
+    Looks for two evidences whose ``source_field`` values agree
+    on everything except the trailing ``_it`` / ``_en``. Returns
+    the shared prefix on first match, or ``None`` when no paired
+    evidence exists.
+    """
+    it_prefixes: set[str] = set()
+    en_prefixes: set[str] = set()
+    for ev in evidences:
+        field = ev.source_field
+        if not field:
+            continue
+        if field.endswith("_it"):
+            it_prefixes.add(field[: -len("_it")])
+        elif field.endswith("_en"):
+            en_prefixes.add(field[: -len("_en")])
+    common = it_prefixes & en_prefixes
+    return next(iter(common)) if common else None
 
 
 class ExtendedRetrievedChunkRef(BaseModel):

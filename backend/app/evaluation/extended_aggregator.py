@@ -187,15 +187,38 @@ def _compute_status(
     output: ExtendedAgentOutput | None,
     na_records: list[NAExtendedCriterion],
 ) -> ExtendedStatus:
-    if output is None:
-        return "failed"
-    crashed = sum(
-        1 for r in na_records if r.source == "handler_error"
-    )
+    """Status tri-state per the 9.C clarification.
+
+    - ``completed``: no technical failure on any criterion. This
+      includes the legitimate case where every criterion is hard-
+      NA from the resolver — A5 is never invoked, output is
+      ``None``, and the status must still be ``completed``
+      because nothing failed; A5 simply had nothing to do.
+    - ``partial``: at least one criterion failed technically, but
+      at least one criterion produced a non-technical outcome
+      (numeric score or semantic NA).
+    - ``failed``: every applicable criterion failed technically,
+      or A5 was expected to run but its output is ``None``.
+    """
     total = len(_ALL_EXTENDED)
+    resolver_count = sum(1 for r in na_records if r.source == "resolver")
+    crashed = sum(1 for r in na_records if r.source == "handler_error")
+
+    # All criteria short-circuited by the resolver — A5 is allowed
+    # to be skipped entirely. Nothing failed.
+    if resolver_count == total:
+        return "completed"
+
+    if output is None:
+        # A5 was expected to run on at least one criterion but
+        # produced no output at all: that IS a failure.
+        return "failed"
+
     if crashed == 0:
         return "completed"
-    if crashed >= total:
+    if crashed + resolver_count >= total:
+        # Every criterion not short-circuited by the resolver
+        # ended in a handler error.
         return "failed"
     return "partial"
 

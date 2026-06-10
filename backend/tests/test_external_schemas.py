@@ -72,7 +72,8 @@ def test_na_judgment_with_technical_flag():
 
 
 def test_technical_na_rejected_without_is_na():
-    with pytest.raises(ValidationError):
+    """`is_na_technical=true` is invalid alongside `is_na=false`."""
+    with pytest.raises(ValidationError, match="is_na_technical=true requires is_na=true"):
         ExtendedCriterionJudgment(
             criterion_code="E1",
             score=1,
@@ -85,6 +86,29 @@ def test_technical_na_rejected_without_is_na():
             ],
             confidence="medium",
         )
+
+
+def test_semantic_na_keeps_technical_flag_false_by_default():
+    """Default technical flag is false; explicit semantic NA is the
+    common case for resolver-driven hard NA (when persisted via
+    the coordinator, not the resolver short-circuit)."""
+    j = _na_judgment("E1")
+    assert j.is_na is True
+    assert j.is_na_technical is False
+
+
+def test_technical_na_paired_with_is_na_true_is_accepted():
+    j = ExtendedCriterionJudgment(
+        criterion_code="E1",
+        score=None,
+        is_na=True,
+        na_reason="handler crashed after retries",
+        is_na_technical=True,
+        justification="x" * 40,
+        confidence="low",
+    )
+    assert j.is_na is True
+    assert j.is_na_technical is True
 
 
 def test_score_required_when_not_na():
@@ -163,7 +187,9 @@ def test_registry_score_rejects_only_document_evidence():
 # ---------------------------------------------------------------------------
 
 
-def test_e4_score_requires_it_and_en():
+def test_e4_score_requires_paired_prefix():
+    """E4 numeric score accepts an evidence pair that shares the
+    same field prefix on the IT and EN sides."""
     j = ExtendedCriterionJudgment(
         criterion_code="E4",
         score=1,
@@ -177,8 +203,26 @@ def test_e4_score_requires_it_and_en():
     assert j.score == 1
 
 
+def test_e4_score_rejects_unrelated_it_en():
+    """Phase 9.C tightening: an `*_it` evidence and an `*_en`
+    evidence on UNRELATED fields don't actually demonstrate
+    cross-lingua coherence."""
+    with pytest.raises(ValidationError, match="paired"):
+        ExtendedCriterionJudgment(
+            criterion_code="E4",
+            score=1,
+            justification="x" * 40,
+            evidences=[
+                ExtendedEvidence(text="a", source_field="learning_outcomes_it"),
+                ExtendedEvidence(text="b", source_field="prerequisites_en"),
+            ],
+            confidence="medium",
+        )
+
+
 def test_e4_score_rejects_only_it_side():
-    with pytest.raises(ValidationError):
+    """No EN-side evidence at all — no paired prefix possible."""
+    with pytest.raises(ValidationError, match="paired"):
         ExtendedCriterionJudgment(
             criterion_code="E4",
             score=1,
@@ -191,13 +235,30 @@ def test_e4_score_rejects_only_it_side():
         )
 
 
+def test_e4_score_accepts_pair_amid_other_evidences():
+    """A pair anywhere in the evidence list is enough — extra
+    unrelated evidences don't disqualify the judgment."""
+    j = ExtendedCriterionJudgment(
+        criterion_code="E4",
+        score=2,
+        justification="x" * 40,
+        evidences=[
+            ExtendedEvidence(text="extra it", source_field="prerequisites_it"),
+            ExtendedEvidence(text="i", source_field="learning_outcomes_it"),
+            ExtendedEvidence(text="e", source_field="learning_outcomes_en"),
+        ],
+        confidence="high",
+    )
+    assert j.score == 2
+
+
 def test_e4_score_rejects_external_document_evidence():
     """E4 must never cite a registry document — the second source
     is the syllabus's own EN side. A document-side evidence on E4
-    fails the dual-source rule, because the EN counterpart is
+    fails the paired-prefix rule, because the EN counterpart is
     missing.
     """
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError, match="paired"):
         ExtendedCriterionJudgment(
             criterion_code="E4",
             score=2,
@@ -354,3 +415,60 @@ def test_aggregator_when_agent_output_is_none():
     assert result.status == "failed"
     assert all(v is None for v in result.criterion_scores.values())
     assert all(n.source == "handler_error" for n in result.na_criteria)
+
+
+def test_aggregator_all_resolver_na_with_none_output_is_completed():
+    """Phase 9.C clarification: when the resolver hard-NAs every
+    criterion, A5 is legitimately never invoked. Output is None
+    but the status must be `completed` — nothing failed."""
+    result = aggregate_extended(
+        None,
+        resolver_na={
+            "E1": "no SUA-CdS",
+            "E2": "no matrice tuning",
+            "E3": "no regolamento",
+            "E4": "no English content",
+            "E5": "no local document",
+        },
+    )
+    assert result.status == "completed"
+    assert all(v is None for v in result.criterion_scores.values())
+    assert all(n.source == "resolver" for n in result.na_criteria)
+
+
+def test_aggregator_resolver_na_plus_handler_error_can_be_failed():
+    """One criterion handler-errored; the other four were resolver-
+    NAs. There's no remaining criterion with a non-technical
+    outcome, so the status is `failed`."""
+    out = ExtendedAgentOutput(
+        judgments=[],
+        handler_errors={"E5": "boom"},
+    )
+    result = aggregate_extended(
+        out,
+        resolver_na={
+            "E1": "no SUA-CdS",
+            "E2": "no matrice tuning",
+            "E3": "no regolamento",
+            "E4": "no English content",
+        },
+    )
+    assert result.status == "failed"
+
+
+def test_aggregator_resolver_na_plus_handler_error_can_be_partial():
+    """Same scenario but with one successful handler — the status
+    becomes `partial`."""
+    out = ExtendedAgentOutput(
+        judgments=[_ok_judgment("E5")],
+        handler_errors={"E3": "boom"},
+    )
+    result = aggregate_extended(
+        out,
+        resolver_na={
+            "E1": "no SUA-CdS",
+            "E2": "no matrice tuning",
+            "E4": "no English content",
+        },
+    )
+    assert result.status == "partial"
