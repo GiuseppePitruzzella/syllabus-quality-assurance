@@ -56,11 +56,20 @@ logger = structlog.get_logger(__name__)
 
 # Per-agent prompt_version snapshot baked into every persisted record
 # (D026: each run must be independently reproducible).
+#
+# A5 is added in Phase 9.C.5.3 as ``"a5_v1"`` — the coordinator-level
+# version. The per-criterion handler versions
+# (``e1_v1``..``e5_v1``) are recorded separately on
+# ``EvaluationResult.extended_criteria_result["agent_output"]
+# ["handler_prompt_versions"]`` so a single core
+# ``prompt_versions`` snapshot does not have to carry five extra
+# keys on every run.
 DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
     "A1": "a1_v5",
     "A2": "a2_v1",
     "A3": "a3_v1",
     "A4": "a4_v2",
+    "A5": "a5_v1",
 }
 
 
@@ -438,6 +447,10 @@ class EvaluationService:
             record.agent_errors = dict(agent_errors) if agent_errors else None
             record.retrieved_chunks = _index_chunks_by_criterion(agent_outputs)
             record.final_report = final_state.get("final_report")
+            record.extended_criteria_result = _dump_extended_result(
+                final_state.get("extended_result"),
+                final_state.get("extended_agent_output"),
+            )
             session.commit()
 
     def _persist_failure(
@@ -522,3 +535,56 @@ def _index_chunks_by_criterion(
             criterion = ref_dict.get("criterion_code") or "_unknown"
             by_criterion.setdefault(criterion, []).append(ref_dict)
     return by_criterion
+
+
+def _dump_extended_result(
+    extended_result: Any | None,
+    extended_agent_output: Any | None,
+) -> dict[str, Any] | None:
+    """Serialise the Phase 9.C.5.3 ``extended_criteria_result`` column.
+
+    Returns ``None`` when the run did not invoke A5 at all (legacy
+    runs, or fresh installs without a resolver supplied). Otherwise
+    returns a JSON-safe dict carrying the aggregated extended result
+    plus the raw ``ExtendedAgentOutput`` for full reproducibility.
+
+    Shape contract::
+
+        {
+            "criterion_scores": {"E1": int|None, ..., "E5": int|None},
+            "na_criteria":     [{"criterion_code": str,
+                                 "source":         "resolver"|"handler_na"|"handler_error",
+                                 "reason":         str}, ...],
+            "handler_errors":  {<E*>: <error message>, ...},
+            "status":          "completed" | "partial" | "failed",
+            "agent_output":    <ExtendedAgentOutput.model_dump()> | None
+        }
+    """
+    if extended_result is None and extended_agent_output is None:
+        return None
+    payload: dict[str, Any] = {}
+    if extended_result is not None:
+        payload["criterion_scores"] = dict(
+            getattr(extended_result, "criterion_scores", {}) or {},
+        )
+        payload["na_criteria"] = [
+            {
+                "criterion_code": r.criterion_code,
+                "source": r.source,
+                "reason": r.reason,
+            }
+            for r in getattr(extended_result, "na_criteria", []) or []
+        ]
+        payload["handler_errors"] = dict(
+            getattr(extended_result, "handler_errors", {}) or {},
+        )
+        payload["status"] = getattr(extended_result, "status", None)
+    if extended_agent_output is not None and hasattr(
+        extended_agent_output, "model_dump",
+    ):
+        payload["agent_output"] = extended_agent_output.model_dump(mode="json")
+    elif extended_agent_output is not None:
+        payload["agent_output"] = extended_agent_output  # already dict-shaped
+    else:
+        payload["agent_output"] = None
+    return payload

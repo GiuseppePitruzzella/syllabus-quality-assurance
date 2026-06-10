@@ -41,6 +41,24 @@ def _ensure_sqlite_schema_compatibility() -> None:
             if column_name not in existing_columns:
                 conn.execute(text(f"ALTER TABLE syllabi ADD COLUMN {column_name} {ddl}"))
 
+    # Phase 9.C.5.3: add ``extended_criteria_result`` JSON column to
+    # ``evaluation_results`` if absent. We can't drop+recreate that
+    # table any more — it now holds real run history — and Alembic
+    # is intentionally out of scope (D020), so an idempotent ALTER
+    # at startup is the smallest viable migration.
+    if "evaluation_results" in table_names:
+        eval_columns = {
+            c["name"] for c in inspector.get_columns("evaluation_results")
+        }
+        with engine.begin() as conn:
+            if "extended_criteria_result" not in eval_columns:
+                conn.execute(
+                    text(
+                        "ALTER TABLE evaluation_results "
+                        "ADD COLUMN extended_criteria_result JSON",
+                    ),
+                )
+
 
 def _ensure_evaluation_results_schema() -> None:
     """Drop+recreate ``evaluation_results`` when the stub schema is detected.
