@@ -41,7 +41,13 @@ from app.evaluation.agents.a1_completeness import CompletenessAgent
 from app.evaluation.agents.a2_learning_outcomes import PedagogicalAgent
 from app.evaluation.agents.a3_coherence import DidacticConsistencyAgent
 from app.evaluation.agents.a4_editorial import EditorialCareAgent
+from app.evaluation.agents.external_consistency_agent import (
+    ExternalConsistencyAgent,
+    build_default_handlers,
+    resolver_na_map,
+)
 from app.evaluation.aggregator import aggregate
+from app.evaluation.extended_aggregator import aggregate_extended
 from app.evaluation.state import (
     EvaluationState,
     merge_agent_error,
@@ -60,6 +66,13 @@ _AGENT_NODE_ORDER: tuple[str, ...] = ("a1", "a2", "a3", "a4")
 # Agent codes -> agent classes. Indirected through a factory so tests
 # can inject fakes without monkey-patching the class imports.
 AgentFactory = Callable[[str, Any, Any], Any]
+# A separate factory for the A5 ExternalConsistencyAgent. Kept apart
+# from ``AgentFactory`` because A5's constructor and ``evaluate``
+# signatures differ from A1-A4 (it consumes ``ResolverOutput`` +
+# ``cdl_id``; it produces ``ExtendedAgentOutput`` rather than
+# ``AgentOutput``). Forcing it through ``_default_agent_factory``
+# would dilute the abstraction.
+ExternalAgentFactory = Callable[[Any, Any], "ExternalConsistencyAgent | None"]
 ProgressPublisher = Callable[[dict[str, Any]], None]
 
 
@@ -76,11 +89,31 @@ def _default_agent_factory(agent_code: str, retriever: Any, llm_client: Any) -> 
     raise ValueError(f"unknown agent_code: {agent_code!r}")
 
 
+def _default_external_agent_factory(
+    llm_client: Any, external_retriever: Any,
+) -> "ExternalConsistencyAgent | None":
+    """Build the A5 coordinator with default handlers.
+
+    Returns ``None`` when ``external_retriever`` is ``None`` — that
+    cleanly turns off the A5 path on a fresh install whose
+    ``external_documents`` Chroma collection has never been created.
+    The orchestrator detects ``None`` and skips the a5 node entirely.
+    """
+    if external_retriever is None:
+        return None
+    handlers = build_default_handlers(
+        llm_client=llm_client, external_retriever=external_retriever,
+    )
+    return ExternalConsistencyAgent(handlers=handlers)
+
+
 def build_graph(
     retriever: Any,
     llm_client: Any,
     *,
+    external_retriever: Any = None,
     agent_factory: AgentFactory = _default_agent_factory,
+    external_agent_factory: ExternalAgentFactory = _default_external_agent_factory,
     progress_publisher: ProgressPublisher | None = None,
 ):
     """Build the compiled LangGraph for a single-syllabus evaluation.
@@ -92,9 +125,21 @@ def build_graph(
             by every agent for the LLM call. In tests pass a fake
             object — the agents themselves are also stubbed via
             ``agent_factory``.
+        external_retriever: Optional :class:`ExternalDocumentRetriever`
+            instance. ``None`` (the default) turns off the A5 path
+            entirely, which keeps a fresh install with no
+            ``external_documents`` Chroma collection from breaking the
+            graph. When wired, A5 runs after A4 and produces an
+            ``extended_agent_output`` distinct from the core
+            ``agent_outputs`` map.
         agent_factory: Function ``(agent_code, retriever, llm_client) ->
             BaseAgent``. Defaults to :func:`_default_agent_factory`,
             which returns the production A1..A4 classes.
+        external_agent_factory: Function ``(llm_client, external_retriever)
+            -> ExternalConsistencyAgent | None`` for A5. Defaults to
+            :func:`_default_external_agent_factory`, which returns the
+            production coordinator with the standard E1..E5 handlers,
+            or ``None`` when ``external_retriever`` is ``None``.
         progress_publisher: Optional ``dict -> None`` callback. When
             present, the agent / aggregate / synthesize nodes call it
             to publish lifecycle events (agent_started, agent_completed,
@@ -114,6 +159,15 @@ def build_graph(
                 code.upper(), retriever, llm_client, agent_factory, publisher
             ),
         )
+    g.add_node(
+        "a5",
+        _make_a5_node(
+            llm_client=llm_client,
+            external_retriever=external_retriever,
+            factory=external_agent_factory,
+            publisher=publisher,
+        ),
+    )
     g.add_node("aggregate", _make_aggregate_node(publisher))
     g.add_node("synthesize", _make_synthesize_node(publisher))
     g.add_node("finalize", _finalize_node)
@@ -123,7 +177,8 @@ def build_graph(
     g.add_edge("a1", "a2")
     g.add_edge("a2", "a3")
     g.add_edge("a3", "a4")
-    g.add_edge("a4", "aggregate")
+    g.add_edge("a4", "a5")
+    g.add_edge("a5", "aggregate")
     g.add_edge("aggregate", "synthesize")
     g.add_edge("synthesize", "finalize")
     g.add_edge("finalize", END)
@@ -242,6 +297,107 @@ def _make_agent_node(
     return _agent_node
 
 
+def _make_a5_node(
+    *,
+    llm_client: Any,
+    external_retriever: Any,
+    factory: ExternalAgentFactory,
+    publisher: ProgressPublisher,
+) -> Callable[[EvaluationState], dict[str, Any]]:
+    """Build the closure that runs A5.
+
+    Skip semantics:
+      - ``resolver_output`` missing from the state → A5 never ran (this
+        is the legacy four-agent-only path; e.g. an existing test that
+        didn't seed the resolver). Return ``{}`` so the state is left
+        untouched.
+      - factory returns ``None`` (e.g. ``external_retriever is None``
+        on a fresh install) → same: A5 cannot run, return ``{}``.
+
+    Failure isolation: any exception raised by the coordinator is
+    caught, logged and turned into ``extended_agent_output=None``. The
+    aggregate node downstream still produces an ``extended_result``
+    with ``status="failed"`` for the audit trail, and the core
+    ``status`` field stays untouched.
+    """
+
+    def _a5_node(state: EvaluationState) -> dict[str, Any]:
+        resolver_output = state.get("resolver_output")
+        if resolver_output is None:
+            # Backwards-compatible no-op: legacy invocations (most
+            # orchestrator tests) don't seed a resolver.
+            return {}
+
+        try:
+            agent = factory(llm_client, external_retriever)
+        except Exception as exc:  # noqa: BLE001 — factory must not break the graph
+            logger.warning(
+                "a5_factory_failed",
+                seuid=state.get("syllabus_seuid"),
+                error=str(exc),
+                exc_info=True,
+            )
+            return {"extended_agent_output": None}
+        if agent is None:
+            return {}
+
+        seuid = state.get("syllabus_seuid")
+        publisher({"type": "agent_started", "agent_code": "A5", "seuid": seuid})
+        started = time.time()
+        try:
+            output = agent.evaluate(
+                syllabus=state["syllabus_snapshot"],
+                cdl_id=int(state.get("cdl_id") or 0),
+                resolver_output=resolver_output,
+            )
+            latency_ms = int((time.time() - started) * 1000)
+            logger.info(
+                "agent_completed",
+                agent_code="A5",
+                seuid=seuid,
+                latency_ms=latency_ms,
+                n_judgments=len(output.judgments),
+                handlers_invoked=output.execution_metadata.get(
+                    "handlers_invoked", [],
+                ),
+            )
+            publisher(
+                {
+                    "type": "agent_completed",
+                    "agent_code": "A5",
+                    "seuid": seuid,
+                    "latency_ms": latency_ms,
+                    "n_judgments": len(output.judgments),
+                }
+            )
+            return {"extended_agent_output": output}
+        except Exception as exc:  # noqa: BLE001 — never break the core flow
+            latency_ms = int((time.time() - started) * 1000)
+            logger.error(
+                "agent_failed",
+                agent_code="A5",
+                seuid=seuid,
+                latency_ms=latency_ms,
+                error_type=type(exc).__name__,
+                error_message=str(exc),
+                exc_info=True,
+            )
+            publisher(
+                {
+                    "type": "agent_failed",
+                    "agent_code": "A5",
+                    "seuid": seuid,
+                    "latency_ms": latency_ms,
+                    "error_type": type(exc).__name__,
+                    "error_message": str(exc),
+                }
+            )
+            return {"extended_agent_output": None}
+
+    _a5_node.__name__ = "a5_node"
+    return _a5_node
+
+
 def _make_aggregate_node(
     publisher: ProgressPublisher,
 ) -> Callable[[EvaluationState], dict[str, Any]]:
@@ -267,7 +423,32 @@ def _make_aggregate_node(
                 "n_na": len(result.na_criteria),
             }
         )
-        return {"aggregation": result, "status": result.status}
+        patch: dict[str, Any] = {
+            "aggregation": result,
+            # ``status`` is set by the CORE aggregator only. Any A5
+            # outcome (success / partial / failed) is recorded
+            # separately on ``extended_result`` and never feeds back
+            # into the core run status.
+            "status": result.status,
+        }
+
+        resolver_output = state.get("resolver_output")
+        if resolver_output is not None:
+            extended = aggregate_extended(
+                state.get("extended_agent_output"),
+                resolver_na=resolver_na_map(resolver_output),
+            )
+            patch["extended_result"] = extended
+            logger.info(
+                "extended_aggregation_completed",
+                seuid=state.get("syllabus_seuid"),
+                extended_status=extended.status,
+                handler_errors=list(extended.handler_errors.keys()),
+                resolver_na_count=sum(
+                    1 for r in extended.na_criteria if r.source == "resolver"
+                ),
+            )
+        return patch
 
     return _aggregate_node
 

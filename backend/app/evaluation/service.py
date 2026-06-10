@@ -380,6 +380,11 @@ class EvaluationService:
             "syllabus_seuid": pending.seuid,
             "course_name": pending.course_name,
             "syllabus_snapshot": pending.syllabus_snapshot,
+            # 9.C.5.2: A5 inputs. The orchestrator skips the a5 node
+            # when ``resolver_output`` is absent, so passing both
+            # keys here is what turns A5 ON for a real run.
+            "cdl_id": pending.cdl_id,
+            "resolver_output": pending.resolver_output,
         }
         logger.info(
             "evaluation_graph_started",
