@@ -50,6 +50,7 @@ from app.local_documents.resolver import (
 )
 from app.models import EvaluationResult, Syllabus
 from app.models.evaluation_external_document import EvaluationExternalDocument
+from app.models.local_document import LocalDocument
 
 logger = structlog.get_logger(__name__)
 
@@ -288,6 +289,65 @@ class EvaluationService:
                 )
             session.expunge(record)
             return record
+
+    def list_external_documents_used(
+        self, evaluation_uuid: str,
+    ) -> list[dict[str, Any]]:
+        """Return one entry per ``EvaluationExternalDocument`` row for the
+        given run, each enriched with the live ``LocalDocument`` title
+        and ``deleted_at`` flag.
+
+        Phase 9.D.1: callers (the API endpoint) wrap the entries in
+        :class:`ExternalDocumentUsedPayload` and attach them to
+        :class:`EvaluationDetail`. The shape is deliberately a plain
+        ``list[dict]`` here so the service layer stays free of
+        HTTP-schema imports.
+
+        Order is deterministic: by ``criterion_code`` ascending then
+        by ``local_document_id`` ascending. E4 cannot appear because
+        the audit table never receives E4 rows by construction
+        (C.5.1).
+        """
+        with self._session_factory() as session:
+            evaluation = (
+                session.query(EvaluationResult)
+                .filter_by(evaluation_uuid=evaluation_uuid)
+                .one_or_none()
+            )
+            if evaluation is None:
+                raise EvaluationNotFoundError(
+                    f"evaluation not found: {evaluation_uuid!r}",
+                )
+            rows = (
+                session.query(EvaluationExternalDocument, LocalDocument)
+                .outerjoin(
+                    LocalDocument,
+                    LocalDocument.id == EvaluationExternalDocument.local_document_id,
+                )
+                .filter(
+                    EvaluationExternalDocument.evaluation_result_id == evaluation.id,
+                )
+                .order_by(
+                    EvaluationExternalDocument.criterion_code.asc(),
+                    EvaluationExternalDocument.local_document_id.asc(),
+                )
+                .all()
+            )
+            out: list[dict[str, Any]] = []
+            for audit, doc in rows:
+                out.append(
+                    {
+                        "criterion_code": audit.criterion_code,
+                        "local_document_id": audit.local_document_id,
+                        "document_type": audit.document_type_snapshot,
+                        "document_version": audit.document_version_snapshot,
+                        "file_hash": audit.file_hash_snapshot,
+                        "resolution_reason": audit.resolution_reason,
+                        "title": doc.title if doc is not None else None,
+                        "deleted_at": doc.deleted_at if doc is not None else None,
+                    },
+                )
+            return out
 
     def list_evaluations_for_syllabus(
         self, seuid: str, *, limit: int = 20
