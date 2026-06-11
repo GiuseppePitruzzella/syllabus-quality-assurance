@@ -22,8 +22,11 @@ them) so the previous nodes' contributions survive the patch.
 from datetime import datetime
 from typing import Any, Literal, Optional, TypedDict
 
+from app.evaluation.agents.external_schemas import ExtendedAgentOutput
 from app.evaluation.agents.schemas import AgentOutput
 from app.evaluation.aggregator import AggregatedResult
+from app.evaluation.extended_aggregator import ExtendedCriteriaResult
+from app.local_documents.resolver import ResolverOutput
 
 
 RunStatus = Literal["pending", "running", "completed", "partial", "failed"]
@@ -54,6 +57,21 @@ class EvaluationState(TypedDict, total=False):
     # === Aggregation + report (filled by aggregate_node / synthesize_node) ===
     aggregation: Optional[AggregatedResult]
     final_report: Optional[str]
+
+    # === A5 / extended criteria (Phase 9.C.5.2) ===
+    # ``cdl_id`` / ``resolver_output`` are inputs supplied by
+    # ``EvaluationService._run_graph`` from the :class:`PendingRun`.
+    # When absent, the a5 node is a no-op so legacy four-agent test
+    # invocations keep working unchanged.
+    cdl_id: int
+    resolver_output: Optional[ResolverOutput]
+    # Output of the A5 coordinator, kept distinct from
+    # ``agent_outputs`` so the core aggregator never mistakes it for
+    # a C1-C9 contribution.
+    extended_agent_output: Optional[ExtendedAgentOutput]
+    # Aggregated E* result. Computed alongside ``aggregation`` but
+    # never influences ``status`` or the core CoreScore.
+    extended_result: Optional[ExtendedCriteriaResult]
 
     # === Run metadata ===
     started_at: datetime

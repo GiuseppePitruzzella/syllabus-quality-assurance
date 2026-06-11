@@ -42,18 +42,34 @@ from sqlalchemy.orm import Session
 from app.config import Settings, settings as default_settings
 from app.evaluation.aggregator import AggregatedResult
 from app.evaluation.state import EvaluationState, snapshot_syllabus
+from app.local_documents.resolver import (
+    REGISTRY_SERVED,
+    ExternalDocumentResolver,
+    ResolverInput,
+    ResolverOutput,
+)
 from app.models import EvaluationResult, Syllabus
+from app.models.evaluation_external_document import EvaluationExternalDocument
 
 logger = structlog.get_logger(__name__)
 
 
 # Per-agent prompt_version snapshot baked into every persisted record
 # (D026: each run must be independently reproducible).
+#
+# A5 is added in Phase 9.C.5.3 as ``"a5_v1"`` — the coordinator-level
+# version. The per-criterion handler versions
+# (``e1_v1``..``e5_v1``) are recorded separately on
+# ``EvaluationResult.extended_criteria_result["agent_output"]
+# ["handler_prompt_versions"]`` so a single core
+# ``prompt_versions`` snapshot does not have to carry five extra
+# keys on every run.
 DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
     "A1": "a1_v5",
     "A2": "a2_v1",
     "A3": "a3_v1",
     "A4": "a4_v2",
+    "A5": "a5_v1",
 }
 
 
@@ -80,12 +96,19 @@ class PendingRun:
     Returned by :meth:`EvaluationService.create_pending_run` so the
     async layer can publish ``evaluation_started`` and schedule the
     blocking graph execution without re-opening the DB session.
+
+    ``cdl_id`` and ``resolver_output`` are added in Phase 9.C.5.1 so
+    the A5 coordinator (wired in 9.C.5.2) can drive its
+    per-criterion handlers off the already-computed resolver verdict
+    without re-running it inside the graph.
     """
 
     evaluation_uuid: str
     seuid: str
     course_name: str
     syllabus_snapshot: dict[str, Any]
+    cdl_id: int
+    resolver_output: ResolverOutput
 
 
 class EvaluationService:
@@ -112,31 +135,86 @@ class EvaluationService:
 
     # ---- public API ----
 
-    def create_pending_run(self, seuid: str) -> PendingRun:
+    def create_pending_run(
+        self,
+        seuid: str,
+        *,
+        selected_document_ids: list[int] | None = None,
+    ) -> PendingRun:
         """Pre-allocate the run row and snapshot the syllabus.
 
-        Commits before returning so a parallel reader (the SSE stream
-        endpoint in Phase 5.4.H.2) can observe the ``pending`` row
-        while the graph runs in a worker thread.
+        Phase 9.C.5.1 extends this method so the entire pre-graph
+        bookkeeping happens in one transaction:
+
+          1. load the syllabus;
+          2. INSERT the ``evaluation_results`` pending row + flush;
+          3. run :class:`ExternalDocumentResolver` against the same
+             session;
+          4. INSERT one ``evaluation_external_documents`` row per
+             *resolved* document (E4 contributes none; resolver
+             hard-NA contributes none);
+          5. ``COMMIT``.
+
+        Any exception raised anywhere in this block triggers a
+        ``ROLLBACK``: there must never be a pending evaluation row
+        without its audit context, and conversely never an audit
+        row without a parent evaluation.
+
+        ``selected_document_ids`` lets callers (a future
+        ``POST /evaluations`` endpoint) pin specific registry
+        versions for this run. ``None`` means "let the resolver
+        apply the academic-year ladder".
+
+        Commits before returning so a parallel reader (the SSE
+        stream endpoint in Phase 5.4.H.2) can observe the
+        ``pending`` row while the graph runs in a worker thread.
 
         Raises:
             SyllabusNotFoundError: if no syllabus matches ``seuid``.
         """
         with self._session_factory() as session:
-            syllabus = session.query(Syllabus).filter_by(seuid=seuid).one_or_none()
-            if syllabus is None:
-                raise SyllabusNotFoundError(f"syllabus not found: seuid={seuid!r}")
+            try:
+                syllabus = (
+                    session.query(Syllabus).filter_by(seuid=seuid).one_or_none()
+                )
+                if syllabus is None:
+                    raise SyllabusNotFoundError(
+                        f"syllabus not found: seuid={seuid!r}",
+                    )
 
-            record = self._create_pending_record(session, syllabus)
-            evaluation_uuid = record.evaluation_uuid
-            course_name = record.course_name_snapshot
-            syllabus_snapshot = snapshot_syllabus(syllabus)
-            session.commit()
+                record = self._create_pending_record(session, syllabus)
+                evaluation_uuid = record.evaluation_uuid
+                course_name = record.course_name_snapshot
+                syllabus_snapshot = snapshot_syllabus(syllabus)
+                cdl_id = syllabus.cdl_id
+
+                resolver = ExternalDocumentResolver(session)
+                resolver_output = resolver.resolve(
+                    ResolverInput(
+                        cdl_id=cdl_id,
+                        academic_year=syllabus.academic_year,
+                        has_english=syllabus.has_english,
+                        selected_document_ids=selected_document_ids,
+                    ),
+                )
+
+                audit_rows_count = self._persist_external_documents(
+                    session,
+                    evaluation_result_id=record.id,
+                    resolver_output=resolver_output,
+                )
+
+                session.commit()
+            except Exception:
+                session.rollback()
+                raise
 
             logger.info(
                 "evaluation_pending_committed",
                 evaluation_uuid=evaluation_uuid,
                 seuid=seuid,
+                cdl_id=cdl_id,
+                external_documents_audited=audit_rows_count,
             )
 
         return PendingRun(
@@ -144,6 +222,8 @@ class EvaluationService:
             seuid=seuid,
             course_name=course_name,
             syllabus_snapshot=syllabus_snapshot,
+            cdl_id=cdl_id,
+            resolver_output=resolver_output,
         )
 
     def execute_pending_run(
@@ -259,6 +339,46 @@ class EvaluationService:
         session.flush()
         return record
 
+    def _persist_external_documents(
+        self,
+        session: Session,
+        *,
+        evaluation_result_id: int,
+        resolver_output: ResolverOutput,
+    ) -> int:
+        """Insert one audit row per resolved external document.
+
+        Skips E4 entirely (E4 is served by the syllabus's own
+        ``*_en`` fields, never by a registry document). Skips
+        criteria that the resolver reported as ``applicable=False``
+        (they contribute zero documents). Returns the inserted row
+        count so callers can log a summary; raises if the
+        ``evaluation_external_documents`` table refuses the row
+        (unlikely — the unique constraint cannot fire on a fresh
+        pending record).
+        """
+        count = 0
+        for code in REGISTRY_SERVED:  # ("E1", "E2", "E3", "E5") — E4 excluded
+            resolution = resolver_output.by_criterion.get(code)
+            if resolution is None or not resolution.applicable:
+                continue
+            for doc in resolution.documents:
+                session.add(
+                    EvaluationExternalDocument(
+                        evaluation_result_id=evaluation_result_id,
+                        local_document_id=doc.local_document_id,
+                        criterion_code=code,
+                        document_version_snapshot=doc.document_version_snapshot,
+                        file_hash_snapshot=doc.file_hash_snapshot,
+                        document_type_snapshot=doc.document_type_snapshot,
+                        resolution_reason=doc.resolution_reason,
+                    ),
+                )
+                count += 1
+        if count:
+            session.flush()
+        return count
+
     def _run_graph(
         self,
         *,
@@ -269,6 +389,11 @@ class EvaluationService:
             "syllabus_seuid": pending.seuid,
             "course_name": pending.course_name,
             "syllabus_snapshot": pending.syllabus_snapshot,
+            # 9.C.5.2: A5 inputs. The orchestrator skips the a5 node
+            # when ``resolver_output`` is absent, so passing both
+            # keys here is what turns A5 ON for a real run.
+            "cdl_id": pending.cdl_id,
+            "resolver_output": pending.resolver_output,
         }
         logger.info(
             "evaluation_graph_started",
@@ -322,6 +447,10 @@ class EvaluationService:
             record.agent_errors = dict(agent_errors) if agent_errors else None
             record.retrieved_chunks = _index_chunks_by_criterion(agent_outputs)
             record.final_report = final_state.get("final_report")
+            record.extended_criteria_result = _dump_extended_result(
+                final_state.get("extended_result"),
+                final_state.get("extended_agent_output"),
+            )
             session.commit()
 
     def _persist_failure(
@@ -406,3 +535,56 @@ def _index_chunks_by_criterion(
             criterion = ref_dict.get("criterion_code") or "_unknown"
             by_criterion.setdefault(criterion, []).append(ref_dict)
     return by_criterion
+
+
+def _dump_extended_result(
+    extended_result: Any | None,
+    extended_agent_output: Any | None,
+) -> dict[str, Any] | None:
+    """Serialise the Phase 9.C.5.3 ``extended_criteria_result`` column.
+
+    Returns ``None`` when the run did not invoke A5 at all (legacy
+    runs, or fresh installs without a resolver supplied). Otherwise
+    returns a JSON-safe dict carrying the aggregated extended result
+    plus the raw ``ExtendedAgentOutput`` for full reproducibility.
+
+    Shape contract::
+
+        {
+            "criterion_scores": {"E1": int|None, ..., "E5": int|None},
+            "na_criteria":     [{"criterion_code": str,
+                                 "source":         "resolver"|"handler_na"|"handler_error",
+                                 "reason":         str}, ...],
+            "handler_errors":  {<E*>: <error message>, ...},
+            "status":          "completed" | "partial" | "failed",
+            "agent_output":    <ExtendedAgentOutput.model_dump()> | None
+        }
+    """
+    if extended_result is None and extended_agent_output is None:
+        return None
+    payload: dict[str, Any] = {}
+    if extended_result is not None:
+        payload["criterion_scores"] = dict(
+            getattr(extended_result, "criterion_scores", {}) or {},
+        )
+        payload["na_criteria"] = [
+            {
+                "criterion_code": r.criterion_code,
+                "source": r.source,
+                "reason": r.reason,
+            }
+            for r in getattr(extended_result, "na_criteria", []) or []
+        ]
+        payload["handler_errors"] = dict(
+            getattr(extended_result, "handler_errors", {}) or {},
+        )
+        payload["status"] = getattr(extended_result, "status", None)
+    if extended_agent_output is not None and hasattr(
+        extended_agent_output, "model_dump",
+    ):
+        payload["agent_output"] = extended_agent_output.model_dump(mode="json")
+    elif extended_agent_output is not None:
+        payload["agent_output"] = extended_agent_output  # already dict-shaped
+    else:
+        payload["agent_output"] = None
+    return payload

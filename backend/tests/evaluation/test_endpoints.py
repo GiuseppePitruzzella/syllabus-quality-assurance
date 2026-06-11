@@ -292,7 +292,8 @@ def test_get_evaluation_returns_persisted_row(client_and_seuid):
     assert body["criterion_scores"]["C1"] == 2
     assert body["llm_model"] == "gemini-2.5-flash"
     assert body["gcp_project_id"] == "test-project"
-    assert set(body["prompt_versions"].keys()) == {"A1", "A2", "A3", "A4"}
+    # Phase 9.C.5.3: A5 coordinator version is now tracked alongside A1-A4.
+    assert set(body["prompt_versions"].keys()) == {"A1", "A2", "A3", "A4", "A5"}
 
 
 def test_get_evaluation_unknown_uuid_returns_404(client_and_seuid):

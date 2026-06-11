@@ -91,6 +91,33 @@ class EvaluationResult(Base):
     #          "similarity_score": 0.79}, ...], ...}
     retrieved_chunks: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
 
+    # === Extended criteria (A5 ExternalConsistencyAgent — Phase 9.C.5.3) ===
+    # Persisted alongside but STRICTLY SEPARATE from the core
+    # ``core_score`` / ``coverage`` / ``criterion_scores`` /
+    # ``na_criteria`` fields. A failed or skipped A5 path NEVER
+    # changes ``status``, ``core_score`` or any other core field —
+    # the run can ship its C1-C9 ``completed`` status with this
+    # column carrying ``{"status": "failed", ...}``.
+    #
+    # Shape::
+    #
+    #     {
+    #         "criterion_scores": {"E1": int|null, ... "E5": int|null},
+    #         "na_criteria":     [{"criterion_code": "E2",
+    #                              "source": "resolver",
+    #                              "reason": "..."}, ...],
+    #         "handler_errors":  {"E2": "...", ...},
+    #         "status":          "completed" | "partial" | "failed",
+    #         "agent_output":    <ExtendedAgentOutput.model_dump()>
+    #     }
+    #
+    # ``agent_output.handler_prompt_versions`` carries the per-E*
+    # prompt versions actually used in this run (D026 traceability
+    # symmetric to the core ``prompt_versions`` column).
+    extended_criteria_result: Mapped[dict[str, Any] | None] = mapped_column(
+        JSON, nullable=True,
+    )
+
     # === Final user-facing report =====================================
     final_report: Mapped[str | None] = mapped_column(Text, nullable=True)
 

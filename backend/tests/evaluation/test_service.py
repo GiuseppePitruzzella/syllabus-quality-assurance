@@ -264,7 +264,8 @@ def test_evaluate_records_scientific_configuration(
     assert record.gcp_project_id == "test-project"
     assert record.gcp_location == "europe-west1"
     # Per-agent prompt versions snapshot
-    assert set(record.prompt_versions.keys()) == {"A1", "A2", "A3", "A4"}
+    # A5 was added in Phase 9.C.5.3 as a coordinator-level entry.
+    assert set(record.prompt_versions.keys()) == {"A1", "A2", "A3", "A4", "A5"}
 
 
 def test_evaluate_persists_retrieved_chunks_grouped_by_criterion(
@@ -411,4 +412,9 @@ def test_default_prompt_versions_track_current_agent_releases():
         "A2": "a2_v1",
         "A3": "a3_v1",
         "A4": "a4_v2",
+        # Phase 9.C.5.3: A5 added at coordinator-level. The per-E*
+        # handler versions live in
+        # ``EvaluationResult.extended_criteria_result.agent_output
+        # .handler_prompt_versions``.
+        "A5": "a5_v1",
     }

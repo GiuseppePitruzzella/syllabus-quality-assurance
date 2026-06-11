@@ -58,6 +58,7 @@ def _production_async_service() -> AsyncEvaluationService:
     from app.evaluation.agents.llm_client import VertexAILLMClient
     from app.evaluation.orchestrator import build_graph
     from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    from app.evaluation.rag.external_retriever import ExternalDocumentRetriever
     from app.evaluation.rag.retriever import NormativeRetriever
 
     project_id, location = settings.require_vertex_ai_config()
@@ -71,6 +72,11 @@ def _production_async_service() -> AsyncEvaluationService:
         output_dimensionality=sci.embedding_output_dimensionality,
     )
     retriever = NormativeRetriever(chroma, embeddings, sci)
+    # Phase 9.C.5.2: build the external retriever lazily so a fresh
+    # install with no ``external_documents`` collection cannot crash
+    # the startup path. The retriever itself returns [] on a missing
+    # collection; instantiation is cheap and side-effect-free.
+    external_retriever = ExternalDocumentRetriever(chroma, embeddings, sci)
     llm_client = VertexAILLMClient(
         project_id=project_id,
         location=location,
@@ -85,6 +91,7 @@ def _production_async_service() -> AsyncEvaluationService:
         graph = build_graph(
             retriever=retriever,
             llm_client=llm_client,
+            external_retriever=external_retriever,
             progress_publisher=progress_publisher,
         )
         return graph.invoke(initial_state)
