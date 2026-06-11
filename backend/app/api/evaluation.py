@@ -32,6 +32,8 @@ from app.schemas.evaluation import (
     EvaluationCreated,
     EvaluationDetail,
     EvaluationSummary,
+    ExtendedCriteriaResultPayload,
+    ExternalDocumentUsedPayload,
 )
 
 logger = structlog.get_logger(__name__)
@@ -147,12 +149,32 @@ async def get_evaluation(
     evaluation_uuid: str,
     sync_service: EvaluationService = Depends(get_sync_service),
 ) -> EvaluationDetail:
-    """Fetch one evaluation by UUID (any status: pending / running / done)."""
+    """Fetch one evaluation by UUID (any status: pending / running / done).
+
+    Phase 9.D.1: the detail payload now also carries
+    ``extended_criteria_result`` in its typed, compact shape and
+    ``external_documents_used`` (the audit-table view) so the frontend
+    can render the E1-E5 section without doing JSON archaeology.
+    """
     try:
         record = await asyncio.to_thread(sync_service.get_evaluation, evaluation_uuid)
+        external_used = await asyncio.to_thread(
+            sync_service.list_external_documents_used, evaluation_uuid,
+        )
     except EvaluationNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-    return EvaluationDetail.model_validate(record, from_attributes=True)
+    detail = EvaluationDetail.model_validate(record, from_attributes=True)
+    # The base ``model_validate`` reads ``extended_criteria_result`` as
+    # the raw dict from the DB column. Re-shape it into the compact
+    # payload that lifts ``judgments`` / ``handler_prompt_versions``
+    # out of the ``agent_output`` envelope.
+    detail.extended_criteria_result = ExtendedCriteriaResultPayload.from_dump(
+        record.extended_criteria_result,
+    )
+    detail.external_documents_used = [
+        ExternalDocumentUsedPayload(**row) for row in external_used
+    ]
+    return detail
 
 
 @router.get("/evaluations/{evaluation_uuid}/stream")
