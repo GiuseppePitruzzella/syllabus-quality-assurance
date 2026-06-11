@@ -165,6 +165,89 @@ export interface EvaluationDetail extends EvaluationSummary {
   agent_errors: Record<string, string> | null;
   retrieved_chunks: Record<string, RetrievedChunkRef[]> | null;
   final_report: string | null;
+  /** Phase 9.D.1 — compact typed A5 result. ``null`` for legacy runs
+   *  (pre-9.C.5.3) so the consumer can render an EmptyState. */
+  extended_criteria_result: ExtendedCriteriaResultPayload | null;
+  /** Phase 9.D.1 — audit-table view of which registry documents fed
+   *  which extended criterion in this run. Empty when no document was
+   *  consumed. Order: by criterion_code asc, local_document_id asc. */
+  external_documents_used: ExternalDocumentUsedPayload[];
+}
+
+// ---------------------------------------------------------------------------
+// Phase 9.D.1 — Extended-criteria (E1-E5) payloads (mirror of
+// app/schemas/evaluation.py)
+// ---------------------------------------------------------------------------
+
+export type ExtendedStatus = "completed" | "partial" | "failed";
+
+/** Closed enum: the *provenance* of an extended NA. ``handler_error``
+ *  is the *technical* NA branch — the UI must surface it distinctly
+ *  from the other two (semantic NA). */
+export type ExtendedNASource = "resolver" | "handler_na" | "handler_error";
+
+/** Closed enum: criteria served by the registry. E4 is NEVER here by
+ *  construction (it's syllabus-served and never produces an audit
+ *  row). The type forbids passing E4 to anything expecting this
+ *  variant. */
+export type RegistryServedCriterion = "E1" | "E2" | "E3" | "E5";
+
+export type ResolutionReason =
+  | "explicit_selection"
+  | "academic_year_match"
+  | "latest_available_fallback";
+
+export interface ExtendedEvidencePayload {
+  text: string;
+  source_field: string | null;
+  source_document_id: number | null;
+  source_chunk_id: string | null;
+}
+
+export interface ExtendedJudgmentPayload {
+  criterion_code: ExtendedCriterionCode;
+  score: 0 | 1 | 2 | null;
+  is_na: boolean;
+  is_na_technical: boolean;
+  na_reason: string | null;
+  justification: string;
+  evidences: ExtendedEvidencePayload[];
+  confidence: "low" | "medium" | "high";
+}
+
+export interface ExtendedNAPayload {
+  criterion_code: ExtendedCriterionCode;
+  source: ExtendedNASource;
+  reason: string;
+}
+
+export interface ExtendedCriteriaResultPayload {
+  status: ExtendedStatus;
+  /** Per-criterion score, ``null`` for NA. Keys are E* codes. */
+  criterion_scores: Record<string, number | null>;
+  na_criteria: ExtendedNAPayload[];
+  /** Map E* -> error message. Always populated when the matching
+   *  criterion is reported as ``handler_error`` in ``na_criteria``. */
+  handler_errors: Record<string, string>;
+  judgments: ExtendedJudgmentPayload[];
+  /** Map E* -> prompt version actually used in this run. Includes
+   *  only handlers that were invoked. */
+  handler_prompt_versions: Record<string, string>;
+}
+
+export interface ExternalDocumentUsedPayload {
+  criterion_code: RegistryServedCriterion;
+  local_document_id: number;
+  document_type: LocalDocumentType;
+  document_version: number;
+  file_hash: string;
+  resolution_reason: ResolutionReason;
+  /** Title from the live registry row. ``null`` only if the row was
+   *  hard-deleted (RESTRICT FK should normally prevent this). */
+  title: string | null;
+  /** ISO timestamp set when the document was soft-deleted after
+   *  this run. UI should display a "archiviato" pill in that case. */
+  deleted_at: string | null;
 }
 
 export interface NACriterionRecord {

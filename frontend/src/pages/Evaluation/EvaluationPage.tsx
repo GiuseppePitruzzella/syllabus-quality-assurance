@@ -14,6 +14,7 @@ import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 import { EvaluationOutputTabs } from "./EvaluationOutputTabs";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
+import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 
 const TERMINAL_STATUSES = new Set<EvaluationStatus>([
   "completed",
@@ -102,11 +103,13 @@ export function EvaluationPage() {
             lastError={stream.lastError}
           />
           <EvaluationScorePanel data={data} />
+          <ExtendedCriteriaResults data={data} />
           <EvaluationOutputTabs data={data} />
         </>
       ) : (
         <>
           <EvaluationScorePanel data={data} />
+          <ExtendedCriteriaResults data={data} />
           <EvaluationOutputTabs data={data} />
           {hasStreamEvents ? (
             <CollapsibleTimeline>
