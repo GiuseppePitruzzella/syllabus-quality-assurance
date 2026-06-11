@@ -6,9 +6,15 @@ import type {
   EvaluationDetail,
   ExtendedCriteriaResultPayload,
   ExtendedCriterionCode,
+  ExtendedEvidencePayload,
   ExtendedJudgmentPayload,
   ExtendedNAPayload,
 } from "@/lib/types";
+
+// Truncate the inline evidence preview so the table row stays compact
+// (Phase 9.D.3 evidence rule: distinguish syllabus / external without
+// blowing up row height; user expands for the full quote).
+const EVIDENCE_PREVIEW_CHARS = 140;
 
 interface Props {
   data: EvaluationDetail;
@@ -294,17 +300,9 @@ function ExpandedExtendedDetails({
           <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Evidenze testuali
           </p>
-          <ul className="space-y-1.5 text-xs">
+          <ul className="space-y-1.5">
             {judgment.evidences.map((ev, i) => (
-              <li key={i} className="flex flex-col gap-0.5">
-                <code className="self-start rounded bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-                  {ev.source_field ??
-                    (ev.source_document_id
-                      ? `doc:${ev.source_document_id}`
-                      : "—")}
-                </code>
-                <span className="text-foreground/90">“{ev.text}”</span>
-              </li>
+              <EvidenceRow key={i} evidence={ev} />
             ))}
           </ul>
         </div>
@@ -314,6 +312,86 @@ function ExpandedExtendedDetails({
         </p>
       )}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Evidence row (Phase 9.D.3 polish)
+// ---------------------------------------------------------------------------
+
+/**
+ * Compact evidence line with a leading pill that makes the source
+ * explicit ("Syllabus · field" vs "Documento esterno · doc:N") and a
+ * truncated quote. The user expands to read the full quote — long
+ * Italian justifications would otherwise stretch the row well past
+ * the table width.
+ */
+function EvidenceRow({ evidence }: { evidence: ExtendedEvidencePayload }) {
+  const [expanded, setExpanded] = useState(false);
+  const isSyllabus = evidence.source_field !== null;
+  const isExternal = evidence.source_document_id !== null;
+  const text = evidence.text ?? "";
+  const isLong = text.length > EVIDENCE_PREVIEW_CHARS;
+  const display = expanded || !isLong
+    ? text
+    : `${text.slice(0, EVIDENCE_PREVIEW_CHARS).trimEnd()}…`;
+
+  // Pill content branches on the typed source. Order matters: the
+  // E4 paired-prefix rule keeps source_field on both halves of a
+  // pair, while E1/E2/E3/E5 numeric judgments must have at least
+  // one external citation.
+  let badgeCls =
+    "inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ";
+  let badgeText: string;
+  let detail: string | null = null;
+  if (isSyllabus) {
+    badgeCls +=
+      "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300";
+    badgeText = "Syllabus";
+    detail = evidence.source_field;
+  } else if (isExternal) {
+    badgeCls +=
+      "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300";
+    badgeText = "Documento esterno";
+    detail = `doc:${evidence.source_document_id}${
+      evidence.source_chunk_id ? ` · ${evidence.source_chunk_id}` : ""
+    }`;
+  } else {
+    // Defensive: a well-formed payload always has exactly one
+    // source; the API-side validator would have rejected the run
+    // otherwise. We still render the row so debug remains possible.
+    badgeCls += "border-border bg-muted text-muted-foreground";
+    badgeText = "—";
+  }
+
+  return (
+    <li className="rounded-md border border-border/40 bg-background/60 px-2.5 py-2 text-xs">
+      <div className="mb-1 flex flex-wrap items-center gap-1.5">
+        <span className={badgeCls}>{badgeText}</span>
+        {detail ? (
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            {detail}
+          </code>
+        ) : null}
+      </div>
+      <p className="leading-relaxed text-foreground/90">
+        <span className="text-muted-foreground">“</span>
+        {display}
+        <span className="text-muted-foreground">”</span>
+        {isLong ? (
+          <>
+            {" "}
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="text-[11px] font-medium text-primary hover:underline"
+            >
+              {expanded ? "comprimi" : "espandi"}
+            </button>
+          </>
+        ) : null}
+      </p>
+    </li>
   );
 }
 
