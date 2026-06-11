@@ -66,7 +66,7 @@ from app.local_documents.ingester import (  # noqa: E402
     DEFAULT_COLLECTION_NAME as EXTERNAL_COLLECTION,
 )
 from app.main import app  # noqa: E402
-from app.models import Syllabus  # noqa: E402
+from app.models import EvaluationResult, Syllabus  # noqa: E402
 from app.models.evaluation_external_document import (  # noqa: E402
     EvaluationExternalDocument,
 )
@@ -103,6 +103,22 @@ def main() -> int:
             "soft-delete the document, re-check, and cleanup."
         ),
     )
+    parser.add_argument(
+        "--preserve-history",
+        action="store_true",
+        help=(
+            "Skip the final cleanup so the smoke leaves an inspectable "
+            "demo run in the DB: the soft-deleted document, its audit row, "
+            "the file on disk, the Chroma chunks AND the EvaluationResult "
+            "all remain. Useful when you want to re-open the frontend "
+            "later and re-verify the historical view of a soft-deleted "
+            "document. Default (flag absent) is a full cleanup: the "
+            "EvaluationResult is hard-deleted, which cascades to the "
+            "audit row, the LocalDocument is then unreferenced and is "
+            "hard-deleted with its file + Chroma chunks — so the smoke "
+            "leaves zero trace in evaluation history."
+        ),
+    )
     args = parser.parse_args()
 
     print(f"=== Phase 9.D smoke — seuid={args.seuid} ===\n")
@@ -134,49 +150,64 @@ def main() -> int:
                 print(f"  - id={d.id} title={d.title!r}")
             return 2
 
-    client = TestClient(app)
+    # Use TestClient as a context manager so the FastAPI lifespan
+    # hooks fire (startup + shutdown) and the threaded scheduler
+    # drains cleanly. Without the ``with`` block the script exits
+    # while a background indexing task is still pending and prints
+    # a noisy warning at teardown.
     failures: list[str] = []
     e5_doc_id: int | None = None
     evaluation_uuid: str | None = None
-    try:
-        # 1. seed E5 document
-        e5_doc_id = _seed_e5_document(
-            client, cdl_id=cdl_id, smoke_title=smoke_title,
-        )
-
-        # 2. run a real evaluation through the HTTP API
-        evaluation_uuid = _trigger_evaluation_and_wait(client, args.seuid)
-        if evaluation_uuid is None:
-            failures.append("evaluation did not complete in time")
-            return _conclude(failures)
-
-        # 3a. fetch the detail and validate the active shape
-        failures.extend(
-            _check_detail_active(client, evaluation_uuid, e5_doc_id, smoke_title)
-        )
-
-        # 4. optional human-in-the-loop pause
-        if args.hold > 0 and not failures:
-            print(
-                f"\n>>> Hold {args.hold}s — open the dev frontend at "
-                f"http://localhost:5173/evaluation/{evaluation_uuid} "
-                "and verify the panel. Press Ctrl+C to abort early."
+    with TestClient(app) as client:
+        try:
+            # 1. seed E5 document
+            e5_doc_id = _seed_e5_document(
+                client, cdl_id=cdl_id, smoke_title=smoke_title,
             )
-            try:
-                time.sleep(args.hold)
-            except KeyboardInterrupt:
-                print("  hold interrupted; proceeding to soft-delete check")
 
-        # 3b. soft-delete the document and validate the historical view
-        if not failures:
+            # 2. run a real evaluation through the HTTP API
+            evaluation_uuid = _trigger_evaluation_and_wait(client, args.seuid)
+            if evaluation_uuid is None:
+                failures.append("evaluation did not complete in time")
+                return _conclude(failures)
+
+            # 3a. fetch the detail and validate the active shape
             failures.extend(
-                _check_detail_soft_deleted(
-                    client, evaluation_uuid, e5_doc_id,
+                _check_detail_active(
+                    client, evaluation_uuid, e5_doc_id, smoke_title,
                 )
             )
-    finally:
-        if e5_doc_id is not None:
-            _force_cleanup_e5_document(e5_doc_id)
+
+            # 4. optional human-in-the-loop pause
+            if args.hold > 0 and not failures:
+                print(
+                    f"\n>>> Hold {args.hold}s — open the dev frontend at "
+                    f"http://localhost:5173/evaluation/{evaluation_uuid} "
+                    "and verify the panel. Press Ctrl+C to abort early."
+                )
+                try:
+                    time.sleep(args.hold)
+                except KeyboardInterrupt:
+                    print("  hold interrupted; proceeding to soft-delete check")
+
+            # 3b. soft-delete the document and validate the historical view
+            if not failures:
+                failures.extend(
+                    _check_detail_soft_deleted(
+                        client, evaluation_uuid, e5_doc_id,
+                    )
+                )
+        finally:
+            if args.preserve_history:
+                _print_preserved_summary(
+                    evaluation_uuid=evaluation_uuid,
+                    e5_doc_id=e5_doc_id,
+                )
+            elif e5_doc_id is not None:
+                _force_cleanup(
+                    e5_doc_id=e5_doc_id,
+                    evaluation_uuid=evaluation_uuid,
+                )
 
     return _conclude(failures)
 
@@ -391,17 +422,56 @@ def _check_detail_soft_deleted(
 # ---------------------------------------------------------------------------
 
 
-def _force_cleanup_e5_document(e5_doc_id: int) -> None:
-    print(f"\n  Cleanup: hard-removing temp doc id={e5_doc_id}")
+def _force_cleanup(
+    *, e5_doc_id: int, evaluation_uuid: str | None,
+) -> None:
+    """Hard-cleanup the full smoke trail.
+
+    Order matters: deleting the ``EvaluationResult`` first lets the
+    audit row CASCADE-delete automatically (FK
+    ``evaluation_result_id ON DELETE CASCADE``); the
+    ``LocalDocument`` is then unreferenced and can be hard-deleted
+    despite the audit-side ``RESTRICT`` FK; finally we drop the file
+    on disk and the Chroma chunks.
+
+    The smoke is supposed to leave zero trace in evaluation history
+    when this branch runs. The ``--preserve-history`` flag selects
+    the opposite policy.
+    """
+    print(f"\n  Cleanup: hard-removing smoke trail (doc id={e5_doc_id})")
+    file_rel_path: str | None = None
     with SessionLocal() as session:
+        # Force FK constraints on so the CASCADE actually fires
+        # on SQLite (engine-level setting is off by default).
+        session.execute(_pragma_fk_on())
+
+        # Delete the EvaluationResult so the audit row cascades.
+        if evaluation_uuid is not None:
+            evaluation = (
+                session.query(EvaluationResult)
+                .filter_by(evaluation_uuid=evaluation_uuid)
+                .one_or_none()
+            )
+            if evaluation is not None:
+                session.delete(evaluation)
+                session.flush()
+
+        # Defensive: if the cascade didn't fire (older SQLite,
+        # non-FK driver, ...), drop any audit row that still points
+        # at the temp doc.
         session.query(EvaluationExternalDocument).filter_by(
             local_document_id=e5_doc_id,
         ).delete(synchronize_session=False)
-        doc = session.query(LocalDocument).filter_by(id=e5_doc_id).one_or_none()
-        file_rel_path = doc.file_path if doc else None
+
+        # Hard-delete the LocalDocument (file path captured first).
+        doc = (
+            session.query(LocalDocument).filter_by(id=e5_doc_id).one_or_none()
+        )
         if doc is not None:
+            file_rel_path = doc.file_path
             session.delete(doc)
         session.commit()
+
     if file_rel_path:
         full = Path(settings.local_documents_dir).resolve() / file_rel_path
         if full.exists():
@@ -415,6 +485,33 @@ def _force_cleanup_e5_document(e5_doc_id: int) -> None:
         collection.delete(where={"document_id": {"$eq": int(e5_doc_id)}})
     except Exception as exc:  # noqa: BLE001 — cleanup best-effort
         print(f"  [WARN] Chroma cleanup skipped: {exc}")
+
+
+def _print_preserved_summary(
+    *, evaluation_uuid: str | None, e5_doc_id: int | None,
+) -> None:
+    print("\n  Cleanup skipped (--preserve-history).")
+    print(
+        "  The smoke trail is left in place so the soft-deleted view "
+        "remains inspectable:"
+    )
+    if evaluation_uuid is not None:
+        print(f"   - EvaluationResult: {evaluation_uuid}")
+    if e5_doc_id is not None:
+        print(
+            f"   - LocalDocument: id={e5_doc_id} (deleted_at set, file on disk and "
+            "Chroma chunks preserved)"
+        )
+    print(
+        "  Re-run with the cleanup default (no flag) when you no longer "
+        "need the demo data."
+    )
+
+
+def _pragma_fk_on():
+    """Return a SQLAlchemy ``text()`` enabling SQLite FK constraints."""
+    from sqlalchemy import text  # imported lazily to keep top imports small
+    return text("PRAGMA foreign_keys=ON")
 
 
 def _conclude(failures: list[str]) -> int:
