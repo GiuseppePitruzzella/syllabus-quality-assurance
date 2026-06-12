@@ -50,6 +50,7 @@ with the estimate; ``--yes`` skips the prompt.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import io
 import json
@@ -82,6 +83,7 @@ E5_FIXTURE_VERSION = "v1"
 E5_DOCUMENT_TYPE = "usi_dipartimentali"
 E5_DOCUMENT_TITLE = "Usi dipartimentali LM-18 — Phase 9.F baseline"
 E5_ACADEMIC_YEAR = "2025-2026"
+REDACTED = "<REDACTED>"
 
 REPO_ROOT = _THIS.parent.parent.parent
 PROTOCOL_PATH = REPO_ROOT / "data" / "calibration" / "phase_9_f" / "protocol.md"
@@ -571,15 +573,30 @@ def _write_evaluation_json(
     output_dir: Path,
     seuid: str,
 ) -> None:
+    redacted_body = copy.deepcopy(body)
+    _redact_gcp_project_id(redacted_body)
     payload = {
         **_calibration_header(),
         "e5_document": e5_doc,
-        "evaluation_detail": body,
+        "evaluation_detail": redacted_body,
     }
     (output_dir / f"{seuid}__evaluation.json").write_text(
         json.dumps(payload, indent=2, ensure_ascii=False, default=str),
         encoding="utf-8",
     )
+
+
+def _redact_gcp_project_id(obj: Any) -> None:
+    """Redact project identifiers recursively before persisting artifacts."""
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            if key == "gcp_project_id":
+                obj[key] = REDACTED
+            else:
+                _redact_gcp_project_id(value)
+    elif isinstance(obj, list):
+        for item in obj:
+            _redact_gcp_project_id(item)
 
 
 def _write_report_md(body: dict[str, Any], output_dir: Path, seuid: str) -> None:

@@ -1,0 +1,31 @@
+{
+  "calibration_mode": "phase_9_f_baseline",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "started_at": "2026-06-12T08:22:46.618414+00:00",
+  "finished_at": "2026-06-12T08:34:26.037692+00:00",
+  "duration_seconds": 699.42,
+  "e4_prompt_version": "e4_v1",
+  "e5_prompt_version": "e5_v1",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": false
+  },
+  "e5_fixture_sha256": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+  "seuids": [
+    "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+    "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+    "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+    "FE97232C-4F07-41F8-A82F-FF73592265EC",
+    "0B53E8E2-4B90-426F-A25C-3AA31FA4B649"
+  ],
+  "evaluation_uuids": [
+    "75d52174-d0bd-48ed-9ccf-44ddd7d93d7e",
+    "929bf379-e823-415f-940f-f1e16fbf564f",
+    "46adcec2-cc07-4d05-9fa4-a86d264a34a9",
+    "fe0b5e42-fc74-4733-a714-f112a8178249",
+    "82aacfd9-6e21-4789-865f-48f4e5ca6ddb"
+  ]
+}
