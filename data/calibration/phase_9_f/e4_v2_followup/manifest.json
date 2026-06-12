@@ -1,0 +1,73 @@
+{
+  "calibration_mode": "phase_9_f_e4_v2_followup",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "e4_prompt_version": "e4_v2",
+  "e5_prompt_version": "e5_v1",
+  "started_at": "2026-06-12T13:45:44.430453+00:00",
+  "finished_at": "2026-06-12T13:57:02.982184+00:00",
+  "duration_seconds": 678.55,
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "e5_fixture_sha256": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+  "sample": [
+    {
+      "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "course_label": "Advanced Computer Graphics",
+      "role": "real",
+      "expected_e4": "score:1",
+      "accepted_e4": [
+        "score:0",
+        "score:1"
+      ]
+    },
+    {
+      "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+      "course_label": "Deep Learning",
+      "role": "real",
+      "expected_e4": "score:2",
+      "accepted_e4": [
+        "score:2"
+      ]
+    },
+    {
+      "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "course_label": "Internet of Things",
+      "role": "real",
+      "expected_e4": "NA-handler_na",
+      "accepted_e4": [
+        "NA-handler_na",
+        "NA-resolver"
+      ]
+    },
+    {
+      "seuid": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+      "course_label": "Machine Learning",
+      "role": "real",
+      "expected_e4": "score:0",
+      "accepted_e4": [
+        "score:0"
+      ]
+    },
+    {
+      "seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+      "course_label": "Sistemi distribuiti avanzati (ctrl)",
+      "role": "synthetic_positive_control",
+      "expected_e4": "score:2",
+      "accepted_e4": [
+        "score:2"
+      ]
+    }
+  ],
+  "evaluation_uuids": [
+    "624e70bb-ef87-4189-b99c-66de17a66c7e",
+    "71efc174-4aab-4ab6-9835-d474409d0b63",
+    "3f9261ff-d0fc-4af2-b929-997dce6ac49a",
+    "92505a9c-b9b4-4a16-b4ad-7b1684d35c6a",
+    "85928c9d-1216-48d8-99c2-c7afe048f82b"
+  ]
+}

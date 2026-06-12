@@ -1,0 +1,965 @@
+{
+  "calibration_mode": "phase_9_f_e4_v2_followup",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "e4_prompt_version": "e4_v2",
+  "expected_e4": "score:1",
+  "observed_e4": "score:1",
+  "role": "real",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "624e70bb-ef87-4189-b99c-66de17a66c7e",
+    "syllabus_seuid_snapshot": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+    "course_name_snapshot": "Advanced Computer Graphics",
+    "status": "completed",
+    "started_at": "2026-06-12T13:45:44.881008",
+    "finished_at": "2026-06-12T13:48:31.786112",
+    "duration_ms": 166905,
+    "core_score": 1.56,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 1,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta la maggior parte delle sezioni obbligatorie richieste dalle Linee Guida UniCT, quali risultati di apprendimento, prerequisiti, contenuti, modalità di verifica, esempi di domande, testi/riferimenti, modalità di svolgimento e metodi didattici, e modalità di frequenza. Tuttavia, la sezione relativa alla programmazione (schedule_it) risulta assente (null), rendendo la completezza strutturale parziale.",
+            "evidences": [
+              {
+                "text": "Conoscenza\ne capacità di comprensione (knowledge and understanding):\na) data\nvisualization: lo studente apprenderà i principi della corretta\nvisualizzazione dati seguento l’approccio strutturato della\n‘Grammar of Graphics’.\nb) visual programming: lo studente\napprenderà i prinicipi generali dello stile di programmazione\nmediante reti di nodi con particolare riferimento al loro uso nel\nsistema Blender.\nCapacità\ndi applicare conoscenza e comprensione (applying knowledge and\nunderstanding):\na)\nlo studente applicherà i principi di cui sopra utilizzando le\nversioni più aggiornate delle librerie Python di gestione e\nvisualizzazione dati (pandas, seabor, plotnine).\nb)\nlo studente familiarizzerà con il sistema dei Geonodes di Blender\nper la creazione di asset parametrici.\nAutonomia\ndi giudizio (making judgements):\na)\nlo studente acquisirà criteri per la valutazione della qualità\ntecnica e della efficacia informativa di una presentazione grafica di\ndati quantitativi e qualitativi.\nb)\nlo studente acquisirà esperienza e abilità di giudizio circa al\nopportunità di progettazione parametrica o realizzazione statica di\nasset 3d.\nAbilità\ncomunicative (communication skills):\na)\nlo studente acquisirà competenza di base per la redazione di grafici\ninformativi complessi che possano validamente accompagnare l’analisi\ndi dati sperimentali.\nb)\nlo studente acquisirà competenza per la creazione di interfacce\nutili al controllo di asset 3d parametrici di buona qualità grafica.\nCapacità\ndi apprendimento (learning skills):\na)\nlo studente sarà in grado di orientarsi e operare con profitto\nnell’utilizzo di librerie di visualizzazione dati in costante\naggiornamento.\nb)\nlo studente sarà in possesso degli eementi base della programmazione\nvisuale per apprendere in autonomia come essa viene applicata in vari\nsettori di sviluppo software.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenza\ndella programmazione strutturata ed ad oggetti con particolare\nriferimento al linguaggio Python.\nConoscenza\ndelle nozioni di base di statistica descrittiva e testing di ipotesi.\nConoscenza\ndelle nozioni base di Interazione Uomo/Macchina.\nEsperienza\nnell’utilizzo di un sistema di un ambiente di sviluppo di asset\ngrafici 3d con particolare riferimento a Blender.\nNozioni\nsui grafi.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Modulo\nData Visualization\n(3cfu)\nIn questo primo modulo del\ncorso si affronta il tema della rappresentazione grafica di\ninformazioni numeriche e/o qualitative a partire da una collezione\nstrutturata di dati.\nSi fornisce una breve panoramica storica\npresentando esempi di data visualizaztion precursori dei metodi\nmoderni.\nSi\naffrontano successivamente alcune problematiche rilevanti relative\nalla percezione visuale passando in rassegna le leggi della Gestalt e\nalla valutazione dello stile grafico secondo le regole di E.Tufte.\nDopo\naver presentato una rapida tassonomia dei grafici più comuni nella\nreportistica tecnica attuale si introduce l’approccio strutturale\ndella ‘Grammar of Graphics’ di L.Wilkinson dapprima nel sup\naspetto teorico e successivamente con attività di laboratorio in\nPython.\nLe\nattività di laboratorio includono lo sviluppo di ‘notebook’ che\nutilizzino le librerie pandas, matplotlib, seaborn e plotnine.\nModulo\nVisual programming (3cfu)\nIn\nquesto modulo dopo avere presentato una breve storia dell’approccio\nvisuale alla programmazione e illustarto alcuni degli esempi pù noti\nsi presentano gli ambienti di sviluppo ‘a nodi’ presenti dentro\nil software 3d Blender con particolare riferimento al sistema detto\ndei ‘geometry nodes’..\nGiustificata\ncon esempi rilevanti la opportunità e il valore dlelo sviluppo di\nasset parametrici vs asset fissi si svolgono attività di laboratorio\nche presentano via via i ‘nodi’ base e i ‘nodi’ avanzati per\ncompletare lo sviluppo di asset complessi sia statici che animati.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La\nverifica si svolge in due parti:\nParte\na) prova di laboratorio della durata di 3 ore relativa alla creazione\ndi grafiche e visualizzazioni a partire da una base di dati\ntabellare.\nParte\nb) Sviluppo e presentazione di un progetto (autonomo ed individuale)\nche includa la creazione di asset parametrici che utilizzino in modo\navanzato i geonodes.\nLa\nprova d’esame è finalizzata a valutare in modo approfondito la\npreparazione dello studente, la capacità di analisi e di\nragionamento sugli argomenti trattati durante il corso, nonché\nl’adeguatezza del linguaggio tecnico utilizzato.\nLe\ndue prove hanno peso eguale ai fini della valutazione e costituiscono\nentrambe elementi essenziali per la valutazione complessiva del\nprofitto.\nLa presentazione e discussione del progetto ‘geonodes’\nè successiva al superamento della prova di laboratorio.\nPer\nl'attribuzione del voto finale si seguiranno di norma i seguenti\ncriteri:\n-\nnon\napprovato:\nlo\nstudente non ha acquisito i concetti di base e non è in grado di\nsvolgere gli esercizi.\n-\n18-23:\nlo studente dimostra una padronanza minima dei concetti di base, le\nsue capacità di esposizione e di collegamento dei contenuti sono\nmodeste, riesce a risolvere semplici esercizi.\n-\n24-27:\nlo studente dimostra una buona padronanza dei contenuti del\ncorso, le sue capacità di esposizione e di collegamento dei\ncontenuti sono buone, risolve gli esercizi con pochi errori.\n-\n28-30 e lode:\nlo studente ha acquisito tutti i contenuti del corso ed è in grado\ndi esporli compiutamente e di collegarli con spirito critico; risolve\ngli esercizi in modo completo e senza errori.\nGli\nstudenti con disabilità e/o DSA dovranno contattare con sufficiente\nanticipo rispetto alla data dell'esame il docente, il referente CInAP\ndel DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono\nsostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Le\nprove di Laboratorio richiedono lo sviluppo di alcune tipologie di\ngrafico (barplot, pieplot, scatterplot multimodali, denisty plot,\ndenisty matrix etc) a partire da basi di dati tabellari con max 300\nrecords a 10 campi (numerici e/o categoriali). Sono fornite per tempo\nagli studenti esempi di prova e le prove assegnate vengono via via\npubblicate nella paogina FB del corso.\nDurante\nle lezioni verranno svolti degli esercizi simili a quelli che gli\nstudenti dovranno affrontare nel loro esame finale. Ulteriori\nesercizi verranno resi disponibili nel corso delle lezioni.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Il\nprimo modulo utilizza:\n-\ndispense e slide fornite dal docente nella pagina FB del corso, tali\nrisorse sono disponibili all’inizio delle lezioni e sono aggiornate\ncostantemente.\n-\nsi abitua lo studente all’utilizzo on line della documentazione API\ndelle librerie utilizzate.\nSi\nsuggerisce inoltre la lettura di:\n-\n‘The Grammar of Graphics’ L.Wilkinsonet alii, Springer 2nd ed.\n-\n‘Non designer’s design book’, R.Williams, Pearson ed.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "L’insegnamento\nsi svolge attraverso lezioni frontali e attività di laboratorio. Le\nlezioni introdurranno i concetti teorici, mentre il laboratorio ne\npermetterà l’applicazione pratica tramite esercitazioni e casi\nstudio.\nQualora\nl'insegnamento venisse impartito in modalità mista o a distanza\npotranno essere introdotte le necessarie variazioni rispetto a quanto\ndichiarato in precedenza, al fine di rispettare il programma previsto\ne riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Seconod le regole del corso di Studio",
+                "source_field": "attendance_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta la versione inglese per il titolo del corso, i risultati di apprendimento e le modalità di verifica. Tuttavia, la sezione relativa ai contenuti del corso in inglese (`course_content_en`) è vuota, rendendo la completezza bilingue parziale rispetto al perimetro minimo richiesto.",
+            "evidences": [
+              {
+                "text": "Advanced Computer Graphics",
+                "source_field": "course_name"
+              },
+              {
+                "text": "Knowledge and Understanding:\na) Data Visualization: The student will learn the principles of proper data visualization using the structured approach of the 'Grammar of Graphics'.\nb) Visual Programming: The student will learn the general principles of the node-based programming style, with particular reference to their use in the Blender system.\nApplying Knowledge and Understanding:\na) The student will apply the above principles using the latest versions of Python data management and visualization libraries (pandas, seabor, plotnine).\nb) The student will familiarize themselves with Blender's Geonodes system for creating parametric assets.\nMaking Judgments:\na) The student will acquire criteria for evaluating the technical quality and informative effectiveness of a graphical presentation of quantitative and qualitative data.\nb) the student will acquire experience and judgment skills regarding the opportunity for parametric design or static creation of 3D assets.\nCommunication skills:\na) The student will acquire basic skills in creating complex information graphics that can effectively support the analysis of experimental data.\nb) The student will acquire skills in creating interfaces useful for controlling high-quality parametric 3D assets.\nLearning skills:\na) The student will be able to navigate and effectively use constantly updated data visualization libraries.\nb) The student will possess the basic elements of visual programming to independently learn how it is applied in various areas of software development.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The exam consists of two parts:\nPart a) A 3-hour laboratory test on creating graphics and visualizations from a tabular database.\nPart b) Development and presentation of a project (independent and individual) that includes the creation of parametric assets using advanced geonodes.\nThe exam is designed to thoroughly assess the student's preparation, analytical and reasoning skills on the topics covered in the course, as well as the appropriateness of the technical language used.\nThe two tests carry equal weight in the evaluation and are both essential elements in the overall assessment of student progress.\nThe presentation and discussion of the \"geonodes\" project follows the successful completion of the laboratory test.\nThe following criteria will generally be used to assign the final grade:\n- Not approved: The student has not mastered the basic concepts and is unable to complete the exercises.\n- 18-23: The student demonstrates minimal mastery of the basic concepts, their presentation and connection skills are modest, and they are able to solve simple exercises.\n- 24-27: The student demonstrates good mastery of the course content, their presentation and connection skills are good, and they solve the exercises with few errors.\n- 28-30 with honors: The student has mastered all the course content and is able to present it fully and connect it critically; they solve the exercises completely and without errors.\nStudents with disabilities and/or learning disabilities (DSA) must contact the instructor, the DMI CInAP representative (Prof. Daniele), and CInAP well in advance of the exam date to communicate their intention to take the exam with appropriate compensatory measure",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e formulati in modo specifico, indicando le conoscenze e le esperienze richieste agli studenti. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene indicata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza\ndella programmazione strutturata ed ad oggetti con particolare\nriferimento al linguaggio Python.\nConoscenza\ndelle nozioni di base di statistica descrittiva e testing di ipotesi.\nConoscenza\ndelle nozioni base di Interazione Uomo/Macchina.\nEsperienza\nnell’utilizzo di un sistema di un ambiente di sviluppo di asset\ngrafici 3d con particolare riferimento a Blender.\nNozioni\nsui grafi.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 20041,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 35306,
+            "response_chars": 13826,
+            "latency_ms": 17572
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7250294089317322
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7247593402862549
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.5.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.5.a",
+            "similarity_score": 0.7094722986221313
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.3__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.3",
+            "similarity_score": 0.7234761118888855
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6947801411151886
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7603316605091095
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.732572078704834
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7300246357917786
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano un linguaggio centrato sullo studente, indicando esplicitamente le conoscenze e le abilità che lo studente acquisirà al termine del corso, con dettagli sugli strumenti e i contesti di applicazione. Non si limitano a descrivere il contenuto del corso, ma si focalizzano sugli esiti dell'apprendimento.",
+            "evidences": [
+              {
+                "text": "Conoscenza\ne capacità di comprensione (knowledge and understanding):\na) data\nvisualization: lo studente apprenderà i principi della corretta\nvisualizzazione dati seguento l’approccio strutturato della\n‘Grammar of Graphics’.\nb) visual programming: lo studente\napprenderà i prinicipi generali dello stile di programmazione\nmediante reti di nodi con particolare riferimento al loro uso nel\nsistema Blender.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità\ndi applicare conoscenza e comprensione (applying knowledge and\nunderstanding):\na)\nlo studente applicherà i principi di cui sopra utilizzando le\nversioni più aggiornate delle librerie Python di gestione e\nvisualizzazione dati (pandas, seabor, plotnine).\nb)\nlo studente familiarizzerà con il sistema dei Geonodes di Blender\nper la creazione di asset parametrici.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia\ndi giudizio (making judgements):\na)\nlo studente acquisirà criteri per la valutazione della qualità\ntecnica e della efficacia informativa di una presentazione grafica di\ndati quantitativi e qualitativi.\nb)\nlo studente acquisirà esperienza e abilità di giudizio circa al\nopportunità di progettazione parametrica o realizzazione statica di\nasset 3d.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità\ncomunicative (communication skills):\na)\nlo studente acquisirà competenza di base per la redazione di grafici\ninformativi complessi che possano validamente accompagnare l’analisi\ndi dati sperimentali.\nb)\nlo studente acquisirà competenza per la creazione di interfacce\nutili al controllo di asset 3d parametrici di buona qualità grafica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità\ndi apprendimento (learning skills):\na)\nlo studente sarà in grado di orientarsi e operare con profitto\nnell’utilizzo di librerie di visualizzazione dati in costante\naggiornamento.\nb)\nlo studente sarà in possesso degli eementi base della programmazione\nvisuale per apprendere in autonomia come essa viene applicata in vari\nsettori di sviluppo software.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono chiaramente articolati e coperti all'interno della sezione 'learning_outcomes_it'. Nonostante i campi specifici 'dublin_*_it' siano vuoti, il contenuto presente nella sezione principale dei risultati di apprendimento è esaustivo, specifico e differenziato per ciascun descrittore, dimostrando piena coerenza con le raccomandazioni delle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza\ne capacità di comprensione (knowledge and understanding):\na) data\nvisualization: lo studente apprenderà i principi della corretta\nvisualizzazione dati seguento l’approccio strutturato della\n‘Grammar of Graphics’.\nb) visual programming: lo studente\napprenderà i prinicipi generali dello stile di programmazione\nmediante reti di nodi con particolare riferimento al loro uso nel\nsistema Blender.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità\ndi applicare conoscenza e comprensione (applying knowledge and\nunderstanding):\na)\nlo studente applicherà i principi di cui sopra utilizzando le\nversioni più aggiornate delle librerie Python di gestione e\nvisualizzazione dati (pandas, seabor, plotnine).\nb)\nlo studente familiarizzerà con il sistema dei Geonodes di Blender\nper la creazione di asset parametrici.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia\ndi giudizio (making judgements):\na)\nlo studente acquisirà criteri per la valutazione della qualità\ntecnica e della efficacia informativa di una presentazione grafica di\ndati quantitativi e qualitativi.\nb)\nlo studente acquisirà esperienza e abilità di giudizio circa al\nopportunità di progettazione parametrica o realizzazione statica di\nasset 3d.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità\n comunicative (communication skills):\na)\nlo studente acquisirà competenza di base per la redazione di grafici\ninformativi complessi che possano validamente accompagnare l’analisi\ndi dati sperimentali.\nb)\nlo studente acquisirà competenza per la creazione di interfacce\nutili al controllo di asset 3d parametrici di buona qualità grafica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità\ndi apprendimento (learning skills):\na)\nlo studente sarà in grado di orientarsi e operare con profitto\nnell’utilizzo di librerie di visualizzazione dati in costante\naggiornamento.\nb)\nlo studente sarà in possesso degli eementi base della programmazione\nvisuale per apprendere in autonomia come essa viene applicata in vari\nsettori di sviluppo software.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 31733,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28773,
+            "response_chars": 5890,
+            "latency_ms": 30633
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7861755937337875
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7494108378887177
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7452357411384583
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8046028167009354
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7601305991411209
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7565101385116577
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico, articolate in due parti distinte (prova di laboratorio e progetto). Vengono forniti dettagli sui criteri di attribuzione del voto, che sono ben graduati e correlati al livello di padronanza dei contenuti. Inoltre, la sezione 'sample_questions_it' fornisce esempi concreti delle tipologie di prove di laboratorio, aumentando la trasparenza e la verificabilità.",
+            "evidences": [
+              {
+                "text": "La verifica si svolge in due parti:\nParte a) prova di laboratorio della durata di 3 ore relativa alla creazione di grafiche e visualizzazioni a partire da una base di dati tabellare.\nParte b) Sviluppo e presentazione di un progetto (autonomo ed individuale) che includa la creazione di asset parametrici che utilizzino in modo avanzato i geonodes.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n- non approvato: lo studente non ha acquisito i concetti di base e non è in grado di svolgere gli esercizi.\n- 18-23: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di esposizione e di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n- 24-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di esposizione e di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n- 28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di esporli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Le prove di Laboratorio richiedono lo sviluppo di alcune tipologie di grafico (barplot, pieplot, scatterplot multimodali, denisty plot, denisty matrix etc) a partire da basi di dati tabellari con max 300 records a 10 campi (numerici e/o categoriali). Sono fornite per tempo agli studenti esempi di prova e le prove assegnate vengono via via pubblicate nella paogina FB del corso.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. Sono suddivisi in due moduli distinti, ciascuno con una descrizione dettagliata degli argomenti trattati, delle problematiche affrontate e delle attività di laboratorio previste. La presenza di una schedule dettagliata, sebbene in inglese, che elenca gli argomenti lezione per lezione con le relative ore, rafforza ulteriormente la chiarezza e la progressione tematica dei contenuti.",
+            "evidences": [
+              {
+                "text": "Modulo Data Visualization (3cfu)\nIn questo primo modulo del corso si affronta il tema della rappresentazione grafica di informazioni numeriche e/o qualitative a partire da una collezione strutturata di dati. Si fornisce una breve panoramica storica presentando esempi di data visualizaztion precursori dei metodi moderni. Si affrontano successivamente alcune problematiche rilevanti relative alla percezione visuale passando in rassegna le leggi della Gestalt e alla valutazione dello stile grafico secondo le regole di E.Tufte. Dopo avere presentato una rapida tassonomia dei grafici più comuni nella reportistica tecnica attuale si introduce l’approccio strutturale della ‘Grammar of Graphics’ di L.Wilkinson dapprima nel sup aspetto teorico e successivamente con attività di laboratorio in Python. Le attività di laboratorio includono lo sviluppo di ‘notebook’ che utilizzino le librerie pandas, matplotlib, seaborn e plotnine.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Modulo Visual programming (3cfu)\nIn questo modulo dopo avere presentato una breve storia dell’approccio visuale alla programmazione e illustarto alcuni degli esempi pù noti si presentano gli ambienti di sviluppo ‘a nodi’ presenti dentro il software 3d Blender con particolare riferimento al sistema detto dei ‘geometry nodes’.. Giustificata con esempi rilevanti la opportunità e il valore dlelo sviluppo di asset parametrici vs asset fissi si svolgono attività di laboratorio che presentano via via i ‘nodi’ base e i ‘nodi’ avanzati per completare lo sviluppo di asset complessi sia statici che animati.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "[...]\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Introduzione alla visualizzazione dati (1h)\",\n      \"riferimenti_testi\": \"\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Storia della visualizzazione dati (2h)\",\n      \"riferimenti_testi\": \"\"\n    },\n    ...\n    {\n      \"numero\": \"19\",\n      \"argomenti\": \"Nodi avanzati e specializzati (2h)\",\n      \"riferimenti_testi\": \"\"\n    }\n  ]",
+                "source_field": "schedule_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste un'ottima coerenza didattico-valutativa tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano sia la conoscenza teorica che la capacità di applicazione pratica, l'autonomia di giudizio e le abilità comunicative, in particolare nella creazione di grafici e asset parametrici. I metodi didattici, basati su lezioni frontali e attività di laboratorio, sono perfettamente allineati a questi obiettivi, fornendo sia la base teorica che l'esperienza pratica. Le modalità di verifica, che includono una prova di laboratorio per la creazione di grafiche e un progetto individuale per lo sviluppo di asset parametrici con geonodes, rispecchiano direttamente le competenze pratiche e di giudizio che gli studenti devono acquisire, garantendo che ciò che viene insegnato e atteso sia effettivamente valutato.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\na) data visualization: lo studente apprenderà i principi della corretta visualizzazione dati seguento l’approccio strutturato della ‘Grammar of Graphics’.\nb) visual programming: lo studente apprenderà i prinicipi generali dello stile di programmazione mediante reti di nodi con particolare riferimento al loro uso nel sistema Blender.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\na) lo studente applicherà i principi di cui sopra utilizzando le versioni più aggiornate delle librerie Python di gestione e visualizzazione dati (pandas, seabor, plotnine).\nb) lo studente familiarizzerà con il sistema dei Geonodes di Blender per la creazione di asset parametrici.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "L’insegnamento si svolge attraverso lezioni frontali e attività di laboratorio. Le lezioni introdurranno i concetti teorici, mentre il laboratorio ne permetterà l’applicazione pratica tramite esercitazioni e casi studio.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Modulo Data Visualization (3cfu) ... Le attività di laboratorio includono lo sviluppo di ‘notebook’ che utilizzino le librerie pandas, matplotlib, seaborn e plotnine.\nModulo Visual programming (3cfu) ... si svolgono attività di laboratorio che presentano via via i ‘nodi’ base e i ‘nodi’ avanzati per completare lo sviluppo di asset complessi sia statici che animati.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "La verifica si svolge in due parti:\nParte a) prova di laboratorio della durata di 3 ore relativa alla creazione di grafiche e visualizzazioni a partire da una base di dati tabellare.\nParte b) Sviluppo e presentazione di un progetto (autonomo ed individuale) che includa la creazione di asset parametrici che utilizzino in modo avanzato i geonodes.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 54670,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 44082,
+            "response_chars": 8516,
+            "latency_ms": 53660
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7631610631942749
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7462994456291199
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7454040050506592
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7572982758283615
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7540308237075806
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7237568795681
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7532176673412323
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7512899190187454
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.7__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.7",
+            "similarity_score": 0.7419905364513397
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diversi refusi e imprecisioni linguistiche sia nella versione italiana che in quella inglese, indicando una cura editoriale non ottimale. Si riscontrano errori di battitura e formattazione irregolare in varie sezioni. I riferimenti bibliografici sono parzialmente incompleti, mancando ad esempio l'anno di pubblicazione per i testi suggeriti. Inoltre, si nota un'incoerenza strutturale nella sezione dei Descrittori di Dublino in inglese, dove il campo `dublin_applying_en` include un'intestazione di sezione che dovrebbe appartenere a un altro descrittore, il quale risulta poi vuoto. Questi elementi suggeriscono una revisione superficiale del documento.",
+            "evidences": [
+              {
+                "text": "seguento l’approccio strutturato della\n‘Grammar of Graphics’.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "apprenderà i prinicipi generali dello stile di programmazione",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "sarà in possesso degli eementi base della programmazione",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Seconod le regole del corso di Studio",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "‘The Grammar of Graphics’ L.Wilkinsonet alii, Springer 2nd ed.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Making Judgments:\na) The student will acquire criteria for evaluating the technical quality and informative effectiveness of a graphical presentation of quantitative and qualitative data.\nb) the student will acquire experience and judgment skills regarding the opportunity for parametric design or static creation of 3D assets.",
+                "source_field": "dublin_applying_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 13308,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 29870,
+            "response_chars": 2048,
+            "latency_ms": 12874
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7254340052604675
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7088529467582703
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7250294089317322
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7247593402862549
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.5.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.5.a",
+          "similarity_score": 0.7094722986221313
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.3__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.3",
+          "similarity_score": 0.7234761118888855
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6947801411151886
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7603316605091095
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.732572078704834
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7300246357917786
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7861755937337875
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7494108378887177
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7452357411384583
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8046028167009354
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7601305991411209
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7565101385116577
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7631610631942749
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7462994456291199
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7454040050506592
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7572982758283615
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7540308237075806
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7237568795681
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7532176673412323
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7512899190187454
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.7__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.7",
+          "similarity_score": 0.7419905364513397
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7254340052604675
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7088529467582703
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — Advanced Computer Graphics\n\n## Sintesi\n\n- **CoreScore**: 1.56/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e verificabile. Utilizzano un linguaggio centrato sullo studente, indicando esplicitamente le conoscenze e le abilità che lo studente acquisirà al termine del corso, con dettagli sugli strumenti e i contesti di applicazione. Non si limitano a descrivere il contenuto del corso, ma si focalizzano sugli esiti dell'apprendimento.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono chiaramente articolati e coperti all'interno della sezione 'learning_outcomes_it'. Nonostante i campi specifici 'dublin_*_it' siano vuoti, il contenuto presente nella sezione principale dei risultati di apprendimento è esaustivo, specifico e differenziato per ciascun descrittore, dimostrando piena coerenza con le raccomandazioni delle Linee Guida UniCT.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico, articolate in due parti distinte (prova di laboratorio e progetto). Vengono forniti dettagli sui criteri di attribuzione del voto, che sono ben graduati e correlati al livello di padronanza dei contenuti. Inoltre, la sezione 'sample_questions_it' fornisce esempi concreti delle tipologie di prove di laboratorio, aumentando la trasparenza e la verificabilità.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. Sono suddivisi in due moduli distinti, ciascuno con una descrizione dettagliata degli argomenti trattati, delle problematiche affrontate e delle attività di laboratorio previste. La presenza di una schedule dettagliata, sebbene in inglese, che elenca gli argomenti lezione per lezione con le relative ore, rafforza ulteriormente la chiarezza e la progressione tematica dei contenuti.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste un'ottima coerenza didattico-valutativa tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano sia la conoscenza teorica che la capacità di applicazione pratica, l'autonomia di giudizio e le abilità comunicative, in particolare nella creazione di grafici e asset parametrici. I metodi didattici, basati su lezioni frontali e attività di laboratorio, sono perfettamente allineati a questi obiettivi, fornendo sia la base teorica che l'esperienza pratica. Le modalità di verifica, che includono una prova di laboratorio per la creazione di grafiche e un progetto individuale per lo sviluppo di asset parametrici con geonodes, rispecchiano direttamente le competenze pratiche e di giudizio che gli studenti devono acquisire, garantendo che ciò che viene insegnato e atteso sia effettivamente valutato.\n\n## Aree di miglioramento\n\n- **C1 — Completezza strutturale e documentale** (score 1): Il syllabus presenta la maggior parte delle sezioni obbligatorie richieste dalle Linee Guida UniCT, quali risultati di apprendimento, prerequisiti, contenuti, modalità di verifica, esempi di domande, testi/riferimenti, modalità di svolgimento e metodi didattici, e modalità di frequenza. Tuttavia, la sezione relativa alla programmazione (schedule_it) risulta assente (null), rendendo la completezza strutturale parziale.\n  - *Raccomandazione*: Considera di verificare che tutte e nove le sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) siano compilate con contenuto sostanziale, non solo come intestazione.\n- **C2 — Completezza bilingue** (score 1): Il syllabus presenta la versione inglese per il titolo del corso, i risultati di apprendimento e le modalità di verifica. Tuttavia, la sezione relativa ai contenuti del corso in inglese (`course_content_en`) è vuota, rendendo la completezza bilingue parziale rispetto al perimetro minimo richiesto.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e formulati in modo specifico, indicando le conoscenze e le esperienze richieste agli studenti. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene indicata una gradazione di importanza (utili, importanti, indispensabili) come raccomandato dalle Linee Guida UniCT.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diversi refusi e imprecisioni linguistiche sia nella versione italiana che in quella inglese, indicando una cura editoriale non ottimale. Si riscontrano errori di battitura e formattazione irregolare in varie sezioni. I riferimenti bibliografici sono parzialmente incompleti, mancando ad esempio l'anno di pubblicazione per i testi suggeriti. Inoltre, si nota un'incoerenza strutturale nella sezione dei Descrittori di Dublino in inglese, dove il campo `dublin_applying_en` include un'intestazione di sezione che dovrebbe appartenere a un altro descrittore, il quale risulta poi vuoto. Questi elementi suggeriscono una revisione superficiale del documento.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": 1,
+        "E5": 0
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": 1,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "La versione inglese del syllabus presenta una buona equivalenza semantica per i campi presenti in entrambe le lingue, come i risultati di apprendimento, i prerequisiti e le modalità di valutazione. Tuttavia, la sezione relativa al contenuto del corso (`course_content`) è presente solo in italiano, costituendo un'omissione rilevante nella versione inglese. Inoltre, sono presenti campi relativi ai descrittori di Dublino (`dublin_knowledge`, `dublin_applying`, `dublin_communication`, `dublin_learning`) solo nella versione inglese, che rappresentano un'anomalia formale. Queste lacune impediscono di assegnare il punteggio massimo, portando a un allineamento parziale.",
+          "evidences": [
+            {
+              "text": "Conoscenza\ne capacità di comprensione (knowledge and understanding):\na) data\nvisualization: lo studente apprenderà i principi della corretta\nvisualizzazione dati seguento l’approccio strutturato della\n‘Grammar of Graphics’.\nb) visual programming: lo studente\napprenderà i prinicipi generali dello stile di programmazione\nmediante reti di nodi con particolare riferimento al loro uso nel\nsistema Blender.",
+              "source_field": "learning_outcomes_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Knowledge and Understanding:\na) Data Visualization: The student will learn the principles of proper data visualization using the structured approach of the 'Grammar of Graphics'.\nb) Visual Programming: The student will learn the general principles of the node-based programming style, with particular reference to their use in the Blender system.",
+              "source_field": "learning_outcomes_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Modulo\nData Visualization\n(3cfu)\nIn questo primo modulo del\ncorso si affronta il tema della rappresentazione grafica di\ninformazioni numeriche e/o qualitative a partire da una collezione\nstrutturata di dati.\nSi fornisce una breve panoramica storica\npresentando esempi di data visualizaztion precursori dei metodi\nmoderni.\nSi\naffrontano successivamente alcune problematiche rilevanti relative\nalla percezione visuale passando in rassegna le leggi della Gestalt e\nalla valutazione dello stile grafico secondo le regole di E.Tufte.\nDopo\naver presentato una rapida tassonomia dei grafici più comuni nella\nreportistica tecnica attuale si introduce l’approccio strutturale\ndella ‘Grammar of Graphics’ di L.Wilkinson dapprima nel sup\naspetto teorico e successivamente con attività di laboratorio in\nPython.\nLe\nattività di laboratorio includono lo sviluppo di ‘notebook’ che\nutilizzino le librerie pandas, matplotlib, seaborn e plotnine.\nModulo\nVisual programming (3cfu)\nIn\nquesto modulo dopo avere presentato una breve storia dell’approccio\nvisuale alla programmazione e illustarto alcuni degli esempi pù noti\nsi presentano gli ambienti di sviluppo ‘a nodi’ presenti dentro\nil software 3d Blender con particolare riferimento al sistema detto\ndei ‘geometry nodes’..\nGiustificata\ncon esempi rilevanti la opportunità e il valore dlelo sviluppo di\nasset parametrici vs asset fissi si svolgono attività di laboratorio\nche presentano via via i ‘nodi’ base e i ‘nodi’ avanzati per\ncompletare lo sviluppo di asset complessi sia statici che animati.",
+              "source_field": "course_content_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "a) Data Visualization: The student will learn the principles of proper data visualization using the structured approach of the 'Grammar of Graphics'.\nb) Visual Programming: The student will learn the general principles of the node-based programming style, with particular reference to their use in the Blender system.",
+              "source_field": "dublin_knowledge_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            }
+          ],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 0,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus presenta diverse e significative non conformità rispetto agli usi dipartimentali esplicitati nel documento esterno. In particolare, la sezione dei prerequisiti non distingue tra conoscenze culturali/generali e disciplinari/specialistiche, contravvenendo all'indicazione che una lista omogenea non soddisfa l'uso. Inoltre, i riferimenti bibliografici non includono l'anno di pubblicazione per le opere citate, un requisito minimo e non negoziabile secondo le linee guida. Anche la sezione relativa alle modalità di frequenza è generica, rimandando alle regole del Corso di Studio anziché esplicitare lo status per l'insegnamento specifico, e la sezione delle domande d'esempio non fornisce una domanda concreta, ma solo una descrizione generica delle tipologie di prove.",
+          "evidences": [
+            {
+              "text": "Conoscenza della programmazione strutturata ed ad oggetti con particolare riferimento al linguaggio Python.\nConoscenza delle nozioni di base di statistica descrittiva e testing di ipotesi.\nConoscenza delle nozioni base di Interazione Uomo/Macchina.\nEsperienza nell’utilizzo di un sistema di un ambiente di sviluppo di asset grafici 3d con particolare riferimento a Blender.\nNozioni sui grafi.",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Una semplice lista omogenea che mischi le due famiglie senza alcuna separazione **non** soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "‘The Grammar of Graphics’ L.Wilkinsonet alii, Springer 2nd ed.\n-\n‘Non designer’s design book’, R.Williams, Pearson ed.",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "ogni riferimento bibliografico riportato nel syllabus deve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "il livello minimo di dettaglio sopra resta non negoziabile.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            },
+            {
+              "text": "Seconod le regole del corso di Studio",
+              "source_field": "attendance_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "la sezione deve indicare in modo esplicito:\n\n- se la frequenza è **obbligatoria** o **facoltativa**;\n- in caso di obbligatorietà parziale (es. solo per la componente\n  di laboratorio), specificare quale componente è soggetta a\n  obbligo;\n- per gli insegnamenti con componenti pratiche (laboratorio,\n  esercitazioni), indicare il livello di frequenza atteso anche\n  quando non strettamente obbligatorio (es. \"fortemente\n  raccomandata per la componente di laboratorio\").\n\nUn syllabus che lascia la sezione vuota o si limita a indicazioni\ngeneriche tipo \"frequenza consigliata\" senza distinguere\ncomponenti pratiche e teoriche è considerato parzialmente\naderente.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            },
+            {
+              "text": "Le prove di Laboratorio richiedono lo sviluppo di alcune tipologie di grafico (barplot, pieplot, scatterplot multimodali, denisty plot, denisty matrix etc) a partire da basi di dati tabellari con max 300 records a 10 campi (numerici e/o categoriali).",
+              "source_field": "sample_questions_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- includere **almeno una domanda esempio** rappresentativa,\n  preferibilmente nella sezione apposita\n  (`sample_questions_it`), oppure in fondo alla sezione modalità\n  di verifica.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}

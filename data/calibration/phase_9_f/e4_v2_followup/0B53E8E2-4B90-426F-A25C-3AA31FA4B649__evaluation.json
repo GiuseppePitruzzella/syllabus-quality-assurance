@@ -1,0 +1,922 @@
+{
+  "calibration_mode": "phase_9_f_e4_v2_followup",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "e4_prompt_version": "e4_v2",
+  "expected_e4": "NA-handler_na",
+  "observed_e4": "NA-handler_na",
+  "role": "real",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "3f9261ff-d0fc-4af2-b929-997dce6ac49a",
+    "syllabus_seuid_snapshot": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+    "course_name_snapshot": "INTERNET OF THINGS",
+    "status": "completed",
+    "started_at": "2026-06-12T13:50:43.053297",
+    "finished_at": "2026-06-12T13:52:25.859413",
+    "duration_ms": 102806,
+    "core_score": 1.33,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 1,
+      "C2": 0,
+      "C5": 1,
+      "C3": 1,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta la maggior parte delle nove sezioni obbligatorie richieste dalle Linee Guida UniCT in modo completo e dettagliato. Tuttavia, le sezioni relative agli 'Esempi di domande d'esame' e ai 'Testi adottati' risultano parzialmente compilate. La sezione 'Esempi di domande d'esame' contiene un solo esempio molto generico, mentre la sezione 'Testi adottati' elenca solo slide e un repository GitHub, senza indicare testi di riferimento tradizionali. Questo rende la completezza complessiva non ottimale.",
+            "evidences": [
+              {
+                "text": "Realizzare una soluzione IoT per monitorare una coltivazione di piante",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Sono disponibili le slides del corso pubblicamente:\nhttps://docs.google.com/presentation/d/1s7WTns6GiE-XUIywNy83hqUFYQeAIBy3K5g6Zrj0bLo/edit?usp=sharing\nInoltre anche la repository pubblica dei progetti:\nhttps://github.com/UniCT-Internet-of-Things",
+                "source_field": "references_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 0,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La completezza bilingue del syllabus è gravemente insufficiente. Sebbene il titolo del corso sia già in inglese, le sezioni fondamentali come i risultati di apprendimento, i contenuti del corso e le modalità di verifica sono completamente assenti nella versione inglese. Le Linee Guida UniCT e i requisiti AVA3 sottolineano l'importanza della disponibilità di queste informazioni in inglese per favorire l'internazionalizzazione e la comprensione da parte di studenti non italofoni.",
+            "evidences": [],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici in termini di conoscenze richieste ('Programmazione a microcontrollori', 'Programmazione 2', 'Reti di Calcolatori'). Viene anche indicata una gradazione di importanza ('Altamente consigliabile'). Tuttavia, il syllabus non distingue esplicitamente tra prerequisiti 'culturali' e 'formali' come raccomandato dalle Linee Guida UniCT, né chiarisce se si tratti di propedeuticità di altri insegnamenti o di conoscenze pregresse. Questa mancanza di distinzione impedisce il raggiungimento del punteggio massimo.",
+            "evidences": [
+              {
+                "text": "Altamente consigliabile:\nProgrammazione a microcontrollori\nProgrammazione 2\nReti di Calcolatori",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18107,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 33680,
+            "response_chars": 3107,
+            "latency_ms": 17145
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.729789137840271
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7230057716369629
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7130305469036102
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7398491501808167
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.6979573965072632
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7590314745903015
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.a__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.a",
+            "similarity_score": 0.7297618091106415
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.72706338763237
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La formulazione dei risultati di apprendimento è parzialmente specifica e verificabile. Sebbene la maggior parte dei descrittori utilizzi un linguaggio orientato allo studente e specifichi le conoscenze e abilità attese, il descrittore relativo alle \"Capacità di apprendimento\" si concentra sulla valutazione della comprensione piuttosto che sull'esplicitazione delle abilità di apprendimento che lo studente acquisirà. Inoltre, il descrittore \"Conoscenza e capacità di comprensione\" inizia con una frase che descrive l'obiettivo del corso (\"Il corso... si prefigge l'obiettivo di fornire\"), che è una formulazione meno ideale rispetto a una direttamente centrata sullo studente, come indicato dalle linee guida normative.",
+            "evidences": [
+              {
+                "text": "Il corso di \"\nInternet of Things\n\" si prefigge l'obiettivo di fornire agli studenti le conoscenze sui principi, modelli, tecniche e strumenti per la programmazione e progettazione di sistemi e architetture IoT.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le capacità di apprendimento degli studenti saranno valutate durante le esercitazioni di laboratorio, le quali hanno l'obiettivo di testare quanto e come gli studenti abbiano compreso il funzionamento delle tecnologie introdotte durante il corso.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Attraverso l'analisi di diversi casi di studio e tramite esercitazioni in laboratorio, il corso consente allo studente di ottenere le capacità di applicare le tecniche acquisite durante le lezioni teoriche nei contesti applicativi dove è richiesto l'utilizzo di tecnologie per l'IoT.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le lezioni del corso e soprattutto le attività di laboratorio sono organizzate in modo da includere un'analisi critica di casi di studio, delle soluzioni impiegate, delle possibili varianti e dei pro e contro di queste ultime, al fine di consentire allo studente di acquisire un'adeguata autonomia di valutazione delle scelte tecniche.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le abilità comunicative dello studente saranno considerate soprattutto durante le varie esercitazioni e esame finale con progetto annesso, in cui lo studente è chiamato ad esporre le scelte implementative adottate e motivandole opportunamente.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e articolati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati a ciascun descrittore. I contenuti per ciascun descrittore sono specifici e differenziati, coprendo adeguatamente le diverse dimensioni richieste (conoscenza, applicazione, giudizio, comunicazione, apprendimento). Non si riscontrano significative sovrapposizioni o genericità tali da compromettere la distinzione tra i descrittori, in linea con le raccomandazioni delle Linee Guida UniCT per una formulazione esplicita per ciascun descrittore.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding) . Il corso di \"\nInternet of Things\n\" si prefigge l'obiettivo di fornire agli studenti le conoscenze sui principi, modelli, tecniche e strumenti per la programmazione e progettazione di sistemi e architetture IoT.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding) . Attraverso l'analisi di diversi casi di studio e tramite esercitazioni in laboratorio, il corso consente allo studente di ottenere le capacità di applicare le tecniche acquisite durante le lezioni teoriche nei contesti applicativi dove è richiesto l'utilizzo di tecnologie per l'IoT.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements) . Le lezioni del corso e soprattutto le attività di laboratorio sono organizzate in modo da includere un'analisi critica di casi di studio, delle soluzioni impiegate, delle possibili varianti e dei pro e contro di queste ultime, al fine di consentire allo studente di acquisire un'adeguata autonomia di valutazione delle scelte tecniche.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills) . Le abilità comunicative dello studente saranno considerate soprattutto durante le varie esercitazioni e esame finale con progetto annesso, in cui lo studente è chiamato ad esporre le scelte implementative adottate e motivandole opportunamente.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills) . Le capacità di apprendimento degli studenti saranno valutate durante le esercitazioni di laboratorio, le quali hanno l'obiettivo di testare quanto e come gli studenti abbiano compreso il funzionamento delle tecnologie introdotte durante il corso.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 26708,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 26500,
+            "response_chars": 5618,
+            "latency_ms": 25929
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8083245754241943
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7702020406723022
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7667105942964554
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8237098455429077
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.783537745475769
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7782333493232727
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato e specifico. Il syllabus indica chiaramente le diverse prove (esame scritto, colloquio orale, prova progettuale), la loro sequenza e le condizioni per accedervi. È presente uno schema di attribuzione del voto che lega esplicitamente i punteggi alla padronanza dei contenuti e alla capacità di applicazione, in linea con le raccomandazioni delle Linee Guida UniCT. Viene fornito anche un esempio di domanda/task progettuale, che contribuisce ulteriormente alla chiarezza.",
+            "evidences": [
+              {
+                "text": "La verifica delle competenze acquisite viene effettuata tramite esame scritto e colloquio orale. La valutazione complessiva tiene conto della successiva prova progettuale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il colloquio orale è da intendersi integrativo alla prova scritta, con risultato almeno sufficiente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il progetto è obbligatorio e potrà essere richiesto esclusivamente dopo il superamento della prova scritta e orale (se richieste).",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20 : lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n20 - 25 : lo studente ha superato con successo la prova scritta ed orale, dimostrando una buona padronanza dei contenuti del corso\n25 - 29: lo studente ha affrontato la prova progettuale\n29 - 30 e lode : lo studente ha affrontato tutte le prove d'esame, riuscendo inoltre a progettare e a sviluppare un progetto IoT senza problemi.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Realizzare una soluzione IoT per monitorare una coltivazione di piante",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro e ben organizzato. Il campo 'course_content_it' articola gli argomenti in sezioni tematiche logiche, fornendo un buon livello di dettaglio che include tecnologie e protocolli specifici. La presenza di una 'schedule_it' con argomenti di alto livello complementa la descrizione dettagliata, offrendo una visione strutturata della progressione didattica.",
+            "evidences": [
+              {
+                "text": "Introduzione ai sistemi IoT\nCos’è l’IoT\nElementi di un ecosistema IoT\nTecnologie e business per l’IoT\nApplicazioni IoT e implicazioni\nComponenti IoT\nDai sensori ai Gateway\nMicrocontrollori (Esp8266, Esp32, STM32, Arduino, Raspberry)\nSensoristica\nSistemi Embedded (Raspberry, Pi Zero)\nFrameworks (Arduino, FreeRTOS, Gobot, etc)\nReti e Connettività\nTecnologie wireless per l’IoT\nRFID\nLe reti LoWPAN\nIntroduzione ai protocolli LoWPAN per l’IoT (non-IP) (Bluetooth, BLE, 802.15.4)\nIntroduzione ai protocolli WLAN per l’IoT (Wi-Fi, 6LoWPAN)\nIntroduzione ai protocolli WSAN per l’IoT (LoRa)\nComunicazione attraverso Internet\nProgettazione di una soluzione Gateway based\nProtocolli di comunicazione per l’IoT\nHTTP\nMQTT\nWebSockets\nIntegrazione dei sistemi IoT\nIntegrazione con il Web\nProgettazione e sviluppo di una soluzione complessa\nIntroduzione a LoRaWAN\nIntroduzione a Chirpstack\nIntroduzione a Docker\nRealizzazione di una soluzione LoRaWAN\nMachine learning applicato all’IoT\nIntroduzione a Keras\nIntroduzione a TensorFlow Lite\nIntroduzione a TensorFlow JS\nRealizzazione ed utilizzo di un modello di rete neurale su dispositivi IoT",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "IoT Introduction",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "IoT Components",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "IoT Communication",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "IoT Integration",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "IoT IA",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "IoT Security",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La coerenza didattico-valutativa è elevata. I risultati di apprendimento attesi, inclusi i descrittori di Dublino, sono ben allineati con i metodi didattici, i contenuti del corso e le modalità di verifica. In particolare, la capacità di applicare conoscenze e l'autonomia di giudizio sono sviluppate tramite 'esercitazioni pratiche' e 'attività di laboratorio' e verificate attraverso una 'prova progettuale' che richiede 'esporre le scelte implementative adottate e motivandole opportunamente', come evidenziato anche dalla domanda campione. Questo allineamento tra 'saper fare' e 'come viene accertato' è un punto di forza del syllabus.",
+            "evidences": [
+              {
+                "text": "fornire agli studenti le conoscenze sui principi, modelli, tecniche e strumenti per la programmazione e progettazione di sistemi e architetture IoT.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "ottenere le capacità di applicare le tecniche acquisite durante le lezioni teoriche nei contesti applicativi dove è richiesto l'utilizzo di tecnologie per l'IoT.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Le lezioni frontali teoriche sono intervallate da esercitazioni pratiche, svolte nella stessa aula di lezione o laboratorio adeguato. Gli studenti sono invitati a formare piccoli gruppi di lavoro (massimo 2-4 persone) per lo svolgimento delle esercitazioni proposte.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La verifica delle competenze acquisite viene effettuata tramite esame scritto e colloquio orale. La valutazione complessiva tiene conto della successiva prova progettuale.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "esporre le scelte implementative adottate e motivandole opportunamente.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Realizzare una soluzione IoT per monitorare una coltivazione di piante",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Realizzazione ed utilizzo di un modello di rete neurale su dispositivi IoT",
+                "source_field": "course_content_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 21802,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 36780,
+            "response_chars": 7302,
+            "latency_ms": 20856
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7574213147163391
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7397977113723755
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.7355422377586365
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7530655562877655
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7406657934188843
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7140628695487976
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7677611112594604
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7513385713100433
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7461144328117371
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta alcuni difetti di cura editoriale che ne compromettono la chiarezza e la completezza. Si riscontrano residui di formattazione (caratteri di nuova riga `\\n`) in diverse sezioni, frammenti di testo che non costituiscono frasi complete nei descrittori di Dublino e una sezione di riferimenti bibliografici che include solo link a materiali online, senza indicare testi di riferimento tradizionali come libri o articoli, come suggerito dalle Linee Guida UniCT. Inoltre, la descrizione della scala di valutazione presenta una leggera incoerenza nelle fasce di punteggio. Questi elementi indicano una cura editoriale parziale, ma non tale da rendere il documento gravemente illeggibile o sistematicamente incoerente.",
+            "evidences": [
+              {
+                "text": "Il corso di \"\nInternet of Things\n\" si prefigge l'obiettivo di fornire agli studenti le conoscenze sui principi, modelli, tecniche e strumenti per la programmazione e progettazione di sistemi e architetture IoT.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "dello studente saranno considerate soprattutto durante le varie esercitazioni e esame finale con progetto annesso, in cui lo studente è chiamato ad esporre le scelte implementative adottate e motivandole opportunamente.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Sono disponibili le slides del corso pubblicamente:\nhttps://docs.google.com/presentation/d/1s7WTns6GiE-XUIywNy83hqUFYQeAIBy3K5g6Zrj0bLo/edit?usp=sharing\nInoltre anche la repository pubblica dei progetti:\nhttps://github.com/UniCT-Internet-of-Things",
+                "source_field": "references_it"
+              },
+              {
+                "text": "20 - 25 : lo studente ha superato con successo la prova scritta ed orale, dimostrando una buona padronanza dei contenuti del corso\n25 - 29: lo studente ha affrontato la prova progettuale\n29 - 30 e lode : lo studente ha affrontato tutte le prove d'esame, riuscendo inoltre a progettare e a sviluppare un progetto IoT senza problemi.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il progetto dovrà essere poi pubblicato in maniera PUBBLICA sul repository ufficiale del corso (https://github.com/UniCT-Internet-of-Things).",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18207,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 21780,
+            "response_chars": 2575,
+            "latency_ms": 17754
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7096458673477173
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6981440782546997
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.729789137840271
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7230057716369629
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7130305469036102
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7398491501808167
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.6979573965072632
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7590314745903015
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.a__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.a",
+          "similarity_score": 0.7297618091106415
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.72706338763237
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8083245754241943
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7702020406723022
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7667105942964554
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8237098455429077
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.783537745475769
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7782333493232727
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7574213147163391
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7397977113723755
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.7355422377586365
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7530655562877655
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7406657934188843
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7140628695487976
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7677611112594604
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7513385713100433
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7461144328117371
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7096458673477173
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6981440782546997
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — INTERNET OF THINGS\n\n## Sintesi\n\n- **CoreScore**: 1.33/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e articolati nel syllabus, sia nel campo generale dei risultati di apprendimento che nei campi dedicati a ciascun descrittore. I contenuti per ciascun descrittore sono specifici e differenziati, coprendo adeguatamente le diverse dimensioni richieste (conoscenza, applicazione, giudizio, comunicazione, apprendimento). Non si riscontrano significative sovrapposizioni o genericità tali da compromettere la distinzione tra i descrittori, in linea con le raccomandazioni delle Linee Guida UniCT per una formulazione esplicita per ciascun descrittore.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato e specifico. Il syllabus indica chiaramente le diverse prove (esame scritto, colloquio orale, prova progettuale), la loro sequenza e le condizioni per accedervi. È presente uno schema di attribuzione del voto che lega esplicitamente i punteggi alla padronanza dei contenuti e alla capacità di applicazione, in linea con le raccomandazioni delle Linee Guida UniCT. Viene fornito anche un esempio di domanda/task progettuale, che contribuisce ulteriormente alla chiarezza.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro e ben organizzato. Il campo 'course_content_it' articola gli argomenti in sezioni tematiche logiche, fornendo un buon livello di dettaglio che include tecnologie e protocolli specifici. La presenza di una 'schedule_it' con argomenti di alto livello complementa la descrizione dettagliata, offrendo una visione strutturata della progressione didattica.\n- **C8 — Coerenza didattico-valutativa** (score 2): La coerenza didattico-valutativa è elevata. I risultati di apprendimento attesi, inclusi i descrittori di Dublino, sono ben allineati con i metodi didattici, i contenuti del corso e le modalità di verifica. In particolare, la capacità di applicare conoscenze e l'autonomia di giudizio sono sviluppate tramite 'esercitazioni pratiche' e 'attività di laboratorio' e verificate attraverso una 'prova progettuale' che richiede 'esporre le scelte implementative adottate e motivandole opportunamente', come evidenziato anche dalla domanda campione. Questo allineamento tra 'saper fare' e 'come viene accertato' è un punto di forza del syllabus.\n\n## Aree di miglioramento\n\n- **C1 — Completezza strutturale e documentale** (score 1): Il syllabus presenta la maggior parte delle nove sezioni obbligatorie richieste dalle Linee Guida UniCT in modo completo e dettagliato. Tuttavia, le sezioni relative agli 'Esempi di domande d'esame' e ai 'Testi adottati' risultano parzialmente compilate. La sezione 'Esempi di domande d'esame' contiene un solo esempio molto generico, mentre la sezione 'Testi adottati' elenca solo slide e un repository GitHub, senza indicare testi di riferimento tradizionali. Questo rende la completezza complessiva non ottimale.\n  - *Raccomandazione*: Considera di verificare che tutte e nove le sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) siano compilate con contenuto sostanziale, non solo come intestazione.\n- **C2 — Completezza bilingue** (score 0): La completezza bilingue del syllabus è gravemente insufficiente. Sebbene il titolo del corso sia già in inglese, le sezioni fondamentali come i risultati di apprendimento, i contenuti del corso e le modalità di verifica sono completamente assenti nella versione inglese. Le Linee Guida UniCT e i requisiti AVA3 sottolineano l'importanza della disponibilità di queste informazioni in inglese per favorire l'internazionalizzazione e la comprensione da parte di studenti non italofoni.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici in termini di conoscenze richieste ('Programmazione a microcontrollori', 'Programmazione 2', 'Reti di Calcolatori'). Viene anche indicata una gradazione di importanza ('Altamente consigliabile'). Tuttavia, il syllabus non distingue esplicitamente tra prerequisiti 'culturali' e 'formali' come raccomandato dalle Linee Guida UniCT, né chiarisce se si tratti di propedeuticità di altri insegnamenti o di conoscenze pregresse. Questa mancanza di distinzione impedisce il raggiungimento del punteggio massimo.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 1): La formulazione dei risultati di apprendimento è parzialmente specifica e verificabile. Sebbene la maggior parte dei descrittori utilizzi un linguaggio orientato allo studente e specifichi le conoscenze e abilità attese, il descrittore relativo alle \"Capacità di apprendimento\" si concentra sulla valutazione della comprensione piuttosto che sull'esplicitazione delle abilità di apprendimento che lo studente acquisirà. Inoltre, il descrittore \"Conoscenza e capacità di comprensione\" inizia con una frase che descrive l'obiettivo del corso (\"Il corso... si prefigge l'obiettivo di fornire\"), che è una formulazione meno ideale rispetto a una direttamente centrata sullo studente, come indicato dalle linee guida normative.\n  - *Raccomandazione*: Considera di riformulare i risultati di apprendimento in termini di conoscenze e abilità osservabili dello studente, evitando formulazioni che descrivono il corso ('il corso copre...') o espressioni generiche ('lo studente acquisirà conoscenze').\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta alcuni difetti di cura editoriale che ne compromettono la chiarezza e la completezza. Si riscontrano residui di formattazione (caratteri di nuova riga `\\n`) in diverse sezioni, frammenti di testo che non costituiscono frasi complete nei descrittori di Dublino e una sezione di riferimenti bibliografici che include solo link a materiali online, senza indicare testi di riferimento tradizionali come libri o articoli, come suggerito dalle Linee Guida UniCT. Inoltre, la descrizione della scala di valutazione presenta una leggera incoerenza nelle fasce di punteggio. Questi elementi indicano una cura editoriale parziale, ma non tale da rendere il documento gravemente illeggibile o sistematicamente incoerente.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": null,
+        "E5": 0
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E4",
+          "source": "handler_na",
+          "reason": "Il perimetro inglese del syllabus è insufficiente per il confronto cross-lingua: nessuna coppia IT/EN con contenuto sostanziale valutabile su entrambe le versioni."
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "Il perimetro inglese del syllabus è insufficiente per il confronto cross-lingua: nessuna coppia IT/EN con contenuto sostanziale valutabile su entrambe le versioni.",
+          "justification": "Il syllabus non espone alcun campo bilingue con contenuto sostanziale su entrambe le versioni IT ed EN. Senza almeno una coppia confrontabile, qualsiasi giudizio numerico sarebbe arbitrario, quindi il criterio è dichiarato NA semantico.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 0,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus disattende in modo significativo le indicazioni dipartimentali esplicite fornite. In particolare, la sezione \"Prerequisiti\" presenta un elenco omogeneo senza la richiesta distinzione tra conoscenze culturali/generali e disciplinari/specialistiche. Inoltre, la sezione \"Riferimenti bibliografici\" non include alcun riferimento formattato secondo gli standard minimi richiesti (autore, anno, titolo, editore/rivista, edizione), fornendo solo link a slide e repository. Sebbene la sezione \"Modalità di verifica\" includa una domanda esempio e indicazioni sui requisiti minimi per le prove, manca l'esplicitazione del peso relativo delle diverse componenti d'esame sul voto finale, come raccomandato dagli usi dipartimentali.",
+          "evidences": [
+            {
+              "text": "Altamente consigliabile:\nProgrammazione a microcontrollori\nProgrammazione 2\nReti di Calcolatori",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "La distinzione può essere realizzata con elenchi separati, con\nsottosezioni esplicite o con un elenco unico organizzato in modo\nchiaramente separabile. Una semplice lista omogenea che mischi le\ndue famiglie senza alcuna separazione **non** soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "Sono disponibili le slides del corso pubblicamente:\nhttps://docs.google.com/presentation/d/1s7WTns6GiE-XUIywNy83hqUFYQeAIBy3K5g6Zrj0bLo/edit?usp=sharing\nInoltre anche la repository pubblica dei progetti:\nhttps://github.com/UniCT-Internet-of-Things",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Ogni riferimento bibliografico riportato nel syllabus\ndeve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "La verifica delle competenze acquisite viene effettuata tramite esame scritto e colloquio orale. La valutazione complessiva tiene conto della successiva prova progettuale.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- esplicitare il **peso relativo** delle componenti dell'esame\n  (scritto, orale, progetto, prova in itinere) sul voto finale,\n  almeno qualitativamente (es. \"il progetto pesa per circa metà\n  del voto finale, lo scritto per circa metà\");",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}

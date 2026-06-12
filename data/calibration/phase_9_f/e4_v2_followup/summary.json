@@ -1,0 +1,284 @@
+{
+  "calibration_mode": "phase_9_f_e4_v2_followup",
+  "protocol_version": "phase_9_f_v1",
+  "manifest": {
+    "calibration_mode": "phase_9_f_e4_v2_followup",
+    "protocol_version": "phase_9_f_v1",
+    "e5_fixture_version": "v1",
+    "e4_prompt_version": "e4_v2",
+    "e5_prompt_version": "e5_v1",
+    "started_at": "2026-06-12T13:45:44.430453+00:00",
+    "finished_at": "2026-06-12T13:57:02.982184+00:00",
+    "duration_seconds": 678.55,
+    "e5_document": {
+      "id": 1,
+      "version": 1,
+      "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+      "reused": true
+    },
+    "e5_fixture_sha256": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "sample": [
+      {
+        "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+        "course_label": "Advanced Computer Graphics",
+        "role": "real",
+        "expected_e4": "score:1",
+        "accepted_e4": [
+          "score:0",
+          "score:1"
+        ]
+      },
+      {
+        "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+        "course_label": "Deep Learning",
+        "role": "real",
+        "expected_e4": "score:2",
+        "accepted_e4": [
+          "score:2"
+        ]
+      },
+      {
+        "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+        "course_label": "Internet of Things",
+        "role": "real",
+        "expected_e4": "NA-handler_na",
+        "accepted_e4": [
+          "NA-handler_na",
+          "NA-resolver"
+        ]
+      },
+      {
+        "seuid": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+        "course_label": "Machine Learning",
+        "role": "real",
+        "expected_e4": "score:0",
+        "accepted_e4": [
+          "score:0"
+        ]
+      },
+      {
+        "seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+        "course_label": "Sistemi distribuiti avanzati (ctrl)",
+        "role": "synthetic_positive_control",
+        "expected_e4": "score:2",
+        "accepted_e4": [
+          "score:2"
+        ]
+      }
+    ],
+    "evaluation_uuids": [
+      "624e70bb-ef87-4189-b99c-66de17a66c7e",
+      "71efc174-4aab-4ab6-9835-d474409d0b63",
+      "3f9261ff-d0fc-4af2-b929-997dce6ac49a",
+      "92505a9c-b9b4-4a16-b4ad-7b1684d35c6a",
+      "85928c9d-1216-48d8-99c2-c7afe048f82b"
+    ]
+  },
+  "runs": [
+    {
+      "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "course_label": "Advanced Computer Graphics",
+      "role": "real",
+      "evaluation_uuid": "624e70bb-ef87-4189-b99c-66de17a66c7e",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 169.07,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      },
+      "expected_e4": "score:1",
+      "observed_e4": "score:1",
+      "accepted_e4": [
+        "score:0",
+        "score:1"
+      ],
+      "passed": true,
+      "verdict": "OK — score:1 ∈ accepted ['score:0', 'score:1']",
+      "note": "course_content_en is empty; e4_v2 must surface the omission via it_only_substantial and refuse score 2.",
+      "e4": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 4
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 9
+      }
+    },
+    {
+      "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+      "course_label": "Deep Learning",
+      "role": "real",
+      "evaluation_uuid": "71efc174-4aab-4ab6-9835-d474409d0b63",
+      "core_status": "completed",
+      "core_score": 1.78,
+      "coverage": 1.0,
+      "duration_seconds": 129.53,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      },
+      "expected_e4": "score:2",
+      "observed_e4": "score:2",
+      "accepted_e4": [
+        "score:2"
+      ],
+      "passed": true,
+      "verdict": "OK — score:2 ∈ accepted ['score:2']",
+      "note": "Fully bilingual baseline case: e4_v2 must not penalise a syllabus with no omission via the new threshold rule.",
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 4
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "medium",
+        "evidences_count": 9
+      }
+    },
+    {
+      "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "course_label": "Internet of Things",
+      "role": "real",
+      "evaluation_uuid": "3f9261ff-d0fc-4af2-b929-997dce6ac49a",
+      "core_status": "completed",
+      "core_score": 1.33,
+      "coverage": 1.0,
+      "duration_seconds": 105.52,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      },
+      "expected_e4": "NA-handler_na",
+      "observed_e4": "NA-handler_na",
+      "accepted_e4": [
+        "NA-handler_na",
+        "NA-resolver"
+      ],
+      "passed": true,
+      "verdict": "OK — NA-handler_na ∈ accepted ['NA-handler_na', 'NA-resolver']",
+      "note": "has_english=True but no paired prefix has substantial content on both sides. Must remain semantic NA (resolver or handler), never technical NA.",
+      "e4": {
+        "outcome": "NA-handler_na",
+        "score": null,
+        "na_source": "handler_na",
+        "na_reason": "Il perimetro inglese del syllabus è insufficiente per il confronto cross-lingua: nessuna coppia IT/EN con contenuto sostanziale valutabile su entrambe le versioni.",
+        "confidence": "high",
+        "evidences_count": 0
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      }
+    },
+    {
+      "seuid": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+      "course_label": "Machine Learning",
+      "role": "real",
+      "evaluation_uuid": "92505a9c-b9b4-4a16-b4ad-7b1684d35c6a",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 162.82,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      },
+      "expected_e4": "score:0",
+      "observed_e4": "score:0",
+      "accepted_e4": [
+        "score:0"
+      ],
+      "passed": true,
+      "verdict": "OK — score:0 ∈ accepted ['score:0']",
+      "note": "Baseline had E4=0 with explicit contradictions on the EN side; e4_v2 must not relax this verdict.",
+      "e4": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 10
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 8
+      }
+    },
+    {
+      "seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+      "course_label": "Sistemi distribuiti avanzati (ctrl)",
+      "role": "synthetic_positive_control",
+      "evaluation_uuid": "85928c9d-1216-48d8-99c2-c7afe048f82b",
+      "core_status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_seconds": 111.58,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      },
+      "expected_e4": "score:2",
+      "observed_e4": "score:2",
+      "accepted_e4": [
+        "score:2"
+      ],
+      "passed": true,
+      "verdict": "OK — score:2 ∈ accepted ['score:2']",
+      "note": "Positive control with IT/EN paired on every prefix; must reach the maximum.",
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 9
+      }
+    }
+  ],
+  "fail_count": 0,
+  "pass_count": 5,
+  "overall_verdict": "GREEN — every expectation met",
+  "extended_status_counts": {
+    "completed": 5
+  },
+  "observed_e4_distribution": {
+    "score:1": 1,
+    "score:2": 2,
+    "NA-handler_na": 1,
+    "score:0": 1
+  }
+}
