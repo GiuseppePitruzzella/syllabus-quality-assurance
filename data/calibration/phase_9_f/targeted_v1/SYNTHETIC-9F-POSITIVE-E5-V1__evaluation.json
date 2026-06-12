@@ -1,0 +1,947 @@
+{
+  "calibration_mode": "phase_9_f_targeted_v1",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "synthetic_fixture_version": "v1",
+  "role": "synthetic_positive_control",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "911bd62a-f7b8-41fb-878a-5fb2b8d3f242",
+    "syllabus_seuid_snapshot": "SYNTHETIC-9F-POSITIVE-E5-V1",
+    "course_name_snapshot": "Sistemi distribuiti avanzati (controllo positivo E5)",
+    "status": "completed",
+    "started_at": "2026-06-12T10:23:08.728666",
+    "finished_at": "2026-06-12T10:25:11.756722",
+    "duration_ms": 123028,
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 1,
+      "C2": 1,
+      "C5": 2,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta la maggior parte delle nove sezioni obbligatorie previste dalle Linee Guida UniCT, con contenuti specifici e ben dettagliati. Tuttavia, la sezione relativa alla programmazione ('schedule_it') è presente ma vuota, indicando una compilazione parziale e non sostanziale per questo specifico elemento obbligatorio.",
+            "evidences": [
+              {
+                "text": "Al termine del corso lo studente sarà in grado di: progettare protocolli di consenso distribuito tolleranti ai guasti; analizzare le proprietà di safety e liveness di algoritmi di replica; valutare il trade-off tra coerenza, disponibilità e tolleranza alle partizioni in sistemi reali; implementare un servizio replicato che usi un protocollo di consenso a sua scelta e ne dimostri le proprietà sperimentalmente.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "**Conoscenze culturali / generali**: capacità di formalizzare un protocollo con notazione precisa; familiarità con il ragionamento per casi e per induzione; capacità di leggere e analizzare testi tecnici in inglese; nozioni di base di logica matematica (predicati, quantificatori).\n\n**Conoscenze disciplinari / specialistiche**: strutture dati e algoritmi (alberi bilanciati, grafi, complessità asintotica); sistemi operativi (processi, scheduling, sincronizzazione e mutua esclusione); reti di calcolatori (modello a strati ISO/OSI, TCP/UDP, RPC); programmazione concorrente di base (thread, lock, monitor); fondamenti di basi di dati (transazioni ACID, livelli di isolamento).",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "1. Modelli di sistema distribuito: sincronia, asincronia, fallimenti per arresto e bizantini.\n2. Risultati di impossibilità: FLP, CAP.\n3. Protocolli di consenso: Paxos (classico, multi-Paxos), Raft, ZAB.\n4. Replica e coerenza: linearizzabilità, coerenza sequenziale, modelli rilassati.\n5. Gestione del leader: elezione, scadenze, lease.\n6. Tolleranza ai guasti: fail-stop vs Byzantine; protocolli BFT moderni.\n7. Sistemi reali: ZooKeeper, etcd, TiDB, Spanner — discussione di scelte architetturali.\n8. Laboratorio: implementazione di un servizio replicato con un protocollo a scelta.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame si compone di tre componenti:\n\n- **progetto**: peso 40% sul voto finale. Consiste nell'implementazione di un servizio replicato che usi un protocollo di consenso a scelta dello studente. Il progetto include una relazione tecnica con analisi delle proprietà di safety / liveness e una valutazione sperimentale.\n- **prova scritta**: peso 40% sul voto finale. Tre domande aperte sui contenuti teorici del corso (FLP, CAP, scelta del protocollo, analisi di scenari di fallimento).\n- **prova orale**: peso 20% sul voto finale. Discussione del progetto e approfondimento di un argomento a scelta del docente.\n\nVoto minimo per accedere alla prova orale: 18/30 sia sulla prova scritta sia sulla relazione del progetto. La sufficienza sul voto finale richiede inoltre almeno 18/30 sulla prova orale. Per esempi rappresentativi delle domande della prova scritta e della discussione orale si veda la sezione 'Esempi di domande'.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "- Si enunci e si discuta il risultato di impossibilità FLP. In quali condizioni resta valido? Quali ipotesi vengono rilassate dai protocolli pratici come Paxos e Raft?\n- Si confrontino la linearizzabilità e la coerenza sequenziale, fornendo un esempio di esecuzione che le distingue.\n- Si analizzi il comportamento di Raft in presenza di una partizione di rete simmetrica che isola il leader: chi può eleggere un nuovo leader e con quali garanzie di safety?\n- Si discuta la motivazione dietro l'uso dei lease nel leader management e le condizioni per la loro correttezza.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "- M. van Steen, A. S. Tanenbaum, *Distributed Systems*, 4ª edizione, distributed-systems.net, 2023.\n- N. A. Lynch, *Distributed Algorithms*, 1ª edizione, Morgan Kaufmann, 1996.\n- C. Cachin, R. Guerraoui, L. Rodrigues, *Introduction to Reliable and Secure Distributed Programming*, 2ª edizione, Springer, 2011.\n- M. Kleppmann, *Designing Data-Intensive Applications*, 1ª edizione, O'Reilly, 2017.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Lezioni frontali con esercitazioni in aula su scenari di fallimento. Sessioni di laboratorio guidate per supportare l'implementazione del progetto. Discussione di articoli di ricerca selezionati durante il corso, con sessioni di lettura assistita.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza alle lezioni teoriche è facoltativa ma fortemente consigliata. La frequenza al laboratorio è obbligatoria al 75% delle ore: gli studenti che non raggiungono questa soglia dovranno concordare con il docente un percorso integrativo di recupero pratico prima di sostenere l'esame.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus fornisce la traduzione in inglese per i risultati di apprendimento, i contenuti del corso e le modalità di verifica. Tuttavia, il titolo del corso ('course_name') è presente solo in italiano e manca la sua versione inglese, non soddisfacendo pienamente il perimetro minimo bilingue richiesto.",
+            "evidences": [
+              {
+                "text": "Sistemi distribuiti avanzati (controllo positivo E5)",
+                "source_field": "course_name"
+              },
+              {
+                "text": "At the end of the course the student will be able to: design fault-tolerant distributed consensus protocols; analyse safety and liveness properties of replication algorithms; evaluate the trade-off between consistency, availability and partition tolerance in real-world systems; implement a replicated service using a consensus protocol of choice and demonstrate its properties experimentally.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "1. Distributed system models: synchrony, asynchrony, crash and Byzantine failures.\n2. Impossibility results: FLP, CAP.\n3. Consensus protocols: Paxos (classic, multi-Paxos), Raft, ZAB.\n4. Replication and consistency: linearizability, sequential consistency, relaxed models.\n5. Leader management: election, leases, expirations.\n6. Fault tolerance: fail-stop vs Byzantine; modern BFT protocols.\n7. Real-world systems: ZooKeeper, etcd, TiDB, Spanner — discussion of architectural choices.\n8. Lab: implementation of a replicated service using a protocol of choice.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The exam comprises three components:\n\n- **project**: weight 40% of the final mark. Consists of the implementation of a replicated service using a consensus protocol of the student's choice. The project includes a technical report with safety / liveness analysis and an experimental evaluation.\n- **written test**: weight 40% of the final mark. Three open questions on the theoretical content of the course (FLP, CAP, protocol selection, failure scenarios).\n- **oral test**: weight 20% of the final mark. Discussion of the project and in-depth treatment of a topic chosen by the lecturer.\n\nMinimum mark to access the oral test: 18/30 on both the written test and the project report. A pass on the final mark additionally requires at least 18/30 on the oral test. Sample questions for the written and oral parts are listed in the 'Sample questions' section.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono formulati in modo chiaro e specifico, distinguendo esplicitamente tra 'Conoscenze culturali / generali' e 'Conoscenze disciplinari / specialistiche'. Questa organizzazione è utile allo studente per comprendere le basi richieste e rispecchia pienamente le indicazioni per il punteggio massimo, nonostante l'assenza di una gradazione esplicita di importanza (utili/importanti/indispensabili) che non è un requisito stringente per il punteggio 2.",
+            "evidences": [
+              {
+                "text": "**Conoscenze culturali / generali**: capacità di formalizzare un protocollo con notazione precisa; familiarità con il ragionamento per casi e per induzione; capacità di leggere e analizzare testi tecnici in inglese; nozioni di base di logica matematica (predicati, quantificatori).\n\n**Conoscenze disciplinari / specialistiche**: strutture dati e algoritmi (alberi bilanciati, grafi, complessità asintotica); sistemi operativi (processi, scheduling, sincronizzazione e mutua esclusione); reti di calcolatori (modello a strati ISO/OSI, TCP/UDP, RPC); programmazione concorrente di base (thread, lock, monitor); fondamenti di basi di dati (transazioni ACID, livelli di isolamento).",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 23198,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 33120,
+            "response_chars": 9624,
+            "latency_ms": 22195
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.730760931968689
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7173294425010681
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.5.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.5.a",
+            "similarity_score": 0.7089267671108246
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7280769050121307
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.6798417568206787
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.778282105922699
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.74241042137146
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7374086976051331
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e orientato allo studente, utilizzando verbi d'azione che indicano capacità osservabili e misurabili. Descrivono precisamente ciò che lo studente sarà in grado di fare al termine del corso, come 'progettare protocolli' e 'implementare un servizio', rendendoli altamente verificabili.",
+            "evidences": [
+              {
+                "text": "Al termine del corso lo studente sarà in grado di: progettare protocolli di consenso distribuito tolleranti ai guasti; analizzare le proprietà di safety e liveness di algoritmi di replica; valutare il trade-off tra coerenza, disponibilità e tolleranza alle partizioni in sistemi reali; implementare un servizio replicato che usi un protocollo di consenso a sua scelta e ne dimostri le proprietà sperimentalmente.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono presenti e formulati in modo specifico e differenziato. Ogni descrittore presenta contenuti pertinenti e distinti dagli altri, indicando chiaramente le conoscenze, le capacità applicative, l'autonomia di giudizio, le abilità comunicative e le capacità di apprendimento che lo studente acquisirà, in linea con le raccomandazioni delle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Conoscenza delle proprietà fondamentali dei sistemi distribuiti (sincronia, fallimenti, modelli di consenso); conoscenza degli algoritmi classici (Paxos, Raft, ZAB); conoscenza dei principali risultati di impossibilità (FLP).",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "Capacità di applicare gli algoritmi studiati a casi d'uso reali (replica di un key-value store, coordinamento di servizi); capacità di valutare in modo informato le scelte di consistency model in un sistema in produzione.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Autonomia di giudizio nel selezionare il protocollo di consenso più adatto a un determinato compromesso di latenza, throughput e tolleranza alle partizioni.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "Capacità di motivare per iscritto e oralmente le scelte di design di un sistema distribuito, con argomentazioni tecniche supportate da diagrammi e analisi di scenari di fallimento.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Capacità di approfondire autonomamente nuove proposte di protocollo (es. consenso byzantine fault tolerant moderno) leggendo articoli di ricerca recenti.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 13772,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 25897,
+            "response_chars": 3070,
+            "latency_ms": 13128
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7998863309621811
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7703529298305511
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.754191517829895
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8101426512002945
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7770010977983475
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7618035078048706
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato, specificando le tre componenti d'esame (progetto, prova scritta, prova orale), il loro peso percentuale sul voto finale e i requisiti minimi per l'accesso alla prova orale e per la sufficienza. Sono inoltre forniti esempi concreti di domande per la prova scritta, aumentando significativamente la chiarezza per lo studente e rispondendo alle raccomandazioni normative.",
+            "evidences": [
+              {
+                "text": "L'esame si compone di tre componenti:\n\n- **progetto**: peso 40% sul voto finale. Consiste nell'implementazione di un servizio replicato che usi un protocollo di consenso a scelta dello studente. Il progetto include una relazione tecnica con analisi delle proprietà di safety / liveness e una valutazione sperimentale.\n- **prova scritta**: peso 40% sul voto finale. Tre domande aperte sui contenuti teorici del corso (FLP, CAP, scelta del protocollo, analisi di scenari di fallimento).\n- **prova orale**: peso 20% sul voto finale. Discussione del progetto e approfondimento di un argomento a scelta del docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Voto minimo per accedere alla prova orale: 18/30 sia sulla prova scritta sia sulla relazione del progetto. La sufficienza sul voto finale richiede inoltre almeno 18/30 sulla prova orale. Per esempi rappresentativi delle domande della prova scritta e della discussione orale si veda la sezione 'Esempi di domande'.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "- Si enunci e si discuta il risultato di impossibilità FLP. In quali condizioni resta valido? Quali ipotesi vengono rilassate dai protocolli pratici come Paxos e Raft?\n- Si confrontino la linearizzabilità e la coerenza sequenziale, fornendo un esempio di esecuzione che le distingue.\n- Si analizzi il comportamento di Raft in presenza di una partizione di rete simmetrica che isola il leader: chi può eleggere un nuovo leader e con quali garanzie di safety?\n- Si discuta la motivazione dietro l'uso dei lease nel leader management e le condizioni per la loro correttezza.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro e ben organizzato tramite un elenco numerato di argomenti specifici. Questa struttura permette di comprendere facilmente la progressione e l'articolazione del programma. I contenuti sono inoltre coerenti con i risultati di apprendimento attesi e le conoscenze dichiarate nei descrittori di Dublino. L'assenza di una programmazione dettagliata (schedule) non inficia la chiarezza e l'organizzazione complessiva dei contenuti, che sono già sufficientemente specifici.",
+            "evidences": [
+              {
+                "text": "1. Modelli di sistema distribuito: sincronia, asincronia, fallimenti per arresto e bizantini.\n2. Risultati di impossibilità: FLP, CAP.\n3. Protocolli di consenso: Paxos (classico, multi-Paxos), Raft, ZAB.\n4. Replica e coerenza: linearizzabilità, coerenza sequenziale, modelli rilassati.\n5. Gestione del leader: elezione, scadenze, lease.\n6. Tolleranza ai guasti: fail-stop vs Byzantine; protocolli BFT moderni.\n7. Sistemi reali: ZooKeeper, etcd, TiDB, Spanner — discussione di scelte architetturali.\n8. Laboratorio: implementazione di un servizio replicato con un protocollo a scelta.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Al termine del corso lo studente sarà in grado di: progettare protocolli di consenso distribuito tolleranti ai guasti; analizzare le proprietà di safety e liveness di algoritmi di replica; valutare il trade-off tra coerenza, disponibilità e tolleranza alle partizioni in sistemi reali; implementare un servizio replicato che usi un protocollo di consenso a sua scelta e ne dimostri le proprietà sperimentalmente.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenza delle proprietà fondamentali dei sistemi distribuiti (sincronia, fallimenti, modelli di consenso); conoscenza degli algoritmi classici (Paxos, Raft, ZAB); conoscenza dei principali risultati di impossibilità (FLP).",
+                "source_field": "dublin_knowledge_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste una chiara e forte coerenza tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I metodi didattici includono lezioni frontali, esercitazioni e sessioni di laboratorio guidate, che supportano sia la comprensione teorica che l'applicazione pratica. La verifica dell'apprendimento, articolata in un progetto pratico, una prova scritta su contenuti teorici e una prova orale, è progettata per valutare direttamente tutte le capacità e conoscenze dichiarate nei risultati di apprendimento e nei descrittori di Dublino, inclusa la capacità di implementare, analizzare, valutare e comunicare.",
+            "evidences": [
+              {
+                "text": "Al termine del corso lo studente sarà in grado di: progettare protocolli di consenso distribuito tolleranti ai guasti; analizzare le proprietà di safety e liveness di algoritmi di replica; valutare il trade-off tra coerenza, disponibilità e tolleranza alle partizioni in sistemi reali; implementare un servizio replicato che usi un protocollo di consenso a sua scelta e ne dimostri le proprietà sperimentalmente.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare gli algoritmi studiati a casi d'uso reali (replica di un key-value store, coordinamento di servizi); capacità di valutare in modo informato le scelte di consistency model in un sistema in produzione.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Capacità di motivare per iscritto e oralmente le scelte di design di un sistema distribuito, con argomentazioni tecniche supportate da diagrammi e analisi di scenari di fallimento.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Lezioni frontali con esercitazioni in aula su scenari di fallimento. Sessioni di laboratorio guidate per supportare l'implementazione del progetto. Discussione di articoli di ricerca selezionati durante il corso, con sessioni di lettura assistita.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "1. Modelli di sistema distribuito: sincronia, asincronia, fallimenti per arresto e bizantini.\n2. Risultati di impossibilità: FLP, CAP.\n3. Protocolli di consenso: Paxos (classico, multi-Paxos), Raft, ZAB.\n4. Replica e coerenza: linearizzabilità, coerenza sequenziale, modelli rilassati.\n5. Gestione del leader: elezione, scadenze, lease.\n6. Tolleranza ai guasti: fail-stop vs Byzantine; protocolli BFT moderni.\n7. Sistemi reali: ZooKeeper, etcd, TiDB, Spanner — discussione di scelte architetturali.\n8. Laboratorio: implementazione di un servizio replicato con un protocollo a scelta.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame si compone di tre componenti:\n\n- **progetto**: peso 40% sul voto finale. Consiste nell'implementazione di un servizio replicato che usi un protocollo di consenso a scelta dello studente. Il progetto include una relazione tecnica con analisi delle proprietà di safety / liveness e una valutazione sperimentale.\n- **prova scritta**: peso 40% sul voto finale. Tre domande aperte sui contenuti teorici del corso (FLP, CAP, scelta del protocollo, analisi di scenari di fallimento).\n- **prova orale**: peso 20% sul voto finale. Discussione del progetto e approfondimento di un argomento a scelta del docente.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 31128,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 35461,
+            "response_chars": 8320,
+            "latency_ms": 30058
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.7393962144851685
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.737815797328949
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7306994497776031
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.744089812040329
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7440732419490814
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7002700567245483
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7588119804859161
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7458759546279907
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.732909619808197
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta una buona cura editoriale generale, con testo chiaro e ben strutturato. Le sezioni sono formattate in modo coerente e i riferimenti interni sono corretti. Tuttavia, si riscontrano alcune piccole imperfezioni che impediscono un punteggio massimo, come la presenza di un tag interno nel nome del corso e una citazione bibliografica leggermente atipica.",
+            "evidences": [
+              {
+                "text": "Sistemi distribuiti avanzati (controllo positivo E5)",
+                "source_field": "course_name"
+              },
+              {
+                "text": "- M. van Steen, A. S. Tanenbaum, *Distributed Systems*, 4ª edizione, distributed-systems.net, 2023.",
+                "source_field": "references_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 14262,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 21997,
+            "response_chars": 918,
+            "latency_ms": 13802
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.701970100402832
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6955962181091309
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.730760931968689
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7173294425010681
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.5.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.5.a",
+          "similarity_score": 0.7089267671108246
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7280769050121307
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.6798417568206787
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.778282105922699
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.74241042137146
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7374086976051331
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7998863309621811
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7703529298305511
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.754191517829895
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8101426512002945
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7770010977983475
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7618035078048706
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.7393962144851685
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.737815797328949
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7306994497776031
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.744089812040329
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7440732419490814
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7002700567245483
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7588119804859161
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7458759546279907
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.732909619808197
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.701970100402832
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6955962181091309
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — Sistemi distribuiti avanzati (controllo positivo E5)\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C5 — Chiarezza dei prerequisiti** (score 2): I prerequisiti sono formulati in modo chiaro e specifico, distinguendo esplicitamente tra 'Conoscenze culturali / generali' e 'Conoscenze disciplinari / specialistiche'. Questa organizzazione è utile allo studente per comprendere le basi richieste e rispecchia pienamente le indicazioni per il punteggio massimo, nonostante l'assenza di una gradazione esplicita di importanza (utili/importanti/indispensabili) che non è un requisito stringente per il punteggio 2.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro, specifico e orientato allo studente, utilizzando verbi d'azione che indicano capacità osservabili e misurabili. Descrivono precisamente ciò che lo studente sarà in grado di fare al termine del corso, come 'progettare protocolli' e 'implementare un servizio', rendendoli altamente verificabili.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono presenti e formulati in modo specifico e differenziato. Ogni descrittore presenta contenuti pertinenti e distinti dagli altri, indicando chiaramente le conoscenze, le capacità applicative, l'autonomia di giudizio, le abilità comunicative e le capacità di apprendimento che lo studente acquisirà, in linea con le raccomandazioni delle Linee Guida UniCT.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato, specificando le tre componenti d'esame (progetto, prova scritta, prova orale), il loro peso percentuale sul voto finale e i requisiti minimi per l'accesso alla prova orale e per la sufficienza. Sono inoltre forniti esempi concreti di domande per la prova scritta, aumentando significativamente la chiarezza per lo studente e rispondendo alle raccomandazioni normative.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro e ben organizzato tramite un elenco numerato di argomenti specifici. Questa struttura permette di comprendere facilmente la progressione e l'articolazione del programma. I contenuti sono inoltre coerenti con i risultati di apprendimento attesi e le conoscenze dichiarate nei descrittori di Dublino. L'assenza di una programmazione dettagliata (schedule) non inficia la chiarezza e l'organizzazione complessiva dei contenuti, che sono già sufficientemente specifici.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste una chiara e forte coerenza tra i risultati di apprendimento attesi, i contenuti del corso, i metodi didattici e le modalità di verifica. I metodi didattici includono lezioni frontali, esercitazioni e sessioni di laboratorio guidate, che supportano sia la comprensione teorica che l'applicazione pratica. La verifica dell'apprendimento, articolata in un progetto pratico, una prova scritta su contenuti teorici e una prova orale, è progettata per valutare direttamente tutte le capacità e conoscenze dichiarate nei risultati di apprendimento e nei descrittori di Dublino, inclusa la capacità di implementare, analizzare, valutare e comunicare.\n\n## Aree di miglioramento\n\n- **C1 — Completezza strutturale e documentale** (score 1): Il syllabus presenta la maggior parte delle nove sezioni obbligatorie previste dalle Linee Guida UniCT, con contenuti specifici e ben dettagliati. Tuttavia, la sezione relativa alla programmazione ('schedule_it') è presente ma vuota, indicando una compilazione parziale e non sostanziale per questo specifico elemento obbligatorio.\n  - *Raccomandazione*: Considera di verificare che tutte e nove le sezioni obbligatorie (RA, PR, CN, MV, ED, TD, MS, MF, PRG) siano compilate con contenuto sostanziale, non solo come intestazione.\n- **C2 — Completezza bilingue** (score 1): Il syllabus fornisce la traduzione in inglese per i risultati di apprendimento, i contenuti del corso e le modalità di verifica. Tuttavia, il titolo del corso ('course_name') è presente solo in italiano e manca la sua versione inglese, non soddisfacendo pienamente il perimetro minimo bilingue richiesto.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta una buona cura editoriale generale, con testo chiaro e ben strutturato. Le sezioni sono formattate in modo coerente e i riferimenti interni sono corretti. Tuttavia, si riscontrano alcune piccole imperfezioni che impediscono un punteggio massimo, come la presenza di un tag interno nel nome del corso e una citazione bibliografica leggermente atipica.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": 2,
+        "E5": 2
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": 2,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "La versione inglese del syllabus presenta una sostanziale equivalenza semantica con la versione italiana per tutti i campi esaminati. La terminologia è coerente e non si riscontrano omissioni significative o cambiamenti di significato che possano compromettere la comprensione o l'aderenza ai contenuti didattici. Le traduzioni sono accurate e professionali.",
+          "evidences": [
+            {
+              "text": "Al termine del corso lo studente sarà in grado di: progettare protocolli di consenso distribuito tolleranti ai guasti; analizzare le proprietà di safety e liveness di algoritmi di replica; valutare il trade-off tra coerenza, disponibilità e tolleranza alle partizioni in sistemi reali; implementare un servizio replicato che usi un protocollo di consenso a sua scelta e ne dimostri le proprietà sperimentalmente.",
+              "source_field": "learning_outcomes_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "At the end of the course the student will be able to: design fault-tolerant distributed consensus protocols; analyse safety and liveness properties of replication algorithms; evaluate the trade-off between consistency, availability and partition tolerance in real-world systems; implement a replicated service using a consensus protocol of choice and demonstrate its properties experimentally.",
+              "source_field": "learning_outcomes_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "L'esame si compone di tre componenti:\n\n- **progetto**: peso 40% sul voto finale. Consiste nell'implementazione di un servizio replicato che usi un protocollo di consenso a scelta dello studente. Il progetto include una relazione tecnica con analisi delle proprietà di safety / liveness e una valutazione sperimentale.\n- **prova scritta**: peso 40% sul voto finale. Tre domande aperte sui contenuti teorici del corso (FLP, CAP, scelta del protocollo, analisi di scenari di fallimento).\n- **prova orale**: peso 20% sul voto finale. Discussione del progetto e approfondimento di un argomento a scelta del docente.\n\nVoto minimo per accedere alla prova orale: 18/30 sia sulla prova scritta sia sulla relazione del progetto. La sufficienza sul voto finale richiede inoltre almeno 18/30 sulla prova orale. Per esempi rappresentativi delle domande della prova scritta e della discussione orale si veda la sezione 'Esempi di domande'.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "The exam comprises three components:\n\n- **project**: weight 40% of the final mark. Consists of the implementation of a replicated service using a consensus protocol of the student's choice. The project includes a technical report with safety / liveness analysis and an experimental evaluation.\n- **written test**: weight 40% of the final mark. Three open questions on the theoretical content of the course (FLP, CAP, protocol selection, failure scenarios).\n- **oral test**: weight 20% of the final mark. Discussion of the project and in-depth treatment of a topic chosen by the lecturer.\n\nMinimum mark to access the oral test: 18/30 on both the written test and the project report. A pass on the final mark additionally requires at least 18/30 on the oral test. Sample questions for the written and oral parts are listed in the 'Sample questions' section.",
+              "source_field": "assessment_methods_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            }
+          ],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 2,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus dimostra un'aderenza sostanziale alle istruzioni operative locali fornite nel documento 'Usi dipartimentali'. In particolare, la sezione dei prerequisiti distingue chiaramente tra 'Conoscenze culturali / generali' e 'Conoscenze disciplinari / specialistiche', come richiesto. Le modalità di verifica dell'apprendimento esplicitano i pesi percentuali di ciascuna componente d'esame (progetto, prova scritta, prova orale) e indicano i voti minimi necessari per accedere alle fasi successive, oltre a includere esempi di domande. Infine, la sezione relativa alla frequenza specifica in modo dettagliato se è obbligatoria o facoltativa per le diverse componenti (lezioni teoriche e laboratorio) e le relative soglie, e i riferimenti bibliografici sono completi di autore, anno, titolo, editore ed edizione, rispettando il formato minimo richiesto.",
+          "evidences": [
+            {
+              "text": "**Conoscenze culturali / generali**: capacità di formalizzare un protocollo con notazione precisa; familiarità con il ragionamento per casi e per induzione; capacità di leggere e analizzare testi tecnici in inglese; nozioni di base di logica matematica (predicati, quantificatori).\n\n**Conoscenze disciplinari / specialistiche**: strutture dati e algoritmi (alberi bilanciati, grafi, complessità asintotica); sistemi operativi (processi, scheduling, sincronizzazione e mutua esclusione); reti di calcolatori (modello a strati ISO/OSI, TCP/UDP, RPC); programmazione concorrente di base (thread, lock, monitor); fondamenti di basi di dati (transazioni ACID, livelli di isolamento).",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "La distinzione può essere realizzata con elenchi separati, con sottosezioni esplicite o con un elenco unico organizzato in modo chiaramente separabile. Una semplice lista omogenea che mischi le due famiglie senza alcuna separazione **non** soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "L'esame si compone di tre componenti:\n\n- **progetto**: peso 40% sul voto finale. Consiste nell'implementazione di un servizio replicato che usi un protocollo di consenso a scelta dello studente. Il progetto include una relazione tecnica con analisi delle proprietà di safety / liveness e una valutazione sperimentale.\n- **prova scritta**: peso 40% sul voto finale. Tre domande aperte sui contenuti teorici del corso (FLP, CAP, scelta del protocollo, analisi di scenari di fallimento).\n- **prova orale**: peso 20% sul voto finale. Discussione del progetto e approfondimento di un argomento a scelta del docente.\n\nVoto minimo per accedere alla prova orale: 18/30 sia sulla prova scritta sia sulla relazione del progetto. La sufficienza sul voto finale richiede inoltre almeno 18/30 sulla prova orale. Per esempi rappresentativi delle domande della prova scritta e della discussione orale si veda la sezione 'Esempi di domande'.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- Si enunci e si discuta il risultato di impossibilità FLP. In quali condizioni resta valido? Quali ipotesi vengono rilassate dai protocolli pratici come Paxos e Raft?\n- Si confrontino la linearizzabilità e la coerenza sequenziale, fornendo un esempio di esecuzione che le distingue.\n- Si analizzi il comportamento di Raft in presenza di una partizione di rete simmetrica che isola il leader: chi può eleggere un nuovo leader e con quali garanzie di safety?\n- Si discuta la motivazione dietro l'uso dei lease nel leader management e le condizioni per la loro correttezza.",
+              "source_field": "sample_questions_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- esplicitare il **peso relativo** delle componenti dell'esame\n  (scritto, orale, progetto, prova in itinere) sul voto finale,\n  almeno qualitativamente (es. \"il progetto pesa per circa metà\n  del voto finale, lo scritto per circa metà\");\n- indicare se è previsto un **voto minimo** sulle singole\n  componenti per accedere alla componente successiva;\n- includere **almeno una domanda esempio** rappresentativa,\n  preferibilmente nella sezione apposita\n  (`sample_questions_it`), oppure in fondo alla sezione modalità\n  di verifica.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "- M. van Steen, A. S. Tanenbaum, *Distributed Systems*, 4ª edizione, distributed-systems.net, 2023.\n- N. A. Lynch, *Distributed Algorithms*, 1ª edizione, Morgan Kaufmann, 1996.\n- C. Cachin, R. Guerraoui, L. Rodrigues, *Introduction to Reliable and Secure Distributed Programming*, 2ª edizione, Springer, 2011.\n- M. Kleppmann, *Designing Data-Intensive Applications*, 1ª edizione, O'Reilly, 2017.",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "ogni riferimento bibliografico riportato nel syllabus\ndeve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "La frequenza alle lezioni teoriche è facoltativa ma fortemente consigliata. La frequenza al laboratorio è obbligatoria al 75% delle ore: gli studenti che non raggiungono questa soglia dovranno concordare con il docente un percorso integrativo di recupero pratico prima di sostenere l'esame.",
+              "source_field": "attendance_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "la sezione deve indicare in modo esplicito:\n\n- se la frequenza è **obbligatoria** o **facoltativa**;\n- in caso di obbligatorietà parziale (es. solo per la componente\n  di laboratorio), specificare quale componente è soggetta a\n  obbligo;\n- per gli insegnamenti con componenti pratiche (laboratorio,\n  esercitazioni), indicare il livello di frequenza atteso anche\n  quando non strettamente obbligatorio (es. \"fortemente\n  raccomandata per la componente di laboratorio\").",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "academic_year_match",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}

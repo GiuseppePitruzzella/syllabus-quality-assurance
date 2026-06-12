@@ -1,0 +1,1001 @@
+{
+  "calibration_mode": "phase_9_f_targeted_v1",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "synthetic_fixture_version": "v1",
+  "role": "real",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "335d553a-d7a7-4436-b776-da88b1e1b103",
+    "syllabus_seuid_snapshot": "DADC30FD-2222-4C43-BAB8-A57D08667196",
+    "course_name_snapshot": "CRITTOGRAFIA",
+    "status": "completed",
+    "started_at": "2026-06-12T10:20:47.107221",
+    "finished_at": "2026-06-12T10:23:07.427120",
+    "duration_ms": 140319,
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 1,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la completezza strutturale e documentale. Ogni sezione è compilata in modo sostanziale e fornisce le informazioni attese, come Risultati di Apprendimento, Prerequisiti, Contenuti, Modalità di Verifica, Esempi di Domande, Testi di Riferimento, Modalità di Svolgimento, Modalità di Frequenza e Programmazione del corso.",
+            "evidences": [
+              {
+                "text": "Obiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi.\nConoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base della crittografia moderna; in particolare lo studente acquisirà le conoscenze dei principali strumenti crittografici utilizzati in pratica.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare in modo sicuro strumenti crittografici quali schemi di cifratura, di autentica e funzioni hash crittografiche.\nAutonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori derivanti dall'utilizzo di soluzioni solo all'apparenza sicure lo studente sarà in grado di utilizzare autonomamente soluzioni crittografiche in grado di garantire elevati livelli di sicurezza.\nAbilità comunicative (communication skills):\nlo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale della crittografia moderna.\nCapacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti crittografici quali cifrari, schemi di firme digitali e funzioni hash.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Per una adeguata comprensione dei contenuti del corso sono necessari i seguenti prerequisiti.\nBasi di matematica discreta.\nNozioni basilari di algoritmi",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso fornisce un'introduzione ai concetti fondamentali della crittografia moderna. Obiettivo del corso sarà definire e costruire adeguati strumenti crittografici quali cifrari, message authentication codes e firme digitali. Cercheremo di capire che proprietà dovrebbero soddisfare tali strumenti, come formalizzare rigorosamente tali proprietà e come costruire schemi che le soddisfano. Ci soffermeremo soprattutto su schemi ampiamente diffusi in pratica, come AES, SHA, HMAC e RSA. In particolare, cercheremo di capire in dettaglio come sono costruiti e che livello di sicurezza garantiscono.\nIl corso non prevede moduli di programmazione.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame consiste di una prova scritta ed un colloquio orale. La prova scritta consiste, tipicamente, di 5 domande a risposta aperta.\nPer superare la prova scritta è necessario ottenere una valutazione di almeno 18. La prova scritta può essere visionata prima di sostenere la prova orale.\nProve in itinere:\nSono previste tre prove in itinere. La prima prova verte, tipicamente, sul concetto di perfetta sicurezza, sui cifrari a blocchi e sulle funzioni e permutazioni pseudocasuali. La seconda prova verte su: cifrari simmetrici, funzioni hash e message authentication. La terza prova copre il resto del programma (crittografia asimmetrica)\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nPer partecipare all'esame finale è necessario avere effettuato la prenotazione sul portale SmartEdu. Per eventuali problemi tecnici relativi alla prenotazione occorre rivolgersi alla Segreteria didattica.\nIl voto è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Definizioni di sicurezza (cifrari simmetrici, asimmetrici, firme digitali, ecc)\nEsercizi sulle primitive crittografiche studiate (ad esempio: dimostrare che un dato cifrario è insicuro)\nAlgoritmi (ad es. fornire e spiegare lo pseudocodice di algoritmi studiati a lezione)\nSi precisa che quanto sopra riportato ha valore puramente indicativo e che anche altre parti del programma possono essere argomento dell'esame.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "[1] M. Bellare, P. Rogaway “Introduction to Modern Cryptography”\nScaricabile da\nhttp://www.cs.ucsd.edu/~mihir/cse107/classnotes.html\n[2] V. Shoup A Computational Introduction to Number Theory and Algebra\nScaricabile da\nhttp://shoup.net/ntb/\n[3] J. Katz, Y. Lindell “Introduction to Modern Cryptography” CRC press",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aula con l'ausilio di slide, rese disponibili agli studenti sulla pagina web del docente (www.dmi.unict.it/catalano/). Le slide non sostituiscono i testi di riferimento, ma, oltre che agevolare la comprensione della lezione, forniscono un dettaglio puntuale sul programma svolto.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza delle lezioni non è obbligatoria ma fortemente consigliata.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[{\"numero\": \"1\", \"argomenti\": \"Cifrari Storici e One Time Pad. Il cifrario shift cipher. Il cifrario substituition cipher. Crittanalisi di substitution cipher. Perfetta Sicurezza. Subst. Cipher non offre perfetta sicurezza (dimostrazione). One time pad. One time pad offre perfetta sicurezza (dimostrazione). One time pad è ottimo (dimostrazione). Teorema di Shannon (enunciato)\", \"riferimenti_testi\": \"Materiale: Cap 2 di [1] e cap. 2 di [3]\"}, {\"numero\": \"2\", \"argomenti\": \"Cifrari a Blocchi: AES\", \"riferimenti_testi\": \"Cap 3 di [1]\"}, {\"numero\": \"3\", \"argomenti\": \"Funzioni e permutazioni Pseudo Casuali. Introduzione e definizioni. Applicazioni ai cifrari a blocchi. La sicurezza in senso prf implica sicurezza in senso key recovery (dimostrazione).\", \"riferimenti_testi\": \"Cap. 4 di [1]\"}, {\"numero\": \"4\", \"argomenti\": \"Cifrari Simmetrici: modi d'operazione. Modo ECB, Modo CBC$, Modi CTR (a stati e randomizzato). Nozione di sicurezza per cifrari simmetrici: IND-CPA. Attacchi a messaggio scelto e attacchi a crittotesto scelto. Prova che un cifrario deterministico non può essere sicuro. Ind-cpa security implica plaintext recovery security (dimostrazione). Indistinguibilità relativamente ad attacchi a crittotesto scelto: IND-CCA security. Ind-cpa security non implica ind-cca security: il caso di CTR$ (dimostrazione)\", \"riferimenti_testi\": \"Cap 5 di [1] e Cap 3 di [3]\"}, {\"numero\": \"5\", \"argomenti\": \"Funzioni Hash.. Resistenza alle collisioni: funzioni universali, funzioni universali unidirezionali, funzioni resistenti alle collisioni. Attacchi generici alle funzioni hash. Attacchi alle funzioni MD4, MD5, SHA1 (cenni). La trasformazione Merkle-Damgard. Cenni su SHA3\", \"riferimenti_testi\": \"Cap 6 di [1]\"}, {\"numero\": \"6\", \"argomenti\": \"Message Authentication. Definizione di sicurezza per MAC. Il paradigma PRF as a MAC. CBC-MAC. Basic CBC-MAC se applicato a messaggi di lunghezza variabile non è sicuro (dimostrazione). (In)sicurezza di CBC-MAC randomizzato. CBC-MAC per messaggi di lunghezza variabile. MAC da funzioni hash: HMAC.\", \"riferimenti_testi\": \"Cap 7 di [1] e Cap 4 di [3]\"}, {\"numero\": \"7\", \"argomenti\": \"Introduzione alla crittografia asimmetrica. Funzioni unidirezionali e funzioni trapdoor. Richiami di teoria dei numeri computazionale. Generalità sui gruppi. Algoritmo di Euclide, teorema cinese del resto. Quadrati residui.\", \"riferimenti_testi\": \"Cap 9 di [1], capitoli vari di [2]\"}, {\"numero\": \"8\", \"argomenti\": \"Primitive Asimmetriche. Il problema del logaritmo discreto su campi finiti. Il problema computazionale Diffie Hellman. Il problema decisionale Diffie-Hellman. Fattorizzazione. La funzione RSA. Cenni su test di primalità. Algoritmo Miller-Rabin. L'algoritmo square and multiply.\", \"riferimenti_testi\": \"Cap 10 di [1].\"}, {\"numero\": \"9\", \"argomenti\": \"Cifrari Asimmetrici. Definizioni di sicurezza per cifrari asimmetrici. Cifrari Asimmetrici. Definizione di sicurezza per cifrari asimmetrici. Il cifrario El Gamal. Il cifrario El Gamal è sicuro (in senso IND-CPA) relativamente all'ipotesi decisional Diffie-Hellman (dimostrazione). Il cifrario Paillier. Preliminari matematici. Il cifrario Paillier gode della proprietà di omomorfismo additivo (dimostrazione). Il cifrario RSA-OAEP. Proprietà del cifrario.\", \"riferimenti_testi\": \"Cap 11 di [1] Cap 11 di [3] e appunti delle lezioni.\"}, {\"numero\": \"10\", \"argomenti\": \"Cifrari basati sull'identità: il cifrario Boneh Franklin. Mappe bilineari. Proprietà del cifrario.\", \"riferimenti_testi\": \"Appunti delle lezioni\"}, {\"numero\": \"11\", \"argomenti\": \"Firme digitali. Preliminari. Definizione di sicurezza per firme digitali. Hash and Sign.\", \"riferimenti_testi\": \"Cap 12 di [1]\"}, {\"numero\": \"12\", \"argomenti\": \"Advanced Encryption Mechanisms. Kyber. Module Learning with errors. Basic Kyber PKE. Fujisaki Okamoto. Kyber KEM.\", \"riferimenti_testi\": \"Appunti delle lezioni e materiale fornito dal docente.\"}]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus è parzialmente bilingue. Sebbene i risultati di apprendimento, i contenuti e le modalità di verifica siano presenti sia in italiano che in inglese, il titolo del corso (`course_name`) è fornito solo in italiano e manca una sua esplicita traduzione in inglese (`course_name_en`). Questo rende la completezza bilingue non totale per il perimetro minimo richiesto.",
+            "evidences": [
+              {
+                "text": "CRITTOGRAFIA",
+                "source_field": "course_name"
+              },
+              {
+                "text": "The goals of this course, in terms of expected results, are\nKnowledge and understanding\n. Students will learn the fundamental ideas and the basic principles of modern cryptography. More specifically, students will be able to understand some of the most important cryptographic schemes and primitives used in practice.\nApplying knowledge and understanding.\nStudents will be able to use, in a secure way, cryptographic schemes such as encryption schemes, authentication schemes and cryptographic hash functions\nMaking judgements\n. By studying concrete examples of seemingly secure (but wrong) solutions students will learn how to use cryptographic schemes providing high security guarantees.\nCommunication Skills\n. Students will learn how to properly communicate using the technical language of modern cryptography\nLearning Skills\n. A goal of this course is to provide a good theoretical and practical background of modern cryptography. It is expected that students will learn how to autonomously address problems that require the usage of cryptographic primitives such as digital signatures, encryption schemes and cryptographic hash functions.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The course provides an introduction to the fundamental concepts of modern cryptography. The goal of the course is to define and construct appropriate cryptographic primitives such as encryption schemes, message authentication codes, and digital signatures. We will aim to understand what properties these tools should satisfy, how to rigorously formalize such properties, and how to design schemes that meet them. We will focus especially on widely used practical schemes such as AES, SHA, HMAC, and RSA. In particular, we will seek to understand in detail how they are built and what level of security they provide.\nThe course does not include programming modules.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The exam consists of a written test and an oral interview. The written test typically includes 5 open-ended questions.\nTo pass the written test, a minimum score of 18 is required. The written test can be reviewed before taking the oral exam.\nMidterm tests:\nThree midterm tests are scheduled. The first test typically covers the concept of perfect security, block ciphers, and pseudorandom functions and permutations. The second test covers symmetric ciphers, hash functions, and message authentication. The third test covers the remaining topics (asymmetric cryptography).\nThe assessment may also be conducted online if circumstances require it.\nTo take the final exam, students must register through the\nSmartEdu\nportal. For any technical issues related to registration, students should contact the Academic Office.\nGrading scale:\nNot approved:\nThe student has not acquired the basic concepts and is unable to answer at least 60% of the questions or to solve theoretical and practical exercises.\n18–20:\nThe student shows only a barely sufficient grasp of basic concepts and/or can approach theoretical/practical exercises with great difficulty and several errors.\n21–24:\nThe student demonstrates a minimal understanding of the basic concepts, has limited ability to connect topics, and can solve only simple exercises.\n25–27:\nThe student shows a good command of the course content, demonstrates solid connections between topics, and solves exercises with few errors.\n28–30 with honors:\nThe student has mastered all course material, can make critical connections between topics, and solves exercises completely and without significant errors.\nStudents with disabilities and/or specific learning disorders (SLD) must contact, well in advance of the exam date, the instructor, the\nCInAP\nrepresentative for the DMI (Prof. Daniele), and the\nCInAP\noffice to request appropriate compensatory measures.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, indicando 'Basi di matematica discreta' e 'Nozioni basilari di algoritmi'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) per ciascun prerequisito, come raccomandato dalle Linee Guida UniCT. La formulazione 'sono necessari' implica l'indispensabilità, ma non la distinzione richiesta per il punteggio massimo.",
+            "evidences": [
+              {
+                "text": "Per una adeguata comprensione dei contenuti del corso sono necessari i seguenti prerequisiti.\nBasi di matematica discreta.\nNozioni basilari di algoritmi",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 35811,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 42539,
+            "response_chars": 16991,
+            "latency_ms": 34838
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7068982720375061
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7048454880714417
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.7036525011062622
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7292828559875488
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.6882576942443848
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7596272826194763
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7256492078304291
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7197391986846924
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, descrivendo ciò che lo studente sarà in grado di fare o conoscere al termine del corso. Le formulazioni utilizzano verbi d'azione e specificano le conoscenze e le abilità osservabili, evitando descrizioni generiche del contenuto del corso. Questo approccio è in linea con le raccomandazioni normative che richiedono risultati di apprendimento valutabili.",
+            "evidences": [
+              {
+                "text": "l'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base della crittografia moderna; in particolare lo studente acquisirà le conoscenze dei principali strumenti crittografici utilizzati in pratica.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze necessarie per utilizzare in modo sicuro strumenti crittografici quali schemi di cifratura, di autentica e funzioni hash crittografiche.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Attraverso esempi concreti di errori derivanti dall'utilizzo di soluzioni solo all'apparenza sicure lo studente sarà in grado di utilizzare autonomamente soluzioni crittografiche in grado di garantire elevati livelli di sicurezza.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale della crittografia moderna.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "il corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti crittografici quali cifrari, schemi di firme digitali e funzioni hash.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati nel syllabus. Ciascun descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una chiara indicazione delle competenze attese per ogni area. La formulazione è coerente con le Linee Guida UniCT che raccomandano una declinazione esplicita per ciascuno dei cinque descrittori.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base della crittografia moderna; in particolare lo studente acquisirà le conoscenze dei principali strumenti crittografici utilizzati in pratica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare in modo sicuro strumenti crittografici quali schemi di cifratura, di autentica e funzioni hash crittografiche.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori derivanti dall'utilizzo di soluzioni solo all'apparenza sicure lo studente sarà in grado di utilizzare autonomamente soluzioni crittografiche in grado di garantire elevati livelli di sicurezza.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills):\nlo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale della crittografia moderna.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti crittografici quali cifrari, schemi di firme digitali e funzioni hash.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 16820,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28546,
+            "response_chars": 4759,
+            "latency_ms": 15981
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7913682460784912
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7636530697345734
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7448965013027191
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8137961477041245
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.777502566576004
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7584907114505768
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato e specifico. Vengono indicate le tipologie di prove (scritta e orale, con prove in itinere), la struttura della prova scritta (5 domande a risposta aperta) e il punteggio minimo per superarla. Inoltre, è presente una chiara e articolata scala di attribuzione del voto che descrive i livelli di conoscenza e competenza attesi per ciascun intervallo di valutazione, in linea con le raccomandazioni delle Linee Guida UniCT. Sono anche forniti esempi di domande, sebbene indicativi, che contribuiscono alla chiarezza.",
+            "evidences": [
+              {
+                "text": "L'esame consiste di una prova scritta ed un colloquio orale. La prova scritta consiste, tipicamente, di 5 domande a risposta aperta.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per superare la prova scritta è necessario ottenere una valutazione di almeno 18.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Sono previste tre prove in itinere. La prima prova verte, tipicamente, sul concetto di perfetta sicurezza, sui cifrari a blocchi e sulle funzioni e permutazioni pseudocasuali. La seconda prova verte su: cifrari simmetrici, funzioni hash e message authentication. La terza prova copre il resto del programma (crittografia asimmetrica)",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto è attribuito secondo il seguente schema:\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di rispondere ad almeno il 60% delle domande né di svolgere gli esercizi teorici e pratici.\n18-20: lo studente dimostra una padronanza appena sufficiente dei concetti base, e/o riesce ad impostare gli esercizi teorico/pratici con molta difficoltà e con vari errori.\n21-24: lo studente dimostra una padronanza minima dei concetti di base, le sue capacità di collegamento dei contenuti sono modeste, riesce a risolvere semplici esercizi.\n25-27: lo studente dimostra una buona padronanza dei contenuti del corso, le sue capacità di collegamento dei contenuti sono buone, risolve gli esercizi con pochi errori.\n28-30 e lode: lo studente ha acquisito tutti i contenuti del corso ed è in grado di padroneggiarli compiutamente e di collegarli con spirito critico; risolve gli esercizi in modo completo e senza errori di particolare rilievo.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Definizioni di sicurezza (cifrari simmetrici, asimmetrici, firme digitali, ecc)\nEsercizi sulle primitive crittografiche studiate (ad esempio: dimostrare che un dato cifrario è insicuro)\nAlgoritmi (ad es. fornire e spiegare lo pseudocodice di algoritmi studiati a lezione)",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La sezione 'course_content_it' fornisce una panoramica generale degli obiettivi e degli strumenti trattati, mentre la 'schedule_it' articola il programma in 12 moduli tematici dettagliati, ciascuno con argomenti specifici e riferimenti bibliografici precisi. Questa organizzazione permette di comprendere la progressione didattica e la profondità degli argomenti, dimostrando una forte coerenza con gli obiettivi formativi dichiarati.",
+            "evidences": [
+              {
+                "text": "Il corso fornisce un'introduzione ai concetti fondamentali della crittografia moderna. Obiettivo del corso sarà definire e costruire adeguati strumenti crittografici quali cifrari, message authentication codes e firme digitali. Cercheremo di capire che proprietà dovrebbero soddisfare tali strumenti, come formalizzare rigorosamente tali proprietà e come costruire schemi che le soddisfano. Ci soffermeremo soprattutto su schemi ampiamente diffusi in pratica, come AES, SHA, HMAC e RSA. In particolare, cercheremo di capire in dettaglio come sono costruiti e che livello di sicurezza garantiscono.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Cifrari Storici e One Time Pad. Il cifrario shift cipher. Il cifrario substituition cipher. Crittanalisi di substitution cipher. Perfetta Sicurezza. Subst. Cipher non offre perfetta sicurezza (dimostrazione). One time pad. One time pad offre perfetta sicurezza (dimostrazione). One time pad è ottimo (dimostrazione). Teorema di Shannon (enunciato)",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Cifrari a Blocchi: AES",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Funzioni Hash.. Resistenza alle collisioni: funzioni universali, funzioni universali unidirezionali, funzioni resistenti alle collisioni. Attacchi generici alle funzioni hash. Attacchi alle funzioni MD4, MD5, SHA1 (cenni). La trasformazione Merkle-Damgard. Cenni su SHA3",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Introduzione alla crittografia asimmetrica. Funzioni unidirezionali e funzioni trapdoor. Richiami di teoria dei numeri computazionale. Generalità sui gruppi. Algoritmo di Euclide, teorema cinese del resto. Quadrati residui.",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, che spaziano dalla conoscenza dei principi alla capacità di applicare strumenti crittografici e di giudicare la loro sicurezza, sono pienamente supportati dai contenuti dettagliati del corso e dai metodi didattici (lezioni frontali con slide). Le modalità di verifica, che includono domande a risposta aperta, esercizi sulle primitive crittografiche e spiegazione di algoritmi, sono direttamente allineate con l'accertamento di tali conoscenze e capacità, inclusa l'autonomia di giudizio e le abilità comunicative, come richiesto dai descrittori di Dublino e dalle normative di riferimento.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base della crittografia moderna; in particolare lo studente acquisirà le conoscenze dei principali strumenti crittografici utilizzati in pratica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare in modo sicuro strumenti crittografici quali schemi di cifratura, di autentica e funzioni hash crittografiche.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori derivanti dall'utilizzo di soluzioni solo all'apparenza sicure lo studente sarà in grado di utilizzare autonomamente soluzioni crittografiche in grado di garantire elevati livelli di sicurezza.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aula con l'ausilio di slide, rese disponibili agli studenti sulla pagina web del docente (www.dmi.unict.it/catalano/). Le slide non sostituiscono i testi di riferimento, ma, oltre che agevolare la comprensione della lezione, forniscono un dettaglio puntuale sul programma svolto.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Il corso fornisce un'introduzione ai concetti fondamentali della crittografia moderna. Obiettivo del corso sarà definire e costruire adeguati strumenti crittografici quali cifrari, message authentication codes e firme digitali. Cercheremo di capire che proprietà dovrebbero soddisfare tali strumenti, come formalizzare rigorosamente tali proprietà e come costruire schemi che le soddisfano. Ci soffermeremo soprattutto su schemi ampiamente diffusi in pratica, come AES, SHA, HMAC e RSA.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame consiste di una prova scritta ed un colloquio orale. La prova scritta consiste, tipicamente, di 5 domande a risposta aperta.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Definizioni di sicurezza (cifrari simmetrici, asimmetrici, firme digitali, ecc)\nEsercizi sulle primitive crittografiche studiate (ad esempio: dimostrare che un dato cifrario è insicuro)\nAlgoritmi (ad es. fornire e spiegare lo pseudocodice di algoritmi studiati a lezione)",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 21830,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 48802,
+            "response_chars": 9255,
+            "latency_ms": 20130
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7521306723356247
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.732468843460083
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7286766767501831
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7422260642051697
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7338691651821136
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7004550993442535
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7434917092323303
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7387000918388367
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7299359142780304
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diversi difetti di cura editoriale, in particolare nella versione inglese. Si riscontrano residui di traduzione automatica non revisionati, come la frase \"ChatGPT ha detto:\" nel campo dei prerequisiti in inglese e l'espressione \"Scaricabile da\" mantenuta in italiano nella sezione dei riferimenti bibliografici in inglese. Inoltre, alcuni campi dei descrittori di Dublino in inglese iniziano con un punto, suggerendo un'incoerenza di formattazione o un residuo di copia-incolla. Anche nella versione italiana, il campo \"Abilità comunicative\" inizia con una congiunzione (\"e\"), indicando una possibile estrazione parziale di testo. Questi elementi denotano una revisione insufficiente del documento.",
+            "evidences": [
+              {
+                "text": "ChatGPT ha detto:\nFor an adequate understanding of the course content, the following prerequisites are required:\nBasics of discrete mathematics.\nBasic knowledge of algorithms.",
+                "source_field": "prerequisites_en"
+              },
+              {
+                "text": "[1] M. Bellare, P. Rogaway “Introduction to Modern Cryptography”\nScaricabile da\nhttp://www.cs.ucsd.edu/~mihir/cse107/classnotes.html",
+                "source_field": "references_en"
+              },
+              {
+                "text": ". Students will learn the fundamental ideas and the basic principles of modern cryptography. More specifically, students will be able to understand some of the most important cryptographic schemes and primitives used in practice.",
+                "source_field": "dublin_knowledge_en"
+              },
+              {
+                "text": "e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale della crittografia moderna.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Cap 11 di [1] Cap 11 di [3] e appunti delle lezioni.",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18157,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 34782,
+            "response_chars": 2103,
+            "latency_ms": 17774
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7189570665359497
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.6952703595161438
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7068982720375061
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7048454880714417
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.7036525011062622
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7292828559875488
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.6882576942443848
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7596272826194763
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7256492078304291
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7197391986846924
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7913682460784912
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7636530697345734
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7448965013027191
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8137961477041245
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.777502566576004
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7584907114505768
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7521306723356247
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.732468843460083
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7286766767501831
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7422260642051697
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7338691651821136
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7004550993442535
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7434917092323303
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7387000918388367
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7299359142780304
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7189570665359497
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.6952703595161438
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — CRITTOGRAFIA\n\n## Sintesi\n\n- **CoreScore**: 1.67/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT per la completezza strutturale e documentale. Ogni sezione è compilata in modo sostanziale e fornisce le informazioni attese, come Risultati di Apprendimento, Prerequisiti, Contenuti, Modalità di Verifica, Esempi di Domande, Testi di Riferimento, Modalità di Svolgimento, Modalità di Frequenza e Programmazione del corso.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo chiaro e specifico, descrivendo ciò che lo studente sarà in grado di fare o conoscere al termine del corso. Le formulazioni utilizzano verbi d'azione e specificano le conoscenze e le abilità osservabili, evitando descrizioni generiche del contenuto del corso. Questo approccio è in linea con le raccomandazioni normative che richiedono risultati di apprendimento valutabili.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono esplicitamente presenti e ben articolati nel syllabus. Ciascun descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una chiara indicazione delle competenze attese per ogni area. La formulazione è coerente con le Linee Guida UniCT che raccomandano una declinazione esplicita per ciascuno dei cinque descrittori.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo molto dettagliato e specifico. Vengono indicate le tipologie di prove (scritta e orale, con prove in itinere), la struttura della prova scritta (5 domande a risposta aperta) e il punteggio minimo per superarla. Inoltre, è presente una chiara e articolata scala di attribuzione del voto che descrive i livelli di conoscenza e competenza attesi per ciascun intervallo di valutazione, in linea con le raccomandazioni delle Linee Guida UniCT. Sono anche forniti esempi di domande, sebbene indicativi, che contribuiscono alla chiarezza.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo estremamente chiaro e ben organizzato. La sezione 'course_content_it' fornisce una panoramica generale degli obiettivi e degli strumenti trattati, mentre la 'schedule_it' articola il programma in 12 moduli tematici dettagliati, ciascuno con argomenti specifici e riferimenti bibliografici precisi. Questa organizzazione permette di comprendere la progressione didattica e la profondità degli argomenti, dimostrando una forte coerenza con gli obiettivi formativi dichiarati.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, che spaziano dalla conoscenza dei principi alla capacità di applicare strumenti crittografici e di giudicare la loro sicurezza, sono pienamente supportati dai contenuti dettagliati del corso e dai metodi didattici (lezioni frontali con slide). Le modalità di verifica, che includono domande a risposta aperta, esercizi sulle primitive crittografiche e spiegazione di algoritmi, sono direttamente allineate con l'accertamento di tali conoscenze e capacità, inclusa l'autonomia di giudizio e le abilità comunicative, come richiesto dai descrittori di Dublino e dalle normative di riferimento.\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 1): Il syllabus è parzialmente bilingue. Sebbene i risultati di apprendimento, i contenuti e le modalità di verifica siano presenti sia in italiano che in inglese, il titolo del corso (`course_name`) è fornito solo in italiano e manca una sua esplicita traduzione in inglese (`course_name_en`). Questo rende la completezza bilingue non totale per il perimetro minimo richiesto.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, indicando 'Basi di matematica discreta' e 'Nozioni basilari di algoritmi'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata la gradazione di importanza (utili, importanti, indispensabili) per ciascun prerequisito, come raccomandato dalle Linee Guida UniCT. La formulazione 'sono necessari' implica l'indispensabilità, ma non la distinzione richiesta per il punteggio massimo.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diversi difetti di cura editoriale, in particolare nella versione inglese. Si riscontrano residui di traduzione automatica non revisionati, come la frase \"ChatGPT ha detto:\" nel campo dei prerequisiti in inglese e l'espressione \"Scaricabile da\" mantenuta in italiano nella sezione dei riferimenti bibliografici in inglese. Inoltre, alcuni campi dei descrittori di Dublino in inglese iniziano con un punto, suggerendo un'incoerenza di formattazione o un residuo di copia-incolla. Anche nella versione italiana, il campo \"Abilità comunicative\" inizia con una congiunzione (\"e\"), indicando una possibile estrazione parziale di testo. Questi elementi denotano una revisione insufficiente del documento.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": 2,
+        "E5": 1
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": 2,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "La versione inglese del syllabus mostra una sostanziale equivalenza semantica con la versione italiana per tutti i campi confrontati. La terminologia è coerente e non si riscontrano omissioni significative o cambi di significato che possano compromettere la comprensione dei contenuti o degli impegni didattici. Sebbene nel campo 'prerequisites_en' sia presente l'indicazione \"ChatGPT ha detto:\", tale annotazione non altera la coerenza semantica del contenuto dei prerequisiti stessi, che rimane fedele alla versione italiana.",
+          "evidences": [
+            {
+              "text": "Obiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi.\nConoscenza e capacità di comprensione (knowledge and understanding):\nl'obiettivo del corso è quello di far acquisire conoscenze che consentano allo studente di comprendere le idee ed i principi che stanno alla base della crittografia moderna; in particolare lo studente acquisirà le conoscenze dei principali strumenti crittografici utilizzati in pratica.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nlo studente acquisirà le competenze necessarie per utilizzare in modo sicuro strumenti crittografici quali schemi di cifratura, di autentica e funzioni hash crittografiche.\nAutonomia di giudizio (making judgements):\nAttraverso esempi concreti di errori derivanti dall'utilizzo di soluzioni solo all'apparenza sicure lo studente sarà in grado di utilizzare autonomamente soluzioni crittografiche in grado di garantire elevati livelli di sicurezza.\nAbilità comunicative (communication skills):\nlo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale della crittografia moderna.\nCapacità di apprendimento (learning skills):\nil corso si propone, come obiettivo, di fornire allo studente le necessarie metodologie teoriche e pratiche per poter affrontare e risolvere autonomamente nuove problematiche che dovessero richiedere l'utilizzo di strumenti crittografici quali cifrari, schemi di firme digitali e funzioni hash.",
+              "source_field": "learning_outcomes_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "The goals of this course, in terms of expected results, are\nKnowledge and understanding\n. Students will learn the fundamental ideas and the basic principles of modern cryptography. More specifically, students will be able to understand some of the most important cryptographic schemes and primitives used in practice.\nApplying knowledge and understanding.\nStudents will be able to use, in a secure way, cryptographic schemes such as encryption schemes, authentication schemes and cryptographic hash functions\nMaking judgements\n. By studying concrete examples of seemingly secure (but wrong) solutions students will learn how to use cryptographic schemes providing high security guarantees.\nCommunication Skills\n. Students will learn how to properly communicate using the technical language of modern cryptography\nLearning Skills\n. A goal of this course is to provide a good theoretical and practical background of modern cryptography. It is expected that students will learn how to autonomously address problems that require the usage of cryptographic primitives such as digital signatures, encryption schemes and cryptographic hash functions.",
+              "source_field": "learning_outcomes_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Per una adeguata comprensione dei contenuti del corso sono necessari i seguenti prerequisiti.\nBasi di matematica discreta.\nNozioni basilari di algoritmi",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "ChatGPT ha detto:\nFor an adequate understanding of the course content, the following prerequisites are required:\nBasics of discrete mathematics.\nBasic knowledge of algorithms.",
+              "source_field": "prerequisites_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            }
+          ],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 1,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus dell'insegnamento di CRITTOGRAFIA mostra un'aderenza parziale agli usi dipartimentali. In particolare, la sezione dei prerequisiti presenta un elenco omogeneo che non distingue tra conoscenze culturali/generali e disciplinari/specialistiche, contrariamente a quanto esplicitamente richiesto dalle linee guida dipartimentali. Inoltre, nella sezione delle modalità di verifica, pur essendo presenti esempi di domande e un voto minimo per la prova scritta, manca l'esplicitazione del peso relativo delle componenti d'esame (scritto e orale) sul voto finale, un dettaglio richiesto per una piena aderenza. Anche la sezione dei riferimenti bibliografici è carente, poiché tutti i riferimenti citati non includono l'anno di pubblicazione, che è un elemento minimo obbligatorio. Tuttavia, la sezione relativa alla frequenza è ben allineata, indicando chiaramente che la frequenza non è obbligatoria ma fortemente consigliata, e non essendoci componenti pratiche specifiche, non sono necessarie ulteriori distinzioni.",
+          "evidences": [
+            {
+              "text": "Per una adeguata comprensione dei contenuti del corso sono necessari i seguenti prerequisiti.\nBasi di matematica discreta.\nNozioni basilari di algoritmi",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "La distinzione può essere realizzata con elenchi separati, con sottosezioni esplicite o con un elenco unico organizzato in modo chiaramente separabile. Una semplice lista omogenea che mischi le due famiglie senza alcuna separazione **non** soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "L'esame consiste di una prova scritta ed un colloquio orale. La prova scritta consiste, tipicamente, di 5 domande a risposta aperta.\nPer superare la prova scritta è necessario ottenere una valutazione di almeno 18. La prova scritta può essere visionata prima di sostenere la prova orale.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "esplicitare il **peso relativo** delle componenti dell'esame (scritto, orale, progetto, prova in itinere) sul voto finale, almeno qualitativamente (es. \"il progetto pesa per circa metà del voto finale, lo scritto per circa metà\");",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "Definizioni di sicurezza (cifrari simmetrici, asimmetrici, firme digitali, ecc)\nEsercizi sulle primitive crittografiche studiate (ad esempio: dimostrare che un dato cifrario è insicuro)\nAlgoritmi (ad es. fornire e spiegare lo pseudocodice di algoritmi studiati a lezione)",
+              "source_field": "sample_questions_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "includere **almeno una domanda esempio** rappresentativa, preferibilmente nella sezione apposita\n  (`sample_questions_it`), oppure in fondo alla sezione modalità\n  di verifica.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "[1] M. Bellare, P. Rogaway “Introduction to Modern Cryptography”\nScaricabile da\nhttp://www.cs.ucsd.edu/~mihir/cse107/classnotes.html\n[2] V. Shoup A Computational Introduction to Number Theory and Algebra\nScaricabile da\nhttp://shoup.net/ntb/\n[3] J. Katz, Y. Lindell “Introduction to Modern Cryptography” CRC press",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "ogni riferimento bibliografico riportato nel syllabus\ndeve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "La frequenza delle lezioni non è obbligatoria ma fortemente consigliata.",
+              "source_field": "attendance_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "la sezione deve indicare in modo esplicito:\n\n- se la frequenza è **obbligatoria** o **facoltativa**;",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}

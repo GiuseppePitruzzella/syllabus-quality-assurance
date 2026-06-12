@@ -1,0 +1,417 @@
+{
+  "calibration_mode": "phase_9_f_targeted_v1",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "synthetic_fixture_version": "v1",
+  "manifest": {
+    "calibration_mode": "phase_9_f_targeted_v1",
+    "protocol_version": "phase_9_f_v1",
+    "e5_fixture_version": "v1",
+    "synthetic_fixture_version": "v1",
+    "started_at": "2026-06-12T10:15:33.250444+00:00",
+    "finished_at": "2026-06-12T10:25:12.270233+00:00",
+    "duration_seconds": 579.02,
+    "e4_prompt_version": "e4_v1",
+    "e5_prompt_version": "e5_v1",
+    "e5_document": {
+      "id": 1,
+      "version": 1,
+      "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+      "reused": true
+    },
+    "e5_fixture_sha256": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "synthetic_fixture_sha256": "fe99d600f04a9f5c8f45edf8cd529fb3d59dfe979c87fa727df989d70846ae66",
+    "synthetic_seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+    "real_seuids": [
+      "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+      "DADC30FD-2222-4C43-BAB8-A57D08667196"
+    ],
+    "evaluation_uuids": [
+      "335a1b88-0556-400b-bab7-e425baf1d8f5",
+      "ba905ccd-40e4-4e99-82bc-d98fcb935165",
+      "335d553a-d7a7-4436-b776-da88b1e1b103",
+      "911bd62a-f7b8-41fb-878a-5fb2b8d3f242"
+    ]
+  },
+  "runs": [
+    {
+      "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "evaluation_uuid": "335a1b88-0556-400b-bab7-e425baf1d8f5",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 154.1,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 10
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    },
+    {
+      "seuid": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+      "evaluation_uuid": "ba905ccd-40e4-4e99-82bc-d98fcb935165",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 159.74,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 7
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    },
+    {
+      "seuid": "DADC30FD-2222-4C43-BAB8-A57D08667196",
+      "evaluation_uuid": "335d553a-d7a7-4436-b776-da88b1e1b103",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_seconds": 141.62,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 4
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 10
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    },
+    {
+      "seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+      "evaluation_uuid": "911bd62a-f7b8-41fb-878a-5fb2b8d3f242",
+      "role": "synthetic_positive_control",
+      "core_status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_seconds": 123.53,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 4
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 9
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "academic_year_match",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    }
+  ],
+  "real_runs": [
+    {
+      "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+      "evaluation_uuid": "335a1b88-0556-400b-bab7-e425baf1d8f5",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 154.1,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 10
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    },
+    {
+      "seuid": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+      "evaluation_uuid": "ba905ccd-40e4-4e99-82bc-d98fcb935165",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.56,
+      "coverage": 1.0,
+      "duration_seconds": 159.74,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 0,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 6
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 7
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    },
+    {
+      "seuid": "DADC30FD-2222-4C43-BAB8-A57D08667196",
+      "evaluation_uuid": "335d553a-d7a7-4436-b776-da88b1e1b103",
+      "role": "real",
+      "core_status": "completed",
+      "core_score": 1.67,
+      "coverage": 1.0,
+      "duration_seconds": 141.62,
+      "extended_status": "completed",
+      "handler_errors": {},
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      },
+      "e4": {
+        "outcome": "score",
+        "score": 2,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 4
+      },
+      "e5": {
+        "outcome": "score",
+        "score": 1,
+        "is_na_technical": false,
+        "confidence": "high",
+        "evidences_count": 10
+      },
+      "e5_document_used": {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    }
+  ],
+  "synthetic_run": {
+    "seuid": "SYNTHETIC-9F-POSITIVE-E5-V1",
+    "evaluation_uuid": "911bd62a-f7b8-41fb-878a-5fb2b8d3f242",
+    "role": "synthetic_positive_control",
+    "core_status": "completed",
+    "core_score": 1.67,
+    "coverage": 1.0,
+    "duration_seconds": 123.53,
+    "extended_status": "completed",
+    "handler_errors": {},
+    "handler_prompt_versions": {
+      "E4": "e4_v1",
+      "E5": "e5_v1"
+    },
+    "e4": {
+      "outcome": "score",
+      "score": 2,
+      "is_na_technical": false,
+      "confidence": "high",
+      "evidences_count": 4
+    },
+    "e5": {
+      "outcome": "score",
+      "score": 2,
+      "is_na_technical": false,
+      "confidence": "high",
+      "evidences_count": 9
+    },
+    "e5_document_used": {
+      "criterion_code": "E5",
+      "local_document_id": 1,
+      "document_type": "usi_dipartimentali",
+      "document_version": 1,
+      "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+      "resolution_reason": "academic_year_match",
+      "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+      "deleted_at": null
+    }
+  },
+  "decision_tree": {
+    "synthetic_e5_score": 2,
+    "real_e5_scores": [
+      1,
+      1,
+      1
+    ],
+    "verdict": "synthetic reached E5=2 and the real boundary cases scored at least 1: e5_v1 is well-calibrated; the Machine Learning baseline outcome looks like a defensible outlier."
+  },
+  "core": {
+    "status_counts": {
+      "completed": 4
+    },
+    "core_score": {
+      "n": 4,
+      "mean": 1.615,
+      "median": 1.615,
+      "min": 1.56,
+      "max": 1.67
+    },
+    "coverage": {
+      "n": 4,
+      "mean": 1.0,
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0
+    }
+  },
+  "extended": {
+    "status_counts": {
+      "completed": 4
+    },
+    "E4": {
+      "outcomes": {
+        "score": 4
+      },
+      "scores": {
+        "0": 1,
+        "1": 0,
+        "2": 3,
+        "NA": 0
+      }
+    },
+    "E5": {
+      "outcomes": {
+        "score": 4
+      },
+      "scores": {
+        "0": 0,
+        "1": 3,
+        "2": 1,
+        "NA": 0
+      }
+    },
+    "technical_na_count": 0,
+    "any_handler_errors": 0
+  },
+  "durations_seconds": {
+    "n": 4,
+    "mean": 144.7475,
+    "median": 147.86,
+    "min": 123.53,
+    "max": 159.74
+  }
+}
