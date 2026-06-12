@@ -572,11 +572,13 @@ def _write_evaluation_json(
     e5_doc: dict[str, Any],
     output_dir: Path,
     seuid: str,
+    *,
+    calibration_header: dict[str, Any] | None = None,
 ) -> None:
     redacted_body = copy.deepcopy(body)
     _redact_gcp_project_id(redacted_body)
     payload = {
-        **_calibration_header(),
+        **(calibration_header or _calibration_header()),
         "e5_document": e5_doc,
         "evaluation_detail": redacted_body,
     }
@@ -599,28 +601,37 @@ def _redact_gcp_project_id(obj: Any) -> None:
             _redact_gcp_project_id(item)
 
 
-def _write_report_md(body: dict[str, Any], output_dir: Path, seuid: str) -> None:
-    header = (
-        f"<!-- calibration_mode={CALIBRATION_MODE} "
-        f"protocol_version={PROTOCOL_VERSION} "
-        f"e5_fixture_version={E5_FIXTURE_VERSION} -->\n\n"
-    )
+def _write_report_md(
+    body: dict[str, Any],
+    output_dir: Path,
+    seuid: str,
+    *,
+    calibration_header: dict[str, Any] | None = None,
+) -> None:
+    header_dict = calibration_header or _calibration_header()
+    header_str = "<!-- " + " ".join(
+        f"{k}={v}" for k, v in header_dict.items()
+    ) + " -->\n\n"
     body_text = body.get("final_report") or "_no final report available_"
     (output_dir / f"{seuid}__report.md").write_text(
-        header + body_text, encoding="utf-8",
+        header_str + body_text, encoding="utf-8",
     )
 
 
 def _write_extended_judgments_md(
-    body: dict[str, Any], output_dir: Path, seuid: str,
+    body: dict[str, Any],
+    output_dir: Path,
+    seuid: str,
+    *,
+    calibration_header: dict[str, Any] | None = None,
 ) -> None:
     ext = body["extended_criteria_result"] or {}
+    header_dict = calibration_header or _calibration_header()
+    header_str = "<!-- " + " ".join(
+        f"{k}={v}" for k, v in header_dict.items()
+    ) + " -->"
     lines: list[str] = []
-    lines.append(
-        f"<!-- calibration_mode={CALIBRATION_MODE} "
-        f"protocol_version={PROTOCOL_VERSION} "
-        f"e5_fixture_version={E5_FIXTURE_VERSION} -->"
-    )
+    lines.append(header_str)
     lines.append("")
     lines.append(f"# Extended judgments — {seuid}")
     lines.append("")

@@ -48,26 +48,75 @@ coverage core fra prima/dopo la Phase 9.
 | 4 | `FE97232C-4F07-41F8-A82F-FF73592265EC` | shortlist |
 | 5 | `0B53E8E2-4B90-426F-A25C-3AA31FA4B649` | shortlist |
 
-### 2.2 Casi mirati opzionali (≤3)
+### 2.2 Casi mirati (campagna `phase_9_f_targeted_v1`)
 
-Da aggiungere **solo se** la shortlist non copre uno dei seguenti
-profili. La selezione finale è da confermare in fase 9.F.2 sulla
-base di un'ispezione manuale dei 30 syllabus LM-18:
+I casi mirati vivono in una **campagna separata** dalla baseline.
+Decisione confermata 2026-06-12 dopo l'esecuzione e l'analisi della
+baseline (analysis.md §"Review manuale Machine Learning"):
 
-1. **Syllabus con `has_english=False`** — deve produrre `E4 = NA
-   semantico` dal resolver, senza chiamata LLM. Utile per validare
-   che il path semantico stia funzionando in produzione.
-2. **Syllabus con EN parziale (1-2 campi paired su 10)** — deve
-   esercitare il pre-LLM paired-prefix check (semantic NA della
-   sezione "perimetro EN inadeguato" se le coppie non hanno
-   contenuto) e/o produrre un giudizio E4 score=1 di equivalenza
-   parziale.
-3. **Syllabus con EN integrale e ben curato** — atteso E4 score=2,
-   utile come reference positiva.
+- la selezione dei casi è fatta **prima** di vedere i punteggi del
+  modello, esplorando i 30 syllabus LM-18 storici;
+- la fixture E5 (`usi_dipartimentali_lm18_v1.md`) resta **invariata**
+  rispetto alla baseline — cambiare prompt e fixture
+  simultaneamente confonderebbe due variabili;
+- i prompt E4/E5 restano `e4_v1` / `e5_v1`.
+
+**Campione targeted (4 evaluation):**
+
+| Ruolo | SEUID | Atteso | Razionale |
+|:---|:---|:---|:---|
+| real | `3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF` (Advanced Computer Graphics) | **E4=1** | EN copre molti campi ma `course_content_en` assente — equivalenza parziale, banda media E4 mancante in baseline |
+| real | `B99A46CC-D23B-4987-91AF-A2ECCFBAC778` (Computer Vision e Laboratorio) | **E5=1** (boundary) | 2 usi aderenti, 1 parziale, 1 violato — stessa struttura del caso ML, cross-validazione della severità |
+| real | `DADC30FD-2222-4C43-BAB8-A57D08667196` (Crittografia) | **E5=1** (boundary) | Secondo boundary E5, per stabilire se il pattern è ricorrente |
+| synthetic | `SYNTHETIC-9F-POSITIVE-E5-V1` | **E5=2** (positive control) | Syllabus sintetico costruito esplicitamente per soddisfare tutti 4 gli usi della fixture |
+
+**Controllo positivo sintetico — perché.** Nessuno dei 30 syllabus
+LM-18 reali distingue esplicitamente prerequisiti culturali e
+disciplinari, e nessuno è onestamente considerabile un *gold
+naturale* E5=2. Senza un caso che eserciti realmente l'anchor
+positivo del criterio, non possiamo distinguere due ipotesi
+opposte:
+
+1. il prompt `e5_v1` è strutturalmente incapace di concedere E5=2;
+2. il prompt è ben calibrato ma i 30 LM-18 storici non lo meritano.
+
+Il controllo positivo discrimina:
+
+| Esito synthetic | Esito real boundary | Interpretazione |
+|:---|:---|:---|
+| `E5=2` | `E5=1` o misto | `e5_v1` ben calibrato, baseline ML era un outlier accettabile |
+| `E5=2` | tutti `E5=0` | Severità sistemica della regola di aggregazione (one-strike-out); `e5_v2` richiesto per chiarire la lingua per-uso vs per-criterio |
+| `< 2` | qualsiasi | Severità strutturale dell'anchor; `e5_v2` richiesto a prescindere dal comportamento sui real |
+
+Il verdetto automatico è calcolato dal runner e finisce in
+`summary.json[decision_tree]` + `summary.md`. **Non sostituisce**
+la lettura umana, che resta necessaria su evidenze e justification.
+
+**Fixture syllabus sintetico.** Il documento sorgente è
+[fixtures/synthetic_syllabus_positive_e5_v1.json](fixtures/synthetic_syllabus_positive_e5_v1.json).
+Il SEUID `SYNTHETIC-9F-POSITIVE-E5-V1` è in maiuscolo e
+deliberatamente non un UUID per non confondersi mai con un syllabus
+reale dello scraping. Il syllabus viene inserito nel DB la prima
+volta dal runner (idempotente: sui successivi run verifica drift
+field-by-field contro il JSON sorgente) e **non viene mai rimosso**:
+fa parte della baseline metodologica di calibrazione Phase 9.F al
+pari della fixture E5 e delle audit row.
+
+**Cosa la campagna mirata NON copre (per scelta esplicita):**
+
+- *Syllabus con `has_english=False`*: nessuno dei 30 LM-18 lo ha.
+  Quando esisterà nel dataset (Phase futura), si aggiungerà come
+  caso separato sotto la propria campagna.
+- *EN integrale come gold naturale*: il syllabus sintetico copre il
+  ruolo di gold positivo. Aggiungere anche un real "ben fatto"
+  ridurrebbe il rigore metodologico — si finirebbe a misurare la
+  cura redazionale di un caso storico invece dell'aderenza
+  semantica esplicita.
 
 I casi mirati vengono presi **dai 30 syllabus LM-18 di calibrazione
 esistente**, non da nuovi syllabus, per restare nel dataset
-scientifico.
+scientifico. Il caso sintetico vive accanto al dataset (SEUID
+distinguibile) e non lo contamina.
 
 ### 2.3 Numerosità totale
 
