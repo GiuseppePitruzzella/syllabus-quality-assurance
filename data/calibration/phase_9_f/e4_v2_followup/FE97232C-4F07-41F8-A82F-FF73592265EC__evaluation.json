@@ -1,0 +1,1043 @@
+{
+  "calibration_mode": "phase_9_f_e4_v2_followup",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "e4_prompt_version": "e4_v2",
+  "expected_e4": "score:0",
+  "observed_e4": "score:0",
+  "role": "real",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": true
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "92505a9c-b9b4-4a16-b4ad-7b1684d35c6a",
+    "syllabus_seuid_snapshot": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+    "course_name_snapshot": "MACHINE LEARNING",
+    "status": "completed",
+    "started_at": "2026-06-12T13:52:28.581780",
+    "finished_at": "2026-06-12T13:55:11.353084",
+    "duration_ms": 162771,
+    "core_score": 1.56,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 2,
+      "C5": 1,
+      "C3": 1,
+      "C4": 1,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Questo garantisce una completa panoramica delle informazioni essenziali del corso per lo studente, come richiesto dal contesto normativo (LG UniCT, sez. 2).",
+            "evidences": [
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati formalmente i modelli fondamentali dello stato dell’arte per la classificazione e la regressione. Verrà introdotto l’approccio moderno dell’apprendimento automatico e saranno presentati casi applicativi in diversi contesti di rilevanza accademica e industriale (es. object detection). Saranno discusse le metodologie per realizzare e ottimizzare algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. La presentazione degli argomenti si sviluppa mediante lezioni teoriche e laboratoriali in cui gli studenti implementeranno e utilizzeranno gli algoritmi trattati mediante linguaggio Python e librerie software open source (es. PyTorch) adattandoli a problemi specifici mediante un progetto sviluppato dagli studenti del corso.\nObiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi:\nConoscenza e capacità di comprensione (knowledge and understanding): lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze pratiche di realizzazione di sistemi di apprendimento automatico attraverso attività laboratoriale\nAutonomia di giudizio (making judgements): Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro\nAbilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi di apprendimento automatico.\nCapacità di apprendimento (learning skills): Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning). Saranno discusse le metodologie per realizzare e ottimizzare gli algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. Si utilizzeranno librerie software open source in linguaggio Python per mettere in pratica le nozioni teoriche presentate nel corso. In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Si utilizzeranno nozioni di base di a\nnalisi matematica, m\natematica discreta, f\nondamenti di informatica, p\nrogrammazione, i\nnterazione e multimedialità, a\nlgoritmi.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Introduction to Machine Learning - Basic Concepts [1,2,3,4,7]\nDecision trees\n[1,2,3,4]\nRandom Forests [1]\nLinear/Logistic Regression [1, 2, 3, 4]\nPolynomial Linear/Logistic Regression\n[1, 2, 3, 4]\nPerceptron [4,6]\nSoftMax\n[4,5]\nKernel Machines - SVM [4]\nCombining Methods\n[1,2,3,4]",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame finale consiste in una prova scritta e la realizzazione di un progetto (che include relazione) concordato con il docente.\nLa prova scritta è costituita, di norma, da tre domande a risposta aperta. La prenotazione per la partecipazione alla prova scritta è obbligatoria.\nIl voto finale è ottenuto dalla media dei voti della prova scritta e del progetto.\nProva in Itinere: Non prevista\nSalvo diversa comunicazione:\n- l'esame scritto si svolge nei giorni previsti nel calendario ufficiale del Corso di Laurea\n- il progetto, insieme alla relazione, deve essere consegnato entro una settimana dallo scritto\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.\nLa votazione è espressa in trentesimi secondo il seguente schema:\nVoto 29-30 e lode\nLo studente ha una conoscenza approfondita dei concetti fondamentali e i principali algoritmi di Machine Learning. Riesce a formalizzare problemi di Machine Learning, individuando gli algoritmi e le tecniche più idonee alla risoluzione dei problemi considerati in maniera autonoma e con spirito critico. Ha ottime capacità comunicative e proprietà di linguaggio.\nVoto 26-28\nLo studente ha una buona conoscenza dei concetti fondamentali\ne i principali algoritmi\ndi Machine Learning. Riesce a formalizzare problemi di\nMachine\nLearning, individuando degli algoritmi e tecniche idonee alla risoluzione dei problemi considerati. Ha buone capacità comunicative e proprietà di linguaggio.\nVoto 22-25\nLo studente ha una discreta conoscenza dei concetti fondamentali\ne i principali algoritmi di\nMachine\nLearning. Riesce a formalizzare problemi di\nMachine\nLearning, seppure non sempre in maniera esaustiva, individuando degli algoritmi e tecniche idonee alla risoluzione del problema considerato. Ha discrete capacità comunicative e proprietà di linguaggio.\nVoto 18-21\nLo studente ha la minima conoscenza dei concetti fondamentali\ne i principali algoritmi di\nMachine\nLearning. Ha una modesta capacità di formalizzare problemi di\nMachine\nLearning, e di individuare degli algoritmi e tecniche idonee alla risoluzione dei problemi considerati. Ha sufficienti capacità comunicative, seppure non sempre una appropriata proprietà di linguaggio.\nEsame non superato\nLo studente non possiede la conoscenza minima richiesta dei contenuti principali dell’insegnamento. La capacità di utilizzare il linguaggio specifico è scarsissima o nulla e non è in grado di applicare autonomamente le conoscenze acquisite.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "- Si discuta la regressione logistica\n- Si definisca il problema dell'overfitting e si discuta la regolarizzazione\n- Si discuta il classificatore Softmax",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Materiale fornito dal docente\nR. O. Duda, P. E. Hart, D. G. Stork, \"Pattern Classification\", Wiley, 2000\nC. Bishop, “Pattern Recognition and Machine Learning\", Springer, 2006\nE. Alpaydin, “Introduction to Machine Learning”, MIT Press, 2014\nI. Goodfellow, Y. Bengio and A. Courville, \"Deep Learning\", MIT Press, 2016\nRaul Rojas, Neural Networks - A Systematic Introduction, Springer, 1996\nM. P. Deisenroth, A A. Faisal, and C. Soon On, Mathematics for Machine Learning, MIT Press, 2019",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni sono tenute in aula con l'ausilio di slide, messe a disposizione degli studenti. Le slide non sostituiscono i testi di riferimento, ma, oltre che agevolare la comprensione della lezione, forniscono un dettaglio puntuale sul programma svolto. Le lezioni frontali teoriche sono intervallate da esercitazioni pratiche in linguaggio python, svolte nella stessa aula di lezione. Gli studenti sono invitati a formare piccoli gruppi di lavoro (massimo 3 persone) per lo svolgimento delle esercitazioni proposte e del progetto finale.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato, al fine di rispettare il programma previsto e riportato nel syllabus. La valutazione dell'apprendimento può essere effettuata anche on-line, qualora le condizioni lo richiedano.\nIl materiale didattico sarà reperibile sul sito del corso:\nhttps://www.dmi.unict.it/farinella/ML/CourseSchedule.html",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "La frequenza non è obbligatorio ma è fortemente consigliata per garantire un adeguato grado di comprensione degli argomenti proposti",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "[\n    {\n      \"numero\": \"1\",\n      \"argomenti\": \"Introduction to Machine Learning - Basic Concepts\",\n      \"riferimenti_testi\": \"[1,2,3,4,7]\"\n    },\n    {\n      \"numero\": \"2\",\n      \"argomenti\": \"Decision trees\",\n      \"riferimenti_testi\": \"[1,2,3,4]\"\n    },\n    {\n      \"numero\": \"3\",\n      \"argomenti\": \"Random Forests\",\n      \"riferimenti_testi\": \"[1]\"\n    },\n    {\n      \"numero\": \"4\",\n      \"argomenti\": \"Linear/Logistic Regression\",\n      \"riferimenti_testi\": \"[1, 2, 3, 4]\"\n    },\n    {\n      \"numero\": \"5\",\n      \"argomenti\": \"Polynomial Linear/Logistic Regression\",\n      \"riferimenti_testi\": \"[1, 2, 3, 4]\"\n    },\n    {\n      \"numero\": \"6\",\n      \"argomenti\": \"Perceptron\",\n      \"riferimenti_testi\": \"[4,6]\"\n    },\n    {\n      \"numero\": \"7\",\n      \"argomenti\": \"SoftMax\",\n      \"riferimenti_testi\": \"[4,5]\"\n    },\n    {\n      \"numero\": \"8\",\n      \"argomenti\": \"Kernel Machines - SVM\",\n      \"riferimenti_testi\": \"[4]\"\n    },\n    {\n      \"numero\": \"9\",\n      \"argomenti\": \"Combining Methods\",\n      \"riferimenti_testi\": \"[1,2,3,4]\"\n    }\n  ]",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus fornisce una versione inglese completa per tutte le sezioni richieste dal perimetro minimo bilingue: titolo del corso, risultati di apprendimento, contenuti e modalità di verifica. La presenza di queste traduzioni rende il syllabus pienamente accessibile a un pubblico internazionale, in linea con le aspettative di completezza bilingue.",
+            "evidences": [
+              {
+                "text": "MACHINE LEARNING",
+                "source_field": "course_name"
+              },
+              {
+                "text": "The aim of the course is to provide an in-depth introduction to the main techniques of Machine Learning. To this purpose, the fundamental models and the state-of-the-art techniques for classification and regression will be formally presented. The modern approach of machine learning will be introduced. Application cases will be discussed considering different contexts with relevance on both research and industrial field (e.g. object detector, image and video understanding). We will discuss the methodologies for creating and optimizing machine learning algorithms, and those useful for evaluating the performance of Machine Learning systems. The presentation of the topics is developed through theoretical and laboratory lessons in which the students will implement and use the algorithms presented in the course exploiting the Python language and other open source software libraries (eg PyTorch). Algorithms will be adapted to address specific problems through a project developed by students.\nThe course aims to train students to:\nprovide key concepts underlying Machine Learning techniques;\nknow a wide range of learning algorithms to solve classic Machine Learning problems (classification and regression);\nunderstand how to design and tune algorithms in order to apply them to new datasets;\nevaluate machine learning algorithms so that the best model can be selected;\ndevelop new Machine Learning algorithms in Python or to adapt existing algorithms to new use cases",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "Introduction to Machine Learning - Basic Concepts [1,2,3,4,7]\nDecision trees\n[1,2,3,4]\nRandom Forests [1]\nLinear/Logistic Regression [1, 2, 3, 4]\nPolynomial Linear/Logistic Regression\n[1, 2, 3, 4]\nPerceptron [4,6]\nSoftMax\n[4,5]\nKernel Machines - SVM [4]\nCombining Methods\n[1,2,3,4]",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The final exam consists of two parts:\nWritten Examination\nProject\nThe grading is expressed in thirtieths according to the following scheme:\nGrade 29-30 with honors\nThe students have an in-depth knowledge of the fundamental concepts and of the main Machine Learning. They are able to formalize\nMachine\nlearning problems by identifying the most suitable algorithms and techniques for solving the considered problems independently and critically. They have excellent communication skills and language proficiency.\nGrade 26-28\nThe students have a good understanding of fundamental concepts and major\nMachine\nLearning. They are able to formalize Machine learning problems identifying appropriate algorithms and techniques for the considered problems. They have good communication skills and language proficiency.\nGrade 22-25\nThe students have a fair understanding of fundamental concepts and of the main\nMachine\nLearning. They are able to formalize\nMachine\nlearning problems, although not always exhaustively, identifying suitable algorithms and techniques for the considered problems. They have moderate communication skills and language proficiency.\nGrade 18-21\nThe students have minimal knowledge of fundamental concepts and of the main\nMachine\nLearning. They have modest ability to formalize\nMachine\nlearning problems and to identify suitable algorithms and techniques for the considered problems. They have sufficient communication skills, although not always appropriate language proficiency.\nFailed Exam\nThe students lack of the minimum required knowledge of the main course contents. Their ability to formalize\nMachine\nlearning problems is very poor or nonexistent, and they are unable to apply the acquired knowledge independently.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, elencando diverse aree di conoscenza fondamentali per il corso. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come suggerito dalle Linee Guida UniCT (sez. 3.2).",
+            "evidences": [
+              {
+                "text": "Si utilizzeranno nozioni di base di a\nnalisi matematica, m\natematica discreta, f\nondamenti di informatica, p\nrogrammazione, i\nnterazione e multimedialità, a\nlgoritmi.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 38676,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 41258,
+            "response_chars": 16250,
+            "latency_ms": 37761
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7194335758686066
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__2__0",
+            "document_id": "lg_unict",
+            "section_ref": "2",
+            "similarity_score": 0.715994119644165
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7134680151939392
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7223697304725647
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.6853615939617157
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7694207727909088
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.7375907897949219
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.a__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.a",
+            "similarity_score": 0.7317918539047241
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "La formulazione dei risultati di apprendimento attesi presenta una combinazione di descrizioni del corso e di risultati espressi in termini di ciò che lo studente sarà in grado di fare. La parte iniziale del campo 'learning_outcomes_it' e l'inizio del descrittore 'dublin_learning_it' descrivono le attività del corso o gli argomenti che verranno presentati, anziché focalizzarsi sulle competenze acquisite dallo studente. Tuttavia, all'interno dei singoli Descrittori di Dublino e nella parte finale del campo 'learning_outcomes_it', sono presenti formulazioni più specifiche e orientate allo studente, sebbene alcune siano ancora generiche (es. 'acquisirà le conoscenze'). Il descrittore 'Abilità comunicative' è particolarmente conciso e poco specifico.",
+            "evidences": [
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati formalmente i modelli fondamentali dello stato dell’arte per la classificazione e la regressione.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi di apprendimento automatico.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning).",
+                "source_field": "dublin_learning_it"
+              },
+              {
+                "text": "In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono presenti e identificati esplicitamente, come raccomandato dalle Linee Guida UniCT. Tuttavia, la loro articolazione non è sempre specifica e differenziata. In particolare, il descrittore 'Abilità comunicative' è molto generico e conciso, mentre il descrittore 'Capacità di apprendimento' inizia con una descrizione del corso e prosegue con una lista di obiettivi che si sovrappongono in larga misura con le capacità di conoscenza e applicazione, anziché focalizzarsi sulla capacità di apprendere in modo autonomo e continuo. I descrittori 'Conoscenza e capacità di comprensione', 'Capacità di applicare conoscenza e comprensione' e 'Autonomia di giudizio' sono formulati in modo più chiaro e specifico, ma la debolezza degli altri due riduce il punteggio complessivo.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and understanding): lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze pratiche di realizzazione di sistemi di apprendimento automatico attraverso attività laboratoriale",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements): Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi di apprendimento automatico.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills): Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning). Saranno discusse le metodologie per realizzare e ottimizzare gli algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. Si utilizzeranno librerie software open source in linguaggio Python per mettere in pratica le nozioni teoriche presentate nel corso. In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 22562,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 31290,
+            "response_chars": 7330,
+            "latency_ms": 21723
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8008949160575867
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.7705532014369965
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7505524009466171
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8212210237979889
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.7863428294658661
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7662511467933655
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Il syllabus indica le componenti dell'esame (prova scritta e progetto con relazione), la modalità di calcolo del voto finale e fornisce una rubrica dettagliata per l'attribuzione del voto, che include descrizioni per ogni fascia di valutazione (29-30 e lode, 26-28, ecc.). Sono inoltre presenti esempi di domande, come suggerito dalle Linee Guida UniCT, e viene menzionata la gestione per studenti con disabilità/DSA, in linea con le raccomandazioni normative.",
+            "evidences": [
+              {
+                "text": "L'esame finale consiste in una prova scritta e la realizzazione di un progetto (che include relazione) concordato con il docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "La prova scritta è costituita, di norma, da tre domande a risposta aperta.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto finale è ottenuto dalla media dei voti della prova scritta e del progetto.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "La votazione è espressa in trentesimi secondo il seguente schema:\nVoto 29-30 e lode\nLo studente ha una conoscenza approfondita dei concetti fondamentali e i principali algoritmi di Machine Learning. Riesce a formalizzare problemi di Machine Learning, individuando gli algoritmi e le tecniche più idonee alla risoluzione dei problemi considerati in maniera autonoma e con spirito critico. Ha ottime capacità comunicative e proprietà di linguaggio.\nVoto 26-28\nLo studente ha una buona conoscenza dei concetti fondamentali\ne i principali algoritmi\ndi Machine Learning. Riesce a formalizzare problemi di\nMachine\nLearning, individuando degli algoritmi e tecniche idonee alla risoluzione dei problemi considerati. Ha buone capacità comunicative e proprietà di linguaggio.\nVoto 22-25\nLo studente ha una discreta conoscenza dei concetti fondamentali\ne i principali algoritmi di\nMachine\nLearning. Riesce a formalizzare problemi di\nMachine\nLearning, seppure non sempre in maniera esaustiva, individuando degli algoritmi e tecniche idonee alla risoluzione del problema considerato. Ha discrete capacità comunicative e proprietà di linguaggio.\nVoto 18-21\nLo studente ha la minima conoscenza dei concetti fondamentali\ne i principali algoritmi di\nMachine\nLearning. Ha una modesta capacità di formalizzare problemi di\nMachine\nLearning, e di individuare degli algoritmi e tecniche idonee alla risoluzione dei problemi considerati. Ha sufficienti capacità comunicative, seppure non sempre una appropriata proprietà di linguaggio.\nEsame non superato\nLo studente non possiede la conoscenza minima richiesta dei contenuti principali dell’insegnamento. La capacità di utilizzare il linguaggio specifico è scarsissima o nulla e non è in grado di applicare autonomamente le conoscenze acquisite.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "- Si discuta la regressione logistica\n- Si definisca il problema dell'overfitting e si discuta la regolarizzazione\n- Si discuta il classificatore Softmax",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "Gli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I contenuti del corso sono presentati in modo chiaro e organizzato. Il syllabus include un elenco dettagliato degli argomenti trattati, ulteriormente strutturato in una programmazione settimanale che ne indica la progressione. Ogni argomento è associato a riferimenti bibliografici specifici. Questa organizzazione permette di comprendere facilmente la struttura del corso e la sequenza degli argomenti, dimostrando coerenza con gli obiettivi formativi e i risultati di apprendimento attesi, che mirano a fornire una conoscenza approfondita delle teorie e tecniche del Machine Learning.",
+            "evidences": [
+              {
+                "text": "Introduction to Machine Learning - Basic Concepts [1,2,3,4,7]\nDecision trees\n[1,2,3,4]\nRandom Forests [1]\nLinear/Logistic Regression [1, 2, 3, 4]\nPolynomial Linear/Logistic Regression\n[1, 2, 3, 4]\nPerceptron [4,6]\nSoftMax\n[4,5]\nKernel Machines - SVM [4]\nCombining Methods\n[1,2,3,4]",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati formalmente i modelli fondamentali dello stato dell’arte per la classificazione e la regressione.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "comprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);",
+                "source_field": "dublin_learning_it"
+              },
+              {
+                "text": "schedule_it",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Esiste una chiara coerenza didattico-valutativa tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano sia la conoscenza teorica che la capacità di applicazione pratica e di sviluppo di soluzioni. I metodi didattici, che includono lezioni teoriche e attività laboratoriali con sviluppo di un progetto in Python, supportano direttamente questi obiettivi. I contenuti del corso coprono gli argomenti necessari per acquisire tali conoscenze e competenze. Infine, le modalità di verifica, composte da una prova scritta (per la conoscenza e la comunicazione) e un progetto (per l'applicazione, l'autonomia di giudizio e le capacità di apprendimento), sono perfettamente allineate per accertare il raggiungimento di tutti i risultati di apprendimento dichiarati, come evidenziato anche dalla rubrica di valutazione dettagliata.",
+            "evidences": [
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati formalmente i modelli fondamentali dello stato dell’arte per la classificazione e la regressione.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "lo studente acquisirà le competenze pratiche di realizzazione di sistemi di apprendimento automatico attraverso attività laboratoriale",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "Le lezioni frontali teoriche sono intervallate da esercitazioni pratiche in linguaggio python, svolte nella stessa aula di lezione. Gli studenti sono invitati a formare piccoli gruppi di lavoro (massimo 3 persone) per lo svolgimento delle esercitazioni proposte e del progetto finale.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Introduction to Machine Learning - Basic Concepts [1,2,3,4,7]\nDecision trees\n[1,2,3,4]\nRandom Forests [1]\nLinear/Logistic Regression [1, 2, 3, 4]\nPolynomial Linear/Logistic Regression\n[1, 2, 3, 4]\nPerceptron [4,6]\nSoftMax\n[4,5]\nKernel Machines - SVM [4]\nCombining Methods\n[1,2,3,4]",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame finale consiste in una prova scritta e la realizzazione di un progetto (che include relazione) concordato con il docente.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "La prova scritta è costituita, di norma, da tre domande a risposta aperta.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Il voto finale è ottenuto dalla media dei voti della prova scritta e del progetto.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Voto 29-30 e lode\nLo studente ha una conoscenza approfondita dei concetti fondamentali e i principali algoritmi di Machine Learning. Riesce a formalizzare problemi di Machine Learning, individuando gli algoritmi e le tecniche più idonee alla risoluzione dei problemi considerati in maniera autonoma e con spirito critico. Ha ottime capacità comunicative e proprietà di linguaggio.",
+                "source_field": "assessment_methods_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 24576,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 44412,
+            "response_chars": 9872,
+            "latency_ms": 23431
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7421061098575592
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.7404465079307556
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7276287078857422
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7593334764242172
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7582139074802399
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7119470834732056
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7432323694229126
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7415089905261993
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7373959422111511
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta una struttura generalmente chiara e i riferimenti bibliografici sono ben curati e correttamente richiamati. Tuttavia, si riscontrano diverse imprecisioni e difetti editoriali che ne compromettono la cura complessiva. Tra questi, si evidenziano errori grammaticali minori, problemi di formattazione con interruzioni di riga (`\\n`) che spezzano le parole in diverse sezioni, e una notevole ripetizione di testo tra la sezione dei risultati di apprendimento generali e quella specifica per la capacità di apprendimento. Inoltre, è presente una macroscopica incoerenza tra la versione italiana e quella inglese per i prerequisiti, dove la prima elenca diverse materie mentre la seconda indica \"None\". Questi elementi suggeriscono una revisione editoriale non del tutto accurata, pur non rendendo il documento illeggibile o gravemente compromesso.",
+            "evidences": [
+              {
+                "text": "Si utilizzeranno nozioni di base di a\nnalisi matematica, m\natematica discreta, f\nondamenti di informatica, p\nrogrammazione, i\nnterazione e multimedialità, a\nlgoritmi.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "La frequenza non è obbligatorio ma è fortemente consigliata per garantire un adeguato grado di comprensione degli argomenti proposti",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning). Saranno discusse le metodologie per realizzare e ottimizzare gli algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. Si utilizzeranno librerie software open source in linguaggio Python per mettere in pratica le nozioni teoriche presentate nel corso. In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+                "source_field": "dublin_learning_it"
+              },
+              {
+                "text": "Lo studente ha una buona conoscenza dei concetti fondamentali\ne i principali algoritmi\ndi Machine Learning.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "prerequisites_it: Si utilizzeranno nozioni di base di a\nnalisi matematica, m\natematica discreta, f\nondamenti di informatica, p\nrogrammazione, i\nnterazione e multimedialità, a\nlgoritmi.\nprerequisites_en: None",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 25805,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 30791,
+            "response_chars": 3442,
+            "latency_ms": 25397
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7192985415458679
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7004624009132385
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7194335758686066
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__2__0",
+          "document_id": "lg_unict",
+          "section_ref": "2",
+          "similarity_score": 0.715994119644165
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7134680151939392
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7223697304725647
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.6853615939617157
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7694207727909088
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.7375907897949219
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.a__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.a",
+          "similarity_score": 0.7317918539047241
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8008949160575867
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.7705532014369965
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7505524009466171
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8212210237979889
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.7863428294658661
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7662511467933655
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7421061098575592
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.7404465079307556
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7276287078857422
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7593334764242172
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7582139074802399
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7119470834732056
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7432323694229126
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7415089905261993
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7373959422111511
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7192985415458679
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7004624009132385
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — MACHINE LEARNING\n\n## Sintesi\n\n- **CoreScore**: 1.56/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG) e ciascuna di esse è compilata in modo sostanziale. Questo garantisce una completa panoramica delle informazioni essenziali del corso per lo studente, come richiesto dal contesto normativo (LG UniCT, sez. 2).\n- **C2 — Completezza bilingue** (score 2): Il syllabus fornisce una versione inglese completa per tutte le sezioni richieste dal perimetro minimo bilingue: titolo del corso, risultati di apprendimento, contenuti e modalità di verifica. La presenza di queste traduzioni rende il syllabus pienamente accessibile a un pubblico internazionale, in linea con le aspettative di completezza bilingue.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Il syllabus indica le componenti dell'esame (prova scritta e progetto con relazione), la modalità di calcolo del voto finale e fornisce una rubrica dettagliata per l'attribuzione del voto, che include descrizioni per ogni fascia di valutazione (29-30 e lode, 26-28, ecc.). Sono inoltre presenti esempi di domande, come suggerito dalle Linee Guida UniCT, e viene menzionata la gestione per studenti con disabilità/DSA, in linea con le raccomandazioni normative.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): I contenuti del corso sono presentati in modo chiaro e organizzato. Il syllabus include un elenco dettagliato degli argomenti trattati, ulteriormente strutturato in una programmazione settimanale che ne indica la progressione. Ogni argomento è associato a riferimenti bibliografici specifici. Questa organizzazione permette di comprendere facilmente la struttura del corso e la sequenza degli argomenti, dimostrando coerenza con gli obiettivi formativi e i risultati di apprendimento attesi, che mirano a fornire una conoscenza approfondita delle teorie e tecniche del Machine Learning.\n- **C8 — Coerenza didattico-valutativa** (score 2): Esiste una chiara coerenza didattico-valutativa tra i risultati di apprendimento attesi, i metodi didattici, i contenuti del corso e le modalità di verifica. I risultati di apprendimento enfatizzano sia la conoscenza teorica che la capacità di applicazione pratica e di sviluppo di soluzioni. I metodi didattici, che includono lezioni teoriche e attività laboratoriali con sviluppo di un progetto in Python, supportano direttamente questi obiettivi. I contenuti del corso coprono gli argomenti necessari per acquisire tali conoscenze e competenze. Infine, le modalità di verifica, composte da una prova scritta (per la conoscenza e la comunicazione) e un progetto (per l'applicazione, l'autonomia di giudizio e le capacità di apprendimento), sono perfettamente allineate per accertare il raggiungimento di tutti i risultati di apprendimento dichiarati, come evidenziato anche dalla rubrica di valutazione dettagliata.\n\n## Aree di miglioramento\n\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, elencando diverse aree di conoscenza fondamentali per il corso. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene utilizzata una gradazione di importanza (utili, importanti, indispensabili) come suggerito dalle Linee Guida UniCT (sez. 3.2).\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C3 — Formulazione dei risultati di apprendimento** (score 1): La formulazione dei risultati di apprendimento attesi presenta una combinazione di descrizioni del corso e di risultati espressi in termini di ciò che lo studente sarà in grado di fare. La parte iniziale del campo 'learning_outcomes_it' e l'inizio del descrittore 'dublin_learning_it' descrivono le attività del corso o gli argomenti che verranno presentati, anziché focalizzarsi sulle competenze acquisite dallo studente. Tuttavia, all'interno dei singoli Descrittori di Dublino e nella parte finale del campo 'learning_outcomes_it', sono presenti formulazioni più specifiche e orientate allo studente, sebbene alcune siano ancora generiche (es. 'acquisirà le conoscenze'). Il descrittore 'Abilità comunicative' è particolarmente conciso e poco specifico.\n  - *Raccomandazione*: Considera di riformulare i risultati di apprendimento in termini di conoscenze e abilità osservabili dello studente, evitando formulazioni che descrivono il corso ('il corso copre...') o espressioni generiche ('lo studente acquisirà conoscenze').\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 1): Tutti e cinque i Descrittori di Dublino sono presenti e identificati esplicitamente, come raccomandato dalle Linee Guida UniCT. Tuttavia, la loro articolazione non è sempre specifica e differenziata. In particolare, il descrittore 'Abilità comunicative' è molto generico e conciso, mentre il descrittore 'Capacità di apprendimento' inizia con una descrizione del corso e prosegue con una lista di obiettivi che si sovrappongono in larga misura con le capacità di conoscenza e applicazione, anziché focalizzarsi sulla capacità di apprendere in modo autonomo e continuo. I descrittori 'Conoscenza e capacità di comprensione', 'Capacità di applicare conoscenza e comprensione' e 'Autonomia di giudizio' sono formulati in modo più chiaro e specifico, ma la debolezza degli altri due riduce il punteggio complessivo.\n  - *Raccomandazione*: Valuta se ciascuno dei cinque Descrittori di Dublino sia articolato con contenuti specifici e differenziati; le Linee Guida UniCT raccomandano una formulazione esplicita per ciascun descrittore.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta una struttura generalmente chiara e i riferimenti bibliografici sono ben curati e correttamente richiamati. Tuttavia, si riscontrano diverse imprecisioni e difetti editoriali che ne compromettono la cura complessiva. Tra questi, si evidenziano errori grammaticali minori, problemi di formattazione con interruzioni di riga (`\\n`) che spezzano le parole in diverse sezioni, e una notevole ripetizione di testo tra la sezione dei risultati di apprendimento generali e quella specifica per la capacità di apprendimento. Inoltre, è presente una macroscopica incoerenza tra la versione italiana e quella inglese per i prerequisiti, dove la prima elenca diverse materie mentre la seconda indica \"None\". Questi elementi suggeriscono una revisione editoriale non del tutto accurata, pur non rendendo il documento illeggibile o gravemente compromesso.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": 0,
+        "E5": 0
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": 0,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "La versione inglese del syllabus presenta ampie sezioni mancanti rispetto alla versione italiana, in particolare per quanto riguarda i Descrittori di Dublino e i prerequisiti, come indicato dal perimetro informativo. Inoltre, anche nelle sezioni presenti in entrambe le lingue, si riscontrano significative omissioni e differenze strutturali. Ad esempio, la sezione 'learning_outcomes' in italiano include i Descrittori di Dublino, mentre la versione inglese li sostituisce con un elenco generico di obiettivi formativi. Analogamente, la sezione 'assessment_methods' in inglese omette diversi dettagli procedurali e organizzativi presenti nella versione italiana, come la struttura della prova scritta, l'assenza di prove in itinere e le procedure per studenti con disabilità. Queste discrepanze e omissioni sostanziali portano a un marcato disallineamento tra le due versioni.",
+          "evidences": [
+            {
+              "text": "Obiettivi formativi generali dell'insegnamento in termini di risultati di apprendimento attesi:\nConoscenza e capacità di comprensione (knowledge and understanding): lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding): lo studente acquisirà le competenze pratiche di realizzazione di sistemi di apprendimento automatico attraverso attività laboratoriale\nAutonomia di giudizio (making judgements): Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro\nAbilità comunicative (communication skills): lo studente acquisirà le necessarie abilità comunicative e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi di apprendimento automatico.\nCapacità di apprendimento (learning skills): Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning). Saranno discusse le metodologie per realizzare e ottimizzare gli algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. Si utilizzeranno librerie software open source in linguaggio Python per mettere in pratica le nozioni teoriche presentate nel corso. In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+              "source_field": "learning_outcomes_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "The course aims to train students to:\nprovide key concepts underlying Machine Learning techniques;\nknow a wide range of learning algorithms to solve classic Machine Learning problems (classification and regression);\nunderstand how to design and tune algorithms in order to apply them to new datasets;\nevaluate machine learning algorithms so that the best model can be selected;\ndevelop new Machine Learning algorithms in Python or to adapt existing algorithms to new use cases",
+              "source_field": "learning_outcomes_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "L'esame finale consiste in una prova scritta e la realizzazione di un progetto (che include relazione) concordato con il docente.\nLa prova scritta è costituita, di norma, da tre domande a risposta aperta. La prenotazione per la partecipazione alla prova scritta è obbligatoria.\nIl voto finale è ottenuto dalla media dei voti della prova scritta e del progetto.\nProva in Itinere: Non prevista\nSalvo diversa comunicazione:\n- l'esame scritto si svolge nei giorni previsti nel calendario ufficiale del Corso di Laurea\n- il progetto, insieme alla relazione, deve essere consegnato entro una settimana dallo scritto\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo rispetto alla data dell'esame il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per comunicare che intendono sostenere l'esame fruendo delle opportune misure compensative.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "The final exam consists of two parts:\nWritten Examination\nProject",
+              "source_field": "assessment_methods_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "lo studente acquisirà le conoscenze e i concetti alla base dei sistemi di apprendimento automatico ed in particolare le metodologie base che permettono di creare sistemi di classificazione/regressione a partire da dati eterogenei",
+              "source_field": "dublin_knowledge_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "lo studente acquisirà le competenze pratiche di realizzazione di sistemi di apprendimento automatico attraverso attività laboratoriale",
+              "source_field": "dublin_applying_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Attraverso gli homework e le correzioni in classe degli stessi lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere i problemi di base che potrebbero presentarsi nel mondo del lavoro",
+              "source_field": "dublin_judgement_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "e di appropriatezza espressiva nell'impiego del linguaggio tecnico nell'ambito generale dei sistemi di apprendimento automatico.",
+              "source_field": "dublin_communication_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Lo scopo del corso è quello di fornire un'approfondita introduzione delle principali teorie e tecniche algoritmiche del Learning Machine. A tal proposito, saranno presentati modelli fondamentali per la classificazione e la regressione, e le architetture basate su reti neurali (es. Deep Learning). Saranno discusse le metodologie per realizzare e ottimizzare gli algoritmi di apprendimento automatico, e quelle utili alla valutazione delle performance dei sistemi di Machine Learning. Si utilizzeranno librerie software open source in linguaggio Python per mettere in pratica le nozioni teoriche presentate nel corso. In particolare, il corso si propone di formare studenti che:\ncomprendano concetti chiave alla base delle tecniche di Machine Learning;\nconoscano una ampia gamma di algoritmi di apprendimento per risolvere problemi classici del Machine Learning (classificazione e regressione);\ncomprendano come effettuare il design e il tuning degli algoritmi al fine di applicare gli stessi a nuovi set di dati;\nsiano in grado di eseguire la valutazione degli algoritmi di Machine Learning in modo da poter selezionare il modello migliore;\nsaranno in grado di sviluppare nuovi algoritmi di Machine Learning in Python o di adattare algoritmi esistenti a nuovi casi d’uso.",
+              "source_field": "dublin_learning_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Si utilizzeranno nozioni di base di a\nnalisi matematica, m\natematica discreta, f\nondamenti di informatica, p\nrogrammazione, i\nnterazione e multimedialità, a\nlgoritmi.",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            }
+          ],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 0,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus presenta una chiara disaderenza rispetto alle indicazioni dipartimentali per la sezione dei prerequisiti. Il documento esterno richiede una distinzione esplicita tra conoscenze culturali/generali e disciplinari/specialistiche, affermando esplicitamente che una lista omogenea non soddisfa l'uso. Il syllabus, invece, fornisce un elenco unico e indifferenziato di prerequisiti. Sebbene altre sezioni, come le modalità di verifica e i riferimenti bibliografici, mostrino un'aderenza parziale o sostanziale alle linee guida, la violazione esplicita di un'indicazione rilevante e applicabile per i prerequisiti porta a un giudizio di non aderenza complessiva.",
+          "evidences": [
+            {
+              "text": "Uso: i prerequisiti del corso vanno organizzati distinguendo in modo esplicito tra due famiglie di conoscenze attese: - **Conoscenze culturali / generali**: competenze metodologiche e formative trasversali, tipicamente acquisite durante il triennio o nei primi insegnamenti dell'LM (esempi: logica matematica di base, ragionamento algoritmico, fondamenti di analisi). - **Conoscenze disciplinari / specialistiche**: contenuti tecnici specifici, attesi dagli insegnamenti propedeutici o dal manifesto (esempi: strutture dati, programmazione orientata agli oggetti, basi di dati, fondamenti di reti).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "Una semplice lista omogenea che mischi le due famiglie senza alcuna separazione **non** soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0001"
+            },
+            {
+              "text": "Si utilizzeranno nozioni di base di a nalisi matematica, m atematica discreta, f ondamenti di informatica, p rogrammazione, i nterazione e multimedialità, a lgoritmi.",
+              "source_field": "prerequisites_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Il voto finale è ottenuto dalla media dei voti della prova scritta e del progetto.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- Si discuta la regressione logistica\n- Si definisca il problema dell'overfitting e si discuta la regolarizzazione\n- Si discuta il classificatore Softmax",
+              "source_field": "sample_questions_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- esplicitare il **peso relativo** delle componenti dell'esame\n  (scritto, orale, progetto, prova in itinere) sul voto finale,\n  almeno qualitativamente (es. \"il progetto pesa per circa metà\n  del voto finale, lo scritto per circa metà\");\n- includere **almeno una domanda esempio** rappresentativa,\n  preferibilmente nella sezione apposita\n  (`sample_questions_it`), oppure in fondo alla sezione modalità\n  di verifica.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "R. O. Duda, P. E. Hart, D. G. Stork, \"Pattern Classification\", Wiley, 2000",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Uso: ogni riferimento bibliografico riportato nel syllabus\ndeve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v2",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}

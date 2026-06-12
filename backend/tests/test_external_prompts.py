@@ -36,7 +36,10 @@ from app.evaluation.agents.external_prompts import (
 from app.evaluation.agents.external_prompts.e1_prompt import E1_CRITERION_SPEC
 from app.evaluation.agents.external_prompts.e2_prompt import E2_CRITERION_SPEC
 from app.evaluation.agents.external_prompts.e3_prompt import E3_CRITERION_SPEC
-from app.evaluation.agents.external_prompts.e4_prompt import E4_CRITERION_SPEC
+from app.evaluation.agents.external_prompts.e4_prompt import (
+    E4_CRITERION_SPEC,
+    E4FieldPartition,
+)
 from app.evaluation.agents.external_prompts.e5_prompt import E5_CRITERION_SPEC
 
 
@@ -64,6 +67,37 @@ def _syllabus_fields() -> dict:
     }
 
 
+def _e4_partition(
+    *,
+    paired_fields: dict | None = None,
+    it_only_substantial=(),
+    en_only_substantial=(),
+    it_only_non_substantial=(),
+    en_only_non_substantial=(),
+) -> E4FieldPartition:
+    """Build a default E4 partition for prompt-rendering tests.
+
+    By default produces two paired prefixes
+    (``learning_outcomes`` and ``course_content``) and no
+    asymmetric entries — enough to keep the v1-era tests passing
+    after the e4_v2 signature change.
+    """
+    if paired_fields is None:
+        paired_fields = {
+            "learning_outcomes_it": "Conoscenza dei modelli di consistenza...",
+            "learning_outcomes_en": "Understanding of consistency models...",
+            "course_content_it": "Modelli, consenso, replicazione",
+            "course_content_en": "Models, consensus, replication",
+        }
+    return E4FieldPartition(
+        paired_fields=paired_fields,
+        it_only_substantial=tuple(it_only_substantial),
+        en_only_substantial=tuple(en_only_substantial),
+        it_only_non_substantial=tuple(it_only_non_substantial),
+        en_only_non_substantial=tuple(en_only_non_substantial),
+    )
+
+
 def _chunks(*, document_id: int = 42, n: int = 2) -> list[dict]:
     return [
         {
@@ -86,7 +120,8 @@ def test_prompt_versions_map_covers_e1_through_e5_and_matches_constants():
     assert PROMPT_VERSIONS["E1"] == E1_PROMPT_VERSION == "e1_v1"
     assert PROMPT_VERSIONS["E2"] == E2_PROMPT_VERSION == "e2_v1"
     assert PROMPT_VERSIONS["E3"] == E3_PROMPT_VERSION == "e3_v1"
-    assert PROMPT_VERSIONS["E4"] == E4_PROMPT_VERSION == "e4_v1"
+    # Phase 9.F.2: e4_v1 → e4_v2 (handler/prompt refactor adds partition).
+    assert PROMPT_VERSIONS["E4"] == E4_PROMPT_VERSION == "e4_v2"
     assert PROMPT_VERSIONS["E5"] == E5_PROMPT_VERSION == "e5_v1"
 
 
@@ -128,7 +163,7 @@ def test_prompt_versions_map_covers_e1_through_e5_and_matches_constants():
         (
             E4_CRITERION_SPEC,
             build_e4_prompt,
-            {"syllabus_data": _syllabus_fields()},
+            {"partition": _e4_partition()},
         ),
         (
             E5_CRITERION_SPEC,
@@ -204,7 +239,7 @@ def test_each_prompt_embeds_its_four_anchors_verbatim(
         (
             "E4",
             build_e4_prompt,
-            {"syllabus_data": _syllabus_fields()},
+            {"partition": _e4_partition()},
         ),
         (
             "E5",
@@ -300,13 +335,13 @@ def test_dual_source_criteria_carry_dual_source_rule(
 
 
 def test_e4_carries_paired_prefix_rule_and_no_dual_source():
-    prompt = build_e4_prompt(syllabus_data=_syllabus_fields())
+    prompt = build_e4_prompt(partition=_e4_partition())
     assert "REGOLA PAIRED-PREFIX" in prompt
     assert "REGOLA DUAL-SOURCE" not in prompt
 
 
 def test_e4_explicitly_forbids_external_document_id():
-    prompt = build_e4_prompt(syllabus_data=_syllabus_fields())
+    prompt = build_e4_prompt(partition=_e4_partition())
     # E4 must not encourage citing external documents.
     assert "NON usare \"source_document_id\"" in prompt
 

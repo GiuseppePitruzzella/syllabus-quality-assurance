@@ -1,0 +1,979 @@
+{
+  "calibration_mode": "phase_9_f_baseline",
+  "protocol_version": "phase_9_f_v1",
+  "e5_fixture_version": "v1",
+  "e5_document": {
+    "id": 1,
+    "version": 1,
+    "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+    "reused": false
+  },
+  "evaluation_detail": {
+    "evaluation_uuid": "929bf379-e823-415f-940f-f1e16fbf564f",
+    "syllabus_seuid_snapshot": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+    "course_name_snapshot": "OTTIMIZZAZIONE",
+    "status": "completed",
+    "started_at": "2026-06-12T08:25:35.757514",
+    "finished_at": "2026-06-12T08:27:35.048427",
+    "duration_ms": 119290,
+    "core_score": 1.56,
+    "coverage": 1.0,
+    "llm_model": "gemini-2.5-flash",
+    "embedding_model": "gemini-embedding-001",
+    "prompt_versions": {
+      "A1": "a1_v5",
+      "A2": "a2_v1",
+      "A3": "a3_v1",
+      "A4": "a4_v2",
+      "A5": "a5_v1"
+    },
+    "embedding_dim": 3072,
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6,
+    "gcp_project_id": "<REDACTED>",
+    "gcp_location": "europe-west1",
+    "error_message": null,
+    "criterion_scores": {
+      "C1": 2,
+      "C2": 0,
+      "C5": 1,
+      "C3": 2,
+      "C4": 2,
+      "C6": 2,
+      "C7": 2,
+      "C8": 2,
+      "C9": 1
+    },
+    "na_criteria": [],
+    "agent_outputs": {
+      "A1": {
+        "agent_code": "A1",
+        "judgments": [
+          {
+            "criterion_code": "C1",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione è compilata in modo sostanziale e fornisce le informazioni necessarie per una completa comprensione dell'insegnamento. La presenza di una programmazione dettagliata con riferimenti testuali specifici è un ulteriore punto di forza.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and\nunderstanding):\nlo\nstudente acquisirà le conoscenze di base nell’ambito della programmazione\nlineare e non lineare e della modellizzazione matematica. Sarà quindi in grado\ndi sviluppare modelli matematici di problemi decisionali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Conoscenze\nfondamentali di analisi matematica, geometria piana e algebra lineare.",
+                "source_field": "prerequisites_it"
+              },
+              {
+                "text": "Il corso si propone di\nstudiare le basi teoriche e le principali metodologie risolutive\ndell’ottimizzazione matematica. L'obiettivo del corso è rendere gli studenti\ncapaci di associare a problemi complessi la formulazione matematica in termini\ndi problemi di programmazione lineare o non lineare e di risolverli utilizzando\nopportuni metodi numerici.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "L'esame finale consiste\nin una prova orale sui contenuti del corso durante la quale viene richiesta\nanche la risoluzione di un esercizio numerico. Il voto finale viene stabilito\nsulla base delle risposte date dal candidato e dello svolgimento dell’esercizio\n.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Risoluzione di un problema di programmazione lineare con il\nmetodo del simplesso. Risoluzione di un problema di programmazione lineare\nintera con il metodo del Branch and Bound. Il problema dello zaino. Metodo dei\ntagli. Condizioni di ottimalità ed illimitatezza in programmazione lineare.",
+                "source_field": "sample_questions_it"
+              },
+              {
+                "text": "[1] R. Tadei, F. Della Croce, “Elementi di Ricerca Operativa”, Società Editrice Esculapio, 2010;\n[2] R. Baldacci, M. Dell’Amico, “Fondamenti di Ricerca Operativa”, Pitagora Editrice, 2002\n[3] M. Bruglieri, A. Colorni, “Ricerca Operativa”, Zanichelli, 2012;\n[4] F. Fumero, Metodi di ottimizzazione. Esercizi ed applicazioni, Società Editrice Esculapio, 2013​\n[5] F.S. Hillier, G.J. Lieberman, Ricerca Opeativa, Mc Graw Hill\nMateriale\nfornito dal docente e accessibile sulla piattaforma Studium.",
+                "source_field": "references_it"
+              },
+              {
+                "text": "Le lezioni si svolgeranno in presenza, con modalità\nfrontale. È prevista l’esposizione dei contenuti teorici da parte del docente,\ncon il supporto di slide e lavagna. La partecipazione attiva degli studenti\nsarà incoraggiata attraverso domande e momenti di discussione in aula.",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "Per una comprensione approfondita\ndegli argomenti trattati e delle metodologie presentate, si raccomanda\nvivamente la regolare partecipazione alle lezioni.",
+                "source_field": "attendance_it"
+              },
+              {
+                "text": "Introduzione e Modelli di programmazione lineare (produzione, dieta ottimale, trasporto, turnazione del personale)",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C2",
+            "score": 0,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Nonostante il flag `has_english` sia impostato su `true` e la maggior parte delle sezioni richieste siano presenti in inglese, manca la traduzione del titolo del corso. Il titolo del corso è indicato solo in italiano ('OTTIMIZZAZIONE') e non è presente un campo specifico per la versione inglese del titolo, né una traduzione implicita nel campo `course_name`.",
+            "evidences": [
+              {
+                "text": "OTTIMIZZAZIONE",
+                "source_field": "course_name"
+              },
+              {
+                "text": "The goals of the course are:\nKnowledge and understanding\n: to acquire base knowledge that allows students to study optimization problems and apply opportune techniques to solve decision-making problems. The students will be able to use algorithms for both linear and nonlinear programming problems.",
+                "source_field": "learning_outcomes_en"
+              },
+              {
+                "text": "The course aims to study the theoretical foundations and main solution methodologies of mathematical optimization. The objective of the course is to enable students to translate complex problems into a mathematical formulation in terms of linear or nonlinear programming and to solve them using appropriate numerical methods.",
+                "source_field": "course_content_en"
+              },
+              {
+                "text": "The final exam consists of an oral test during which the candidate is\nalso requested to solve a numerical exercise. The final grade is established on\nthe basis of the answers given by the candidate and the solving of the\nnumerical example.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C5",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I prerequisiti sono presenti e specifici, indicando 'Conoscenze fondamentali di analisi matematica, geometria piana e algebra lineare'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene fornita una gradazione di importanza (es. utili, importanti, indispensabili) come suggerito dalle Linee Guida UniCT per raggiungere il punteggio massimo.",
+            "evidences": [
+              {
+                "text": "Conoscenze\nfondamentali di analisi matematica, geometria piana e algebra lineare.",
+                "source_field": "prerequisites_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 18772,
+          "retry_count": 0,
+          "prompt_version": "a1_v5",
+          "criteria_codes": [
+            "C1",
+            "C2",
+            "C5"
+          ],
+          "retrieved_chunks_count": 8,
+          "max_output_tokens_override": 16384,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 16384,
+            "finish_reason": "STOP",
+            "prompt_chars": 40584,
+            "response_chars": 6262,
+            "latency_ms": 17705
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7215989530086517
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "ava3__3.2.b__0",
+            "document_id": "ava3",
+            "section_ref": "3.2.b",
+            "similarity_score": 0.7142092883586884
+          },
+          {
+            "criterion_code": "C1",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7045010328292847
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7373770475387573
+          },
+          {
+            "criterion_code": "C2",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7000016570091248
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "lg_unict__3.2__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.2",
+            "similarity_score": 0.7644899487495422
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "cpds_unict__Quadro E.b__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro E.b",
+            "similarity_score": 0.7298452258110046
+          },
+          {
+            "criterion_code": "C5",
+            "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.2.2.a",
+            "similarity_score": 0.728896975517273
+          }
+        ]
+      },
+      "A2": {
+        "agent_code": "A2",
+        "judgments": [
+          {
+            "criterion_code": "C3",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, descrivendo chiaramente ciò che lo studente sarà in grado di fare o conoscere al termine del corso. Le formulazioni utilizzano verbi d'azione e specificano le competenze e le conoscenze acquisite, come richiesto dalle linee guida per una formulazione efficace dei risultati di apprendimento.",
+            "evidences": [
+              {
+                "text": "lo studente acquisirà le conoscenze di base nell’ambito della programmazione lineare e non lineare e della modellizzazione matematica. Sarà quindi in grado di sviluppare modelli matematici di problemi decisionali.",
+                "source_field": "dublin_knowledge_it"
+              },
+              {
+                "text": "lo studente saprà applicare metodi numerici per calcolare le soluzioni di problemi decisionali complessi e di interpretare la soluzione, anche utlizzando i più noti software per la programmazione matematica.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "attraverso esempi concreti, lo studente sarà in grado di elaborare autonomamente soluzioni in grado di risolvere problemi di ottimizzazione di natura aziendale.",
+                "source_field": "dublin_judgement_it"
+              },
+              {
+                "text": "lo studente acquisirà la capacità di sostenere una conversazione tecnica e/o di leggere testi su argomenti riguardanti la modellazione di problemi decisionali; potrà inoltre trasmettere la propria esperienza e conoscenza ad altri.",
+                "source_field": "dublin_communication_it"
+              },
+              {
+                "text": "lo studente otterrà le capacità adeguate allo sviluppo e l'approfondimento di ulteriori competenze. Il corso si propone di fornire una preparazione di base ed una autonomia di studio che consenta agli studenti di consultare libri di testo avanzati e riviste specializzate nei settori di ricerca dell'ottimizzazione matematica.",
+                "source_field": "dublin_learning_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C4",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Tutti e cinque i Descrittori di Dublino sono presenti e chiaramente articolati nella versione italiana del syllabus. Ogni descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una visione completa delle competenze attese, in linea con le raccomandazioni delle Linee Guida UniCT che richiedono una formulazione esplicita per ciascuno dei cinque descrittori.",
+            "evidences": [
+              {
+                "text": "Conoscenza e capacità di comprensione (knowledge and\nunderstanding):\nlo\nstudente acquisirà le conoscenze di base nell’ambito della programmazione\nlineare e non lineare e della modellizzazione matematica. Sarà quindi in grado\ndi sviluppare modelli matematici di problemi decisionali.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di applicare conoscenza e comprensione\n(applying knowledge and understanding):\nl\no studente saprà applicare metodi numerici per calcolare le\nsoluzioni di problemi decisionali complessi e di interpretare la soluzione,\nanche utlizzando i più noti software per la programmazione matematica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Autonomia di giudizio (making judgements):\nattraverso esempi concreti, lo studente\nsarà in grado di elaborare autonomamente soluzioni in grado di risolvere\nproblemi di ottimizzazione di natura aziendale.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Abilità comunicative (communication skills):\nl\no studente acquisirà la\ncapacità di sostenere una conversazione tecnica e/o di leggere testi su\nargomenti riguardanti la modellazione di problemi decisionali; potrà inoltre\ntrasmettere la propria esperienza e conoscenza ad altri.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Capacità di apprendimento (learning skills):\nlo studente otterrà le capacità adeguate allo\ns sviluppo e l'approfondimento di ulteriori competenze. Il corso si propone di\nfornire una preparazione di base ed una autonomia di studio che consenta agli\nstudenti di consultare libri di testo avanzati e riviste specializzate nei\nsettori di ricerca dell'ottimizzazione matematica.",
+                "source_field": "learning_outcomes_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 14379,
+          "retry_count": 0,
+          "prompt_version": "a2_v1",
+          "criteria_codes": [
+            "C3",
+            "C4"
+          ],
+          "retrieved_chunks_count": 6,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 28728,
+            "response_chars": 4691,
+            "latency_ms": 13690
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.7855896204710007
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "matrice_tuning__2.b__0",
+            "document_id": "matrice_tuning",
+            "section_ref": "2.b",
+            "similarity_score": 0.756244108080864
+          },
+          {
+            "criterion_code": "C3",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.7465080618858337
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__3.1__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.1",
+            "similarity_score": 0.8101844787597656
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lg_unict__Allegato 1.a__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 1.a",
+            "similarity_score": 0.774039089679718
+          },
+          {
+            "criterion_code": "C4",
+            "chunk_id": "lgsua_cds__7.d__0",
+            "document_id": "lgsua_cds",
+            "section_ref": "7.d",
+            "similarity_score": 0.766407921910286
+          }
+        ]
+      },
+      "A3": {
+        "agent_code": "A3",
+        "judgments": [
+          {
+            "criterion_code": "C6",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus descrive in modo chiaro e specifico le modalità di verifica dell'apprendimento, indicando che l'esame finale consiste in una prova orale e la risoluzione di un esercizio numerico. Vengono forniti dettagliati criteri di attribuzione del voto, che specificano le aspettative per ogni fascia di valutazione, in linea con le raccomandazioni delle Linee Guida UniCT. Inoltre, la sezione dedicata agli esempi di domande offre una panoramica concreta delle tipologie di problemi e argomenti che saranno oggetto d'esame, aumentando la trasparenza per gli studenti.",
+            "evidences": [
+              {
+                "text": "L'esame finale consiste in una prova orale sui contenuti del corso durante la quale viene richiesta anche la risoluzione di un esercizio numerico. Il voto finale viene stabilito sulla base delle risposte date dal candidato e dello svolgimento dell’esercizio.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Per l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n-\nnon approvato:\nlo\nstudente non ha acquisito i concetti di base e non è in grado di svolgere gli\nesercizi.\n-\n18-23:\nlo studente\ndimostra una padronanza minima dei concetti di base, le sue capacità di\nesposizione e di collegamento dei contenuti sono modeste, riesce a risolvere\nsemplici esercizi.\n-\n24-27:\nlo\nstudente dimostra una buona padronanza dei contenuti del corso, le sue capacità\ndi esposizione e di collegamento dei contenuti sono buone, risolve gli\nesercizi con pochi errori.\n-\n28-30 e lode:\nlo\nstudente ha acquisito tutti i contenuti del corso ed è in grado di esporli\ncompiutamente e di collegarli con spirito critico; risolve gli esercizi in modo\ncompleto e senza errori.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Risoluzione di un problema di programmazione lineare con il\nmetodo del simplesso. Risoluzione di un problema di programmazione lineare\nintera con il metodo del Branch and Bound. Il problema dello zaino. Metodo dei\ntagli. Condizioni di ottimalità ed illimitatezza in programmazione lineare.\nCondizioni di ottimalità per problemi di ottimizzazione non vincolata.\nCondizioni KKT. Metodi di penalità e barriera.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C7",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta i contenuti del corso in maniera molto chiara e ben organizzata. La sezione 'course_content_it' fornisce una descrizione generale degli obiettivi e dell'ambito del corso, mentre la 'schedule_it' articola questi contenuti in 16 argomenti specifici, ciascuno con riferimenti bibliografici dettagliati. Questa strutturazione permette di comprendere la progressione didattica e la profondità degli argomenti trattati, superando la semplice elencazione e fornendo una visione completa e coerente del programma, come richiesto dalle Linee Guida UniCT.",
+            "evidences": [
+              {
+                "text": "Il corso si propone di\nstudiare le basi teoriche e le principali metodologie risolutive\ndell’ottimizzazione matematica. L'obiettivo del corso è rendere gli studenti\ncapaci di associare a problemi complessi la formulazione matematica in termini\ndi problemi di programmazione lineare o non lineare e di risolverli utilizzando\nopportuni metodi numerici. Alla fine del corso lo studente sarà in grado di\ncostruire un modello matematico di un problema decisionale reale e di\ninterpretare la soluzione trovata come strategia operativa. Particolare enfasi\nsarà data alle applicazioni nei settori socio-economico, informatico e\ningegneristico.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "Introduzione e Modelli di programmazione lineare (produzione, dieta ottimale, trasporto, turnazione del personale)",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Metodo del simplesso",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Software per l'ottimizzazione (Geogebra, Excel, Gurobi, Mathematica)",
+                "source_field": "schedule_it"
+              }
+            ],
+            "confidence": "high"
+          },
+          {
+            "criterion_code": "C8",
+            "score": 2,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus dimostra un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, che includono la capacità di sviluppare modelli, applicare metodi numerici e interpretare soluzioni, sono direttamente supportati dai contenuti del corso, che coprono ampiamente la programmazione lineare e non lineare e l'uso di software. I metodi didattici, che prevedono lezioni frontali ed esercitazioni, sono adeguati a sviluppare tali capacità. Infine, le modalità di verifica, con una prova orale e la risoluzione di un esercizio numerico, accertano direttamente il raggiungimento di questi risultati, come evidenziato anche dagli esempi di domande che richiedono l'applicazione pratica delle conoscenze.",
+            "evidences": [
+              {
+                "text": "lo\nstudente acquisirà le conoscenze di base nell’ambito della programmazione\nlineare e non lineare e della modellizzazione matematica. Sarà quindi in grado\ndi sviluppare modelli matematici di problemi decisionali.\nl\no studente saprà applicare metodi numerici per calcolare le\nsoluzioni di problemi decisionali complessi e di interpretare la soluzione,\nanche utlizzando i più noti software per la programmazione matematica.",
+                "source_field": "learning_outcomes_it"
+              },
+              {
+                "text": "Il corso si propone di\nstudiare le basi teoriche e le principali metodologie risolutive\ndell’ottimizzazione matematica. L'obiettivo del corso è rendere gli studenti\ncapaci di associare a problemi complessi la formulazione matematica in termini\ndi problemi di programmazione lineare o non lineare e di risolverli utilizzando\nopportuni metodi numerici.",
+                "source_field": "course_content_it"
+              },
+              {
+                "text": "24 ore di lezione frontale\n24 ore di esercitazione",
+                "source_field": "teaching_methods_it"
+              },
+              {
+                "text": "L'esame finale consiste\nin una prova orale sui contenuti del corso durante la quale viene richiesta\nanche la risoluzione di un esercizio numerico.",
+                "source_field": "assessment_methods_it"
+              },
+              {
+                "text": "Risoluzione di un problema di programmazione lineare con il\nmetodo del simplesso. Risoluzione di un problema di programmazione lineare\nintera con il metodo del Branch and Bound.",
+                "source_field": "sample_questions_it"
+              }
+            ],
+            "confidence": "high"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 23470,
+          "retry_count": 0,
+          "prompt_version": "a3_v1",
+          "criteria_codes": [
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "retrieved_chunks_count": 9,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 47023,
+            "response_chars": 6986,
+            "latency_ms": 22390
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__Allegato 2.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "Allegato 2.c",
+            "similarity_score": 0.7540665864944458
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "lg_unict__3.4.b__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.b",
+            "similarity_score": 0.7422505915164948
+          },
+          {
+            "criterion_code": "C6",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7353806495666504
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "lg_unict__3.8__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.8",
+            "similarity_score": 0.7618036717176437
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.a",
+            "similarity_score": 0.7596667110919952
+          },
+          {
+            "criterion_code": "C7",
+            "chunk_id": "dm1154__ALLEGATO C.e__0",
+            "document_id": "dm1154",
+            "section_ref": "ALLEGATO C.e",
+            "similarity_score": 0.7145818769931793
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+            "document_id": "ava3_unict",
+            "section_ref": "D.CDS.1.4.b",
+            "similarity_score": 0.7551551014184952
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "cpds_unict__Quadro C__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro C",
+            "similarity_score": 0.7472825050354004
+          },
+          {
+            "criterion_code": "C8",
+            "chunk_id": "lg_unict__3.4.c__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.4.c",
+            "similarity_score": 0.7438958585262299
+          }
+        ]
+      },
+      "A4": {
+        "agent_code": "A4",
+        "judgments": [
+          {
+            "criterion_code": "C9",
+            "score": 1,
+            "is_na": false,
+            "na_reason": null,
+            "justification": "Il syllabus presenta diverse imprecisioni e incongruenze che ne compromettono la cura editoriale complessiva. Si riscontrano refusi, problemi di formattazione con interruzioni di riga inopportune e una gestione non uniforme dei riferimenti bibliografici. In particolare, la sezione dei descrittori di Dublino in inglese mostra un'incoerenza interna, e la lista dei testi di riferimento è disorganizzata e incompleta in alcuni dettagli.",
+            "evidences": [
+              {
+                "text": "anche utlizzando i più noti software per la programmazione matematica.",
+                "source_field": "dublin_applying_it"
+              },
+              {
+                "text": "[5] F.S. Hillier, G.J. Lieberman, Ricerca Opeativa, Mc Graw Hill\nMateriale\nfornito dal docente e accessibile sulla piattaforma Studium.\nAutore\nTitolo\nEditore\nAnno\nISBN\nF.S. Hillier, G.J. Lieberman\nIntroduction to Operations Research,\nMc Graw Hill.\n2020",
+                "source_field": "references_it"
+              },
+              {
+                "text": "to identify and model real-life decision-making problems. In addition, through real examples, the student will be able to find correct solutions for complex problems.\nMaking judgments\n: to choose and solve autonomously complex decision-making problems and to interpret the solutions.",
+                "source_field": "dublin_applying_en"
+              },
+              {
+                "text": "del docente",
+                "source_field": "schedule_it"
+              },
+              {
+                "text": "Rejected\n: Basic knowledge has not been acquired. The student\nis not able to solve simple exercises.",
+                "source_field": "assessment_methods_en"
+              }
+            ],
+            "confidence": "medium"
+          }
+        ],
+        "execution_metadata": {
+          "latency_ms": 17113,
+          "retry_count": 0,
+          "prompt_version": "a4_v2",
+          "criteria_codes": [
+            "C9"
+          ],
+          "retrieved_chunks_count": 2,
+          "max_output_tokens_override": null,
+          "llm_metadata": {
+            "model": "gemini-2.5-flash",
+            "gcp_project_id": "<REDACTED>",
+            "gcp_location": "europe-west1",
+            "temperature": 0.1,
+            "max_output_tokens": 8192,
+            "finish_reason": "STOP",
+            "prompt_chars": 33491,
+            "response_chars": 1835,
+            "latency_ms": 16677
+          }
+        },
+        "retrieved_chunks": [
+          {
+            "criterion_code": "C9",
+            "chunk_id": "lg_unict__3.6__0",
+            "document_id": "lg_unict",
+            "section_ref": "3.6",
+            "similarity_score": 0.7330249845981598
+          },
+          {
+            "criterion_code": "C9",
+            "chunk_id": "cpds_unict__Quadro B__0",
+            "document_id": "cpds_unict",
+            "section_ref": "Quadro B",
+            "similarity_score": 0.7214679419994354
+          }
+        ]
+      }
+    },
+    "agent_errors": null,
+    "retrieved_chunks": {
+      "C1": [
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7215989530086517
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "ava3__3.2.b__0",
+          "document_id": "ava3",
+          "section_ref": "3.2.b",
+          "similarity_score": 0.7142092883586884
+        },
+        {
+          "criterion_code": "C1",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7045010328292847
+        }
+      ],
+      "C2": [
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7373770475387573
+        },
+        {
+          "criterion_code": "C2",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7000016570091248
+        }
+      ],
+      "C5": [
+        {
+          "criterion_code": "C5",
+          "chunk_id": "lg_unict__3.2__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.2",
+          "similarity_score": 0.7644899487495422
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "cpds_unict__Quadro E.b__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro E.b",
+          "similarity_score": 0.7298452258110046
+        },
+        {
+          "criterion_code": "C5",
+          "chunk_id": "ava3_unict__D.CDS.2.2.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.2.2.a",
+          "similarity_score": 0.728896975517273
+        }
+      ],
+      "C3": [
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.7855896204710007
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "matrice_tuning__2.b__0",
+          "document_id": "matrice_tuning",
+          "section_ref": "2.b",
+          "similarity_score": 0.756244108080864
+        },
+        {
+          "criterion_code": "C3",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.7465080618858337
+        }
+      ],
+      "C4": [
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__3.1__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.1",
+          "similarity_score": 0.8101844787597656
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 1.a",
+          "similarity_score": 0.774039089679718
+        },
+        {
+          "criterion_code": "C4",
+          "chunk_id": "lgsua_cds__7.d__0",
+          "document_id": "lgsua_cds",
+          "section_ref": "7.d",
+          "similarity_score": 0.766407921910286
+        }
+      ],
+      "C6": [
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__Allegato 2.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "Allegato 2.c",
+          "similarity_score": 0.7540665864944458
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "lg_unict__3.4.b__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.b",
+          "similarity_score": 0.7422505915164948
+        },
+        {
+          "criterion_code": "C6",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7353806495666504
+        }
+      ],
+      "C7": [
+        {
+          "criterion_code": "C7",
+          "chunk_id": "lg_unict__3.8__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.8",
+          "similarity_score": 0.7618036717176437
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "ava3_unict__D.CDS.1.4.a__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.a",
+          "similarity_score": 0.7596667110919952
+        },
+        {
+          "criterion_code": "C7",
+          "chunk_id": "dm1154__ALLEGATO C.e__0",
+          "document_id": "dm1154",
+          "section_ref": "ALLEGATO C.e",
+          "similarity_score": 0.7145818769931793
+        }
+      ],
+      "C8": [
+        {
+          "criterion_code": "C8",
+          "chunk_id": "ava3_unict__D.CDS.1.4.b__0",
+          "document_id": "ava3_unict",
+          "section_ref": "D.CDS.1.4.b",
+          "similarity_score": 0.7551551014184952
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "cpds_unict__Quadro C__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro C",
+          "similarity_score": 0.7472825050354004
+        },
+        {
+          "criterion_code": "C8",
+          "chunk_id": "lg_unict__3.4.c__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.4.c",
+          "similarity_score": 0.7438958585262299
+        }
+      ],
+      "C9": [
+        {
+          "criterion_code": "C9",
+          "chunk_id": "lg_unict__3.6__0",
+          "document_id": "lg_unict",
+          "section_ref": "3.6",
+          "similarity_score": 0.7330249845981598
+        },
+        {
+          "criterion_code": "C9",
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "document_id": "cpds_unict",
+          "section_ref": "Quadro B",
+          "similarity_score": 0.7214679419994354
+        }
+      ]
+    },
+    "final_report": "# Report di valutazione — OTTIMIZZAZIONE\n\n## Sintesi\n\n- **CoreScore**: 1.56/2.00\n- **Copertura**: 100% (9/9 criteri valutati)\n- **Stato**: completed\n\nLa valutazione è completa: tutti i 9 criteri valutati dispongono di un punteggio motivato. Il CoreScore è la media aritmetica dei punteggi sulla scala 0/1/2 (D017).\n\n## Punti di forza\n\n- **C1 — Completezza strutturale e documentale** (score 2): Il syllabus presenta tutte le nove sezioni obbligatorie richieste dalle Linee Guida UniCT (RA, PR, CN, MV, ED, TD, MS, MF, PRG). Ogni sezione è compilata in modo sostanziale e fornisce le informazioni necessarie per una completa comprensione dell'insegnamento. La presenza di una programmazione dettagliata con riferimenti testuali specifici è un ulteriore punto di forza.\n- **C3 — Formulazione dei risultati di apprendimento** (score 2): I risultati di apprendimento attesi sono formulati in modo specifico e verificabile, descrivendo chiaramente ciò che lo studente sarà in grado di fare o conoscere al termine del corso. Le formulazioni utilizzano verbi d'azione e specificano le competenze e le conoscenze acquisite, come richiesto dalle linee guida per una formulazione efficace dei risultati di apprendimento.\n- **C4 — Articolazione secondo i Descrittori di Dublino** (score 2): Tutti e cinque i Descrittori di Dublino sono presenti e chiaramente articolati nella versione italiana del syllabus. Ogni descrittore presenta contenuti specifici e differenziati, evitando ripetizioni e fornendo una visione completa delle competenze attese, in linea con le raccomandazioni delle Linee Guida UniCT che richiedono una formulazione esplicita per ciascuno dei cinque descrittori.\n- **C6 — Modalità di verifica dell'apprendimento** (score 2): Il syllabus descrive in modo chiaro e specifico le modalità di verifica dell'apprendimento, indicando che l'esame finale consiste in una prova orale e la risoluzione di un esercizio numerico. Vengono forniti dettagliati criteri di attribuzione del voto, che specificano le aspettative per ogni fascia di valutazione, in linea con le raccomandazioni delle Linee Guida UniCT. Inoltre, la sezione dedicata agli esempi di domande offre una panoramica concreta delle tipologie di problemi e argomenti che saranno oggetto d'esame, aumentando la trasparenza per gli studenti.\n- **C7 — Chiarezza dei contenuti del corso** (score 2): Il syllabus presenta i contenuti del corso in maniera molto chiara e ben organizzata. La sezione 'course_content_it' fornisce una descrizione generale degli obiettivi e dell'ambito del corso, mentre la 'schedule_it' articola questi contenuti in 16 argomenti specifici, ciascuno con riferimenti bibliografici dettagliati. Questa strutturazione permette di comprendere la progressione didattica e la profondità degli argomenti trattati, superando la semplice elencazione e fornendo una visione completa e coerente del programma, come richiesto dalle Linee Guida UniCT.\n- **C8 — Coerenza didattico-valutativa** (score 2): Il syllabus dimostra un'ottima coerenza didattico-valutativa. I risultati di apprendimento attesi, che includono la capacità di sviluppare modelli, applicare metodi numerici e interpretare soluzioni, sono direttamente supportati dai contenuti del corso, che coprono ampiamente la programmazione lineare e non lineare e l'uso di software. I metodi didattici, che prevedono lezioni frontali ed esercitazioni, sono adeguati a sviluppare tali capacità. Infine, le modalità di verifica, con una prova orale e la risoluzione di un esercizio numerico, accertano direttamente il raggiungimento di questi risultati, come evidenziato anche dagli esempi di domande che richiedono l'applicazione pratica delle conoscenze.\n\n## Aree di miglioramento\n\n- **C2 — Completezza bilingue** (score 0): Nonostante il flag `has_english` sia impostato su `true` e la maggior parte delle sezioni richieste siano presenti in inglese, manca la traduzione del titolo del corso. Il titolo del corso è indicato solo in italiano ('OTTIMIZZAZIONE') e non è presente un campo specifico per la versione inglese del titolo, né una traduzione implicita nel campo `course_name`.\n  - *Raccomandazione*: Valuta se il perimetro minimo bilingue (titolo, risultati di apprendimento, contenuti, modalità di verifica) sia coperto anche in lingua inglese.\n- **C5 — Chiarezza dei prerequisiti** (score 1): I prerequisiti sono presenti e specifici, indicando 'Conoscenze fondamentali di analisi matematica, geometria piana e algebra lineare'. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti culturali e formali, né viene fornita una gradazione di importanza (es. utili, importanti, indispensabili) come suggerito dalle Linee Guida UniCT per raggiungere il punteggio massimo.\n  - *Raccomandazione*: Considera di rendere i prerequisiti più specifici (conoscenze e abilità, non solo codici di esami). Le Linee Guida UniCT raccomandano, quando applicabile, di esplicitare la gradazione (utili / importanti / indispensabili) e la distinzione fra propedeuticità culturali e formali.\n- **C9 — Cura editoriale del syllabus** (score 1): Il syllabus presenta diverse imprecisioni e incongruenze che ne compromettono la cura editoriale complessiva. Si riscontrano refusi, problemi di formattazione con interruzioni di riga inopportune e una gestione non uniforme dei riferimenti bibliografici. In particolare, la sezione dei descrittori di Dublino in inglese mostra un'incoerenza interna, e la lista dei testi di riferimento è disorganizzata e incompleta in alcuni dettagli.\n  - *Raccomandazione*: Considera una rilettura editoriale del syllabus per refusi, incongruenze interne fra sezioni, completezza dei riferimenti bibliografici e residui di formattazione.\n\n## Note metodologiche\n\nIl sistema è uno strumento di supporto alla valutazione e all'autovalutazione del syllabus, non un sostituto del giudizio del docente o degli organi di Assicurazione della Qualità.\n\nLe evidenze citate e i giudizi prodotti vanno verificati sul syllabus originale: il sistema lavora su dati estratti tramite scraping e parsing, e residui di estrazione (refusi apparenti, interruzioni di parola anomale, marker di template) possono essere artefatti dell'estrazione e non difetti del documento redatto dal docente.\n",
+    "extended_criteria_result": {
+      "status": "completed",
+      "criterion_scores": {
+        "E1": null,
+        "E2": null,
+        "E3": null,
+        "E4": 0,
+        "E5": 1
+      },
+      "na_criteria": [
+        {
+          "criterion_code": "E1",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E1 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E2",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E2 on cdl_id=3"
+        },
+        {
+          "criterion_code": "E3",
+          "source": "resolver",
+          "reason": "no indexed document enabled for E3 on cdl_id=3"
+        }
+      ],
+      "handler_errors": {},
+      "judgments": [
+        {
+          "criterion_code": "E1",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E1 on cdl_id=3",
+          "justification": "Il criterio E1 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E1 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E2",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E2 on cdl_id=3",
+          "justification": "Il criterio E2 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E2 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E3",
+          "score": null,
+          "is_na": true,
+          "is_na_technical": false,
+          "na_reason": "no indexed document enabled for E3 on cdl_id=3",
+          "justification": "Il criterio E3 è dichiarato non applicabile dal resolver dei documenti esterni: no indexed document enabled for E3 on cdl_id=3. Nessun handler dell'A5 è stato invocato per questo criterio.",
+          "evidences": [],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E4",
+          "score": 0,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "La coerenza semantica tra la versione italiana e quella inglese del syllabus è gravemente compromessa da diverse discrepanze e omissioni significative. In particolare, la sezione 'dublin_applying_en' non solo presenta un contenuto che si discosta da quello italiano, focalizzandosi su 'identificare e modellare' piuttosto che sull'applicazione di 'metodi numerici', ma include anche erroneamente la descrizione del descrittore di Dublino 'Making judgments'. Inoltre, la sezione 'course_content_en' omette completamente le descrizioni dettagliate degli obiettivi dell'Agenda ONU per lo Sviluppo Sostenibile, limitandosi a elencare i numeri degli obiettivi e dei target. Anche in 'learning_outcomes_en' e 'assessment_methods_en' si riscontrano omissioni di dettagli rilevanti e differenze di enfasi che alterano l'equivalenza semantica complessiva.",
+          "evidences": [
+            {
+              "text": "l\no studente saprà applicare metodi numerici per calcolare le\nsoluzioni di problemi decisionali complessi e di interpretare la soluzione,\nanche utlizzando i più noti software per la programmazione matematica.",
+              "source_field": "dublin_applying_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "to identify and model real-life decision-making problems. In addition, through real examples, the student will be able to find correct solutions for complex problems.\nMaking judgments\n: to choose and solve autonomously complex decision-making problems and to interpret the solutions.",
+              "source_field": "dublin_applying_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Obiettivo n. 4 – Istruzione di qualità\nTarget 4.3:\nGarantire entro il 2030 un accesso equo per tutti a un’istruzione tecnica, professionale e terziaria di qualità, compresa l’università.\nTarget 4.7:\nAssicurare che tutti gli studenti acquisiscano le conoscenze e le competenze necessarie per promuovere lo sviluppo sostenibile, anche attraverso l’educazione alla cittadinanza globale e alla consapevolezza culturale.\nObiettivo n. 13 – Lotta contro il cambiamento climatico\nTarget 13.3:\nMigliorare l’educazione, la sensibilizzazione e la capacità umana e istituzionale in materia di mitigazione, adattamento, riduzione dell’impatto e allerta precoce riguardo al cambiamento climatico.",
+              "source_field": "course_content_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Goal\nN. 4 Quality Education\nTarget 4.3\nTarget 4.7\nGoal N. 13\nClimate Action\nTarget\n13.3",
+              "source_field": "course_content_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "La prova d’esame è finalizzata a valutare in modo approfondito la\npreparazione dello studente, la capacità di analisi e di ragionamento sugli\nargomenti trattati durante il corso, nonché l’adeguatezza del linguaggio\ntecnico utilizzato.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "The final exam consists of an oral test during which the candidate is\nalso requested to solve a numerical exercise. The final grade is established on\nthe basis of the answers given by the candidate and the solving of the\nnumerical example.",
+              "source_field": "assessment_methods_en",
+              "source_document_id": null,
+              "source_chunk_id": null
+            }
+          ],
+          "confidence": "high"
+        },
+        {
+          "criterion_code": "E5",
+          "score": 1,
+          "is_na": false,
+          "is_na_technical": false,
+          "na_reason": null,
+          "justification": "Il syllabus presenta un'aderenza parziale alle indicazioni dipartimentali. Per quanto riguarda le modalità di verifica, sebbene siano presenti esempi di domande, non viene esplicitato il peso relativo delle componenti d'esame (prova orale ed esercizio numerico) sul voto finale, né l'eventuale voto minimo richiesto per le singole componenti. In merito ai riferimenti bibliografici, la maggior parte segue il formato richiesto, ma un riferimento è incompleto (manca l'anno) e un'altra voce è una generica menzione di materiale didattico non strutturata secondo le indicazioni. Infine, per le modalità di frequenza, il syllabus si limita a una raccomandazione generica senza specificare esplicitamente se la frequenza sia obbligatoria o facoltativa, né distinguere tra componenti teoriche e pratiche, come invece richiesto dalle linee guida.",
+          "evidences": [
+            {
+              "text": "L'esame finale consiste in una prova orale sui contenuti del corso durante la quale viene richiesta anche la risoluzione di un esercizio numerico. Il voto finale viene stabilito sulla base delle risposte date dal candidato e dello svolgimento dell’esercizio.",
+              "source_field": "assessment_methods_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "Risoluzione di un problema di programmazione lineare con il metodo del simplesso. Risoluzione di un problema di programmazione lineare intera con il metodo del Branch and Bound. Il problema dello zaino. Metodo dei tagli. Condizioni di ottimalità ed illimitatezza in programmazione lineare. Condizioni di ottimalità per problemi di ottimizzazione non vincolata. Condizioni KKT. Metodi di penalità e barriera.",
+              "source_field": "sample_questions_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "- esplicitare il **peso relativo** delle componenti dell'esame\n  (scritto, orale, progetto, prova in itinere) sul voto finale,\n  almeno qualitativamente (es. \"il progetto pesa per circa metà\n  del voto finale, lo scritto per circa metà\");\n- indicare se è previsto un **voto minimo** sulle singole\n  componenti per accedere alla componente successiva;\n- includere **almeno una domanda esempio** rappresentativa,\n  preferibilmente nella sezione apposita\n  (`sample_questions_it`), oppure in fondo alla sezione modalità\n  di verifica.\n\nUn syllabus che limita la descrizione a formule generiche del tipo\n\"esame orale con valutazione complessiva delle competenze\nacquisite\" senza pesi né esempi è considerato **parzialmente\naderente** (aderenza 1). L'assenza completa di pesi e di esempi\nporta a **non aderente** (0).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "[5] F.S. Hillier, G.J. Lieberman, Ricerca Opeativa, Mc Graw Hill\nMateriale\nfornito dal docente e accessibile sulla piattaforma Studium.\nAutore\nTitolo\nEditore\nAnno\nISBN\nF.S. Hillier, G.J. Lieberman\nIntroduction to Operations Research,\nMc Graw Hill.\n2020",
+              "source_field": "references_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "**Uso:** ogni riferimento bibliografico riportato nel syllabus\ndeve includere come minimo:\n\n- **autore/autori** (cognome puntato è ammesso);\n- **anno** di pubblicazione (anche solo l'edizione di riferimento);\n- **titolo** completo dell'opera;\n- **editore** (per i libri) o **rivista** (per gli articoli);\n- **edizione** quando rilevante per il corso (es. terza edizione\n  di un manuale per cui il syllabus indica capitoli specifici).",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0002"
+            },
+            {
+              "text": "I riferimenti possono essere organizzati per **tipo** (manuale\nprincipale, manuale complementare, articoli di approfondimento,\nrisorse online ufficiali) o in elenco unico, ma il livello minimo\ndi dettaglio sopra resta non negoziabile. Una sola riga del tipo\n\"il libro di Tanenbaum\" non soddisfa l'uso.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            },
+            {
+              "text": "Per una comprensione approfondita\ndegli argomenti trattati e delle metodologie presentate, si raccomanda\nvivamente la regolare partecipazione alle lezioni.",
+              "source_field": "attendance_it",
+              "source_document_id": null,
+              "source_chunk_id": null
+            },
+            {
+              "text": "**Uso:** la sezione deve indicare in modo esplicito:\n\n- se la frequenza è **obbligatoria** o **facoltativa**;\n- in caso di obbligatorietà parziale (es. solo per la componente\n  di laboratorio), specificare quale componente è soggetta a\n  obbligo;\n- per gli insegnamenti con componenti pratiche (laboratorio,\n  esercitazioni), indicare il livello di frequenza atteso anche\n  quando non strettamente obbligatorio (es. \"fortemente\n  raccomandata per la componente di laboratorio\").\n\nUn syllabus che lascia la sezione vuota o si limita a indicazioni\ngeneriche tipo \"frequenza consigliata\" senza distinguere\ncomponenti pratiche e teoriche è considerato parzialmente\naderente.",
+              "source_field": null,
+              "source_document_id": 1,
+              "source_chunk_id": "external_1_v1__chunk_0003"
+            }
+          ],
+          "confidence": "high"
+        }
+      ],
+      "handler_prompt_versions": {
+        "E4": "e4_v1",
+        "E5": "e5_v1"
+      }
+    },
+    "external_documents_used": [
+      {
+        "criterion_code": "E5",
+        "local_document_id": 1,
+        "document_type": "usi_dipartimentali",
+        "document_version": 1,
+        "file_hash": "ab953d43381c170b07c6eab6e569dbceff6919c0f6d9f5d61b4d2deeedb60418",
+        "resolution_reason": "latest_available_fallback",
+        "title": "Usi dipartimentali LM-18 — Phase 9.F baseline",
+        "deleted_at": null
+      }
+    ]
+  }
+}
