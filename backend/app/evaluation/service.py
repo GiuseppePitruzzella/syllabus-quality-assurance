@@ -90,6 +90,20 @@ class EvaluationNotFoundError(LookupError):
     """Raised when an ``evaluation_uuid`` is unknown to the service."""
 
 
+class InvalidSelectedDocumentIdsError(ValueError):
+    """Raised when ``selected_document_ids`` violates a 9.E.1 rule.
+
+    ``code`` is a short machine-readable token the API endpoint
+    surfaces so clients can branch (``duplicate``, ``unknown``,
+    ``not_indexed``, ``archived``, ``wrong_cdl``,
+    ``no_enabled_criteria``).
+    """
+
+    def __init__(self, message: str, *, code: str) -> None:
+        super().__init__(message)
+        self.code = code
+
+
 @dataclass(frozen=True)
 class PendingRun:
     """Everything :meth:`EvaluationService.execute_pending_run` needs.
@@ -172,7 +186,14 @@ class EvaluationService:
 
         Raises:
             SyllabusNotFoundError: if no syllabus matches ``seuid``.
+            InvalidSelectedDocumentIdsError: if ``selected_document_ids``
+                violates a 9.E.1 rule (the API endpoint runs this
+                check separately for early-422 reporting, but the
+                service runs it again here as a hard guard against
+                callers that bypass the endpoint).
         """
+        if selected_document_ids:
+            self.validate_selected_document_ids(seuid, selected_document_ids)
         with self._session_factory() as session:
             try:
                 syllabus = (
@@ -289,6 +310,130 @@ class EvaluationService:
                 )
             session.expunge(record)
             return record
+
+    def validate_selected_document_ids(
+        self, seuid: str, selected_document_ids: list[int],
+    ) -> None:
+        """Apply the 9.E.1 rules; raise :class:`InvalidSelectedDocumentIdsError`
+        on the first violation.
+
+        Run by the HTTP endpoint *before* ``create_pending_run`` so a
+        bad request never reaches the resolver / graph. Idempotent and
+        cheap: only one DB round trip.
+        """
+        if len(set(selected_document_ids)) != len(selected_document_ids):
+            raise InvalidSelectedDocumentIdsError(
+                "selected_document_ids contains duplicates",
+                code="duplicate",
+            )
+        with self._session_factory() as session:
+            syllabus = (
+                session.query(Syllabus).filter_by(seuid=seuid).one_or_none()
+            )
+            if syllabus is None:
+                raise SyllabusNotFoundError(
+                    f"syllabus not found: seuid={seuid!r}",
+                )
+            cdl_id = int(syllabus.cdl_id)
+            docs = (
+                session.query(LocalDocument)
+                .filter(LocalDocument.id.in_(selected_document_ids))
+                .all()
+            )
+            found_ids = {d.id for d in docs}
+            missing = sorted(set(selected_document_ids) - found_ids)
+            if missing:
+                raise InvalidSelectedDocumentIdsError(
+                    f"unknown local_document id(s): {missing}",
+                    code="unknown",
+                )
+            for d in docs:
+                if d.status != "indexed":
+                    raise InvalidSelectedDocumentIdsError(
+                        f"local_document id={d.id} is not indexed "
+                        f"(status={d.status!r})",
+                        code="not_indexed",
+                    )
+                if d.deleted_at is not None:
+                    raise InvalidSelectedDocumentIdsError(
+                        f"local_document id={d.id} is archived "
+                        "(soft-deleted) and cannot feed a new evaluation",
+                        code="archived",
+                    )
+                if int(d.cdl_id) != cdl_id:
+                    raise InvalidSelectedDocumentIdsError(
+                        f"local_document id={d.id} belongs to "
+                        f"cdl_id={d.cdl_id} but syllabus is on cdl_id={cdl_id}",
+                        code="wrong_cdl",
+                    )
+                if not (d.enabled_criteria or []):
+                    raise InvalidSelectedDocumentIdsError(
+                        f"local_document id={d.id} has no enabled_criteria; "
+                        "cannot serve any extended criterion",
+                        code="no_enabled_criteria",
+                    )
+
+    def build_resolution_preview(self, seuid: str) -> dict[str, Any]:
+        """Compute the per-criterion preview returned by
+        ``GET /api/syllabi/{seuid}/resolution-preview``.
+
+        The shape matches :class:`ResolutionPreview` in
+        ``app/schemas/evaluation.py`` but the service returns a
+        plain dict so the HTTP layer can wrap it into the typed
+        Pydantic without the service depending on schemas.
+
+        Deterministic: same syllabus + registry state → same
+        preview. Single source of truth for the precedence ladder
+        — the frontend dropdown is built off this response, never
+        re-implementing the ladder client-side.
+        """
+        with self._session_factory() as session:
+            syllabus = (
+                session.query(Syllabus).filter_by(seuid=seuid).one_or_none()
+            )
+            if syllabus is None:
+                raise SyllabusNotFoundError(
+                    f"syllabus not found: seuid={seuid!r}",
+                )
+            cdl_id = int(syllabus.cdl_id)
+            academic_year = syllabus.academic_year
+            has_english = bool(syllabus.has_english)
+
+            resolver = ExternalDocumentResolver(session)
+            resolver_output = resolver.resolve(
+                ResolverInput(
+                    cdl_id=cdl_id,
+                    academic_year=academic_year,
+                    has_english=has_english,
+                    selected_document_ids=None,
+                ),
+            )
+
+            by_criterion: dict[str, Any] = {}
+            for code in ("E1", "E2", "E3", "E4", "E5"):
+                resolution = resolver_output.by_criterion[code]
+                if code == "E4":
+                    by_criterion[code] = _preview_e4(resolution)
+                else:
+                    candidates = _preview_registry_candidates(
+                        session, cdl_id=cdl_id, criterion_code=code,
+                        resolution=resolution,
+                    )
+                    by_criterion[code] = {
+                        "criterion_code": code,
+                        "served_by": "registry",
+                        "applicable": resolution.applicable,
+                        "na_reason": resolution.na_reason,
+                        "candidates": candidates,
+                    }
+
+        return {
+            "seuid": seuid,
+            "cdl_id": cdl_id,
+            "academic_year": academic_year,
+            "has_english": has_english,
+            "by_criterion": by_criterion,
+        }
 
     def list_external_documents_used(
         self, evaluation_uuid: str,
@@ -595,6 +740,83 @@ def _index_chunks_by_criterion(
             criterion = ref_dict.get("criterion_code") or "_unknown"
             by_criterion.setdefault(criterion, []).append(ref_dict)
     return by_criterion
+
+
+def _preview_e4(resolution: Any) -> dict[str, Any]:
+    """Build the E4 preview entry. E4 is served by the syllabus
+    itself, so the candidates list is always empty and
+    ``served_by`` reflects whether the syllabus has English
+    content at all."""
+    if not resolution.applicable:
+        return {
+            "criterion_code": "E4",
+            "served_by": "none",
+            "applicable": False,
+            "na_reason": resolution.na_reason,
+            "candidates": [],
+        }
+    return {
+        "criterion_code": "E4",
+        "served_by": "syllabus",
+        "applicable": True,
+        "na_reason": None,
+        "candidates": [],
+    }
+
+
+def _preview_registry_candidates(
+    session: Session,
+    *,
+    cdl_id: int,
+    criterion_code: str,
+    resolution: Any,
+) -> list[dict[str, Any]]:
+    """List every LocalDocument the user could pick for this criterion.
+
+    Includes archived rows (``deleted_at`` set) flagged
+    ``selectable=False`` so the UI can show them as historical
+    context without allowing them to feed a new run. Ordered by
+    ``local_document_id`` ascending for determinism.
+
+    The auto-resolved ids (the ones the resolver actually picked)
+    are flagged ``is_auto_resolved=True`` and carry the
+    ``resolution_reason`` from the precedence ladder; alternatives
+    leave both fields empty.
+    """
+    auto_by_id = {
+        d.local_document_id: d for d in (resolution.documents or [])
+    }
+    candidates_rows = (
+        session.query(LocalDocument)
+        .filter(LocalDocument.cdl_id == cdl_id)
+        .filter(LocalDocument.status == "indexed")
+        .order_by(LocalDocument.id.asc())
+        .all()
+    )
+    out: list[dict[str, Any]] = []
+    for row in candidates_rows:
+        enabled = list(row.enabled_criteria or [])
+        if criterion_code not in enabled:
+            continue
+        auto = auto_by_id.get(row.id)
+        out.append(
+            {
+                "local_document_id": int(row.id),
+                "title": row.title,
+                "document_type": row.document_type,
+                "version": int(row.version),
+                "file_hash": row.file_hash,
+                "academic_year": row.academic_year,
+                "enabled_criteria": enabled,
+                "is_auto_resolved": auto is not None,
+                "resolution_reason": (
+                    auto.resolution_reason if auto is not None else None
+                ),
+                "deleted_at": row.deleted_at,
+                "selectable": row.deleted_at is None,
+            },
+        )
+    return out
 
 
 def _dump_extended_result(

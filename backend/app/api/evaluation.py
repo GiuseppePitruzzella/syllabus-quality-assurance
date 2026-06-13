@@ -26,14 +26,17 @@ from app.evaluation.registry import evaluation_registry
 from app.evaluation.service import (
     EvaluationNotFoundError,
     EvaluationService,
+    InvalidSelectedDocumentIdsError,
     SyllabusNotFoundError,
 )
 from app.schemas.evaluation import (
+    EvaluateRequest,
     EvaluationCreated,
     EvaluationDetail,
     EvaluationSummary,
     ExtendedCriteriaResultPayload,
     ExternalDocumentUsedPayload,
+    ResolutionPreview,
 )
 
 logger = structlog.get_logger(__name__)
@@ -131,14 +134,58 @@ def get_sync_service(
 )
 async def evaluate_syllabus(
     seuid: str,
+    body: EvaluateRequest | None = None,
     service: AsyncEvaluationService = Depends(get_async_service),
 ) -> EvaluationCreated:
-    """Kick off a new evaluation. Returns the UUID immediately (202)."""
+    """Kick off a new evaluation. Returns the UUID immediately (202).
+
+    Phase 9.E.1: the optional body lets the caller pin specific
+    ``LocalDocument`` versions via ``selected_document_ids``. The
+    list is *additive* — criteria not covered by any explicit id
+    continue to be resolved automatically through the standard
+    precedence ladder. Validation runs server-side and surfaces a
+    structured 422 on the first violation (see
+    :class:`InvalidSelectedDocumentIdsError.code`).
+    """
+    selected_ids = body.selected_document_ids if body is not None else None
     try:
-        evaluation_uuid = await service.start_evaluation(seuid)
+        evaluation_uuid = await service.start_evaluation(
+            seuid, selected_document_ids=selected_ids,
+        )
     except SyllabusNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except InvalidSelectedDocumentIdsError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail={"code": exc.code, "message": str(exc)},
+        ) from exc
     return EvaluationCreated(evaluation_uuid=evaluation_uuid)
+
+
+@router.get(
+    "/syllabi/{seuid}/resolution-preview",
+    response_model=ResolutionPreview,
+)
+async def resolution_preview(
+    seuid: str,
+    sync_service: EvaluationService = Depends(get_sync_service),
+) -> ResolutionPreview:
+    """Phase 9.E.1 — show how the resolver would resolve E1-E5 for
+    this syllabus, plus the alternatives the user can select.
+
+    Deterministic and side-effect-free: the same syllabus + registry
+    state always yields the same preview. The endpoint is the
+    single source of truth for the precedence ladder — the
+    frontend dropdown builds off this response, never
+    re-implementing the ladder client-side.
+    """
+    try:
+        payload = await asyncio.to_thread(
+            sync_service.build_resolution_preview, seuid,
+        )
+    except SyllabusNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return ResolutionPreview.model_validate(payload)
 
 
 @router.get(
