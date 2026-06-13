@@ -480,3 +480,152 @@ def test_evaluate_post_returns_404_when_syllabus_missing(client_and_session):
         json={"selected_document_ids": [10]},
     )
     assert r.status_code == 404
+
+
+# ===========================================================================
+# Phase 9.E.3 — multi-chain explicit_selection persistence
+#
+# Validates that an override on one chain is faithfully recorded in
+# the audit table (resolution_reason="explicit_selection") AND that
+# sibling chains continue to use the resolver's automatic pick with
+# their own reason. The smoke stops at the pending record + audit
+# write so it never touches Vertex / Chroma — Phase 9.E.1
+# already commits the resolution before the graph runs.
+# ===========================================================================
+
+
+def test_explicit_selection_on_one_chain_preserves_auto_on_another(
+    client_and_session,
+):
+    """E5 with two chains; user pins one chain via explicit_selection.
+
+    Expected audit rows (read from GET /api/evaluations/{uuid}):
+      * the overridden chain has resolution_reason="explicit_selection";
+      * the other chain keeps its automatic reason
+        (academic_year_match or latest_available_fallback).
+    """
+    client, Session = client_and_session
+    _seed_db(Session)
+    # Two distinct E5 chains, both auto-resolved by the resolver.
+    # Chain A: ``usi_dipartimentali``
+    _seed_local_document(
+        Session, doc_id=30, title="Usi dipartimentali LM-18",
+        document_type="usi_dipartimentali", enabled_criteria=["E5"],
+        academic_year="2024-2025", version=1,
+    )
+    _seed_local_document(
+        Session, doc_id=31, title="Usi dipartimentali LM-18",
+        document_type="usi_dipartimentali", enabled_criteria=["E5"],
+        academic_year="2025-2026", version=2,
+    )
+    # Chain B: ``linee_guida_cdl``
+    _seed_local_document(
+        Session, doc_id=40, title="Linee guida CdL LM-18",
+        document_type="linee_guida_cdl", enabled_criteria=["E5"],
+        academic_year="2025-2026", version=1,
+    )
+
+    # Override: pin the *older* version on chain A (id=30),
+    # leave chain B untouched.
+    r = client.post(
+        f"/api/evaluate/{SEUID}",
+        json={"selected_document_ids": [30]},
+    )
+    assert r.status_code == 202
+    uuid = r.json()["evaluation_uuid"]
+
+    detail = client.get(f"/api/evaluations/{uuid}").json()
+    docs = detail["external_documents_used"]
+    by_doc = {d["local_document_id"]: d for d in docs}
+
+    # Chain A: user pinned id=30 (the 2024-2025 version, normally
+    # not auto-picked because v2 matches the syllabus year). Reason
+    # is the explicit override.
+    assert 30 in by_doc, (
+        "the overridden chain's audit row must be persisted"
+    )
+    assert by_doc[30]["criterion_code"] == "E5"
+    assert by_doc[30]["resolution_reason"] == "explicit_selection"
+
+    # Chain B: untouched, the resolver's automatic pick is recorded
+    # with its own reason (matches the syllabus year).
+    assert 40 in by_doc, (
+        "the non-overridden chain must continue resolving automatically"
+    )
+    assert by_doc[40]["criterion_code"] == "E5"
+    assert by_doc[40]["resolution_reason"] == "academic_year_match"
+
+    # And the v2 of chain A (id=31) does NOT appear in the audit
+    # rows — the explicit override on chain A wins over the
+    # automatic pick that would have chosen v2.
+    assert 31 not in by_doc
+
+
+def test_explicit_selection_on_two_chains_records_both(client_and_session):
+    """Pin BOTH chains explicitly; both audit rows must carry
+    ``explicit_selection`` and no automatic pick from either chain
+    should bleed through."""
+    client, Session = client_and_session
+    _seed_db(Session)
+    _seed_local_document(
+        Session, doc_id=30, title="Usi LM-18",
+        document_type="usi_dipartimentali", enabled_criteria=["E5"],
+    )
+    _seed_local_document(
+        Session, doc_id=40, title="Linee guida LM-18",
+        document_type="linee_guida_cdl", enabled_criteria=["E5"],
+    )
+    r = client.post(
+        f"/api/evaluate/{SEUID}",
+        json={"selected_document_ids": [30, 40]},
+    )
+    assert r.status_code == 202
+    uuid = r.json()["evaluation_uuid"]
+
+    detail = client.get(f"/api/evaluations/{uuid}").json()
+    reasons = {
+        d["local_document_id"]: d["resolution_reason"]
+        for d in detail["external_documents_used"]
+    }
+    assert reasons[30] == "explicit_selection"
+    assert reasons[40] == "explicit_selection"
+
+
+def test_explicit_selection_audit_row_for_e1_only_chain(client_and_session):
+    """Single-criterion override (E1). The audit row for the
+    overridden chain must record ``explicit_selection``. Other
+    criteria (E5 here, with an auto-resolved doc) keep their own
+    reason."""
+    client, Session = client_and_session
+    _seed_db(Session)
+    _seed_local_document(
+        Session, doc_id=10, title="SUA-CdS",
+        document_type="sua_cds", enabled_criteria=["E1"],
+        academic_year="2024-2025", version=1,
+    )
+    _seed_local_document(
+        Session, doc_id=11, title="SUA-CdS",
+        document_type="sua_cds", enabled_criteria=["E1"],
+        academic_year="2025-2026", version=2,
+    )
+    # Add an unrelated E5 chain so we can verify it stays automatic.
+    _seed_local_document(
+        Session, doc_id=50, title="Usi LM-18",
+        document_type="usi_dipartimentali", enabled_criteria=["E5"],
+    )
+
+    # Pin the OLDER SUA version explicitly.
+    r = client.post(
+        f"/api/evaluate/{SEUID}",
+        json={"selected_document_ids": [10]},
+    )
+    assert r.status_code == 202
+    uuid = r.json()["evaluation_uuid"]
+
+    detail = client.get(f"/api/evaluations/{uuid}").json()
+    by_doc = {d["local_document_id"]: d for d in detail["external_documents_used"]}
+    assert by_doc[10]["criterion_code"] == "E1"
+    assert by_doc[10]["resolution_reason"] == "explicit_selection"
+    assert by_doc[50]["criterion_code"] == "E5"
+    # E5 auto pick keeps its own reason — not explicit_selection.
+    assert by_doc[50]["resolution_reason"] != "explicit_selection"

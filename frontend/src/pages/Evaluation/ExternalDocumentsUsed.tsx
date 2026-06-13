@@ -1,7 +1,8 @@
 import { Archive, FileText } from "lucide-react";
 
 import { Section } from "@/components/layout/Section";
-import type { EvaluationDetail, ResolutionReason } from "@/lib/types";
+import { ResolutionReasonPill } from "@/components/ResolutionReasonPill";
+import type { EvaluationDetail } from "@/lib/types";
 
 interface Props {
   data: EvaluationDetail;
@@ -162,38 +163,6 @@ function ArchivedPill({ deletedAt }: { deletedAt: string }) {
     </span>
   );
 }
-
-function ResolutionReasonPill({ reason }: { reason: ResolutionReason }) {
-  const { label, cls } = RESOLUTION_REASON_META[reason];
-  return (
-    <span
-      className={
-        "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-medium " +
-        cls
-      }
-    >
-      {label}
-    </span>
-  );
-}
-
-const RESOLUTION_REASON_META: Record<
-  ResolutionReason,
-  { label: string; cls: string }
-> = {
-  explicit_selection: {
-    label: "selezione esplicita",
-    cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  },
-  academic_year_match: {
-    label: "anno accademico",
-    cls: "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  },
-  latest_available_fallback: {
-    label: "fallback (ultima vers.)",
-    cls: "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  },
-};
 
 function shortHash(hash: string): string {
   // Mirror the convention used in the local-documents UI for
