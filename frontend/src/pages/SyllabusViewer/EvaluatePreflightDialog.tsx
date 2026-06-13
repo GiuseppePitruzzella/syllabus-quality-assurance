@@ -421,14 +421,9 @@ function CriterionCard({
           {CRITERION_LABELS[criterion.criterion_code]}
         </span>
         <ServedByPill servedBy={criterion.served_by} />
-        {anyOverride ? (
-          <span className="inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
-            override
-          </span>
-        ) : null}
         {groups.length > 1 ? (
           <span className="text-[10px] text-muted-foreground">
-            {groups.length} chain
+            {groups.length} fonti
           </span>
         ) : null}
       </div>
@@ -590,9 +585,17 @@ function CandidateRow({
       <span className="text-[10px] text-muted-foreground">
         {candidate.academic_year}
       </span>
-      {selected && !overrideActive && candidate.is_auto_resolved
-        ? <ResolutionReasonPill reason={candidate.resolution_reason} />
-        : null}
+      {selected ? (
+        overrideActive ? (
+          // 9.E.3.fix: mirror the post-run pill on the pre-run
+          // dialog — the user-pinned candidate gets the emerald
+          // "Selezione esplicita" pill that the audit row will
+          // carry once the evaluation is created.
+          <ResolutionReasonPill reason="explicit_selection" />
+        ) : candidate.is_auto_resolved ? (
+          <ResolutionReasonPill reason={candidate.resolution_reason} />
+        ) : null
+      ) : null}
       {candidate.deleted_at ? (
         <span
           className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:text-amber-300"
