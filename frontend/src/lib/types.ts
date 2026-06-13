@@ -235,6 +235,64 @@ export interface ExtendedCriteriaResultPayload {
   handler_prompt_versions: Record<string, string>;
 }
 
+// ---------------------------------------------------------------------------
+// Phase 9.E.1 — Resolution preview + selected-document validation
+// ---------------------------------------------------------------------------
+
+/** Closed enum: the source that serves an extended criterion in the
+ *  preview. ``registry`` is E1/E2/E3/E5; ``syllabus`` is E4 with
+ *  ``has_english=true``; ``none`` is the resolver-NA state. */
+export type ResolutionPreviewServedBy = "registry" | "syllabus" | "none";
+
+/** Closed enum of structured codes returned by the backend on 422
+ *  from ``POST /api/evaluate/{seuid}`` when ``selected_document_ids``
+ *  violates a Phase 9.E.1 rule. Used by the dialog to render an
+ *  actionable error per row instead of a generic toast. */
+export type SelectedDocumentValidationCode =
+  | "duplicate"
+  | "unknown"
+  | "not_indexed"
+  | "archived"
+  | "wrong_cdl"
+  | "no_enabled_criteria";
+
+export interface ResolutionPreviewCandidate {
+  local_document_id: number;
+  title: string;
+  document_type: LocalDocumentType;
+  version: number;
+  file_hash: string;
+  academic_year: string;
+  enabled_criteria: ExtendedCriterionCode[];
+  /** True when the resolver's precedence ladder picks this row
+   *  for its chain. Exactly one candidate per chain is flagged. */
+  is_auto_resolved: boolean;
+  /** Populated only on the auto-resolved candidate. */
+  resolution_reason: ResolutionReason | null;
+  /** ISO timestamp set when the document was soft-deleted. */
+  deleted_at: string | null;
+  /** ``false`` for soft-deleted rows — visible for transparency
+   *  but cannot feed new evaluations (Phase 9.E policy). */
+  selectable: boolean;
+}
+
+export interface ResolutionPreviewCriterion {
+  criterion_code: ExtendedCriterionCode;
+  served_by: ResolutionPreviewServedBy;
+  applicable: boolean;
+  na_reason: string | null;
+  /** Empty list for E4 (always) and for ``served_by="none"``. */
+  candidates: ResolutionPreviewCandidate[];
+}
+
+export interface ResolutionPreview {
+  seuid: string;
+  cdl_id: number;
+  academic_year: string | null;
+  has_english: boolean;
+  by_criterion: Record<ExtendedCriterionCode, ResolutionPreviewCriterion>;
+}
+
 export interface ExternalDocumentUsedPayload {
   criterion_code: RegistryServedCriterion;
   local_document_id: number;
