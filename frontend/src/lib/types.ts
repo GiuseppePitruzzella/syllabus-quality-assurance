@@ -258,6 +258,13 @@ export type SelectedDocumentValidationCode =
 
 export interface ResolutionPreviewCandidate {
   local_document_id: number;
+  /** Stable per-chain identifier. Two versions of the same
+   *  document share the value; two different chains differ.
+   *  Format: ``{document_type}::{normalized_title}``.
+   *  Phase 9.E.2.fix: the dialog groups radios by chain so an
+   *  override on one chain does not blank out the auto pick on
+   *  another (multi-chain E5 case). */
+  chain_key: string;
   title: string;
   document_type: LocalDocumentType;
   version: number;

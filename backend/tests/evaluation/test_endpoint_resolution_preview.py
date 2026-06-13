@@ -267,6 +267,74 @@ def test_preview_excludes_non_indexed_candidates(client_and_session):
     assert ids == [10]
 
 
+def test_preview_chain_key_derived_from_type_and_normalized_title(
+    client_and_session,
+):
+    """Phase 9.E.2.fix — every candidate exposes a stable
+    ``chain_key``. Two versions of the same chain share it; two
+    different chains differ. The key mirrors the resolver's
+    natural identity (minus the cdl_id)."""
+    client, Session = client_and_session
+    _seed_db(Session)
+    _seed_local_document(
+        Session, doc_id=10, title="SUA-CdS",
+        document_type="sua_cds", enabled_criteria=["E1"],
+        academic_year="2024-2025", version=1,
+    )
+    _seed_local_document(
+        Session, doc_id=11, title="SUA-CdS",
+        document_type="sua_cds", enabled_criteria=["E1"],
+        academic_year="2025-2026", version=2,
+    )
+    _seed_local_document(
+        Session, doc_id=20, title="Reg",
+        document_type="regolamento_didattico", enabled_criteria=["E3"],
+    )
+    body = client.get(f"/api/syllabi/{SEUID}/resolution-preview").json()
+    e1_keys = {
+        c["chain_key"] for c in body["by_criterion"]["E1"]["candidates"]
+    }
+    e3_keys = {
+        c["chain_key"] for c in body["by_criterion"]["E3"]["candidates"]
+    }
+    # Two SUA versions share one chain key.
+    assert len(e1_keys) == 1
+    assert next(iter(e1_keys)) == "sua_cds::sua-cds"
+    # E3 has its own chain key, disjoint from E1.
+    assert next(iter(e3_keys)) == "regolamento_didattico::reg"
+    assert e1_keys.isdisjoint(e3_keys)
+
+
+def test_preview_e5_with_two_chains_auto_resolves_both(client_and_session):
+    """Phase 9.E.2.fix — E5 admits multi-chain resolution. When the
+    registry holds an ``usi_dipartimentali`` row AND a
+    ``linee_guida_cdl`` row for the same CdL, BOTH get
+    ``is_auto_resolved=True``: the resolver picks one document per
+    chain, and the dialog must surface both auto picks in the
+    default view."""
+    client, Session = client_and_session
+    _seed_db(Session)
+    _seed_local_document(
+        Session, doc_id=30, title="Usi LM-18",
+        document_type="usi_dipartimentali", enabled_criteria=["E5"],
+    )
+    _seed_local_document(
+        Session, doc_id=31, title="Linee guida LM-18",
+        document_type="linee_guida_cdl", enabled_criteria=["E5"],
+    )
+    body = client.get(f"/api/syllabi/{SEUID}/resolution-preview").json()
+    e5_cands = body["by_criterion"]["E5"]["candidates"]
+    assert len(e5_cands) == 2
+    auto = [c for c in e5_cands if c["is_auto_resolved"]]
+    assert len(auto) == 2  # both chains contribute one auto pick
+    # The two picks belong to distinct chains.
+    auto_keys = {c["chain_key"] for c in auto}
+    assert auto_keys == {
+        "usi_dipartimentali::usi lm-18",
+        "linee_guida_cdl::linee guida lm-18",
+    }
+
+
 def test_preview_buckets_documents_by_criterion(client_and_session):
     client, Session = client_and_session
     _seed_db(Session)

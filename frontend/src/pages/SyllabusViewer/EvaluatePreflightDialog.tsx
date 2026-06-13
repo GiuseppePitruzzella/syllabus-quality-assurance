@@ -88,12 +88,15 @@ export function EvaluatePreflightDialog({
 }: Props) {
   const navigate = useNavigate();
   const [customize, setCustomize] = useState(false);
-  // Map: criterion → local_document_id selected by the user.
-  // Only criteria the user actually picked appear here; everything
-  // else keeps the resolver's automatic choice.
-  const [selection, setSelection] = useState<
-    Partial<Record<ExtendedCriterionCode, number>>
-  >({});
+  // Map: chain_key → local_document_id selected by the user.
+  // Phase 9.E.2.fix: keyed by *chain* (not criterion) so an
+  // override on one chain doesn't blank out the auto pick on
+  // sibling chains. The multi-chain E5 case (e.g.
+  // ``usi_dipartimentali`` + ``linee_guida_cdl``) needs this:
+  // the resolver picks one document per chain and the dialog
+  // must allow per-chain overrides while keeping the others on
+  // their auto picks.
+  const [selection, setSelection] = useState<Record<string, number>>({});
   const [errorBanner, setErrorBanner] = useState<{
     message: string;
     code?: SelectedDocumentValidationCode;
@@ -126,6 +129,10 @@ export function EvaluatePreflightDialog({
 
   const startMutation = useMutation({
     mutationFn: () =>
+      // selectedIds is the union of every per-chain override.
+      // Chains not in ``selection`` continue with the resolver's
+      // automatic pick — exactly the additive semantics 9.E.1
+      // documents for ``selected_document_ids``.
       startEvaluation(seuid, { selectedDocumentIds: selectedIds }),
     onSuccess: (data) => {
       onOpenChange(false);
@@ -193,13 +200,13 @@ export function EvaluatePreflightDialog({
                 customize={customize}
                 onToggleCustomize={() => setCustomize((v) => !v)}
                 selection={selection}
-                onSelect={(code, docId) =>
-                  setSelection((prev) => ({ ...prev, [code]: docId }))
+                onSelectChain={(chainKey, docId) =>
+                  setSelection((prev) => ({ ...prev, [chainKey]: docId }))
                 }
-                onResetCriterion={(code) =>
+                onResetChain={(chainKey) =>
                   setSelection((prev) => {
                     const next = { ...prev };
-                    delete next[code];
+                    delete next[chainKey];
                     return next;
                   })
                 }
@@ -280,15 +287,15 @@ function PreviewBody({
   customize,
   onToggleCustomize,
   selection,
-  onSelect,
-  onResetCriterion,
+  onSelectChain,
+  onResetChain,
 }: {
   preview: ResolutionPreview;
   customize: boolean;
   onToggleCustomize: () => void;
-  selection: Partial<Record<ExtendedCriterionCode, number>>;
-  onSelect: (code: ExtendedCriterionCode, docId: number) => void;
-  onResetCriterion: (code: ExtendedCriterionCode) => void;
+  selection: Record<string, number>;
+  onSelectChain: (chainKey: string, docId: number) => void;
+  onResetChain: (chainKey: string) => void;
 }) {
   return (
     <div className="space-y-3">
@@ -302,9 +309,9 @@ function PreviewBody({
               key={code}
               criterion={criterion}
               customize={customize}
-              overrideId={selection[code]}
-              onSelect={(docId) => onSelect(code, docId)}
-              onReset={() => onResetCriterion(code)}
+              selection={selection}
+              onSelectChain={onSelectChain}
+              onResetChain={onResetChain}
             />
           );
         })}
@@ -325,30 +332,85 @@ function PreviewBody({
   );
 }
 
+/**
+ * One row per chain in the criterion's candidate list. A chain is
+ * the family of versions of the same document; each chain
+ * contributes at most one document to the run (resolver
+ * behaviour). The criterion's "effective perimeter" is the union
+ * of the per-chain picks — overridden where the user touched the
+ * radio, automatic everywhere else.
+ */
+interface ChainGroup {
+  chainKey: string;
+  candidates: ResolutionPreviewCandidate[];
+  /** Resolver's pick for this chain, if any. */
+  autoPick: ResolutionPreviewCandidate | undefined;
+}
+
+function groupByChain(
+  candidates: ResolutionPreviewCandidate[],
+): ChainGroup[] {
+  // Use an insertion-ordered Map so the chain rendering follows
+  // the candidates' deterministic backend order (local_document_id
+  // ascending → first chain seen wins the first slot).
+  const map = new Map<string, ChainGroup>();
+  for (const c of candidates) {
+    const existing = map.get(c.chain_key);
+    if (existing) {
+      existing.candidates.push(c);
+      if (!existing.autoPick && c.is_auto_resolved) {
+        existing.autoPick = c;
+      }
+    } else {
+      map.set(c.chain_key, {
+        chainKey: c.chain_key,
+        candidates: [c],
+        autoPick: c.is_auto_resolved ? c : undefined,
+      });
+    }
+  }
+  return Array.from(map.values());
+}
+
+function chainLabel(group: ChainGroup): string {
+  // All candidates in the chain share document_type and the same
+  // normalized title — use the first one's display title.
+  const head = group.candidates[0];
+  return `${head.title} · ${head.document_type}`;
+}
+
 function CriterionCard({
   criterion,
   customize,
-  overrideId,
-  onSelect,
-  onReset,
+  selection,
+  onSelectChain,
+  onResetChain,
 }: {
   criterion: ResolutionPreviewCriterion;
   customize: boolean;
-  overrideId: number | undefined;
-  onSelect: (docId: number) => void;
-  onReset: () => void;
+  selection: Record<string, number>;
+  onSelectChain: (chainKey: string, docId: number) => void;
+  onResetChain: (chainKey: string) => void;
 }) {
-  const autoIds = criterion.candidates
-    .filter((c) => c.is_auto_resolved)
-    .map((c) => c.local_document_id);
-  const effectiveIds = overrideId ? [overrideId] : autoIds;
-  const overrideActive = overrideId !== undefined;
+  const groups = groupByChain(criterion.candidates);
+  // Effective picks: per-chain override when set, otherwise the
+  // chain's auto pick (when present).
+  const effectivePicks = groups
+    .map((g) => {
+      const overrideId = selection[g.chainKey];
+      if (overrideId !== undefined) {
+        return g.candidates.find((c) => c.local_document_id === overrideId);
+      }
+      return g.autoPick;
+    })
+    .filter((c): c is ResolutionPreviewCandidate => c !== undefined);
+  const anyOverride = groups.some((g) => selection[g.chainKey] !== undefined);
 
   return (
     <div
       className={
         "rounded-md border bg-background/60 px-3 py-2.5 text-sm " +
-        (overrideActive ? "border-emerald-500/30 bg-emerald-500/5" : "")
+        (anyOverride ? "border-emerald-500/30 bg-emerald-500/5" : "")
       }
     >
       <div className="flex flex-wrap items-center gap-2">
@@ -359,14 +421,19 @@ function CriterionCard({
           {CRITERION_LABELS[criterion.criterion_code]}
         </span>
         <ServedByPill servedBy={criterion.served_by} />
-        {overrideActive ? (
+        {anyOverride ? (
           <span className="inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
             override
           </span>
         ) : null}
+        {groups.length > 1 ? (
+          <span className="text-[10px] text-muted-foreground">
+            {groups.length} chain
+          </span>
+        ) : null}
       </div>
 
-      {/* Default / current pick */}
+      {/* Effective perimeter — one row per chain in this criterion. */}
       <div className="mt-1.5">
         {criterion.served_by === "syllabus" ? (
           <p className="text-xs text-muted-foreground">
@@ -377,108 +444,120 @@ function CriterionCard({
           <p className="text-xs text-amber-700 dark:text-amber-300">
             {criterion.na_reason ?? "Non applicabile per questo syllabus."}
           </p>
-        ) : effectiveIds.length === 0 ? (
+        ) : effectivePicks.length === 0 ? (
           <p className="text-xs text-muted-foreground">
             Nessun documento attualmente selezionabile.
           </p>
         ) : (
           <div className="space-y-1">
-            {effectiveIds.map((id) => {
-              const c = criterion.candidates.find(
-                (x) => x.local_document_id === id,
-              );
-              if (!c) return null;
-              return (
-                <CandidateRow
-                  key={id}
-                  candidate={c}
-                  selected
-                  overrideActive={overrideActive}
-                />
-              );
-            })}
+            {effectivePicks.map((c) => (
+              <CandidateRow
+                key={c.local_document_id}
+                candidate={c}
+                selected
+                overrideActive={selection[c.chain_key] !== undefined}
+              />
+            ))}
           </div>
         )}
       </div>
 
-      {/* Alternatives (expanded) */}
+      {/* Alternatives (expanded) — one radio group per chain. */}
       {customize && criterion.served_by === "registry" && criterion.applicable && (
-        <Alternatives
+        <ChainAlternatives
           criterion={criterion}
-          overrideId={overrideId}
-          onSelect={onSelect}
-          onReset={onReset}
+          groups={groups}
+          selection={selection}
+          onSelectChain={onSelectChain}
+          onResetChain={onResetChain}
         />
       )}
     </div>
   );
 }
 
-function Alternatives({
+function ChainAlternatives({
   criterion,
-  overrideId,
-  onSelect,
-  onReset,
+  groups,
+  selection,
+  onSelectChain,
+  onResetChain,
 }: {
   criterion: ResolutionPreviewCriterion;
-  overrideId: number | undefined;
-  onSelect: (docId: number) => void;
-  onReset: () => void;
+  groups: ChainGroup[];
+  selection: Record<string, number>;
+  onSelectChain: (chainKey: string, docId: number) => void;
+  onResetChain: (chainKey: string) => void;
 }) {
+  if (groups.length === 0) {
+    return (
+      <div className="mt-2.5 border-t border-dashed border-border/60 pt-2">
+        <p className="text-xs text-muted-foreground">Nessun candidato.</p>
+      </div>
+    );
+  }
   return (
-    <div className="mt-2.5 space-y-1 border-t border-dashed border-border/60 pt-2">
+    <div className="mt-2.5 space-y-2.5 border-t border-dashed border-border/60 pt-2">
       <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
         Alternative selezionabili
       </p>
-      {criterion.candidates.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Nessun candidato.</p>
-      ) : (
-        <ul className="space-y-1">
-          {criterion.candidates.map((c) => {
-            const isOverride = overrideId === c.local_document_id;
-            const disabled = !c.selectable;
-            return (
-              <li key={c.local_document_id}>
-                <label
-                  className={
-                    "flex cursor-pointer items-start gap-2 rounded-md border px-2 py-1.5 text-xs transition-colors " +
-                    (disabled
-                      ? "cursor-not-allowed border-border/50 bg-muted/30 text-muted-foreground"
-                      : isOverride
-                        ? "border-emerald-500/30 bg-emerald-500/5"
-                        : "border-border hover:bg-muted/30")
-                  }
-                >
-                  <input
-                    type="radio"
-                    name={`override-${criterion.criterion_code}`}
-                    className="mt-1 h-3.5 w-3.5"
-                    checked={isOverride}
-                    disabled={disabled}
-                    onChange={() => onSelect(c.local_document_id)}
-                  />
-                  <div className="min-w-0 flex-1 space-y-0.5">
-                    <CandidateRow
-                      candidate={c}
-                      selected={false}
-                      overrideActive={isOverride}
-                    />
-                  </div>
-                </label>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      {overrideId !== undefined ? (
-        <button
-          type="button"
-          onClick={onReset}
-          className="mt-1 text-[11px] font-medium text-primary hover:underline"
-        >
-          ↺ ripristina scelta automatica
-        </button>
-      ) : null}
+      {groups.map((group) => {
+        const overrideId = selection[group.chainKey];
+        return (
+          <div key={group.chainKey} className="space-y-1">
+            <p className="text-[11px] font-medium text-foreground/80">
+              {chainLabel(group)}
+            </p>
+            <ul className="space-y-1">
+              {group.candidates.map((c) => {
+                const isOverride = overrideId === c.local_document_id;
+                const disabled = !c.selectable;
+                return (
+                  <li key={c.local_document_id}>
+                    <label
+                      className={
+                        "flex cursor-pointer items-start gap-2 rounded-md border px-2 py-1.5 text-xs transition-colors " +
+                        (disabled
+                          ? "cursor-not-allowed border-border/50 bg-muted/30 text-muted-foreground"
+                          : isOverride
+                            ? "border-emerald-500/30 bg-emerald-500/5"
+                            : "border-border hover:bg-muted/30")
+                      }
+                    >
+                      <input
+                        type="radio"
+                        name={`override-${criterion.criterion_code}-${group.chainKey}`}
+                        className="mt-1 h-3.5 w-3.5"
+                        checked={isOverride}
+                        disabled={disabled}
+                        onChange={() =>
+                          onSelectChain(group.chainKey, c.local_document_id)
+                        }
+                      />
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <CandidateRow
+                          candidate={c}
+                          selected={false}
+                          overrideActive={isOverride}
+                        />
+                      </div>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+            {overrideId !== undefined ? (
+              <button
+                type="button"
+                onClick={() => onResetChain(group.chainKey)}
+                className="text-[11px] font-medium text-primary hover:underline"
+              >
+                ↺ ripristina scelta automatica per questa chain
+              </button>
+            ) : null}
+          </div>
+        );
+      })}
     </div>
   );
 }

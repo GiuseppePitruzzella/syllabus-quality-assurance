@@ -279,6 +279,14 @@ class ResolutionPreviewCandidate(BaseModel):
     """
 
     local_document_id: int
+    # Stable identifier of the *chain* this candidate belongs to —
+    # i.e. the family of versions of the same document. Derived as
+    # ``{document_type}::{normalized_title}``. Phase 9.E.2.fix
+    # introduces this so the dialog can group radios by chain
+    # rather than by criterion: a criterion (e.g. E5) can be fed
+    # by *multiple* chains simultaneously, and override on one
+    # chain must not blank out the auto pick on the others.
+    chain_key: str
     title: str
     document_type: str
     version: int

@@ -802,6 +802,10 @@ def _preview_registry_candidates(
         out.append(
             {
                 "local_document_id": int(row.id),
+                # 9.E.2.fix: stable chain identifier, identical to the
+                # resolver's chain key minus the cdl_id (which is
+                # implicit in the request).
+                "chain_key": f"{row.document_type}::{row.normalized_title}",
                 "title": row.title,
                 "document_type": row.document_type,
                 "version": int(row.version),
