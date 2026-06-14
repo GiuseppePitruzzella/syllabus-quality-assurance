@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, ExternalLink, Loader2, Sparkles } from "lucide-react";
-import { toast } from "sonner";
 import {
   getSyllabus,
   listEvaluationsForSyllabus,
-  startEvaluation,
 } from "@/lib/api";
 import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
@@ -24,36 +22,36 @@ import {
 } from "@/components/ui/tabs";
 import { DublinDescriptors } from "./DublinDescriptors";
 import { CourseScheduleTable } from "./CourseScheduleTable";
+import { EvaluatePreflightDialog } from "./EvaluatePreflightDialog";
 import { MetadataSidebar } from "./MetadataSidebar";
 
-function EvaluateButton({ seuid }: { seuid: string }) {
-  const navigate = useNavigate();
-  const mutation = useMutation({
-    mutationFn: () => startEvaluation(seuid),
-    onSuccess: (data) => {
-      navigate(`/evaluation/${data.evaluation_uuid}`);
-    },
-    onError: (err) => {
-      toast.error("Avvio valutazione fallito", {
-        description: err instanceof Error ? err.message : String(err),
-      });
-    },
-  });
-
+/**
+ * Phase 9.E.2 — the Evaluate button always opens the preflight
+ * dialog. Direct submission was retired so a user can never start
+ * a run without first seeing the informational perimeter (which
+ * documents will feed E1-E5).
+ */
+function EvaluateButton({
+  seuid,
+  courseName,
+}: {
+  seuid: string;
+  courseName: string;
+}) {
+  const [open, setOpen] = useState(false);
   return (
-    <Button
-      size="lg"
-      onClick={() => mutation.mutate()}
-      disabled={mutation.isPending}
-      aria-busy={mutation.isPending}
-    >
-      {mutation.isPending ? (
-        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-      ) : (
+    <>
+      <Button size="lg" onClick={() => setOpen(true)}>
         <Sparkles className="h-4 w-4" aria-hidden />
-      )}
-      {mutation.isPending ? "Avvio…" : "Valuta"}
-    </Button>
+        Valuta
+      </Button>
+      <EvaluatePreflightDialog
+        open={open}
+        onOpenChange={setOpen}
+        seuid={seuid}
+        courseName={courseName}
+      />
+    </>
   );
 }
 
@@ -172,7 +170,10 @@ export function SyllabusViewer() {
               onChange={setLang}
               hasEnglish={data.has_english}
             />
-            <EvaluateButton seuid={data.seuid} />
+            <EvaluateButton
+              seuid={data.seuid}
+              courseName={data.course_name ?? data.seuid}
+            />
           </>
         }
       />

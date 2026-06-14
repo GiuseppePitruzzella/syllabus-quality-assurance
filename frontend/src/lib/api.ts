@@ -12,14 +12,83 @@ import type {
   LocalDocumentChunkPreview,
   LocalDocumentStatus,
   LocalDocumentType,
+  ResolutionPreview,
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
 
+/**
+ * Typed API error preserving the HTTP status, the raw detail
+ * payload and — when the backend surfaces it (Phase 9.E.1 422
+ * validations) — a structured ``code`` so the UI can branch on
+ * the specific rule that fired.
+ *
+ * The generic ``fetchApi`` wrapper always raises this exception
+ * on a non-2xx response. Callers that need to distinguish error
+ * types can ``catch`` it and inspect ``status`` / ``code`` /
+ * ``detail``.
+ */
+export class ApiError<Code extends string = string> extends Error {
+  readonly status: number;
+  readonly detail: unknown;
+  readonly code: Code | undefined;
+
+  constructor(opts: {
+    status: number;
+    statusText: string;
+    detail: unknown;
+    code?: Code;
+    message?: string;
+  }) {
+    super(
+      opts.message ?? `API error: ${opts.status} ${opts.statusText}`,
+    );
+    this.name = "ApiError";
+    this.status = opts.status;
+    this.detail = opts.detail;
+    this.code = opts.code;
+  }
+}
+
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, options);
   if (!res.ok) {
-    throw new Error(`API error: ${res.status} ${res.statusText}`);
+    let detail: unknown = null;
+    // The backend sends structured JSON for 4xx (FastAPI's
+    // ``HTTPException(detail=...)``). Parse defensively so a
+    // malformed response can't crash the UI.
+    try {
+      detail = await res.clone().json();
+    } catch {
+      try {
+        detail = await res.text();
+      } catch {
+        detail = null;
+      }
+    }
+    // Phase 9.E.1 validators surface `{ "detail": { "code", "message" } }`.
+    // FastAPI may also send `{ "detail": "<string>" }` or
+    // `{ "detail": [{...}] }` (Pydantic 422). Extract the code only
+    // when the nested shape matches the 9.E.1 contract.
+    const inner =
+      detail && typeof detail === "object" && "detail" in detail
+        ? (detail as { detail: unknown }).detail
+        : undefined;
+    const code =
+      inner && typeof inner === "object" && "code" in inner
+        ? (inner as { code: unknown }).code
+        : undefined;
+    const message =
+      inner && typeof inner === "object" && "message" in inner
+        ? (inner as { message: unknown }).message
+        : undefined;
+    throw new ApiError({
+      status: res.status,
+      statusText: res.statusText,
+      detail,
+      code: typeof code === "string" ? code : undefined,
+      message: typeof message === "string" ? message : undefined,
+    });
   }
   return res.json();
 }
@@ -62,8 +131,48 @@ export const scrapeSyllabusDetail = (seuid: string) =>
  * the run continues asynchronously on the server; subscribe to the SSE
  * stream (`connectEvaluationSse`) to follow progress in real time.
  */
-export const startEvaluation = (seuid: string) =>
-  fetchApi<EvaluationCreated>(`/evaluate/${seuid}`, { method: "POST" });
+/**
+ * Kick off an evaluation. Phase 9.E.1 lets the caller pin specific
+ * ``LocalDocument`` versions via ``selectedDocumentIds``. The
+ * options object is open-ended so future additions (e.g. dry-run,
+ * custom prompt overrides) stay backwards compatible.
+ *
+ * When ``selectedDocumentIds`` is undefined / empty the request
+ * is sent without a body — the resolver's standard precedence
+ * ladder kicks in. With explicit ids, the validation runs
+ * server-side and surfaces structured 422s via :class:`ApiError`.
+ */
+export interface StartEvaluationOptions {
+  selectedDocumentIds?: number[];
+}
+
+export const startEvaluation = (
+  seuid: string,
+  options?: StartEvaluationOptions,
+) => {
+  const ids = options?.selectedDocumentIds ?? [];
+  const init: RequestInit = { method: "POST" };
+  if (ids.length > 0) {
+    init.headers = { "Content-Type": "application/json" };
+    init.body = JSON.stringify({ selected_document_ids: ids });
+  }
+  return fetchApi<EvaluationCreated>(`/evaluate/${seuid}`, init);
+};
+
+/**
+ * Phase 9.E.1 — typed view of the resolver's verdict for this
+ * syllabus, plus the alternatives the user can pick. The
+ * response is deterministic and side-effect-free: ``GET`` only.
+ */
+export const getResolutionPreview = (seuid: string) =>
+  fetchApi<ResolutionPreview>(`/syllabi/${seuid}/resolution-preview`);
+
+/**
+ * Closed enum of structured validation codes the backend emits
+ * on a 422 from POST /api/evaluate/{seuid}. Re-exported here so
+ * UI consumers can match without hardcoding the strings.
+ */
+export type { SelectedDocumentValidationCode } from "./types";
 
 /**
  * Fetch one evaluation row by UUID. Works for any status:

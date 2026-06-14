@@ -50,6 +50,35 @@ class EvaluationCreated(BaseModel):
     evaluation_uuid: str
 
 
+class EvaluateRequest(BaseModel):
+    """Optional body of ``POST /api/evaluate/{seuid}`` (Phase 9.E.1).
+
+    ``selected_document_ids`` lets the caller pin specific
+    ``LocalDocument`` versions instead of letting the resolver pick
+    via the standard precedence ladder
+    (``academic_year_match`` → ``latest_available_fallback``).
+    Criteria not covered by any explicit id continue to be
+    resolved automatically — the override is *additive*, not
+    exclusive.
+
+    Validation rules (see service.validate_selected_document_ids):
+
+      * no duplicates;
+      * every id must exist and have ``status == "indexed"``;
+      * archived documents (``deleted_at`` set) are rejected for new
+        runs — historical reproducibility is provided by the
+        existing audit table, not by allowing fresh runs against
+        retired sources;
+      * every id must belong to the syllabus's CdL;
+      * every id must declare at least one ``enabled_criteria``
+        (a document with ``enabled_criteria=[]`` is registry junk
+        the resolver would silently skip — the API surfaces the
+        error early).
+    """
+
+    selected_document_ids: list[int] | None = None
+
+
 class EvaluationSummary(BaseModel):
     """Lightweight summary for history lists."""
 
@@ -233,3 +262,80 @@ class EvaluationDetail(EvaluationSummary):
     external_documents_used: list[ExternalDocumentUsedPayload] = Field(
         default_factory=list,
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase 9.E.1 — resolution preview
+# ---------------------------------------------------------------------------
+
+
+class ResolutionPreviewCandidate(BaseModel):
+    """One LocalDocument the resolver could pick for a given criterion.
+
+    The candidate carries the audit-friendly snapshot fields and
+    two display-only flags (``is_auto_resolved``, ``selectable``)
+    so the frontend can render the radio/dropdown without
+    additional queries.
+    """
+
+    local_document_id: int
+    # Stable identifier of the *chain* this candidate belongs to —
+    # i.e. the family of versions of the same document. Derived as
+    # ``{document_type}::{normalized_title}``. Phase 9.E.2.fix
+    # introduces this so the dialog can group radios by chain
+    # rather than by criterion: a criterion (e.g. E5) can be fed
+    # by *multiple* chains simultaneously, and override on one
+    # chain must not blank out the auto pick on the others.
+    chain_key: str
+    title: str
+    document_type: str
+    version: int
+    file_hash: str
+    academic_year: str
+    enabled_criteria: list[str]
+    # The resolver's pick (when ``is_auto_resolved=True``) carries
+    # the precedence-ladder reason it was selected; alternatives
+    # leave the field ``None``.
+    is_auto_resolved: bool
+    resolution_reason: ResolutionReason | None = None
+    # Archived documents (``deleted_at`` set) are visible for
+    # transparency but ``selectable=False`` — Phase 9.E policy:
+    # historical reproducibility is provided by the audit table,
+    # not by allowing fresh runs against retired sources.
+    deleted_at: datetime | None = None
+    selectable: bool
+
+
+class ResolutionPreviewCriterion(BaseModel):
+    """Per-extended-criterion view: who serves it, how it would resolve,
+    what alternatives exist.
+
+    ``served_by`` is the source of the criterion's evidence:
+      * ``"registry"`` — E1/E2/E3/E5 use local documents;
+      * ``"syllabus"`` — E4 uses the syllabus's own ``*_en`` fields;
+      * ``"none"`` — no source is available (resolver hard-NA on
+        registry-served criteria; ``has_english=False`` on E4).
+    """
+
+    criterion_code: ExtendedCriterionCode
+    served_by: Literal["registry", "syllabus", "none"]
+    applicable: bool
+    na_reason: str | None = None
+    # Empty for E4 (always) and for ``served_by="none"``.
+    candidates: list[ResolutionPreviewCandidate] = Field(default_factory=list)
+
+
+class ResolutionPreview(BaseModel):
+    """Top-level resolution preview for one syllabus.
+
+    Returned by ``GET /api/syllabi/{seuid}/resolution-preview``.
+    Deterministic — the same syllabus + registry state always
+    yields the same preview, including the per-criterion order
+    of candidates (by ``local_document_id`` ascending).
+    """
+
+    seuid: str
+    cdl_id: int
+    academic_year: str | None = None
+    has_english: bool
+    by_criterion: dict[str, ResolutionPreviewCriterion]

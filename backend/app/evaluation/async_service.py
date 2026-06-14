@@ -64,16 +64,30 @@ class AsyncEvaluationService:
     def registry(self) -> EvaluationRegistry:
         return self._registry
 
-    async def start_evaluation(self, seuid: str) -> str:
+    async def start_evaluation(
+        self,
+        seuid: str,
+        *,
+        selected_document_ids: list[int] | None = None,
+    ) -> str:
         """Pre-allocate the run, emit ``evaluation_started``, schedule worker.
 
         Returns the ``evaluation_uuid`` so the HTTP layer can respond
         with 202 and the client knows which stream to subscribe to.
 
+        Phase 9.E.1: ``selected_document_ids`` lets the caller pin
+        specific ``LocalDocument`` versions; the underlying
+        ``EvaluationService.create_pending_run`` revalidates and
+        raises ``InvalidSelectedDocumentIdsError`` on a bad request.
+
         Raises:
             SyllabusNotFoundError: if no syllabus matches ``seuid``.
+            InvalidSelectedDocumentIdsError: from create_pending_run.
         """
-        pending = await asyncio.to_thread(self._sync.create_pending_run, seuid)
+        pending = await asyncio.to_thread(
+            self._sync.create_pending_run, seuid,
+            selected_document_ids=selected_document_ids,
+        )
         self._registry.register(pending.evaluation_uuid)
 
         await self._publish_async(
