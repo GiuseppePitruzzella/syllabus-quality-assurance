@@ -80,6 +80,40 @@ function buildChips(args: {
   return chips;
 }
 
+const SENTENCE_LEAD: Record<string, string> = {
+  ottima: "Il syllabus è di qualità eccellente sui criteri valutati",
+  buona: "Il syllabus è generalmente adeguato",
+  discreta: "Il syllabus è complessivamente accettabile",
+  da_rivedere: "Il syllabus richiede una revisione sostanziale",
+};
+
+/** Deterministic editorial sentence for the verdict banner. Returns
+ *  null when no qualitative judgement applies (insufficient coverage,
+ *  failed/pending). */
+export function verdictSummarySentence(v: Verdict): string | null {
+  const lead = SENTENCE_LEAD[v.band];
+  if (!lead) return null; // copertura_insufficiente / non_disponibile
+
+  const parts: string[] = [];
+  if (v.criticalCount > 0) {
+    parts.push(
+      v.criticalCount === 1 ? "1 criticità" : `${v.criticalCount} criticità`,
+    );
+  }
+  if (v.improvableCount > 0) {
+    parts.push(
+      v.improvableCount === 1
+        ? "1 area da migliorare"
+        : `${v.improvableCount} aree da migliorare`,
+    );
+  }
+
+  if (parts.length === 0) return `${lead}.`;
+  const joined = parts.join(" e ");
+  if (v.band === "da_rivedere") return `${lead}: ${joined}.`;
+  return `${lead}, ma presenta ${joined}.`;
+}
+
 export interface CriterionExpandInput {
   code: string;
   score: number | null;

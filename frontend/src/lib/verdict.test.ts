@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { computeVerdict, defaultExpandedCriteria } from "./verdict";
+import {
+  computeVerdict,
+  defaultExpandedCriteria,
+  verdictSummarySentence,
+} from "./verdict";
 import type { VerdictInput, CriterionExpandInput } from "./verdict";
 
 /** Build a C1..C9 score map from a 9-length array; `null` = NA. */
@@ -172,6 +176,51 @@ describe("computeVerdict — status branches", () => {
     const v = computeVerdict(input({ status: "partial", criterionScores: scores([2, 2, 2, 2, 2, 2, 2, 2, 2]) }));
     expect(v.partialExecution).toBe(true);
     expect(v.band).toBe("ottima");
+  });
+});
+
+function scoresVerdict(values: (number | null)[]): VerdictInput {
+  return {
+    status: "completed",
+    coreScore: null,
+    coverage: null,
+    criterionScores: scores(values),
+  };
+}
+
+describe("verdictSummarySentence", () => {
+  it("buona with three improvable → adeguato + aree da migliorare", () => {
+    const v = computeVerdict(scoresVerdict([1, 1, 2, 2, 2, 2, 2, 2, 1]));
+    expect(v.band).toBe("buona");
+    expect(verdictSummarySentence(v)).toBe(
+      "Il syllabus è generalmente adeguato, ma presenta 3 aree da migliorare.",
+    );
+  });
+
+  it("ottima with no issues → no clause", () => {
+    const v = computeVerdict(scoresVerdict([2, 2, 2, 2, 2, 2, 2, 2, 2]));
+    expect(v.band).toBe("ottima");
+    expect(verdictSummarySentence(v)).toBe(
+      "Il syllabus è di qualità eccellente sui criteri valutati.",
+    );
+  });
+
+  it("da_rivedere lists issues with a colon", () => {
+    const v = computeVerdict(scoresVerdict([0, 0, 0, 0, 0, 0, 0, 1, 2]));
+    expect(v.band).toBe("da_rivedere");
+    expect(v.criticalCount).toBe(7);
+    expect(verdictSummarySentence(v)).toBe(
+      "Il syllabus richiede una revisione sostanziale: 7 criticità e 1 area da migliorare.",
+    );
+  });
+
+  it("returns null for insufficient coverage / non disponibile", () => {
+    expect(
+      verdictSummarySentence(computeVerdict(scoresVerdict([2, 2, 2, 2, 2, null, null, null, null]))),
+    ).toBeNull();
+    expect(
+      verdictSummarySentence(computeVerdict({ status: "failed", coreScore: null, coverage: null, criterionScores: null })),
+    ).toBeNull();
   });
 });
 

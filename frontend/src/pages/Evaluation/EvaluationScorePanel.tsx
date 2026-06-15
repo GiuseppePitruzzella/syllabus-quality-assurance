@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronRight } from "lucide-react";
 
 import { Section } from "@/components/layout/Section";
@@ -9,6 +9,11 @@ import {
   defaultExpandedCriteria,
   type CriterionExpandInput,
 } from "@/lib/verdict";
+import {
+  CRITERIA_SECTION_ID,
+  FOCUS_CRITERIA_EVENT,
+  type FocusCriteriaDetail,
+} from "@/lib/events";
 import type {
   CriterionJudgmentDump,
   EvaluationDetail,
@@ -49,6 +54,22 @@ export function EvaluationScorePanel({ data }: Props) {
   const { technical } = useTechnicalView();
   // Per-code explicit open/close; absence means "follow auto-derived".
   const [overrides, setOverrides] = useState<Map<string, boolean>>(new Map());
+
+  // Banner chips can ask to expand specific criteria (focus signal).
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const codes =
+        (e as CustomEvent<FocusCriteriaDetail>).detail?.codes ?? [];
+      if (codes.length === 0) return;
+      setOverrides((prev) => {
+        const next = new Map(prev);
+        for (const code of codes) next.set(code, true);
+        return next;
+      });
+    };
+    window.addEventListener(FOCUS_CRITERIA_EVENT, handler);
+    return () => window.removeEventListener(FOCUS_CRITERIA_EVENT, handler);
+  }, []);
 
   const scores = data.criterion_scores;
 
@@ -99,6 +120,7 @@ export function EvaluationScorePanel({ data }: Props) {
   const anyExpanded = CRITERIA.some((c) => isExpanded(c.code));
 
   return (
+    <div id={CRITERIA_SECTION_ID} className="scroll-mt-24">
     <Section
       title="Punteggi C1-C9"
       headerAside={
@@ -163,6 +185,7 @@ export function EvaluationScorePanel({ data }: Props) {
 
       {naCriteria.length > 0 ? <NaCriteriaList items={naCriteria} /> : null}
     </Section>
+    </div>
   );
 }
 
