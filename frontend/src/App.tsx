@@ -8,6 +8,7 @@ import { Dashboard } from "@/pages/Dashboard/Dashboard";
 import { EvaluationPage } from "@/pages/Evaluation/EvaluationPage";
 import { SettingsPage } from "@/pages/Settings/SettingsPage";
 import { SyllabusViewer } from "@/pages/SyllabusViewer/SyllabusViewer";
+import { TechnicalViewProvider } from "@/context/TechnicalViewProvider";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,44 +28,46 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <TooltipProvider delay={300}>
-          <main className="relative isolate min-h-screen bg-slate-50">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.08),transparent_55%)]"
-            />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route
-                path="/syllabus/:seuid"
-                element={
-                  <Chromed>
-                    <SyllabusViewer />
-                  </Chromed>
-                }
+      <TechnicalViewProvider>
+        <BrowserRouter>
+          <TooltipProvider delay={300}>
+            <main className="relative isolate min-h-screen bg-slate-50">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.08),transparent_55%)]"
               />
-              <Route
-                path="/evaluation/:evaluation_uuid"
-                element={
-                  <Chromed>
-                    <EvaluationPage />
-                  </Chromed>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <Chromed>
-                    <SettingsPage />
-                  </Chromed>
-                }
-              />
-            </Routes>
-          </main>
-          <Toaster position="bottom-right" />
-        </TooltipProvider>
-      </BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route
+                  path="/syllabus/:seuid"
+                  element={
+                    <Chromed>
+                      <SyllabusViewer />
+                    </Chromed>
+                  }
+                />
+                <Route
+                  path="/evaluation/:evaluation_uuid"
+                  element={
+                    <Chromed>
+                      <EvaluationPage />
+                    </Chromed>
+                  }
+                />
+                <Route
+                  path="/settings"
+                  element={
+                    <Chromed>
+                      <SettingsPage />
+                    </Chromed>
+                  }
+                />
+              </Routes>
+            </main>
+            <Toaster position="bottom-right" />
+          </TooltipProvider>
+        </BrowserRouter>
+      </TechnicalViewProvider>
     </QueryClientProvider>
   );
 }

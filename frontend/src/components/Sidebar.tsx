@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { BarChart3, LayoutDashboard, Settings } from "lucide-react";
 
+import { TechnicalViewToggle } from "@/components/TechnicalViewToggle";
+
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
@@ -73,7 +75,10 @@ export function Navbar() {
         })}
       </nav>
 
-      <MockProfile />
+      <div className="flex h-full items-center gap-1 pr-1">
+        <TechnicalViewToggle />
+        <MockProfile />
+      </div>
     </div>
   );
 }
