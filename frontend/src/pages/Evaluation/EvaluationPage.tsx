@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
-import { MetricTile } from "@/components/layout/MetricTile";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
 import { EvaluationReport } from "./EvaluationReport";
-import { AgentDetailsSection } from "./AgentDetailsSection";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 import { ExternalDocumentsUsed } from "./ExternalDocumentsUsed";
+import { ReviewRail } from "./ReviewRail";
+import { TechnicalBlock } from "./TechnicalBlock";
 import { SyntheticVerdict } from "@/components/SyntheticVerdict";
 import { useTechnicalView } from "@/context/technicalView";
 
@@ -29,18 +28,15 @@ const TERMINAL_STATUSES = new Set<EvaluationStatus>([
 const POLL_MS = 3000;
 
 /**
- * Phase 5.9.C — review-mode evaluation page.
+ * Phase 10.A R2 — full-width two-column review layout.
  *
- * Layout choices reflect the actual use case: a docente / presidio
- * qualità reading a finished evaluation and comparing it against
- * the original syllabus.
- *
- *   - Live run (pending/running): timeline first, then the (empty)
- *     score + output sections that fill in as events arrive.
- *   - Terminated run: header + score + output as primary surfaces;
- *     the SSE timeline drops to a collapsed section at the bottom
- *     when events were accumulated in the current session, and is
- *     hidden entirely on historical runs (no events ever received).
+ *   - Live run (pending/running): timeline + progress precede the
+ *     review layout in a single column; the full rail appears once
+ *     scores are available (terminated).
+ *   - Terminated run: header (KPI strip) + two columns — main (C1-C9,
+ *     report, extended analysis) and a sticky review rail (verdict,
+ *     priorities). Technical surfaces live in a full-width block below,
+ *     only in Vista tecnica.
  */
 export function EvaluationPage() {
   const { evaluation_uuid } = useParams<{ evaluation_uuid: string }>();
@@ -56,8 +52,6 @@ export function EvaluationPage() {
     },
   });
 
-  // SSE only matters while the run is in flight. Hook called
-  // unconditionally; gating happens inside via `enabled`.
   const isLive = data ? !TERMINAL_STATUSES.has(data.status) : false;
   const stream = useEvaluationStream(evaluation_uuid, isLive);
   const { technical } = useTechnicalView();
@@ -93,45 +87,44 @@ export function EvaluationPage() {
     );
   }
 
-  const hasStreamEvents = stream.events.length > 0;
-
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-[1600px] space-y-6">
       <Header data={data} isFetching={isFetching} isLive={isLive} />
 
-      <SyntheticVerdict data={data} />
-
       {isLive ? (
-        <>
+        <div className="space-y-6">
           <EvaluationProgressTimeline
             events={stream.events}
             isLive
             isConnected={stream.isConnected}
             lastError={stream.lastError}
           />
+          <SyntheticVerdict data={data} />
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
           <EvaluationReport data={data} />
-          {technical ? <AgentDetailsSection data={data} /> : null}
-        </>
+        </div>
       ) : (
         <>
-          <EvaluationScorePanel data={data} />
-          <ExtendedCriteriaResults data={data} />
-          <ExternalDocumentsUsed data={data} />
-          <EvaluationReport data={data} />
-          {technical ? <AgentDetailsSection data={data} /> : null}
-          {technical && hasStreamEvents ? (
-            <CollapsibleTimeline>
-              <EvaluationProgressTimeline
-                events={stream.events}
-                isLive={false}
-                isConnected={false}
-                lastError={stream.lastError}
-                embedded
-              />
-            </CollapsibleTimeline>
+          <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_22rem]">
+            <aside className="xl:col-start-2 xl:row-start-1 xl:sticky xl:top-20 xl:self-start xl:max-h-[calc(100vh-6rem)] xl:overflow-auto">
+              <ReviewRail data={data} />
+            </aside>
+            <div className="min-w-0 space-y-6 xl:col-start-1 xl:row-start-1">
+              <EvaluationScorePanel data={data} />
+              <EvaluationReport data={data} />
+              <ExtendedCriteriaResults data={data} />
+              <ExternalDocumentsUsed data={data} />
+            </div>
+          </div>
+
+          {technical ? (
+            <TechnicalBlock
+              data={data}
+              events={stream.events}
+              lastError={stream.lastError}
+            />
           ) : null}
         </>
       )}
@@ -153,17 +146,14 @@ function Header({
   isLive: boolean;
 }) {
   const startedAt = data.started_at ? new Date(data.started_at) : null;
-  const finishedAt = data.finished_at ? new Date(data.finished_at) : null;
   const durationSec =
     typeof data.duration_ms === "number" ? data.duration_ms / 1000 : null;
-  const { technical } = useTechnicalView();
 
   const scores = data.criterion_scores;
   const hasScores = scores !== null && scores !== undefined;
   const evaluatedCount = hasScores
     ? Object.values(scores).filter((v) => typeof v === "number").length
     : 0;
-  const naCount = hasScores ? 9 - evaluatedCount : 0;
 
   return (
     <div className="space-y-5">
@@ -203,16 +193,6 @@ function Header({
             ) : null}
           </>
         }
-        actions={
-          hasScores ? (
-            <ScoreSummary
-              coreScore={data.core_score}
-              coverage={data.coverage}
-              evaluatedCount={evaluatedCount}
-              naCount={naCount}
-            />
-          ) : null
-        }
         footer={
           <div className="space-y-3">
             {data.status === "failed" && data.error_message ? (
@@ -220,31 +200,27 @@ function Header({
                 {data.error_message}
               </p>
             ) : null}
-            {technical ? (
-            <details className="group">
-              <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-                Dettagli tecnici
-              </summary>
-              <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-5">
-                <TechField label="Avvio">
-                  {startedAt ? formatDateTime(startedAt) : "—"}
-                </TechField>
-                <TechField label="Fine">
-                  {finishedAt ? formatDateTime(finishedAt) : "—"}
-                </TechField>
-                <TechField label="LLM">{data.llm_model}</TechField>
-                <TechField label="Embedding">
-                  {data.embedding_model} ({data.embedding_dim}d)
-                </TechField>
-                <TechField label="Prompt versions">
-                  <code className="font-mono">
-                    {Object.entries(data.prompt_versions)
-                      .map(([k, v]) => `${k}=${v}`)
-                      .join(" · ")}
-                  </code>
-                </TechField>
-              </dl>
-            </details>
+            {hasScores ? (
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-1 text-sm">
+                <Kpi
+                  label="CoreScore"
+                  value={
+                    typeof data.core_score === "number"
+                      ? data.core_score.toFixed(2)
+                      : "—"
+                  }
+                  suffix="/2"
+                />
+                <Kpi
+                  label="Copertura"
+                  value={
+                    typeof data.coverage === "number"
+                      ? `${Math.round(data.coverage * 100)}%`
+                      : "—"
+                  }
+                />
+                <Kpi label="Criteri valutati" value={`${evaluatedCount}/9`} />
+              </div>
             ) : null}
           </div>
         }
@@ -253,92 +229,21 @@ function Header({
   );
 }
 
-function ScoreSummary({
-  coreScore,
-  coverage,
-  evaluatedCount,
-  naCount,
-}: {
-  coreScore: number | null;
-  coverage: number | null;
-  evaluatedCount: number;
-  naCount: number;
-}) {
-  return (
-    <>
-      <MetricTile
-        label="CoreScore"
-        value={typeof coreScore === "number" ? coreScore.toFixed(2) : "—"}
-        suffix="/ 2.00"
-        tone="success"
-      />
-      <MetricTile
-        label="Coverage"
-        value={
-          typeof coverage === "number"
-            ? `${Math.round(coverage * 100)}%`
-            : "—"
-        }
-        tone="muted"
-      />
-      <MetricTile
-        label="Valutati"
-        value={String(evaluatedCount)}
-        suffix="/ 9"
-        tone="muted"
-      />
-      {naCount > 0 ? (
-        <MetricTile label="NA" value={String(naCount)} tone="warning" />
-      ) : null}
-    </>
-  );
-}
-
-function TechField({
+function Kpi({
   label,
-  children,
+  value,
+  suffix,
 }: {
   label: string;
-  children: React.ReactNode;
+  value: string;
+  suffix?: string;
 }) {
   return (
-    <div className="min-w-0">
-      <dt className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        {label}
-      </dt>
-      <dd className="mt-0.5 truncate text-xs text-foreground">{children}</dd>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// CollapsibleTimeline — wraps the SSE timeline after the run terminates
-// ---------------------------------------------------------------------------
-
-function CollapsibleTimeline({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <section className="rounded-lg border bg-card">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-muted/30"
-        aria-expanded={open}
-      >
-        <span className="!text-base !font-semibold !tracking-normal">
-          Timeline esecuzione
-        </span>
-        <span className="flex items-center gap-2 text-xs text-muted-foreground">
-          {open ? "nascondi" : "mostra"}
-          {open ? (
-            <ChevronUp className="h-4 w-4" aria-hidden />
-          ) : (
-            <ChevronDown className="h-4 w-4" aria-hidden />
-          )}
-        </span>
-      </button>
-      {open ? <div className="border-t p-4">{children}</div> : null}
-    </section>
+    <span>
+      <span className="text-muted-foreground">{label} </span>
+      <span className="font-semibold tabular-nums text-foreground">{value}</span>
+      {suffix ? <span className="text-muted-foreground">{suffix}</span> : null}
+    </span>
   );
 }
 
@@ -348,7 +253,7 @@ function CollapsibleTimeline({ children }: { children: React.ReactNode }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-[1600px] space-y-6">
       <div className="space-y-3 border-b pb-6">
         <div className="h-4 w-40 animate-pulse rounded bg-muted" />
         <div className="h-8 w-2/3 animate-pulse rounded bg-muted" />
