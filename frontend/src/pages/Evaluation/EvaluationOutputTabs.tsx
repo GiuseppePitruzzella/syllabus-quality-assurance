@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/layout/Section";
 import { getSyllabus } from "@/lib/api";
+import { useTechnicalView } from "@/context/technicalView";
 import type {
   AgentOutputDump,
   CriterionJudgmentDump,
@@ -31,14 +32,19 @@ interface Props {
  * tab; mobile and tablet users still use the separate tabs.
  */
 export function EvaluationOutputTabs({ data }: Props) {
+  const { technical } = useTechnicalView();
+  const [tab, setTab] = useState("report");
   const syllabusQuery = useQuery({
     queryKey: ["syllabus", data.syllabus_seuid_snapshot],
     queryFn: () => getSyllabus(data.syllabus_seuid_snapshot),
   });
   const syllabus = syllabusQuery.data ?? null;
 
+  // Derived: if Vista tecnica is off, never resolve to the agents tab.
+  const activeTab = !technical && tab === "agents" ? "report" : tab;
+
   return (
-    <Tabs defaultValue="report" className="min-w-0">
+    <Tabs value={activeTab} onValueChange={setTab} className="min-w-0">
       <Section
         className="min-w-0"
         title="Output valutazione"
@@ -46,7 +52,9 @@ export function EvaluationOutputTabs({ data }: Props) {
           <TabsList className="h-auto max-w-full flex-wrap justify-start overflow-visible">
             <TabsTrigger value="report">Report</TabsTrigger>
             <TabsTrigger value="syllabus">Syllabus originale</TabsTrigger>
-            <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
+            {technical ? (
+              <TabsTrigger value="agents">Dettagli agenti</TabsTrigger>
+            ) : null}
           </TabsList>
         }
         padded={false}
@@ -72,9 +80,11 @@ export function EvaluationOutputTabs({ data }: Props) {
           />
         </TabsContent>
 
-        <TabsContent value="agents" className="mt-0 min-w-0 p-4">
-          <AgentDetailsPanel data={data} />
-        </TabsContent>
+        {technical ? (
+          <TabsContent value="agents" className="mt-0 min-w-0 p-4">
+            <AgentDetailsPanel data={data} />
+          </TabsContent>
+        ) : null}
       </Section>
     </Tabs>
   );

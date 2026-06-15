@@ -2,6 +2,7 @@ import { Archive, FileText } from "lucide-react";
 
 import { Section } from "@/components/layout/Section";
 import { ResolutionReasonPill } from "@/components/ResolutionReasonPill";
+import { useTechnicalView } from "@/context/technicalView";
 import type { EvaluationDetail } from "@/lib/types";
 
 interface Props {
@@ -32,6 +33,7 @@ interface Props {
  * such endpoint today. Adding one is out of scope for 9.D.
  */
 export function ExternalDocumentsUsed({ data }: Props) {
+  const { technical } = useTechnicalView();
   const docs = data.external_documents_used;
   if (!docs || docs.length === 0) return null;
 
@@ -51,8 +53,12 @@ export function ExternalDocumentsUsed({ data }: Props) {
             <tr>
               <th className="w-14 px-3 py-2 text-left font-medium">Crit</th>
               <th className="px-3 py-2 text-left font-medium">Tipo</th>
-              <th className="w-14 px-3 py-2 text-left font-medium">Ver</th>
-              <th className="w-24 px-3 py-2 text-left font-medium">Hash</th>
+              {technical ? (
+                <th className="w-14 px-3 py-2 text-left font-medium">Ver</th>
+              ) : null}
+              {technical ? (
+                <th className="w-24 px-3 py-2 text-left font-medium">Hash</th>
+              ) : null}
               <th className="w-40 px-3 py-2 text-left font-medium">
                 Resolution
               </th>
@@ -73,17 +79,21 @@ export function ExternalDocumentsUsed({ data }: Props) {
                     {doc.document_type}
                   </span>
                 </td>
-                <td className="px-3 py-2 font-mono text-xs tabular-nums">
-                  v{doc.document_version}
-                </td>
-                <td className="px-3 py-2">
-                  <code
-                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
-                    title={doc.file_hash}
-                  >
-                    {shortHash(doc.file_hash)}
-                  </code>
-                </td>
+                {technical ? (
+                  <td className="px-3 py-2 font-mono text-xs tabular-nums">
+                    v{doc.document_version}
+                  </td>
+                ) : null}
+                {technical ? (
+                  <td className="px-3 py-2">
+                    <code
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                      title={doc.file_hash}
+                    >
+                      {shortHash(doc.file_hash)}
+                    </code>
+                  </td>
+                ) : null}
                 <td className="px-3 py-2 text-xs">
                   <ResolutionReasonPill reason={doc.resolution_reason} />
                 </td>
@@ -100,13 +110,15 @@ export function ExternalDocumentsUsed({ data }: Props) {
         </table>
       </div>
 
-      <p className="mt-3 text-[11px] text-muted-foreground">
-        Le colonne tipo / versione / hash riportano lo snapshot dell'audit:
-        rappresentano lo stato del documento al momento della run e
-        restano stabili anche se il documento viene successivamente
-        modificato o archiviato. Il titolo è invece letto dal registry
-        attuale.
-      </p>
+      {technical ? (
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          Le colonne tipo / versione / hash riportano lo snapshot dell'audit:
+          rappresentano lo stato del documento al momento della run e
+          restano stabili anche se il documento viene successivamente
+          modificato o archiviato. Il titolo è invece letto dal registry
+          attuale.
+        </p>
+      ) : null}
     </Section>
   );
 }

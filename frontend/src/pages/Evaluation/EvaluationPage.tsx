@@ -16,6 +16,8 @@ import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 import { ExternalDocumentsUsed } from "./ExternalDocumentsUsed";
+import { SyntheticVerdict } from "@/components/SyntheticVerdict";
+import { useTechnicalView } from "@/context/technicalView";
 
 const TERMINAL_STATUSES = new Set<EvaluationStatus>([
   "completed",
@@ -57,6 +59,7 @@ export function EvaluationPage() {
   // unconditionally; gating happens inside via `enabled`.
   const isLive = data ? !TERMINAL_STATUSES.has(data.status) : false;
   const stream = useEvaluationStream(evaluation_uuid, isLive);
+  const { technical } = useTechnicalView();
 
   useEffect(() => {
     if (data?.course_name_snapshot) {
@@ -95,6 +98,8 @@ export function EvaluationPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <Header data={data} isFetching={isFetching} isLive={isLive} />
 
+      <SyntheticVerdict data={data} />
+
       {isLive ? (
         <>
           <EvaluationProgressTimeline
@@ -114,7 +119,7 @@ export function EvaluationPage() {
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
           <EvaluationOutputTabs data={data} />
-          {hasStreamEvents ? (
+          {technical && hasStreamEvents ? (
             <CollapsibleTimeline>
               <EvaluationProgressTimeline
                 events={stream.events}
@@ -148,6 +153,7 @@ function Header({
   const finishedAt = data.finished_at ? new Date(data.finished_at) : null;
   const durationSec =
     typeof data.duration_ms === "number" ? data.duration_ms / 1000 : null;
+  const { technical } = useTechnicalView();
 
   const scores = data.criterion_scores;
   const hasScores = scores !== null && scores !== undefined;
@@ -211,6 +217,7 @@ function Header({
                 {data.error_message}
               </p>
             ) : null}
+            {technical ? (
             <details className="group">
               <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
                 Dettagli tecnici
@@ -235,6 +242,7 @@ function Header({
                 </TechField>
               </dl>
             </details>
+            ) : null}
           </div>
         }
       />
