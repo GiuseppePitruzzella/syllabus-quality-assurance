@@ -1,4 +1,9 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+
+import { truncateText } from "@/lib/text";
+
+const GUIDED_INITIAL_EVIDENCES = 2;
+const MAX_EVIDENCE_CHARS = 240;
 
 export interface WhyThisResultEvidence {
   text: string;
@@ -139,6 +144,10 @@ function Evidences({
   technical: boolean;
   compact: boolean;
 }) {
+  // Local state persists across refetch while the row stays expanded.
+  const [showAll, setShowAll] = useState(false);
+  const [expandedQuotes, setExpandedQuotes] = useState<Set<number>>(new Set());
+
   // Discreet score-2 rows omit the empty-state message entirely.
   if (evidences.length === 0) {
     if (compact) return null;
@@ -148,23 +157,92 @@ function Evidences({
       </p>
     );
   }
+
+  // Technical: every evidence, full text, source fields, no truncation.
+  if (technical) {
+    return (
+      <Block label="Dal syllabus">
+        <ul className="space-y-1.5">
+          {evidences.map((ev, i) => (
+            <li key={i} className="flex flex-col gap-0.5">
+              {ev.sourceField ? (
+                <code className="self-start rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                  {ev.sourceField}
+                </code>
+              ) : null}
+              <Quote text={ev.text} />
+            </li>
+          ))}
+        </ul>
+      </Block>
+    );
+  }
+
+  // Guided: keep evidences in persisted order; show max 2, each ≤240
+  // chars, with per-quote and per-list expansion.
+  const visible = showAll
+    ? evidences
+    : evidences.slice(0, GUIDED_INITIAL_EVIDENCES);
+  const remaining = evidences.length - GUIDED_INITIAL_EVIDENCES;
+
+  const toggleQuote = (i: number) =>
+    setExpandedQuotes((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
+      return next;
+    });
+
   return (
     <Block label="Dal syllabus">
-      <ul className="space-y-1.5">
-        {evidences.map((ev, i) => (
-          <li key={i} className="flex flex-col gap-0.5">
-            {technical && ev.sourceField ? (
-              <code className="self-start rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-                {ev.sourceField}
-              </code>
-            ) : null}
-            <span className="border-l-2 border-muted-foreground/20 pl-2 text-foreground/90">
-              “{ev.text}”
-            </span>
-          </li>
-        ))}
+      <ul className="space-y-2">
+        {visible.map((ev, i) => {
+          const open = expandedQuotes.has(i);
+          const { text, truncated } = truncateText(ev.text, MAX_EVIDENCE_CHARS);
+          const display = open || !truncated ? ev.text : text;
+          return (
+            <li key={i} className="flex flex-col gap-0.5">
+              <Quote text={display} />
+              {truncated ? (
+                <button
+                  type="button"
+                  onClick={() => toggleQuote(i)}
+                  className="self-start text-xs font-medium text-primary hover:underline"
+                >
+                  {open ? "Mostra meno" : "Mostra testo completo"}
+                </button>
+              ) : null}
+            </li>
+          );
+        })}
       </ul>
+      {!showAll && remaining > 0 ? (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="mt-1.5 text-xs font-medium text-primary hover:underline"
+        >
+          Mostra altre {remaining} {remaining === 1 ? "evidenza" : "evidenze"}
+        </button>
+      ) : null}
+      {showAll && evidences.length > GUIDED_INITIAL_EVIDENCES ? (
+        <button
+          type="button"
+          onClick={() => setShowAll(false)}
+          className="mt-1.5 text-xs font-medium text-primary hover:underline"
+        >
+          Mostra meno evidenze
+        </button>
+      ) : null}
     </Block>
+  );
+}
+
+function Quote({ text }: { text: string }) {
+  return (
+    <span className="border-l-2 border-muted-foreground/20 pl-2 text-foreground/90">
+      “{text}”
+    </span>
   );
 }
 
