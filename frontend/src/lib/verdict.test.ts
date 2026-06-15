@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { computeVerdict } from "./verdict";
-import type { VerdictInput } from "./verdict";
+import { computeVerdict, defaultExpandedCriteria } from "./verdict";
+import type { VerdictInput, CriterionExpandInput } from "./verdict";
 
 /** Build a C1..C9 score map from a 9-length array; `null` = NA. */
 function scores(values: (number | null)[]): Record<string, number | null> {
@@ -172,6 +172,42 @@ describe("computeVerdict — status branches", () => {
     const v = computeVerdict(input({ status: "partial", criterionScores: scores([2, 2, 2, 2, 2, 2, 2, 2, 2]) }));
     expect(v.partialExecution).toBe(true);
     expect(v.band).toBe("ottima");
+  });
+});
+
+function expandItem(
+  p: Partial<CriterionExpandInput> & { code: string },
+): CriterionExpandInput {
+  return { score: null, isNaTechnical: false, hasJustification: false, ...p };
+}
+
+describe("defaultExpandedCriteria — auto-expand rules", () => {
+  it("expands 0 and 1, collapses 2", () => {
+    const out = defaultExpandedCriteria([
+      expandItem({ code: "C1", score: 0 }),
+      expandItem({ code: "C2", score: 1 }),
+      expandItem({ code: "C3", score: 2 }),
+    ]);
+    expect(out).toEqual(["C1", "C2"]);
+  });
+
+  it("expands technical NA, collapses semantic NA without justification", () => {
+    const out = defaultExpandedCriteria([
+      expandItem({ code: "C1", score: null, isNaTechnical: true }),
+      expandItem({ code: "C2", score: null, isNaTechnical: false, hasJustification: false }),
+    ]);
+    expect(out).toEqual(["C1"]);
+  });
+
+  it("expands semantic NA when a useful justification exists", () => {
+    const out = defaultExpandedCriteria([
+      expandItem({ code: "C1", score: null, hasJustification: true }),
+    ]);
+    expect(out).toEqual(["C1"]);
+  });
+
+  it("handles empty list", () => {
+    expect(defaultExpandedCriteria([])).toEqual([]);
   });
 });
 

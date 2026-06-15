@@ -80,6 +80,27 @@ function buildChips(args: {
   return chips;
 }
 
+export interface CriterionExpandInput {
+  code: string;
+  score: number | null;
+  isNaTechnical: boolean;
+  hasJustification: boolean;
+}
+
+/** Codes to auto-expand on first load of scores (guided emphasis):
+ *  score 0/1 and technical NA always; semantic NA / missing only when a
+ *  useful justification is present; score 2 collapsed. */
+export function defaultExpandedCriteria(items: CriterionExpandInput[]): string[] {
+  return items
+    .filter((it) => {
+      if (it.score === 0 || it.score === 1) return true;
+      if (it.score === 2) return false;
+      if (it.isNaTechnical) return true;
+      return it.hasJustification;
+    })
+    .map((it) => it.code);
+}
+
 export function computeVerdict(input: VerdictInput): Verdict {
   const { status, coreScore, coverage, criterionScores } = input;
 

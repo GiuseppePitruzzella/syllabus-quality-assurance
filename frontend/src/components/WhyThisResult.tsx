@@ -22,9 +22,10 @@ export interface WhyThisResultProps {
 }
 
 const SCORE_BADGE: Record<string, string> = {
-  "2": "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
-  "1": "border-amber-500/30 bg-amber-500/10 text-amber-700",
-  "0": "border-rose-500/30 bg-rose-500/10 text-rose-700",
+  // score 2 is intentionally discreet; 0/1 carry visual weight
+  "2": "border-slate-300 bg-slate-100 text-slate-600",
+  "1": "border-amber-400 bg-amber-100 text-amber-900 font-semibold",
+  "0": "border-rose-400 bg-rose-100 text-rose-900 font-semibold",
   NA: "border-border bg-muted text-muted-foreground",
 };
 
@@ -71,8 +72,8 @@ export function WhyThisResult({
         </Field>
       ) : null}
 
-      {evidences.length > 0 ? (
-        <Field label="Evidenze">
+      <Field label="Evidenze">
+        {evidences.length > 0 ? (
           <ul className="space-y-1.5">
             {evidences.map((ev, i) => (
               <li key={i} className="flex flex-col gap-0.5">
@@ -85,8 +86,12 @@ export function WhyThisResult({
               </li>
             ))}
           </ul>
-        </Field>
-      ) : null}
+        ) : (
+          <p className="text-muted-foreground">
+            Nessuna citazione testuale collegata a questo criterio.
+          </p>
+        )}
+      </Field>
 
       {limits.length > 0 ? (
         <Field label="Limiti">
