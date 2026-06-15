@@ -9,7 +9,6 @@ import {
   defaultExpandedCriteria,
   type CriterionExpandInput,
 } from "@/lib/verdict";
-import { SCORE_MEANINGS } from "@/lib/comprehension";
 import type {
   CriterionJudgmentDump,
   EvaluationDetail,
@@ -27,6 +26,10 @@ const CRITERIA = CORE_CRITERIA.map((c) => ({
   name: c.name,
   owner: c.agent,
   description: c.description,
+  // deterministic "what adequate looks like" — drives the
+  // cosa-correggere/migliorare callout for score 0/1
+  improvementTarget:
+    c.anchors.find((a) => a.score === 2)?.description ?? null,
 }));
 
 /**
@@ -143,6 +146,7 @@ export function EvaluationScorePanel({ data }: Props) {
                   code={c.code}
                   name={c.name}
                   description={c.description}
+                  improvementTarget={c.improvementTarget}
                   owner={c.owner}
                   score={score}
                   judgment={judgment}
@@ -175,6 +179,7 @@ function CriterionRow({
   code,
   name,
   description,
+  improvementTarget,
   owner,
   score,
   judgment,
@@ -186,6 +191,7 @@ function CriterionRow({
   code: string;
   name: string;
   description: string;
+  improvementTarget: string | null;
   owner: string;
   score: number | null;
   judgment: CriterionJudgmentDump | null;
@@ -195,6 +201,7 @@ function CriterionRow({
   technical: boolean;
 }) {
   const isNa = judgment?.is_na ?? score === null;
+  const isNaTechnical = Boolean(agentError) && !judgment;
   const accent = score !== null ? ROW_ACCENT[String(score)] ?? "" : "";
   const muted = score === 2 ? "text-muted-foreground" : "";
   const colSpan = technical ? 6 : 4;
@@ -234,18 +241,17 @@ function CriterionRow({
         <tr className="border-t bg-muted/20">
           <td colSpan={colSpan} className="px-6 py-3 text-sm">
             <WhyThisResult
-              outcome={{
-                score,
-                isNa,
-                label: SCORE_MEANINGS[isNa || score === null ? "NA" : String(score)],
-              }}
+              score={score}
+              isNa={isNa}
+              isNaTechnical={isNaTechnical}
               whatItEvaluates={description}
               justification={judgment?.justification ?? null}
               evidences={(judgment?.evidences ?? []).map((e) => ({
                 text: e.text,
                 sourceField: e.source_field,
               }))}
-              limits={buildLimits(judgment, agentError)}
+              improvementTarget={improvementTarget}
+              naReason={judgment?.na_reason ?? null}
               confidence={
                 (judgment?.confidence as "low" | "medium" | "high" | null) ??
                 null
@@ -330,24 +336,6 @@ function NaCriteriaList({ items }: { items: NACriterionRecord[] }) {
 // ---------------------------------------------------------------------------
 // helpers
 // ---------------------------------------------------------------------------
-
-/** Human-readable "Limiti" lines for a criterion's WhyThisResult. */
-function buildLimits(
-  judgment: CriterionJudgmentDump | null,
-  agentError: string | null,
-): string[] {
-  const limits: string[] = [];
-  if (agentError && !judgment) {
-    limits.push(
-      "Criterio non valutabile per un problema tecnico dell'agente (NA tecnico).",
-    );
-    return limits;
-  }
-  if (judgment?.is_na && judgment.na_reason) {
-    limits.push(judgment.na_reason);
-  }
-  return limits;
-}
 
 function buildJudgmentIndex(
   data: EvaluationDetail,
