@@ -11,7 +11,8 @@ import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
-import { EvaluationOutputTabs } from "./EvaluationOutputTabs";
+import { EvaluationReport } from "./EvaluationReport";
+import { AgentDetailsSection } from "./AgentDetailsSection";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
@@ -111,14 +112,16 @@ export function EvaluationPage() {
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
-          <EvaluationOutputTabs data={data} />
+          <EvaluationReport data={data} />
+          {technical ? <AgentDetailsSection data={data} /> : null}
         </>
       ) : (
         <>
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
-          <EvaluationOutputTabs data={data} />
+          <EvaluationReport data={data} />
+          {technical ? <AgentDetailsSection data={data} /> : null}
           {technical && hasStreamEvents ? (
             <CollapsibleTimeline>
               <EvaluationProgressTimeline
