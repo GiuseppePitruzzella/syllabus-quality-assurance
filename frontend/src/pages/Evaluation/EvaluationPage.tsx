@@ -107,7 +107,7 @@ export function EvaluationPage() {
       ) : (
         <>
           <SyntheticVerdict data={data} />
-          <PriorityStrip data={data} />
+          {data.status !== "failed" ? <PriorityStrip data={data} /> : null}
           <div className="min-w-0 divide-y divide-slate-200/80">
             <EvaluationScorePanel data={data} />
             <EvaluationReport data={data} />

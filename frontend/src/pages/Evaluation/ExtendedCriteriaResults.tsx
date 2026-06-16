@@ -145,7 +145,7 @@ export function ExtendedCriteriaResults({ data }: Props) {
           </table>
         </div>
 
-        {handlerErrorCodes.size > 0 ? (
+        {technical && handlerErrorCodes.size > 0 ? (
           <HandlerErrorsBanner errors={ext.handler_errors} />
         ) : null}
       </EvaluationSection>
@@ -195,12 +195,12 @@ function ExtendedRow({
     <>
       <tr
         className={
-          "cursor-pointer border-t border-slate-200/80 transition-colors hover:bg-muted/30 " +
+          "cursor-pointer border-t border-slate-200/80 transition-colors hover:bg-slate-50 " +
           (isTechnicalNa ? "bg-rose-500/[0.04]" : "")
         }
         onClick={onToggle}
       >
-        <td className="px-2 py-2 text-muted-foreground">
+        <td className="px-2 py-2 text-slate-500">
           <ChevronRight
             className={
               "h-4 w-4 transition-transform " + (expanded ? "rotate-90" : "")
@@ -211,7 +211,7 @@ function ExtendedRow({
         <td className="px-3 py-2 font-mono text-xs">{code}</td>
         <td className="px-3 py-2">{name}</td>
         {technical ? (
-          <td className="px-3 py-2 font-mono text-[11px] text-muted-foreground">
+          <td className="px-3 py-2 font-mono text-[11px] text-slate-500">
             {handlerVersion ?? "—"}
           </td>
         ) : null}
@@ -222,7 +222,11 @@ function ExtendedRow({
       {expanded ? (
         <tr className="border-t border-slate-200/80 bg-slate-50/70">
           <td colSpan={technical ? 5 : 4} className="px-6 py-3 text-sm">
-            <ExpandedExtendedDetails judgment={judgment} na={na} />
+            <ExpandedExtendedDetails
+              judgment={judgment}
+              na={na}
+              technical={technical}
+            />
           </td>
         </tr>
       ) : null}
@@ -233,15 +237,18 @@ function ExtendedRow({
 function ExpandedExtendedDetails({
   judgment,
   na,
+  technical,
 }: {
   judgment: ExtendedJudgmentPayload | null;
   na: ExtendedNAPayload | null;
+  technical: boolean;
 }) {
   // Technical NA (handler_error) takes priority: render the
   // handler's error message as a prominent rose block. The judgment
   // object may still be present (the coordinator synthesises a
   // technical-NA judgment in that case) but its body is generic, so
-  // we lead with the error message.
+  // we lead with the error message. In guided view the raw reason
+  // (stack traces / infrastructure) is redacted.
   if (na?.source === "handler_error") {
     return (
       <div className="space-y-2">
@@ -252,11 +259,13 @@ function ExpandedExtendedDetails({
               Errore tecnico handler
             </p>
             <p className="text-rose-900/90 dark:text-rose-100/90">
-              {na.reason}
+              {technical
+                ? na.reason
+                : "Il criterio non è stato valutato per un problema tecnico. Passa alla Vista tecnica per i dettagli."}
             </p>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-500">
           Il criterio è stato marcato NA tecnico dal coordinator. Gli altri
           handler hanno potuto completare normalmente.
         </p>
@@ -280,7 +289,7 @@ function ExpandedExtendedDetails({
           </div>
         </div>
         {judgment?.justification ? (
-          <p className="text-xs leading-relaxed text-muted-foreground">
+          <p className="text-xs leading-relaxed text-slate-500">
             {judgment.justification}
           </p>
         ) : null}
@@ -290,7 +299,7 @@ function ExpandedExtendedDetails({
 
   if (!judgment) {
     return (
-      <p className="text-xs text-muted-foreground">
+      <p className="text-xs text-slate-500">
         Nessuna motivazione disponibile.
       </p>
     );
@@ -300,7 +309,7 @@ function ExpandedExtendedDetails({
   return (
     <div className="space-y-3">
       <div>
-        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">
           Motivazione
         </p>
         <p className="text-sm leading-relaxed">{judgment.justification}</p>
@@ -308,7 +317,7 @@ function ExpandedExtendedDetails({
 
       {judgment.evidences.length > 0 ? (
         <div>
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">
             Evidenze testuali
           </p>
           <ul className="space-y-1.5">
@@ -318,7 +327,7 @@ function ExpandedExtendedDetails({
           </ul>
         </div>
       ) : (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-slate-500">
           Nessuna evidenza letterale riportata.
         </p>
       )}
@@ -371,7 +380,7 @@ function EvidenceRow({ evidence }: { evidence: ExtendedEvidencePayload }) {
     // Defensive: a well-formed payload always has exactly one
     // source; the API-side validator would have rejected the run
     // otherwise. We still render the row so debug remains possible.
-    badgeCls += "bg-muted text-muted-foreground";
+    badgeCls += "bg-slate-100 text-slate-500";
     badgeText = "—";
   }
 
@@ -380,15 +389,15 @@ function EvidenceRow({ evidence }: { evidence: ExtendedEvidencePayload }) {
       <div className="mb-1 flex flex-wrap items-center gap-1.5">
         <span className={badgeCls}>{badgeText}</span>
         {detail ? (
-          <code className="bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+          <code className="bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">
             {detail}
           </code>
         ) : null}
       </div>
       <p className="leading-relaxed text-foreground/90">
-        <span className="text-muted-foreground">“</span>
+        <span className="text-slate-500">“</span>
         {display}
-        <span className="text-muted-foreground">”</span>
+        <span className="text-slate-500">”</span>
         {isLong ? (
           <>
             {" "}
@@ -426,7 +435,7 @@ function ExtendedOutcomeBadge({
   }
   if (na?.source === "resolver") {
     return (
-      <span className="text-[11px] font-medium text-muted-foreground">
+      <span className="text-[11px] font-medium text-slate-500">
         NA resolver
       </span>
     );
@@ -451,7 +460,7 @@ function ExtendedOutcomeBadge({
     cls += "text-rose-700 dark:text-rose-300";
     label = "0";
   } else {
-    cls += "text-muted-foreground";
+    cls += "text-slate-500";
     label = "—";
   }
   return <span className={cls}>{label}</span>;
@@ -494,7 +503,7 @@ function ExtendedStatusBanner({
   }
 
   return (
-    <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+    <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
       <span className={statusCls}>A5 · {result.status}</span>
       <span>·</span>
       <span>{numeric} numerici</span>
@@ -544,16 +553,16 @@ function ExtendedCriteriaLegacyEmptyState() {
       title="Criteri estesi E1-E5"
       aside={<NotInCoreScorePill />}
     >
-      <div className="flex items-start gap-3 bg-muted/30 px-4 py-4">
+      <div className="flex items-start gap-3 bg-slate-50 px-4 py-4">
         <Info
-          className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
+          className="mt-0.5 h-5 w-5 shrink-0 text-slate-500"
           aria-hidden
         />
         <div className="space-y-1.5">
           <p className="text-sm font-medium">
             Risultati estesi non disponibili
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-slate-500">
             Questa valutazione è stata eseguita prima dell'introduzione di A5
             (Phase 9.C) e non ha prodotto giudizi sui criteri estesi E1-E5.
             Le run successive popolano questa sezione automaticamente.

@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import type { EvaluationDetail } from "@/lib/types";
+import { useTechnicalView } from "@/context/technicalView";
 import { EvaluationSection } from "./EvaluationSection";
 
 interface Props {
@@ -18,10 +19,24 @@ interface Props {
  * the original syllabus remains one click away via the header link.
  */
 export function EvaluationReport({ data }: Props) {
+  const { technical } = useTechnicalView();
+  // A failed run's synthesized report embeds raw execution errors
+  // (TransportError, hosts, traceback). In guided view it must be
+  // replaced by a plain notice; the full report stays in technical.
+  const redactRawReport = !technical && data.status === "failed";
+
   return (
     <EvaluationSection title="Report di valutazione" className="min-w-0">
       <div className="max-w-[78ch]">
-        <ReportPanel data={data} />
+        {redactRawReport ? (
+          <p className="text-sm text-slate-600">
+            Il report non è disponibile perché la valutazione non è stata
+            completata. Passa alla Vista tecnica per consultare i dettagli di
+            esecuzione.
+          </p>
+        ) : (
+          <ReportPanel data={data} />
+        )}
       </div>
     </EvaluationSection>
   );
@@ -30,7 +45,7 @@ export function EvaluationReport({ data }: Props) {
 function ReportPanel({ data }: { data: EvaluationDetail }) {
   if (!data.final_report) {
     return (
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-slate-500">
         Il report sarà disponibile al termine della fase di sintesi
         (evento <code>report_synthesized</code>).
       </p>
@@ -121,7 +136,7 @@ function ReportMarkdown({ source }: { source: string }) {
           ),
           thead: (props) => (
             <thead
-              className="bg-muted/40 text-[0.7rem] uppercase tracking-wide text-muted-foreground"
+              className="bg-slate-100 text-[0.7rem] uppercase tracking-wide text-slate-500"
               {...props}
             />
           ),
@@ -137,7 +152,7 @@ function ReportMarkdown({ source }: { source: string }) {
               {...props}
             />
           ),
-          hr: () => <hr className="my-4 border-border" />,
+          hr: () => <hr className="my-4 border-slate-200" />,
         }}
       >
         {source}
