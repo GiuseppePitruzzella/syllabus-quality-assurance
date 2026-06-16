@@ -4,6 +4,7 @@ import type {
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
+const WITH_CREDENTIALS: EventSourceInit = { withCredentials: true };
 
 export function connectSse(
   jobId: string,
@@ -13,7 +14,10 @@ export function connectSse(
     onError: (event: { message: string }) => void;
   }
 ): () => void {
-  const source = new EventSource(`${BASE_URL}/scrape/stream/${jobId}`);
+  const source = new EventSource(
+    `${BASE_URL}/scrape/stream/${jobId}`,
+    WITH_CREDENTIALS,
+  );
 
   source.onmessage = (e) => {
     const data: SseEvent = JSON.parse(e.data);
@@ -70,6 +74,7 @@ export function connectEvaluationSse(
 ): () => void {
   const source = new EventSource(
     `${BASE_URL}/evaluations/${evaluationUuid}/stream`,
+    WITH_CREDENTIALS,
   );
 
   source.onmessage = (e) => {
@@ -128,6 +133,7 @@ export function connectLocalDocumentIndexingStream(
 ): () => void {
   const source = new EventSource(
     `${BASE_URL}/local-documents/stream/${jobId}`,
+    WITH_CREDENTIALS,
   );
 
   source.onmessage = (e) => {

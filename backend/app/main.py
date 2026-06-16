@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect, text
 
@@ -110,12 +110,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+_AUTHENTICATED_API = [Depends(auth.current_user)]
+
 app.include_router(auth.router)
-app.include_router(departments.router)
-app.include_router(scrape_departments.router)
-app.include_router(scrape_stream.router)
-app.include_router(evaluation.router)
-app.include_router(cdl.router)
-app.include_router(syllabi.router)
-app.include_router(stats.router)
-app.include_router(local_documents.router)
+app.include_router(departments.router, dependencies=_AUTHENTICATED_API)
+app.include_router(scrape_departments.router, dependencies=_AUTHENTICATED_API)
+app.include_router(scrape_stream.router, dependencies=_AUTHENTICATED_API)
+app.include_router(evaluation.router, dependencies=_AUTHENTICATED_API)
+app.include_router(cdl.router, dependencies=_AUTHENTICATED_API)
+app.include_router(syllabi.router, dependencies=_AUTHENTICATED_API)
+app.include_router(stats.router, dependencies=_AUTHENTICATED_API)
+app.include_router(local_documents.router, dependencies=_AUTHENTICATED_API)
