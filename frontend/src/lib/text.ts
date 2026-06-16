@@ -34,3 +34,24 @@ export function truncateText(input: string, max = 240): TruncatedText {
   const cut = lastSpace >= floor ? lastSpace : max;
   return { text: text.slice(0, cut).trim() + "…", truncated: true };
 }
+
+/**
+ * Clean small scraper artefacts before rendering syllabus prose.
+ *
+ * Some SmartEdu fields contain lines made only of punctuation (most
+ * commonly a single ".") before the actual paragraph. Those markers
+ * are not meaningful content, so the UI drops only standalone
+ * punctuation lines while preserving normal punctuation inside text.
+ */
+export function cleanSyllabusDisplayText(input: string | null | undefined): string {
+  if (!input) return "";
+  return input
+    .split(/\r?\n/)
+    .map((line) => line.trimEnd())
+    .filter((line) => {
+      const compact = line.trim();
+      return compact === "" || !/^[.:;·•-]+$/.test(compact);
+    })
+    .join("\n")
+    .trim();
+}

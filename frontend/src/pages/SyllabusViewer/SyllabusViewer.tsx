@@ -10,6 +10,7 @@ import type { EvaluationSummary, SyllabusDetail } from "@/lib/types";
 import { useAutoScrape } from "@/hooks/useAutoScrape";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Button } from "@/components/ui/button";
+import { cleanSyllabusDisplayText } from "@/lib/text";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { StatusBadge } from "@/components/StatusBadge";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -128,7 +129,7 @@ export function SyllabusViewer() {
 
   const textField = (field: string): string => {
     const key = `${field}_${lang}` as keyof SyllabusDetail;
-    return (data[key] as string) || "";
+    return cleanSyllabusDisplayText((data[key] as string) || "");
   };
 
   const breadcrumbItems = [
@@ -210,7 +211,7 @@ export function SyllabusViewer() {
           <Tabs defaultValue="obiettivi">
             <TabsList
               variant="line"
-              className="w-full justify-start overflow-x-auto p-0"
+              className="w-full justify-start overflow-x-auto p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               <TabsTrigger value="obiettivi">Obiettivi formativi</TabsTrigger>
               <TabsTrigger value="contenuto">

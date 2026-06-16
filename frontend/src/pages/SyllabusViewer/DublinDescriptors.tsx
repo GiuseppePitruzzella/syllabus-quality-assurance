@@ -1,4 +1,5 @@
 import type { SyllabusDetail } from "@/lib/types";
+import { cleanSyllabusDisplayText } from "@/lib/text";
 
 interface DublinDescriptorsProps {
   data: SyllabusDetail;
@@ -43,7 +44,9 @@ const descriptors = [
  */
 export function DublinDescriptors({ data, lang }: DublinDescriptorsProps) {
   const learningOutcomesKey = `learning_outcomes_${lang}` as keyof SyllabusDetail;
-  const learningOutcomes = data[learningOutcomesKey] as string | null;
+  const learningOutcomes = cleanSyllabusDisplayText(
+    data[learningOutcomesKey] as string | null,
+  );
   const hasDescriptorText = descriptors.some((d) => {
     const fieldKey = `${d.key}_${lang}` as keyof SyllabusDetail;
     return Boolean((data[fieldKey] as string | null)?.trim());
@@ -68,7 +71,9 @@ export function DublinDescriptors({ data, lang }: DublinDescriptorsProps) {
     <div className="grid grid-cols-1 divide-y divide-slate-200 border-y border-slate-200 md:grid-cols-2 md:divide-x md:divide-y-0">
       {descriptors.map((d) => {
         const fieldKey = `${d.key}_${lang}` as keyof SyllabusDetail;
-        const value = (data[fieldKey] as string | null) || "";
+        const value = cleanSyllabusDisplayText(
+          data[fieldKey] as string | null,
+        );
         const hasValue = Boolean(value.trim());
         return (
           <article key={d.key} className="p-4">

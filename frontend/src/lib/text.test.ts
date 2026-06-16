@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { truncateText } from "./text";
+import { cleanSyllabusDisplayText, truncateText } from "./text";
 
 describe("truncateText", () => {
   it("short text → not truncated, unchanged", () => {
@@ -34,5 +34,32 @@ describe("truncateText", () => {
     const out = truncateText("x".repeat(300), 240);
     expect(out.truncated).toBe(true);
     expect(out.text).toBe("x".repeat(240) + "…");
+  });
+});
+
+describe("cleanSyllabusDisplayText", () => {
+  it("removes standalone punctuation artefact lines", () => {
+    expect(
+      cleanSyllabusDisplayText(
+        ".\nLo studente acquisisce capacità metodologiche.\n.\nSecondo periodo.",
+      ),
+    ).toBe(
+      "Lo studente acquisisce capacità metodologiche.\nSecondo periodo.",
+    );
+  });
+
+  it("preserves punctuation inside real prose", () => {
+    expect(
+      cleanSyllabusDisplayText(
+        "Lo studente acquisisce competenze, abilità e autonomia. Esempio: laboratorio.",
+      ),
+    ).toBe(
+      "Lo studente acquisisce competenze, abilità e autonomia. Esempio: laboratorio.",
+    );
+  });
+
+  it("returns empty string for nullish values", () => {
+    expect(cleanSyllabusDisplayText(null)).toBe("");
+    expect(cleanSyllabusDisplayText(undefined)).toBe("");
   });
 });
