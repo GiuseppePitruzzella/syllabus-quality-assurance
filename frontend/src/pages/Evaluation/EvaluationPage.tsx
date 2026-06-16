@@ -13,7 +13,7 @@ import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 import { ExternalDocumentsUsed } from "./ExternalDocumentsUsed";
-import { ReviewRail } from "./ReviewRail";
+import { PriorityStrip } from "./PriorityStrip";
 import { TechnicalBlock } from "./TechnicalBlock";
 import { SyntheticVerdict } from "@/components/SyntheticVerdict";
 import { useTechnicalView } from "@/context/technicalView";
@@ -106,17 +106,16 @@ export function EvaluationPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_22rem] xl:gap-16">
-            <aside className="xl:col-start-2 xl:row-start-1 xl:sticky xl:top-20 xl:self-start xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto xl:pr-2">
-              <ReviewRail data={data} />
-            </aside>
-            <div className="min-w-0 divide-y divide-slate-200/80 xl:col-start-1 xl:row-start-1">
-              <EvaluationScorePanel data={data} />
-              <EvaluationReport data={data} />
-              <ExtendedCriteriaResults data={data} />
-              <ExternalDocumentsUsed data={data} />
-            </div>
+          <SyntheticVerdict data={data} />
+          {data.status !== "failed" ? <PriorityStrip data={data} /> : null}
+          <div className="min-w-0 divide-y divide-slate-200/80">
+            <EvaluationScorePanel data={data} />
+            <EvaluationReport data={data} />
+            <ExtendedCriteriaResults data={data} />
+            <ExternalDocumentsUsed data={data} />
           </div>
+
+          {!technical ? <GuidedTechnicalHint /> : null}
 
           {technical ? (
             <TechnicalBlock
@@ -148,12 +147,6 @@ function Header({
   const durationSec =
     typeof data.duration_ms === "number" ? data.duration_ms / 1000 : null;
   const { technical } = useTechnicalView();
-
-  const scores = data.criterion_scores;
-  const hasScores = scores !== null && scores !== undefined;
-  const evaluatedCount = hasScores
-    ? Object.values(scores).filter((v) => typeof v === "number").length
-    : 0;
 
   return (
     <header className="space-y-7 pb-2">
@@ -196,56 +189,17 @@ function Header({
           {data.error_message}
         </p>
       ) : null}
-
-      {hasScores ? (
-        <dl className="grid grid-cols-3 gap-5 border-y border-slate-200 py-4 sm:w-fit sm:min-w-[32rem] sm:gap-12">
-          <Kpi
-            label="CoreScore"
-            value={
-              typeof data.core_score === "number"
-                ? data.core_score.toFixed(2)
-                : "—"
-            }
-            suffix="/2"
-          />
-          <Kpi
-            label="Copertura"
-            value={
-              typeof data.coverage === "number"
-                ? `${Math.round(data.coverage * 100)}%`
-                : "—"
-            }
-          />
-          <Kpi label="Criteri valutati" value={`${evaluatedCount}/9`} />
-        </dl>
-      ) : null}
     </header>
   );
 }
 
-function Kpi({
-  label,
-  value,
-  suffix,
-}: {
-  label: string;
-  value: string;
-  suffix?: string;
-}) {
+function GuidedTechnicalHint() {
   return (
-    <div>
-      <dt className="text-[10px] font-medium uppercase text-slate-500">
-        {label}
-      </dt>
-      <dd className="mt-1 text-xl font-semibold tabular-nums text-slate-950 sm:text-2xl">
-        {value}
-        {suffix ? (
-          <span className="ml-0.5 text-xs font-normal text-slate-500">
-            {suffix}
-          </span>
-        ) : null}
-      </dd>
-    </div>
+    <p className="mt-10 border-t border-dashed border-slate-300 pt-4 text-sm text-slate-500">
+      Attiva la{" "}
+      <span className="font-medium text-slate-700">Vista tecnica</span> (in alto
+      a destra) per vedere agenti, RAG, esecuzione e timeline.
+    </p>
   );
 }
 

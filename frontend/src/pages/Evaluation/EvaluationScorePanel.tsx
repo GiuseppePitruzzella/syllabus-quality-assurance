@@ -133,7 +133,13 @@ export function EvaluationScorePanel({ data }: Props) {
           </button>
         }
       >
-        {hasAgentErrors ? <AgentErrorsBanner errors={agentErrors!} /> : null}
+        {hasAgentErrors ? (
+          technical ? (
+            <AgentErrorsBanner errors={agentErrors!} />
+          ) : (
+            <GuidedAgentErrorNotice failed={data.status === "failed"} />
+          )
+        ) : null}
 
         <div className="divide-y divide-slate-200/80">
           {CRITERIA.map((c) => {
@@ -161,7 +167,13 @@ export function EvaluationScorePanel({ data }: Props) {
           })}
         </div>
 
-        {naCriteria.length > 0 ? <NaCriteriaList items={naCriteria} /> : null}
+        {naCriteria.length > 0 ? (
+          technical ? (
+            <NaCriteriaList items={naCriteria} />
+          ) : (
+            <GuidedNaCriteriaNotice items={naCriteria} />
+          )
+        ) : null}
       </EvaluationSection>
     </div>
   );
@@ -302,6 +314,19 @@ function ScoreMark({ score, isNa }: { score: number | null; isNa: boolean }) {
   );
 }
 
+/** Guided-view replacement for the raw AgentErrorsBanner: a plain,
+ *  human-readable notice that points to the technical view. Never
+ *  exposes stack traces or infrastructure detail. */
+function GuidedAgentErrorNotice({ failed }: { failed: boolean }) {
+  return (
+    <div className="mb-4 bg-slate-100 px-3 py-2.5 text-sm text-slate-600">
+      {failed
+        ? "La valutazione non è stata completata per un errore tecnico durante l'esecuzione. Passa alla Vista tecnica per vedere i dettagli."
+        : "Alcuni controlli non sono stati completati per un errore tecnico; i criteri interessati risultano non valutabili. Passa alla Vista tecnica per i dettagli."}
+    </div>
+  );
+}
+
 function AgentErrorsBanner({ errors }: { errors: Record<string, string> }) {
   return (
     <div className="mb-4 bg-amber-100/60 px-3 py-2 text-sm">
@@ -319,10 +344,25 @@ function AgentErrorsBanner({ errors }: { errors: Record<string, string> }) {
   );
 }
 
+/** Guided-view summary of NA criteria: lists only the criterion codes
+ *  with a plain explanation. Never exposes the raw `source`
+ *  (`agent_error`) or `reason` (stack traces / infrastructure). */
+function GuidedNaCriteriaNotice({ items }: { items: NACriterionRecord[] }) {
+  const codes = Array.from(
+    new Set(items.map((i) => i.criterion_code)),
+  ).join(", ");
+  return (
+    <div className="mt-4 bg-slate-100 px-3 py-2.5 text-sm text-slate-600">
+      Alcuni criteri non sono stati valutati per un problema tecnico
+      {codes ? ` (${codes})` : ""}. Passa alla Vista tecnica per i dettagli.
+    </div>
+  );
+}
+
 function NaCriteriaList({ items }: { items: NACriterionRecord[] }) {
   return (
     <div className="mt-4">
-      <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+      <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
         Criteri marcati NA
       </h3>
       <ul className="space-y-1 text-sm">
@@ -332,10 +372,10 @@ function NaCriteriaList({ items }: { items: NACriterionRecord[] }) {
             className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5"
           >
             <code className="font-mono text-xs">{item.criterion_code}</code>
-            <code className="font-mono text-[10px] text-muted-foreground">
+            <code className="bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">
               {item.source}
             </code>
-            <span className="text-xs text-muted-foreground">{item.reason}</span>
+            <span className="text-xs text-slate-500">{item.reason}</span>
           </li>
         ))}
       </ul>

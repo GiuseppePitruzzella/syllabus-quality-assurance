@@ -135,6 +135,26 @@ export function defaultExpandedCriteria(items: CriterionExpandInput[]): string[]
     .map((it) => it.code);
 }
 
+export interface ReviewPriority {
+  code: string;
+  score: 0 | 1;
+}
+
+/** Criteria below adequacy (score 0 or 1), canonical C1..C9 keys only,
+ *  ordered criticità (0) before aree da migliorare (1); within a score,
+ *  canonical code order. Pure — reused by the priorities strip and 10.D. */
+export function reviewPriorities(
+  criterionScores: Record<string, number | null> | null,
+): ReviewPriority[] {
+  if (!criterionScores) return [];
+  const out: ReviewPriority[] = [];
+  for (const code of CORE_CRITERION_CODES) {
+    const raw = criterionScores[code];
+    if (raw === 0 || raw === 1) out.push({ code, score: raw });
+  }
+  return out.sort((a, b) => a.score - b.score);
+}
+
 export function computeVerdict(input: VerdictInput): Verdict {
   const { status, coreScore, coverage, criterionScores } = input;
 

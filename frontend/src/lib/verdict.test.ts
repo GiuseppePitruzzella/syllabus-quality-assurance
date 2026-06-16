@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   computeVerdict,
   defaultExpandedCriteria,
+  reviewPriorities,
   verdictSummarySentence,
 } from "./verdict";
 import type { VerdictInput, CriterionExpandInput } from "./verdict";
@@ -280,5 +281,39 @@ describe("computeVerdict — two-level chips and Italian plurals", () => {
       { label: "2 criticità", tone: "critical" },
       { label: "1 area da migliorare", tone: "warning" },
     ]);
+  });
+});
+
+describe("reviewPriorities", () => {
+  it("returns only score 0 and 1, criticità (0) before aree (1)", () => {
+    // C1=0, C2=1, C3=2, C4=0, C5=null, C6=2, C7=2, C8=1, C9=2
+    const r = reviewPriorities(scores([0, 1, 2, 0, null, 2, 2, 1, 2]));
+    expect(r).toEqual([
+      { code: "C1", score: 0 },
+      { code: "C4", score: 0 },
+      { code: "C2", score: 1 },
+      { code: "C8", score: 1 },
+    ]);
+  });
+
+  it("excludes score 2 and NA", () => {
+    const r = reviewPriorities(scores([2, 2, 2, 2, 2, 2, 2, 2, null]));
+    expect(r).toEqual([]);
+  });
+
+  it("ignores keys outside C1..C9", () => {
+    const map = scores([0, 2, 2, 2, 2, 2, 2, 2, 2]);
+    map["C10"] = 0;
+    map["foo"] = 1;
+    const r = reviewPriorities(map);
+    expect(r).toEqual([{ code: "C1", score: 0 }]);
+  });
+
+  it("returns [] when nothing is below threshold", () => {
+    expect(reviewPriorities(scores([2, 2, 2, 2, 2, 2, 2, 2, 2]))).toEqual([]);
+  });
+
+  it("returns [] for null scores", () => {
+    expect(reviewPriorities(null)).toEqual([]);
   });
 });

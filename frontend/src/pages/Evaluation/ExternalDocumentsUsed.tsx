@@ -41,7 +41,7 @@ export function ExternalDocumentsUsed({ data }: Props) {
     <EvaluationSection
       title="Documenti utilizzati"
       aside={
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-slate-500">
           {docs.length} {docs.length === 1 ? "documento" : "documenti"} ·
           {" "}snapshot al momento della run
         </span>
@@ -75,7 +75,7 @@ export function ExternalDocumentsUsed({ data }: Props) {
                   {doc.criterion_code}
                 </td>
                 <td className="px-3 py-2">
-                  <span className="font-mono text-[11px] text-muted-foreground">
+                  <span className="font-mono text-[11px] text-slate-500">
                     {doc.document_type}
                   </span>
                 </td>
@@ -87,7 +87,7 @@ export function ExternalDocumentsUsed({ data }: Props) {
                 {technical ? (
                   <td className="px-3 py-2">
                     <code
-                      className="bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                      className="bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500"
                       title={doc.file_hash}
                     >
                       {shortHash(doc.file_hash)}
@@ -111,7 +111,7 @@ export function ExternalDocumentsUsed({ data }: Props) {
       </div>
 
       {technical ? (
-        <p className="mt-3 text-[11px] text-muted-foreground">
+        <p className="mt-3 text-[11px] text-slate-500">
           Le colonne tipo / versione / hash riportano lo snapshot dell'audit:
           rappresentano lo stato del documento al momento della run e
           restano stabili anche se il documento viene successivamente
@@ -140,12 +140,12 @@ function DocumentTitleCell({
   // the FK RESTRICT normally prevents. Render the document id as a
   // last-resort label so the row remains identifiable.
   const label =
-    title ?? <span className="text-muted-foreground">id={docId}</span>;
+    title ?? <span className="text-slate-500">id={docId}</span>;
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       <FileText
-        className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+        className="h-3.5 w-3.5 shrink-0 text-slate-500"
         aria-hidden
       />
       <span className="text-sm">{label}</span>
