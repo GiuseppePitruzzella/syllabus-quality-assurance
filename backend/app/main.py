@@ -7,6 +7,7 @@ from sqlalchemy import inspect, text
 from app.config import settings
 from app.database import Base, engine
 from app.api import (
+    auth,
     cdl,
     departments,
     evaluation,
@@ -104,11 +105,12 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_allowed_origins,
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(departments.router)
 app.include_router(scrape_departments.router)
 app.include_router(scrape_stream.router)

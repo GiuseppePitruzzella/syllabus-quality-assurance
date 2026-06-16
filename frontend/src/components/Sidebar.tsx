@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, LayoutDashboard, Settings } from "lucide-react";
+import { BarChart3, LayoutDashboard, LogOut, Settings } from "lucide-react";
 
 import { TechnicalViewToggle } from "@/components/TechnicalViewToggle";
+import { useAuth } from "@/context/auth";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
@@ -84,22 +85,48 @@ export function Navbar() {
 }
 
 function MockProfile() {
+  const { user, logout } = useAuth();
+
+  const initials = getInitials(user?.full_name ?? user?.email ?? "Utente");
+  const primary = user?.full_name ?? "Utente";
+  const secondary = user?.role === "quality_reviewer" ? "Presidio qualità" : user?.email;
+
   return (
-    <div className="flex h-full items-center gap-3 px-3 sm:px-5">
+    <div className="flex h-full items-center gap-2 px-3 sm:px-5">
       <div className="hidden text-right sm:block">
         <p className="text-xs font-medium leading-none text-white">
-          Docente demo
+          {primary}
         </p>
         <p className="mt-0.5 text-[10px] leading-none text-slate-400">
-          Presidio qualità
+          {secondary}
         </p>
       </div>
       <span
         aria-hidden
         className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/15 text-xs font-medium text-emerald-200"
       >
-        DD
+        {initials}
       </span>
+      <button
+        type="button"
+        onClick={() => void logout()}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+        aria-label="Esci"
+        title="Esci"
+      >
+        <LogOut className="h-3.5 w-3.5" aria-hidden />
+      </button>
     </div>
   );
+}
+
+function getInitials(value: string): string {
+  const parts = value
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+  return value.slice(0, 2).toUpperCase();
 }
