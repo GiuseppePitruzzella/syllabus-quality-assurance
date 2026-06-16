@@ -25,6 +25,15 @@ export function TechnicalBlock({
 }) {
   return (
     <section className="mt-12 bg-slate-100/70 px-5 py-2 sm:px-7 lg:px-9">
+      <div className="border-b-2 border-slate-300 pb-3 pt-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
+          Vista tecnica — dettagli di esecuzione
+        </h2>
+        <p className="mt-0.5 text-xs text-slate-500">
+          Metadati di esecuzione, agenti A1–A4 con frammenti RAG e timeline.
+          Non incidono sul giudizio.
+        </p>
+      </div>
       <div className="divide-y divide-slate-200/80">
       <EvaluationSection title="Esecuzione">
         <ExecutionMetadata data={data} />
