@@ -20,7 +20,7 @@ export function ProfileSection() {
       description="Snapshot dei parametri scientifici della run attiva. Sincronizzato a mano col backend per ragioni di riproducibilità."
       headerAside={
         p.locked ? (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-800">
+          <span className="inline-flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-800">
             <Lock className="h-3 w-3" aria-hidden />
             Bloccato per riproducibilità
           </span>
@@ -36,7 +36,7 @@ export function ProfileSection() {
           <ul className="flex flex-wrap gap-1.5">
             {p.prompt_versions.map((pv) => (
               <li key={pv.agent}>
-                <span className="inline-flex items-center gap-1 rounded-md border bg-card px-2 py-0.5 font-mono text-xs text-foreground">
+                <span className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 font-mono text-xs text-foreground">
                   <span className="text-muted-foreground">{pv.agent}</span>
                   <span aria-hidden className="text-muted-foreground">/</span>
                   {pv.version}
@@ -64,7 +64,7 @@ export function ProfileSection() {
       </dl>
 
       {p.locked ? (
-        <p className="mt-5 rounded-md border border-dashed bg-muted/40 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+        <p className="mt-5 bg-muted/40 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
           {p.locked_reason}
         </p>
       ) : null}

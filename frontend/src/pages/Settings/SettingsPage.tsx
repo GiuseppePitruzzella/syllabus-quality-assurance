@@ -24,7 +24,7 @@ import { ValidationSection } from "./ValidationSection";
  */
 export function SettingsPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-[1720px] space-y-10">
       <PageHeader
         badge="Governance"
         badgeTone="neutral"

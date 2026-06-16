@@ -42,13 +42,13 @@ export function RubricSection() {
         title="Criteri estesi E1-E5"
         description="Sperimentali / futuri. Richiedono documenti aggiuntivi non uniformemente disponibili."
         headerAside={
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-800">
+          <span className="inline-flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-800">
             <FlaskConical className="h-3 w-3" aria-hidden />
             Non concorrono al CoreScore
           </span>
         }
       >
-        <p className="mb-4 rounded-md border border-dashed border-amber-300 bg-amber-500/[0.06] px-3 py-2 text-xs leading-relaxed text-amber-900/90">
+        <p className="mb-4 bg-amber-500/[0.06] px-3 py-2 text-xs leading-relaxed text-amber-900/90">
           I criteri estesi sono mantenuti separati dal nucleo C1-C9 per
           preservare la simmetria informativa tra sistema automatico e
           valutatori umani: entrambi giudicano dallo stesso perimetro
@@ -81,9 +81,9 @@ function CoreRubricTable() {
     });
 
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+        <thead className="text-xs uppercase tracking-wide text-muted-foreground">
           <tr>
             <th className="w-8 px-2 py-2" aria-hidden />
             <th className="w-14 px-3 py-2 text-left font-medium">Cod.</th>
@@ -121,7 +121,7 @@ function CoreRow({
   return (
     <>
       <tr
-        className="cursor-pointer border-t transition-colors hover:bg-muted/30"
+        className="cursor-pointer border-t border-slate-200/80 transition-colors hover:bg-muted/30"
         onClick={onToggle}
       >
         <td className="px-2 py-2 text-muted-foreground">
@@ -146,7 +146,7 @@ function CoreRow({
         </td>
       </tr>
       {expanded ? (
-        <tr className="border-t bg-muted/20">
+        <tr className="border-t border-slate-200/80 bg-muted/20">
           <td colSpan={7} className="px-6 py-4">
             <CoreDetails criterion={c} />
           </td>
@@ -198,19 +198,19 @@ function CoreDetails({ criterion: c }: { criterion: CoreCriterion }) {
 
 function ScoreBadge({ score }: { score: Score }) {
   let cls =
-    "inline-flex h-6 w-9 shrink-0 items-center justify-center rounded-md border text-xs font-medium tabular-nums";
+    "inline-flex h-6 w-9 shrink-0 items-center justify-center text-xs font-medium tabular-nums ";
   let label: string;
   if (score === 2) {
-    cls += " border-emerald-300 bg-emerald-500/10 text-emerald-800";
+    cls += "bg-emerald-500/10 text-emerald-800";
     label = "2";
   } else if (score === 1) {
-    cls += " border-amber-300 bg-amber-500/10 text-amber-800";
+    cls += "bg-amber-500/10 text-amber-800";
     label = "1";
   } else if (score === 0) {
-    cls += " border-rose-300 bg-rose-500/10 text-rose-800";
+    cls += "bg-rose-500/10 text-rose-800";
     label = "0";
   } else {
-    cls += " border-border bg-muted text-muted-foreground";
+    cls += "bg-muted text-muted-foreground";
     label = "NA";
   }
   return <span className={cls}>{label}</span>;
@@ -222,20 +222,20 @@ function ScoreBadge({ score }: { score: Score }) {
 
 function ExtendedCard({ criterion: c }: { criterion: ExtendedCriterion }) {
   return (
-    <div className="rounded-md border border-amber-200 bg-amber-500/[0.04] p-3">
+    <div className="bg-amber-500/[0.04] p-3">
       <div className="flex flex-wrap items-center gap-2">
-        <code className="rounded bg-amber-500/10 px-1.5 py-0.5 font-mono text-xs font-semibold text-amber-900">
+        <code className="bg-amber-500/10 px-1.5 py-0.5 font-mono text-xs font-semibold text-amber-900">
           {c.code}
         </code>
         <h4 className="text-sm font-medium text-foreground">{c.name}</h4>
         <div className="ml-auto flex flex-wrap items-center gap-1.5">
           {c.local_document ? (
-            <span className="inline-flex items-center gap-1 rounded-md border border-cyan-300 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cyan-800">
+            <span className="inline-flex items-center gap-1 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-cyan-800">
               <FileText className="h-3 w-3" aria-hidden />
               Richiede documento locale
             </span>
           ) : null}
-          <span className="rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
+          <span className="bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800">
             {c.status}
           </span>
         </div>
@@ -305,4 +305,3 @@ function ExtendedCard({ criterion: c }: { criterion: ExtendedCriterion }) {
     </div>
   );
 }
-

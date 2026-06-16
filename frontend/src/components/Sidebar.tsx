@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { BarChart3, LayoutDashboard, Settings } from "lucide-react";
 
+import { TechnicalViewToggle } from "@/components/TechnicalViewToggle";
+
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
@@ -28,17 +30,17 @@ export function Navbar() {
     <div className="relative flex h-14 w-full items-center justify-between text-slate-100">
       <Link
         to="/"
-        className="flex h-full items-center gap-2 px-5 text-sm font-semibold tracking-wide text-white transition-colors hover:text-white/90"
+        className="flex h-full items-center gap-2 px-4 text-sm font-semibold tracking-wide text-white transition-colors hover:text-white/90 sm:px-5"
       >
         <span
           className="inline-block h-2 w-2 rounded-sm bg-emerald-400"
           aria-hidden
         />
-        Syllabus QA
+        Syllabus Quality Assurance
       </Link>
 
       <nav
-        className="pointer-events-none absolute left-1/2 top-0 flex h-full -translate-x-1/2 items-center"
+        className="pointer-events-none absolute left-1/2 top-0 hidden h-full -translate-x-1/2 items-center md:flex"
         aria-label="Sezioni"
       >
         {navItems.map((item) => {
@@ -73,14 +75,17 @@ export function Navbar() {
         })}
       </nav>
 
-      <MockProfile />
+      <div className="flex h-full items-center gap-1 pr-1">
+        <TechnicalViewToggle />
+        <MockProfile />
+      </div>
     </div>
   );
 }
 
 function MockProfile() {
   return (
-    <div className="flex h-full items-center gap-3 px-5">
+    <div className="flex h-full items-center gap-3 px-3 sm:px-5">
       <div className="hidden text-right sm:block">
         <p className="text-xs font-medium leading-none text-white">
           Docente demo

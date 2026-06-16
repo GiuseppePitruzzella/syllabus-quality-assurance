@@ -35,32 +35,32 @@ export function StatusBadge({ status, animate = false }: Props) {
       label: "in attesa",
       variant: "outline",
       extra:
-        "border-slate-300 bg-slate-500/10 text-slate-700 dark:border-slate-600 dark:text-slate-300",
+        "border-transparent bg-slate-500/10 text-slate-700 dark:border-transparent dark:text-slate-300",
     },
     running: {
       label: "in esecuzione",
       variant: "outline",
       extra:
-        "border-cyan-300 bg-cyan-500/10 text-cyan-800 dark:text-cyan-300" +
+        "border-transparent bg-cyan-500/10 text-cyan-800 dark:border-transparent dark:text-cyan-300" +
         (animate ? " animate-pulse" : ""),
     },
     completed: {
       label: "completata",
       variant: "outline",
       extra:
-        "border-emerald-300 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300",
+        "border-transparent bg-emerald-500/10 text-emerald-800 dark:border-transparent dark:text-emerald-300",
     },
     partial: {
       label: "parziale",
       variant: "outline",
       extra:
-        "border-amber-300 bg-amber-500/10 text-amber-800 dark:text-amber-300",
+        "border-transparent bg-amber-500/10 text-amber-800 dark:border-transparent dark:text-amber-300",
     },
     failed: {
       label: "fallita",
       variant: "outline",
       extra:
-        "border-rose-300 bg-rose-500/10 text-rose-800 dark:text-rose-300",
+        "border-transparent bg-rose-500/10 text-rose-800 dark:border-transparent dark:text-rose-300",
     },
   };
   const c = config[status];

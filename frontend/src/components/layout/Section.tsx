@@ -17,11 +17,12 @@ interface SectionProps {
 }
 
 /**
- * Phase 6.0.A — content section with optional bordered header.
+ * Phase 10.A — content section with optional editorial header.
  *
- * Replaces the inline ``rounded-lg border bg-card`` + ``border-b
- * header`` pattern duplicated across Dashboard / SyllabusViewer /
- * EvaluationPage / EvaluationOutputTabs.
+ * Originally this replaced the inline ``rounded-lg border bg-card``
+ * pattern duplicated across pages. The app now uses a document-like
+ * layout: sections are separated by rhythm and, when siblings are
+ * stacked, by the parent context — not by card boxes.
  *
  * When ``title`` (or ``headerAside``) is omitted the header bar is
  * not rendered at all, so the component degrades to a plain
@@ -36,19 +37,18 @@ export function Section({
   children,
 }: SectionProps) {
   const hasHeader = title !== undefined || headerAside !== undefined;
-  const outerCls =
-    "rounded-lg border bg-card" + (className ? ` ${className}` : "");
+  const outerCls = "py-5 first:pt-0" + (className ? ` ${className}` : "");
   return (
     <section className={outerCls}>
       {hasHeader ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           {title ? (
             <div className="min-w-0">
-              <h2 className="text-base font-semibold tracking-normal">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
                 {title}
               </h2>
               {description ? (
-                <p className="mt-0.5 text-xs text-muted-foreground">
+                <p className="mt-1 max-w-3xl text-xs leading-relaxed text-muted-foreground">
                   {description}
                 </p>
               ) : null}
@@ -59,7 +59,7 @@ export function Section({
           {headerAside ? <div>{headerAside}</div> : null}
         </div>
       ) : null}
-      <div className={padded ? "p-4" : ""}>{children}</div>
+      <div className={padded ? "" : ""}>{children}</div>
     </section>
   );
 }

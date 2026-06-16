@@ -14,7 +14,13 @@ import {
 } from "@/components/ui/select";
 
 const TRIGGER_CLASS =
-  "h-12 w-full rounded-xl border-input bg-card px-4 text-sm font-medium shadow-xs transition-all hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:border-primary data-[popup-open]:border-primary data-[popup-open]:ring-2 data-[popup-open]:ring-primary/20 [&_svg]:size-4";
+  "h-12 w-full justify-start rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 text-sm font-medium text-slate-950 shadow-none transition-colors hover:border-slate-500 hover:bg-transparent focus-visible:border-slate-950 focus-visible:ring-0 data-[popup-open]:border-slate-950 data-[popup-open]:ring-0 disabled:bg-transparent disabled:text-slate-400 data-placeholder:text-sm data-placeholder:font-normal [&_svg]:size-4";
+
+const CONTENT_CLASS =
+  "rounded-none shadow-lg ring-1 ring-slate-200";
+
+const ITEM_CLASS =
+  "rounded-none px-2 py-2 focus:bg-slate-100 focus:text-slate-950";
 
 interface CdlSelectorProps {
   departmentId: number | null;
@@ -26,10 +32,10 @@ function CdlTypeBadge({ type }: { type: string }) {
   const isTriennale = type.toLowerCase().includes("triennale");
   return (
     <span
-      className={`inline-flex w-14 items-center justify-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+      className={`inline-flex w-8 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-wide ${
         isTriennale
-          ? "bg-accent/15 text-accent"
-          : "bg-primary/10 text-primary"
+          ? "text-emerald-700"
+          : "text-sky-800"
       }`}
     >
       {isTriennale ? "L" : "LM"}
@@ -73,7 +79,7 @@ export function CdlSelector({
           />
           <SelectValue placeholder="Seleziona prima un dipartimento" />
         </SelectTrigger>
-        <SelectContent />
+        <SelectContent className={CONTENT_CLASS} />
       </Select>
     );
   }
@@ -122,9 +128,13 @@ export function CdlSelector({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className={CONTENT_CLASS}>
         {cdlList.map((cdl) => (
-          <SelectItem key={cdl.id} value={String(cdl.id)}>
+          <SelectItem
+            key={cdl.id}
+            value={String(cdl.id)}
+            className={ITEM_CLASS}
+          >
             <span className="flex items-center gap-2">
               <CdlTypeBadge type={cdl.type} />
               {cdl.name}

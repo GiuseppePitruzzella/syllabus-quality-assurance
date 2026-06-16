@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Circle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/StatusBadge";
-import { MetricTile } from "@/components/layout/MetricTile";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
-import { EvaluationOutputTabs } from "./EvaluationOutputTabs";
+import { EvaluationReport } from "./EvaluationReport";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 import { ExternalDocumentsUsed } from "./ExternalDocumentsUsed";
+import { ReviewRail } from "./ReviewRail";
+import { TechnicalBlock } from "./TechnicalBlock";
+import { SyntheticVerdict } from "@/components/SyntheticVerdict";
+import { useTechnicalView } from "@/context/technicalView";
 
 const TERMINAL_STATUSES = new Set<EvaluationStatus>([
   "completed",
@@ -26,18 +27,15 @@ const TERMINAL_STATUSES = new Set<EvaluationStatus>([
 const POLL_MS = 3000;
 
 /**
- * Phase 5.9.C — review-mode evaluation page.
+ * Phase 10.A R2 — full-width two-column review layout.
  *
- * Layout choices reflect the actual use case: a docente / presidio
- * qualità reading a finished evaluation and comparing it against
- * the original syllabus.
- *
- *   - Live run (pending/running): timeline first, then the (empty)
- *     score + output sections that fill in as events arrive.
- *   - Terminated run: header + score + output as primary surfaces;
- *     the SSE timeline drops to a collapsed section at the bottom
- *     when events were accumulated in the current session, and is
- *     hidden entirely on historical runs (no events ever received).
+ *   - Live run (pending/running): timeline + progress precede the
+ *     review layout in a single column; the full rail appears once
+ *     scores are available (terminated).
+ *   - Terminated run: header (KPI strip) + two columns — main (C1-C9,
+ *     report, extended analysis) and a sticky review rail (verdict,
+ *     priorities). Technical surfaces live in a full-width block below,
+ *     only in Vista tecnica.
  */
 export function EvaluationPage() {
   const { evaluation_uuid } = useParams<{ evaluation_uuid: string }>();
@@ -53,10 +51,9 @@ export function EvaluationPage() {
     },
   });
 
-  // SSE only matters while the run is in flight. Hook called
-  // unconditionally; gating happens inside via `enabled`.
   const isLive = data ? !TERMINAL_STATUSES.has(data.status) : false;
   const stream = useEvaluationStream(evaluation_uuid, isLive);
+  const { technical } = useTechnicalView();
 
   useEffect(() => {
     if (data?.course_name_snapshot) {
@@ -89,41 +86,44 @@ export function EvaluationPage() {
     );
   }
 
-  const hasStreamEvents = stream.events.length > 0;
-
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-[1720px] space-y-10">
       <Header data={data} isFetching={isFetching} isLive={isLive} />
 
       {isLive ? (
-        <>
+        <div className="space-y-6">
           <EvaluationProgressTimeline
             events={stream.events}
             isLive
             isConnected={stream.isConnected}
             lastError={stream.lastError}
           />
+          <SyntheticVerdict data={data} />
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
-          <EvaluationOutputTabs data={data} />
-        </>
+          <EvaluationReport data={data} />
+        </div>
       ) : (
         <>
-          <EvaluationScorePanel data={data} />
-          <ExtendedCriteriaResults data={data} />
-          <ExternalDocumentsUsed data={data} />
-          <EvaluationOutputTabs data={data} />
-          {hasStreamEvents ? (
-            <CollapsibleTimeline>
-              <EvaluationProgressTimeline
-                events={stream.events}
-                isLive={false}
-                isConnected={false}
-                lastError={stream.lastError}
-                embedded
-              />
-            </CollapsibleTimeline>
+          <div className="grid grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_22rem] xl:gap-16">
+            <aside className="xl:col-start-2 xl:row-start-1 xl:sticky xl:top-20 xl:self-start xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto xl:pr-2">
+              <ReviewRail data={data} />
+            </aside>
+            <div className="min-w-0 divide-y divide-slate-200/80 xl:col-start-1 xl:row-start-1">
+              <EvaluationScorePanel data={data} />
+              <EvaluationReport data={data} />
+              <ExtendedCriteriaResults data={data} />
+              <ExternalDocumentsUsed data={data} />
+            </div>
+          </div>
+
+          {technical ? (
+            <TechnicalBlock
+              data={data}
+              events={stream.events}
+              lastError={stream.lastError}
+            />
           ) : null}
         </>
       )}
@@ -145,189 +145,145 @@ function Header({
   isLive: boolean;
 }) {
   const startedAt = data.started_at ? new Date(data.started_at) : null;
-  const finishedAt = data.finished_at ? new Date(data.finished_at) : null;
   const durationSec =
     typeof data.duration_ms === "number" ? data.duration_ms / 1000 : null;
+  const { technical } = useTechnicalView();
 
   const scores = data.criterion_scores;
   const hasScores = scores !== null && scores !== undefined;
   const evaluatedCount = hasScores
     ? Object.values(scores).filter((v) => typeof v === "number").length
     : 0;
-  const naCount = hasScores ? 9 - evaluatedCount : 0;
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+    <header className="space-y-7 pb-2">
+      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
         <Link
           to={`/syllabus/${data.syllabus_seuid_snapshot}`}
-          className="text-primary hover:underline"
+          className="inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-slate-950"
         >
-          ← Torna al syllabus
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
+          Torna al syllabus
         </Link>
-        <span>·</span>
-        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-          {data.evaluation_uuid.slice(0, 8)}
-        </code>
+        {technical ? (
+          <>
+            <span aria-hidden>·</span>
+            <code className="font-mono text-[11px]">
+              run {data.evaluation_uuid.slice(0, 8)}
+            </code>
+          </>
+        ) : null}
         {isLive && isFetching ? (
-          <span className="text-xs text-muted-foreground/80">
+          <span className="text-xs text-slate-500">
             aggiornamento in corso…
           </span>
         ) : null}
       </div>
 
-      <PageHeader
-        badge="Valutazione"
-        title={data.course_name_snapshot}
-        pills={
-          <>
-            <StatusBadge status={data.status} animate />
-            {startedAt ? (
-              <span className="text-xs text-muted-foreground">
-                avviata il {formatDateTime(startedAt)}
-              </span>
-            ) : null}
-            {durationSec != null ? (
-              <span className="text-xs text-muted-foreground">
-                · durata {durationSec.toFixed(1)} s
-              </span>
-            ) : null}
-          </>
-        }
-        actions={
-          hasScores ? (
-            <ScoreSummary
-              coreScore={data.core_score}
-              coverage={data.coverage}
-              evaluatedCount={evaluatedCount}
-              naCount={naCount}
-            />
-          ) : null
-        }
-        footer={
-          <div className="space-y-3">
-            {data.status === "failed" && data.error_message ? (
-              <p className="rounded-md border border-rose-200 bg-rose-500/5 px-3 py-2 text-sm text-rose-800">
-                {data.error_message}
-              </p>
-            ) : null}
-            <details className="group">
-              <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-                Dettagli tecnici
-              </summary>
-              <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-5">
-                <TechField label="Avvio">
-                  {startedAt ? formatDateTime(startedAt) : "—"}
-                </TechField>
-                <TechField label="Fine">
-                  {finishedAt ? formatDateTime(finishedAt) : "—"}
-                </TechField>
-                <TechField label="LLM">{data.llm_model}</TechField>
-                <TechField label="Embedding">
-                  {data.embedding_model} ({data.embedding_dim}d)
-                </TechField>
-                <TechField label="Prompt versions">
-                  <code className="font-mono">
-                    {Object.entries(data.prompt_versions)
-                      .map(([k, v]) => `${k}=${v}`)
-                      .join(" · ")}
-                  </code>
-                </TechField>
-              </dl>
-            </details>
-          </div>
-        }
-      />
-    </div>
-  );
-}
+      <div className="max-w-5xl">
+        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
+          <StatusText status={data.status} isLive={isLive} />
+          {startedAt ? <span>Avviata il {formatDateTime(startedAt)}</span> : null}
+          {durationSec != null ? <span>{durationSec.toFixed(1)} s</span> : null}
+        </div>
+        <h1 className="text-3xl font-semibold leading-tight text-slate-950 md:text-5xl">
+          {data.course_name_snapshot}
+        </h1>
+      </div>
 
-function ScoreSummary({
-  coreScore,
-  coverage,
-  evaluatedCount,
-  naCount,
-}: {
-  coreScore: number | null;
-  coverage: number | null;
-  evaluatedCount: number;
-  naCount: number;
-}) {
-  return (
-    <>
-      <MetricTile
-        label="CoreScore"
-        value={typeof coreScore === "number" ? coreScore.toFixed(2) : "—"}
-        suffix="/ 2.00"
-        tone="success"
-      />
-      <MetricTile
-        label="Coverage"
-        value={
-          typeof coverage === "number"
-            ? `${Math.round(coverage * 100)}%`
-            : "—"
-        }
-        tone="muted"
-      />
-      <MetricTile
-        label="Valutati"
-        value={String(evaluatedCount)}
-        suffix="/ 9"
-        tone="muted"
-      />
-      {naCount > 0 ? (
-        <MetricTile label="NA" value={String(naCount)} tone="warning" />
+      {data.status === "failed" && data.error_message ? (
+        <p className="bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          {data.error_message}
+        </p>
       ) : null}
-    </>
+
+      {hasScores ? (
+        <dl className="grid grid-cols-3 gap-5 border-y border-slate-200 py-4 sm:w-fit sm:min-w-[32rem] sm:gap-12">
+          <Kpi
+            label="CoreScore"
+            value={
+              typeof data.core_score === "number"
+                ? data.core_score.toFixed(2)
+                : "—"
+            }
+            suffix="/2"
+          />
+          <Kpi
+            label="Copertura"
+            value={
+              typeof data.coverage === "number"
+                ? `${Math.round(data.coverage * 100)}%`
+                : "—"
+            }
+          />
+          <Kpi label="Criteri valutati" value={`${evaluatedCount}/9`} />
+        </dl>
+      ) : null}
+    </header>
   );
 }
 
-function TechField({
+function Kpi({
   label,
-  children,
+  value,
+  suffix,
 }: {
   label: string;
-  children: React.ReactNode;
+  value: string;
+  suffix?: string;
 }) {
   return (
-    <div className="min-w-0">
-      <dt className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+    <div>
+      <dt className="text-[10px] font-medium uppercase text-slate-500">
         {label}
       </dt>
-      <dd className="mt-0.5 truncate text-xs text-foreground">{children}</dd>
+      <dd className="mt-1 text-xl font-semibold tabular-nums text-slate-950 sm:text-2xl">
+        {value}
+        {suffix ? (
+          <span className="ml-0.5 text-xs font-normal text-slate-500">
+            {suffix}
+          </span>
+        ) : null}
+      </dd>
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// CollapsibleTimeline — wraps the SSE timeline after the run terminates
-// ---------------------------------------------------------------------------
+const STATUS_LABEL: Record<EvaluationStatus, string> = {
+  pending: "In attesa",
+  running: "In esecuzione",
+  completed: "Valutazione completata",
+  partial: "Valutazione parziale",
+  failed: "Valutazione non riuscita",
+};
 
-function CollapsibleTimeline({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+const STATUS_DOT: Record<EvaluationStatus, string> = {
+  pending: "fill-slate-400 text-slate-400",
+  running: "fill-sky-500 text-sky-500",
+  completed: "fill-emerald-500 text-emerald-500",
+  partial: "fill-amber-500 text-amber-500",
+  failed: "fill-rose-500 text-rose-500",
+};
+
+function StatusText({
+  status,
+  isLive,
+}: {
+  status: EvaluationStatus;
+  isLive: boolean;
+}) {
   return (
-    <section className="rounded-lg border bg-card">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-muted/30"
-        aria-expanded={open}
-      >
-        <span className="!text-base !font-semibold !tracking-normal">
-          Timeline esecuzione
-        </span>
-        <span className="flex items-center gap-2 text-xs text-muted-foreground">
-          {open ? "nascondi" : "mostra"}
-          {open ? (
-            <ChevronUp className="h-4 w-4" aria-hidden />
-          ) : (
-            <ChevronDown className="h-4 w-4" aria-hidden />
-          )}
-        </span>
-      </button>
-      {open ? <div className="border-t p-4">{children}</div> : null}
-    </section>
+    <span className="inline-flex items-center gap-1.5 font-medium text-slate-700">
+      <Circle
+        className={
+          "h-2.5 w-2.5 " +
+          STATUS_DOT[status] +
+          (isLive ? " animate-pulse" : "")
+        }
+        aria-hidden
+      />
+      {STATUS_LABEL[status]}
+    </span>
   );
 }
 
@@ -337,7 +293,7 @@ function CollapsibleTimeline({ children }: { children: React.ReactNode }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-[1720px] space-y-6">
       <div className="space-y-3 border-b pb-6">
         <div className="h-4 w-40 animate-pulse rounded bg-muted" />
         <div className="h-8 w-2/3 animate-pulse rounded bg-muted" />
@@ -345,7 +301,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 2 }).map((_, i) => (
         <div
           key={i}
-          className="h-28 animate-pulse rounded-lg border bg-card"
+          className="h-28 animate-pulse bg-slate-100"
           aria-hidden
         />
       ))}
