@@ -13,6 +13,8 @@ import type {
   LocalDocumentStatus,
   LocalDocumentType,
   ResolutionPreview,
+  AuthResponse,
+  AuthUser,
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
@@ -51,7 +53,10 @@ export class ApiError<Code extends string = string> extends Error {
 }
 
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, options);
+  const res = await fetch(`${BASE_URL}${path}`, {
+    credentials: "include",
+    ...options,
+  });
   if (!res.ok) {
     let detail: unknown = null;
     // The backend sends structured JSON for 4xx (FastAPI's
@@ -92,6 +97,48 @@ async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   }
   return res.json();
 }
+
+export interface RegisterPayload {
+  full_name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export const register = (payload: RegisterPayload) =>
+  fetchApi<AuthResponse>("/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+export const login = (payload: LoginPayload) =>
+  fetchApi<AuthResponse>("/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+export const logout = async (): Promise<void> => {
+  const res = await fetch(`${BASE_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    throw new ApiError({
+      status: res.status,
+      statusText: res.statusText,
+      detail: null,
+    });
+  }
+};
+
+export const getCurrentUser = () =>
+  fetchApi<AuthUser>("/auth/me");
 
 export const getDepartments = () =>
   fetchApi<Department[]>("/departments");
@@ -243,6 +290,7 @@ export const patchLocalDocumentCriteria = async (
 ): Promise<LocalDocumentPatchResponse> => {
   const res = await fetch(`${BASE_URL}/local-documents/${id}`, {
     method: "PATCH",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ enabled_criteria }),
   });
@@ -274,6 +322,7 @@ export const uploadLocalDocument = async (
   form.set("file", payload.file);
   const res = await fetch(`${BASE_URL}/local-documents`, {
     method: "POST",
+    credentials: "include",
     body: form,
   });
   if (!res.ok) {
@@ -309,6 +358,7 @@ export const getLocalDocumentChunks = (
 export const deleteLocalDocument = async (id: number): Promise<void> => {
   const res = await fetch(`${BASE_URL}/local-documents/${id}`, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!res.ok) {
     throw new Error(`API error: ${res.status} ${res.statusText}`);

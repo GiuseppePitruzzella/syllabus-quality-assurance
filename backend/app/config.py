@@ -90,6 +90,14 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
     ]
 
+    # === Authentication (Phase 11) ===
+    auth_cookie_name: str = "sqa_session"
+    auth_session_days: int = 7
+    # Local thesis prototype defaults to non-secure cookies so Vite/FastAPI
+    # split-dev on localhost works. Production deployments must set this true
+    # behind HTTPS.
+    auth_cookie_secure: bool = False
+
     # === Logging ===
     log_level: str = "INFO"
 

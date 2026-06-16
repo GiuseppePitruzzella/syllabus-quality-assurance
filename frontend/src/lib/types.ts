@@ -90,6 +90,18 @@ export interface Stats {
   with_english: number;
 }
 
+export interface AuthUser {
+  id: number;
+  email: string;
+  full_name: string;
+  role: string;
+  created_at: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+}
+
 export interface JobCreated {
   job_id: string;
 }

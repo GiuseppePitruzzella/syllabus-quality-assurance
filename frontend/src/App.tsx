@@ -4,7 +4,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import { Navbar } from "@/components/Sidebar";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AuthProvider } from "@/context/AuthProvider";
 import { Dashboard } from "@/pages/Dashboard/Dashboard";
+import { LoginPage } from "@/pages/Auth/LoginPage";
+import { RegisterPage } from "@/pages/Auth/RegisterPage";
 import { EvaluationPage } from "@/pages/Evaluation/EvaluationPage";
 import { SettingsPage } from "@/pages/Settings/SettingsPage";
 import { SyllabusViewer } from "@/pages/SyllabusViewer/SyllabusViewer";
@@ -28,49 +32,61 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TechnicalViewProvider>
-        <BrowserRouter>
-          <TooltipProvider delay={300}>
-            <main className="relative isolate min-h-screen bg-slate-50">
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Chromed>
-                      <Dashboard />
-                    </Chromed>
-                  }
-                />
-                <Route
-                  path="/syllabus/:seuid"
-                  element={
-                    <Chromed>
-                      <SyllabusViewer />
-                    </Chromed>
-                  }
-                />
-                <Route
-                  path="/evaluation/:evaluation_uuid"
-                  element={
-                    <Chromed>
-                      <EvaluationPage />
-                    </Chromed>
-                  }
-                />
-                <Route
-                  path="/settings"
-                  element={
-                    <Chromed>
-                      <SettingsPage />
-                    </Chromed>
-                  }
-                />
-              </Routes>
-            </main>
-            <Toaster position="bottom-right" />
-          </TooltipProvider>
-        </BrowserRouter>
-      </TechnicalViewProvider>
+      <AuthProvider>
+        <TechnicalViewProvider>
+          <BrowserRouter>
+            <TooltipProvider delay={300}>
+              <main className="relative isolate min-h-screen bg-slate-50">
+                <Routes>
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <Dashboard />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/syllabus/:seuid"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <SyllabusViewer />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/evaluation/:evaluation_uuid"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <EvaluationPage />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <SettingsPage />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </main>
+              <Toaster position="bottom-right" />
+            </TooltipProvider>
+          </BrowserRouter>
+        </TechnicalViewProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

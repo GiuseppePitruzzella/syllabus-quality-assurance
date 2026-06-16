@@ -4,6 +4,7 @@ from app.models.syllabus import Syllabus
 from app.models.evaluation import EvaluationResult
 from app.models.local_document import LocalDocument
 from app.models.evaluation_external_document import EvaluationExternalDocument
+from app.models.user import AuthSession, User
 
 __all__ = [
     "Department",
@@ -12,4 +13,6 @@ __all__ = [
     "EvaluationResult",
     "LocalDocument",
     "EvaluationExternalDocument",
+    "User",
+    "AuthSession",
 ]
