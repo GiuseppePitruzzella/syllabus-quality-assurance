@@ -30,17 +30,17 @@ export function Navbar() {
     <div className="relative flex h-14 w-full items-center justify-between text-slate-100">
       <Link
         to="/"
-        className="flex h-full items-center gap-2 px-5 text-sm font-semibold tracking-wide text-white transition-colors hover:text-white/90"
+        className="flex h-full items-center gap-2 px-4 text-sm font-semibold tracking-wide text-white transition-colors hover:text-white/90 sm:px-5"
       >
         <span
           className="inline-block h-2 w-2 rounded-sm bg-emerald-400"
           aria-hidden
         />
-        Syllabus QA
+        Syllabus Quality Assurance
       </Link>
 
       <nav
-        className="pointer-events-none absolute left-1/2 top-0 flex h-full -translate-x-1/2 items-center"
+        className="pointer-events-none absolute left-1/2 top-0 hidden h-full -translate-x-1/2 items-center md:flex"
         aria-label="Sezioni"
       >
         {navItems.map((item) => {
@@ -85,7 +85,7 @@ export function Navbar() {
 
 function MockProfile() {
   return (
-    <div className="flex h-full items-center gap-3 px-5">
+    <div className="flex h-full items-center gap-3 px-3 sm:px-5">
       <div className="hidden text-right sm:block">
         <p className="text-xs font-medium leading-none text-white">
           Docente demo

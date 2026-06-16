@@ -29,9 +29,9 @@ export function ValidationSection() {
             {p.shortlist.map((it) => (
               <li
                 key={it.ordinal}
-                className="flex items-center gap-3 rounded-md border bg-card px-3 py-1.5 text-sm"
+                className="flex items-center gap-3 bg-muted/30 px-3 py-1.5 text-sm"
               >
-                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border bg-muted text-[10px] font-medium tabular-nums text-muted-foreground">
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center bg-muted text-[10px] font-medium tabular-nums text-muted-foreground">
                   {it.ordinal}
                 </span>
                 <span className="truncate text-foreground/90">
@@ -61,7 +61,7 @@ export function ValidationSection() {
             {p.metrics.map((m) => (
               <div
                 key={m.name}
-                className="rounded-md border bg-card px-3 py-2"
+                className="bg-muted/30 px-3 py-2"
               >
                 <dt className="text-sm font-medium text-foreground">
                   {m.name}

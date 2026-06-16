@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 
-import { Badge } from "@/components/ui/badge";
-
 export type BadgeTone = "cyan" | "emerald" | "amber" | "rose" | "neutral";
 
 interface PageHeaderProps {
@@ -27,11 +25,11 @@ interface PageHeaderProps {
 }
 
 const badgeToneClass: Record<BadgeTone, string> = {
-  cyan: "border-cyan-200 bg-cyan-500/10 text-cyan-800",
-  emerald: "border-emerald-200 bg-emerald-500/10 text-emerald-800",
-  amber: "border-amber-200 bg-amber-500/10 text-amber-800",
-  rose: "border-rose-200 bg-rose-500/10 text-rose-800",
-  neutral: "border-border bg-card text-foreground",
+  cyan: "text-sky-700",
+  emerald: "text-emerald-700",
+  amber: "text-amber-700",
+  rose: "text-rose-700",
+  neutral: "text-slate-500",
 };
 
 /**
@@ -53,19 +51,24 @@ export function PageHeader({
   footer,
 }: PageHeaderProps) {
   return (
-    <header className="space-y-3 border-b pb-6">
+    <header className="space-y-5 pb-2">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           {badge ? (
-            <Badge variant="outline" className={badgeToneClass[badgeTone]}>
+            <p
+              className={
+                "text-[10px] font-semibold uppercase tracking-[0.16em] " +
+                badgeToneClass[badgeTone]
+              }
+            >
               {badge}
-            </Badge>
+            </p>
           ) : null}
-          <h1 className="mt-3 text-3xl font-semibold tracking-normal leading-tight md:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-normal text-slate-950 md:text-5xl">
             {title}
           </h1>
           {subtitle ? (
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
               {subtitle}
             </p>
           ) : null}
@@ -73,9 +76,7 @@ export function PageHeader({
             <div className="mt-3 flex flex-wrap items-center gap-2">{pills}</div>
           ) : null}
         </div>
-        {actions ? (
-          <div className="flex flex-wrap items-center gap-2">{actions}</div>
-        ) : null}
+        {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
       {footer ? <div>{footer}</div> : null}
     </header>

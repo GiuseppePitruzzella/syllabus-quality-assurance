@@ -28,15 +28,15 @@ const RESOLUTION_REASON_META: Record<
 > = {
   explicit_selection: {
     label: "Selezione esplicita",
-    cls: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    cls: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
   },
   academic_year_match: {
     label: "Anno accademico",
-    cls: "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300",
+    cls: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
   },
   latest_available_fallback: {
     label: "Fallback ultima versione",
-    cls: "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
+    cls: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
   },
 };
 
@@ -59,7 +59,7 @@ export function ResolutionReasonPill({
   return (
     <span
       className={
-        "inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-medium " +
+        "inline-flex items-center px-2 py-0.5 text-[10px] font-medium " +
         meta.cls
       }
     >

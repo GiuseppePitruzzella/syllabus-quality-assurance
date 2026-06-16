@@ -42,7 +42,7 @@ export function MetadataSidebar({ data }: MetadataSidebarProps) {
 
   return (
     <Section title="Metadati" padded={false}>
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-3 p-4 sm:grid-cols-3 lg:grid-cols-6">
+      <dl className="grid grid-cols-2 gap-x-8 gap-y-4 border-y border-slate-200 py-4 sm:grid-cols-3 lg:grid-cols-6">
         {fields.map((f) => (
           <div key={f.label} className="min-w-0">
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">

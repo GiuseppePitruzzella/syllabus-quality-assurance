@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import {
   BookOpen,
   Building2,
@@ -7,7 +8,6 @@ import {
   Languages,
 } from "lucide-react";
 
-import { Navbar } from "@/components/Sidebar";
 import { Section } from "@/components/layout/Section";
 import { getStats } from "@/lib/api";
 
@@ -16,27 +16,44 @@ import { DepartmentSelector } from "./DepartmentSelector";
 import { SyllabiTable } from "./SyllabiTable";
 
 /**
- * Phase 6.1.E — SaaS shell dashboard with the stats strip
- * integrated into the dark chrome.
- *
- *   1. Dark rounded shell (slate-800): navbar, then hero (badge /
- *      title / description / status pill), then a four-tile stats
- *      strip directly inside the same shell. No separate metrics
- *      row below.
- *
- *   2. `Selezione corso`.
- *
- *   3. `Elenco insegnamenti` — scrolled into view when the user
- *      picks a CdL.
+ * Phase 10.A R2 — dashboard aligned with the EvaluationPage grammar:
+ * full-width shell, editorial header, KPI strip as a neutral data row,
+ * and content sections separated by spacing rather than cards.
  */
 export function Dashboard() {
-  const [departmentId, setDepartmentId] = useState<number | null>(null);
-  const [cdlId, setCdlId] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const syllabiRef = useRef<HTMLDivElement>(null);
 
+  const departmentId = parseUrlId(searchParams.get("dept"));
+  const cdlId = departmentId
+    ? parseUrlId(searchParams.get("cdl"))
+    : null;
+
+  function updateDashboardParams(
+    nextDepartmentId: number | null,
+    nextCdlId: number | null,
+  ) {
+    const next = new URLSearchParams(searchParams);
+    if (nextDepartmentId === null) {
+      next.delete("dept");
+      next.delete("cdl");
+    } else {
+      next.set("dept", String(nextDepartmentId));
+      if (nextCdlId === null) {
+        next.delete("cdl");
+      } else {
+        next.set("cdl", String(nextCdlId));
+      }
+    }
+    setSearchParams(next, { replace: true });
+  }
+
   function handleDepartmentChange(id: number | null) {
-    setDepartmentId(id);
-    setCdlId(null);
+    updateDashboardParams(id, null);
+  }
+
+  function handleCdlChange(id: number | null) {
+    updateDashboardParams(departmentId, id);
   }
 
   // Phase 6.1.E — when the user lands on a CdL, scroll the syllabi
@@ -62,34 +79,22 @@ export function Dashboard() {
   }, [cdlId]);
 
   return (
-    <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <header className="overflow-hidden rounded-2xl bg-slate-800 text-slate-100">
-        <Navbar />
-        <div className="px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-300">
-                Qualità syllabus
-              </span>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
-                Syllabus Quality Assurance
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
-                Strumento di supporto alla revisione della qualità dei syllabus
-                universitari, con analisi bilingue, criteri C1-C9 e report
-                consultabili.
-              </p>
-            </div>
-            <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-200 sm:self-end">
-              <span
-                aria-hidden
-                className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400"
-              />
-              Valutazione attiva
-            </span>
-          </div>
+    <div className="mx-auto w-full max-w-[1720px] space-y-10">
+      <header className="space-y-7 pb-2">
+        <div className="max-w-5xl">
+          <p className="max-w-5xl text-[11px] font-medium uppercase leading-relaxed tracking-[0.08em] text-slate-500">
+            Tesi di Laurea Magistrale di Giuseppe Pitruzzella | LM-18, UNICT |
+            A.A. 2025/2026
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold leading-tight text-slate-950 md:text-5xl">
+            Syllabus Quality Assurance
+          </h1>
+          <p className="mt-3 max-w-4xl text-sm leading-relaxed text-slate-600">
+            Analisi automatica attraverso architettura multi-agentica per tutti
+            i syllabus all'interno dell'Università Degli Studi di Catania.
+          </p>
         </div>
-        <DarkStatsStrip />
+        <StatsStrip />
       </header>
 
       <Section title="Selezione corso">
@@ -110,7 +115,7 @@ export function Dashboard() {
             <CdlSelector
               departmentId={departmentId}
               value={cdlId}
-              onChange={setCdlId}
+              onChange={handleCdlChange}
             />
           </div>
         </div>
@@ -123,13 +128,19 @@ export function Dashboard() {
   );
 }
 
+function parseUrlId(value: string | null): number | null {
+  if (value === null) return null;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
 // ---------------------------------------------------------------------------
-// Dark stats strip — four-tile row living inside the hero shell.
+// Stats strip — mirrors the EvaluationPage KPI treatment.
 // ---------------------------------------------------------------------------
 
-type DarkTone = "info" | "success" | "default";
+type StatTone = "info" | "success" | "default";
 
-function DarkStatsStrip() {
+function StatsStrip() {
   const { data: stats } = useQuery({
     queryKey: ["stats"],
     queryFn: getStats,
@@ -141,40 +152,40 @@ function DarkStatsStrip() {
       : 0;
 
   return (
-    <div className="grid grid-cols-2 divide-x divide-white/10 border-t border-white/10 sm:grid-cols-4">
-      <DarkTile
+    <dl className="grid w-full grid-cols-2 gap-5 border-y border-slate-200 py-4 md:grid-cols-4 md:gap-8 xl:gap-12">
+      <StatItem
         label="Syllabi"
         value={stats?.syllabi ?? "—"}
         hint="totali in archivio"
         icon={<BookOpen className="h-3.5 w-3.5" aria-hidden />}
         tone="info"
       />
-      <DarkTile
+      <StatItem
         label="Versione EN"
         value={stats ? `${englishCoverage}%` : "—"}
         hint={stats ? `${stats.with_english} bilingui` : "in attesa"}
         icon={<Languages className="h-3.5 w-3.5" aria-hidden />}
         tone="success"
       />
-      <DarkTile
+      <StatItem
         label="CdL"
         value={stats?.cdl ?? "—"}
         hint="corsi di laurea"
         icon={<GraduationCap className="h-3.5 w-3.5" aria-hidden />}
         tone="default"
       />
-      <DarkTile
+      <StatItem
         label="Dipartimenti"
         value={stats?.departments ?? "—"}
         hint="fonti monitorate"
         icon={<Building2 className="h-3.5 w-3.5" aria-hidden />}
         tone="default"
       />
-    </div>
+    </dl>
   );
 }
 
-function DarkTile({
+function StatItem({
   label,
   value,
   hint,
@@ -185,27 +196,27 @@ function DarkTile({
   value: ReactNode;
   hint?: ReactNode;
   icon?: ReactNode;
-  tone: DarkTone;
+  tone: StatTone;
 }) {
   const valueColor =
     tone === "success"
-      ? "text-emerald-300"
+      ? "text-emerald-700"
       : tone === "info"
-        ? "text-cyan-300"
-        : "text-white";
+        ? "text-sky-800"
+        : "text-slate-950";
   return (
-    <div className="px-6 py-4 sm:px-8 sm:py-5">
-      <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-slate-400">
+    <div className="min-w-0">
+      <dt className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-slate-500">
         {icon ? <span aria-hidden>{icon}</span> : null}
         {label}
-      </div>
-      <p
+      </dt>
+      <dd
         className={`mt-1.5 text-2xl font-semibold leading-none tabular-nums ${valueColor}`}
       >
         {value}
-      </p>
+      </dd>
       {hint ? (
-        <p className="mt-1 text-[11px] text-slate-400">{hint}</p>
+        <dd className="mt-1 text-[11px] text-slate-500">{hint}</dd>
       ) : null}
     </div>
   );

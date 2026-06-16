@@ -14,7 +14,13 @@ import {
 } from "@/components/ui/select";
 
 const TRIGGER_CLASS =
-  "h-12 w-full rounded-xl border-input bg-card px-4 text-sm font-medium shadow-xs transition-all hover:border-primary/40 hover:bg-primary/[0.03] focus-visible:border-primary data-[popup-open]:border-primary data-[popup-open]:ring-2 data-[popup-open]:ring-primary/20 [&_svg]:size-4";
+  "h-12 w-full justify-start rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 text-sm font-medium text-slate-950 shadow-none transition-colors hover:border-slate-500 hover:bg-transparent focus-visible:border-slate-950 focus-visible:ring-0 data-[popup-open]:border-slate-950 data-[popup-open]:ring-0 disabled:bg-transparent disabled:text-slate-400 data-placeholder:text-sm data-placeholder:font-normal [&_svg]:size-4";
+
+const CONTENT_CLASS =
+  "rounded-none shadow-lg ring-1 ring-slate-200";
+
+const ITEM_CLASS =
+  "rounded-none px-2 py-2 focus:bg-slate-100 focus:text-slate-950";
 
 interface DepartmentSelectorProps {
   value: number | null;
@@ -80,9 +86,13 @@ export function DepartmentSelector({
           {selectedName}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className={CONTENT_CLASS}>
         {departments.map((dept) => (
-          <SelectItem key={dept.id} value={String(dept.id)}>
+          <SelectItem
+            key={dept.id}
+            value={String(dept.id)}
+            className={ITEM_CLASS}
+          >
             {dept.name}
           </SelectItem>
         ))}

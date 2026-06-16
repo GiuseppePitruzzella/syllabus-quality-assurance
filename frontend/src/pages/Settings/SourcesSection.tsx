@@ -105,7 +105,7 @@ export function SourcesSection() {
       headerAside={
         <div className="flex items-center gap-2">
           {data ? (
-            <span className="rounded-md border bg-muted/50 px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground">
+              <span className="bg-muted px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground">
               {data.length}
             </span>
           ) : null}
@@ -142,7 +142,7 @@ export function SourcesSection() {
         ) : !data || data.length === 0 ? (
           <EmptyRegistry hasFilters={documentType !== "all" || status !== "all"} />
         ) : (
-          <ul className="space-y-2">
+          <ul className="divide-y divide-slate-200/80">
             {data.map((doc) => (
               <DocumentRow
                 key={doc.id}
@@ -222,7 +222,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 h-9 w-full rounded-lg border bg-card px-3 text-sm font-medium shadow-xs transition-colors hover:border-primary/40 focus-visible:border-primary focus-visible:outline-none"
+        className="mt-1 h-9 w-full border border-input bg-background px-3 text-sm font-medium transition-colors hover:border-primary/40 focus-visible:border-primary focus-visible:outline-none"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -311,7 +311,7 @@ function DocumentRow({
   const isReindexing = reindexState.kind === "in_progress";
 
   return (
-    <li className="rounded-lg border bg-card px-4 py-3">
+    <li className="py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -319,7 +319,7 @@ function DocumentRow({
             <h3 className="truncate text-sm font-medium text-foreground">
               {doc.title}
             </h3>
-            <code className="rounded bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            <code className="bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
               v{doc.version}
             </code>
           </div>
@@ -386,7 +386,7 @@ function DocumentRow({
                 {doc.enabled_criteria.map((c) => (
                   <code
                     key={c}
-                    className="rounded bg-amber-500/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-900"
+                    className="bg-amber-500/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-900"
                   >
                     {c}
                   </code>
@@ -416,7 +416,7 @@ function DocumentRow({
       </dl>
 
       {editing ? (
-        <div className="mt-3 space-y-3 rounded-md border border-amber-200 bg-amber-500/[0.04] p-3">
+        <div className="mt-3 space-y-3 bg-amber-500/[0.04] p-3">
           <CriteriaPicker
             value={draftCriteria}
             onChange={setDraftCriteria}
@@ -461,14 +461,14 @@ function DocumentRow({
       ) : null}
 
       {reindexState.kind === "in_progress" ? (
-        <div className="mt-3 flex items-center gap-2 rounded-md border border-cyan-300 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-900">
+        <div className="mt-3 flex items-center gap-2 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-900">
           <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
           Reindicizzazione: {STATUS_VISUALS[reindexState.stage as LocalDocumentStatus]?.label ?? reindexState.stage}
         </div>
       ) : null}
 
       {!editing && doc.status === "failed" && doc.failure_reason ? (
-        <p className="mt-3 rounded-md border border-rose-300 bg-rose-500/10 px-3 py-2 text-xs leading-relaxed text-rose-800">
+        <p className="mt-3 bg-rose-500/10 px-3 py-2 text-xs leading-relaxed text-rose-800">
           {doc.failure_reason}
         </p>
       ) : null}
@@ -501,15 +501,15 @@ function StatusBadge({
   children: React.ReactNode;
 }) {
   const palette = {
-    emerald: "border-emerald-300 bg-emerald-500/10 text-emerald-800",
-    amber: "border-amber-300 bg-amber-500/10 text-amber-800",
-    rose: "border-rose-300 bg-rose-500/10 text-rose-800",
-    cyan: "border-cyan-300 bg-cyan-500/10 text-cyan-800",
-    slate: "border-slate-300 bg-slate-500/10 text-slate-700",
+    emerald: "bg-emerald-500/10 text-emerald-800",
+    amber: "bg-amber-500/10 text-amber-800",
+    rose: "bg-rose-500/10 text-rose-800",
+    cyan: "bg-cyan-500/10 text-cyan-800",
+    slate: "bg-slate-500/10 text-slate-700",
   };
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${palette[tone]}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${palette[tone]}`}
     >
       {inFlight ? (
         <Loader2 className="h-3 w-3 animate-spin" aria-hidden />
@@ -534,7 +534,7 @@ function LoadingRows() {
       {Array.from({ length: 3 }).map((_, i) => (
         <li
           key={i}
-          className="h-20 animate-pulse rounded-lg border bg-muted/30"
+          className="h-20 animate-pulse bg-muted/30"
           aria-hidden
         />
       ))}
@@ -544,7 +544,7 @@ function LoadingRows() {
 
 function EmptyRegistry({ hasFilters }: { hasFilters: boolean }) {
   return (
-    <div className="rounded-lg border border-dashed bg-muted/30 px-4 py-6 text-center">
+    <div className="bg-muted/30 px-4 py-6 text-center">
       <p className="text-sm font-medium text-foreground">
         {hasFilters
           ? "Nessun documento corrisponde ai filtri selezionati."
@@ -561,7 +561,7 @@ function EmptyRegistry({ hasFilters }: { hasFilters: boolean }) {
 
 function ErrorBanner({ error }: { error: unknown }) {
   return (
-    <div className="rounded-md border border-rose-300 bg-rose-500/10 px-3 py-2 text-sm text-rose-900">
+    <div className="bg-rose-500/10 px-3 py-2 text-sm text-rose-900">
       Impossibile caricare i documenti.{" "}
       <span className="text-xs text-rose-800/80">
         {error instanceof Error ? error.message : String(error)}

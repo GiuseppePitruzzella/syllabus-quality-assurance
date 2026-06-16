@@ -9,7 +9,6 @@ import { EmptyState } from "@/components/EmptyState";
 import { ScrapeProgress } from "@/components/ScrapeProgress";
 import { Section } from "@/components/layout/Section";
 import { Toolbar } from "@/components/layout/Toolbar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -98,9 +97,9 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
       title={
         <span className="flex items-center gap-2">
           Elenco insegnamenti
-          <Badge variant="outline" className="bg-muted/50">
+          <span className="bg-muted px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
             {syllabi.length}
-          </Badge>
+          </span>
         </span>
       }
       description={
@@ -108,10 +107,14 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
       }
       padded={false}
     >
-      <div className="px-4 pt-4">
+      <div className="pt-2">
         <Toolbar
           actions={
-            <Button variant="outline" onClick={handleScrape}>
+            <Button
+              variant="ghost"
+              onClick={handleScrape}
+              className="rounded-none px-0 text-xs font-medium text-slate-600 shadow-none hover:bg-transparent hover:text-slate-950"
+            >
               <RefreshCw className="h-4 w-4" />
               Aggiorna elenco
             </Button>
@@ -131,7 +134,7 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
 
       <Table className="w-full table-fixed">
         <TableHeader>
-          <TableRow className="bg-muted/30 hover:bg-muted/30">
+          <TableRow className="bg-transparent hover:bg-transparent">
             <TableHead className="w-16 text-center">Anno</TableHead>
             <TableHead className="w-24">Codice</TableHead>
             <TableHead>Insegnamento</TableHead>
@@ -147,12 +150,9 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
             syllabi.map((syl) => (
               <TableRow key={syl.id} className="hover:bg-muted/40">
                 <TableCell className="text-center">
-                  <Badge
-                    variant="outline"
-                    className="border-slate-200 bg-slate-500/10 text-slate-700"
-                  >
+                  <span className="inline-flex min-w-7 items-center justify-center bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-700">
                     {syl.year_of_study || "—"}
-                  </Badge>
+                  </span>
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {syl.course_code || "—"}
@@ -194,19 +194,13 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
 
 function LanguageBadge({ hasEnglish }: { hasEnglish: boolean }) {
   return hasEnglish ? (
-    <Badge
-      variant="outline"
-      className="border-emerald-200 bg-emerald-500/10 text-emerald-800"
-    >
+    <span className="inline-flex bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-800">
       IT + EN
-    </Badge>
+    </span>
   ) : (
-    <Badge
-      variant="outline"
-      className="border-amber-200 bg-amber-500/10 text-amber-800"
-    >
+    <span className="inline-flex bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-800">
       Solo IT
-    </Badge>
+    </span>
   );
 }
 

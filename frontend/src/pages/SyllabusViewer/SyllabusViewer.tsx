@@ -41,7 +41,11 @@ function EvaluateButton({
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button size="lg" onClick={() => setOpen(true)}>
+      <Button
+        size="lg"
+        onClick={() => setOpen(true)}
+        className="rounded-none bg-slate-950 text-white shadow-none hover:bg-slate-800 hover:shadow-none"
+      >
         <Sparkles className="h-4 w-4" aria-hidden />
         Valuta
       </Button>
@@ -68,7 +72,7 @@ function SourceLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex h-9 items-center gap-1.5 rounded-xl border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+      className="inline-flex h-9 items-center gap-1.5 bg-slate-100 px-3 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-950"
     >
       {label}
       <ExternalLink className="h-3 w-3" aria-hidden />
@@ -97,7 +101,7 @@ export function SyllabusViewer() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-6xl py-10">
+      <div className="mx-auto max-w-[1720px] py-10">
         <p className="text-sm text-muted-foreground">Caricamento…</p>
       </div>
     );
@@ -105,7 +109,7 @@ export function SyllabusViewer() {
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-6xl py-10">
+      <div className="mx-auto max-w-[1720px] py-10">
         <p className="text-sm text-muted-foreground">Syllabus non trovato.</p>
       </div>
     );
@@ -113,7 +117,7 @@ export function SyllabusViewer() {
 
   if (autoScrape.isLoading) {
     return (
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 py-20">
+      <div className="mx-auto flex max-w-[1720px] flex-col items-center justify-center gap-3 py-20">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
           Scaricamento contenuto in corso…
@@ -138,15 +142,20 @@ export function SyllabusViewer() {
     },
     { label: data.course_name },
   ];
+  const subtitleParts = [
+    data.teacher,
+    data.cdl_name ?? "CdL",
+    data.academic_year,
+  ].filter(Boolean);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="mx-auto w-full max-w-[1720px] space-y-10">
       <Breadcrumb items={breadcrumbItems} />
 
       <PageHeader
         badge="Syllabus"
         title={data.course_name}
-        subtitle={`${data.teacher} · ${data.cdl_name ?? "CdL"} · ${data.academic_year}`}
+        subtitle={subtitleParts.join(" · ")}
         pills={
           <>
             <LanguagePill hasEnglish={data.has_english} />
@@ -187,7 +196,7 @@ export function SyllabusViewer() {
         isLoading={isHistoryLoading}
       />
 
-      <Section
+        <Section
         title="Contenuto syllabus"
         headerAside={
           <span className="text-xs text-muted-foreground">
@@ -199,7 +208,10 @@ export function SyllabusViewer() {
         }
       >
           <Tabs defaultValue="obiettivi">
-            <TabsList>
+            <TabsList
+              variant="line"
+              className="w-full justify-start overflow-x-auto p-0"
+            >
               <TabsTrigger value="obiettivi">Obiettivi formativi</TabsTrigger>
               <TabsTrigger value="contenuto">
                 Contenuto e programma
@@ -271,13 +283,13 @@ export function SyllabusViewer() {
 function LanguagePill({ hasEnglish }: { hasEnglish: boolean }) {
   if (hasEnglish) {
     return (
-      <span className="inline-flex items-center rounded-md border border-emerald-200 bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-800">
+      <span className="inline-flex items-center bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-800">
         IT + EN
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center rounded-md border border-amber-200 bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-800">
+    <span className="inline-flex items-center bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-800">
       Solo IT
     </span>
   );
@@ -292,12 +304,12 @@ function Pill({
 }) {
   const cls =
     tone === "neutral"
-      ? "border-border bg-card text-foreground"
-      : "border-transparent bg-muted text-muted-foreground";
+      ? "bg-slate-100 text-slate-800"
+      : "bg-muted text-muted-foreground";
   return (
     <span
       className={
-        "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium " +
+        "inline-flex items-center px-2 py-0.5 text-xs font-medium " +
         cls
       }
     >
@@ -340,7 +352,7 @@ function EvaluationHistoryList({
         isLoading ? (
           <span className="text-xs text-muted-foreground">caricamento…</span>
         ) : (
-          <span className="rounded-md border bg-muted px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
+          <span className="bg-muted px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
             {items.length} run
           </span>
         )
@@ -357,7 +369,7 @@ function EvaluationHistoryList({
             ))}
           </div>
         ) : items.length === 0 ? (
-          <p className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
+          <p className="bg-muted/30 px-3 py-4 text-sm text-muted-foreground">
             Nessuna valutazione registrata. Avvia una run con{" "}
             <strong className="font-medium text-foreground">
               Valuta
@@ -365,7 +377,7 @@ function EvaluationHistoryList({
             .
           </p>
         ) : (
-          <ul className="divide-y rounded-md border">
+          <ul className="divide-y divide-slate-200/80">
             {items.map((item) => (
               <li key={item.evaluation_uuid}>
                 <Link

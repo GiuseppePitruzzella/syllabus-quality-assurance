@@ -32,12 +32,15 @@ export default function App() {
         <BrowserRouter>
           <TooltipProvider delay={300}>
             <main className="relative isolate min-h-screen bg-slate-50">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.08),transparent_55%)]"
-              />
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route
+                  path="/"
+                  element={
+                    <Chromed>
+                      <Dashboard />
+                    </Chromed>
+                  }
+                />
                 <Route
                   path="/syllabus/:seuid"
                   element={
@@ -74,11 +77,11 @@ export default function App() {
 
 function Chromed({ children }: { children: ReactNode }) {
   return (
-    <div className="space-y-4 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-      <header className="overflow-hidden rounded-2xl bg-slate-800">
+    <div>
+      <header className="bg-slate-950">
         <Navbar />
       </header>
-      {children}
+      <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">{children}</div>
     </div>
   );
 }

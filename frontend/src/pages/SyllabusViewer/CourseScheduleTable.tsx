@@ -17,16 +17,16 @@ interface CourseScheduleTableProps {
 export function CourseScheduleTable({ items }: CourseScheduleTableProps) {
   if (!items || items.length === 0) {
     return (
-      <p className="rounded-md border border-dashed px-3 py-3 text-sm text-muted-foreground">
+      <p className="border-y border-slate-200 px-3 py-3 text-sm text-muted-foreground">
         Nessuna programmazione disponibile.
       </p>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="overflow-x-auto border-y border-slate-200">
       <table className="w-full text-sm">
-        <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
+        <thead className="text-xs uppercase tracking-wide text-muted-foreground">
           <tr>
             <th className="w-12 px-3 py-2 text-left font-medium">N°</th>
             <th className="px-3 py-2 text-left font-medium">Argomento</th>
@@ -50,7 +50,7 @@ export function CourseScheduleTable({ items }: CourseScheduleTableProps) {
               "";
 
             return (
-              <tr key={i} className="border-t">
+              <tr key={i} className="border-t border-slate-200">
                 <td className="px-3 py-2 align-top tabular-nums text-muted-foreground">
                   {item.numero ?? i + 1}
                 </td>
