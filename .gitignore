@@ -222,6 +222,8 @@ data/batch_results/
 node_modules/
 # Claude
 CLAUDE.md
+# Superpowers brainstorm scratch (mockups, server state)
+.superpowers/
 PROGRESS.md
 DECISIONS.md
 DESIGN.md
