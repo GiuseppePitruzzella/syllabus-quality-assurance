@@ -1,8 +1,8 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { Section } from "@/components/layout/Section";
 import type { EvaluationDetail } from "@/lib/types";
+import { EvaluationSection } from "./EvaluationSection";
 
 interface Props {
   data: EvaluationDetail;
@@ -19,9 +19,11 @@ interface Props {
  */
 export function EvaluationReport({ data }: Props) {
   return (
-    <Section title="Report di valutazione" className="min-w-0">
-      <ReportPanel data={data} />
-    </Section>
+    <EvaluationSection title="Report di valutazione" className="min-w-0">
+      <div className="max-w-[78ch]">
+        <ReportPanel data={data} />
+      </div>
+    </EvaluationSection>
   );
 }
 
@@ -44,25 +46,25 @@ function ReportPanel({ data }: { data: EvaluationDetail }) {
  */
 function ReportMarkdown({ source }: { source: string }) {
   return (
-    <div className="max-w-none overflow-visible break-words text-sm leading-relaxed [overflow-wrap:anywhere]">
+    <div className="max-w-none overflow-visible break-words text-[0.925rem] leading-7 text-slate-700 [overflow-wrap:anywhere]">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: (props) => (
             <h1
-              className="!mt-6 !mb-3 !text-[1.25rem] !leading-tight !font-semibold !tracking-normal first:!mt-0"
+              className="!mt-8 !mb-3 !text-2xl !leading-tight !font-semibold !tracking-normal !text-slate-950 first:!mt-0"
               {...props}
             />
           ),
           h2: (props) => (
             <h2
-              className="!mt-6 !mb-2 !text-[1rem] !leading-snug !font-semibold !tracking-normal first:!mt-0"
+              className="!mt-8 !mb-2 !text-lg !leading-snug !font-semibold !tracking-normal !text-slate-900 first:!mt-0"
               {...props}
             />
           ),
           h3: (props) => (
             <h3
-              className="!mt-4 !mb-1.5 !text-sm !font-semibold !tracking-normal first:!mt-0"
+              className="!mt-5 !mb-1.5 !text-base !font-semibold !tracking-normal !text-slate-900 first:!mt-0"
               {...props}
             />
           ),
@@ -91,23 +93,20 @@ function ReportMarkdown({ source }: { source: string }) {
             />
           ),
           blockquote: (props) => (
-            <blockquote
-              className="my-3 border-l-2 border-muted-foreground/30 pl-3 text-muted-foreground"
-              {...props}
-            />
+            <blockquote className="my-4 bg-slate-100/70 px-4 py-3 text-slate-600" {...props} />
           ),
           code: ({ children, className, ...rest }) => {
             const isBlock = /language-/.test(className ?? "");
             return isBlock ? (
               <code
-                className="block overflow-x-auto whitespace-pre-wrap rounded-md bg-muted px-3 py-2 font-mono text-xs"
+                className="block overflow-x-auto whitespace-pre-wrap bg-slate-100 px-3 py-2 font-mono text-xs"
                 {...rest}
               >
                 {children}
               </code>
             ) : (
               <code
-                className="rounded bg-muted px-1 py-0.5 font-mono text-[0.85em]"
+                className="bg-slate-100 px-1 py-0.5 font-mono text-[0.85em]"
                 {...rest}
               >
                 {children}
@@ -116,7 +115,7 @@ function ReportMarkdown({ source }: { source: string }) {
           },
           pre: (props) => <pre className="my-3 overflow-x-auto" {...props} />,
           table: (props) => (
-            <div className="my-3 overflow-x-auto rounded-md border">
+            <div className="my-4 overflow-x-auto">
               <table className="w-full text-xs" {...props} />
             </div>
           ),

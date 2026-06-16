@@ -1,4 +1,3 @@
-import { Section } from "@/components/layout/Section";
 import type {
   AgentOutputDump,
   CriterionJudgmentDump,
@@ -19,11 +18,7 @@ interface Props {
  * confidence, source fields and the retrieved RAG chunks.
  */
 export function AgentDetailsSection({ data }: Props) {
-  return (
-    <Section title="Dettagli agenti" className="min-w-0">
-      <AgentDetailsPanel data={data} />
-    </Section>
-  );
+  return <AgentDetailsPanel data={data} />;
 }
 
 const AGENT_ORDER = ["A1", "A2", "A3", "A4"] as const;
@@ -51,7 +46,7 @@ function AgentDetailsPanel({ data }: { data: EvaluationDetail }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="divide-y divide-slate-200/80">
       {AGENT_ORDER.map((code) => {
         const out = outputs?.[code] ?? null;
         const err = errors?.[code] ?? null;
@@ -76,8 +71,8 @@ function AgentCard({
     AGENT_INFO as Record<string, { label: string; criteria: string[] }>
   )[code];
   return (
-    <div className="rounded-md border">
-      <header className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1 border-b bg-muted/30 px-4 py-3">
+    <article className="py-5 first:pt-0 last:pb-0">
+      <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
         <div className="min-w-0">
           <h3 className="!m-0 flex items-baseline gap-2 text-sm font-semibold">
             <code className="font-mono">{code}</code>
@@ -94,7 +89,7 @@ function AgentCard({
                 {info.criteria.map((c) => (
                   <code
                     key={c}
-                    className="rounded bg-background px-1.5 py-0.5 font-mono text-[10px]"
+                    className="font-mono text-[10px] text-slate-500"
                   >
                     {c}
                   </code>
@@ -103,7 +98,7 @@ function AgentCard({
             ) : null}
           </p>
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-[11px] text-muted-foreground">
           {meta.prompt_version ? (
             <span>prompt {meta.prompt_version} · </span>
           ) : null}
@@ -120,13 +115,13 @@ function AgentCard({
       </header>
 
       {error ? (
-        <div className="border-b px-4 py-2 text-xs text-rose-700 dark:text-rose-300">
+        <div className="mt-3 bg-rose-50 px-3 py-2 text-xs text-rose-700 dark:text-rose-300">
           <code className="font-mono">{error}</code>
         </div>
       ) : null}
 
       {output && output.judgments.length > 0 ? (
-        <ul className="divide-y text-sm">
+        <ul className="mt-3 divide-y divide-slate-100 text-sm">
           {output.judgments.map((j) => (
             <JudgmentRow key={j.criterion_code} judgment={j} />
           ))}
@@ -136,19 +131,17 @@ function AgentCard({
       {output && output.retrieved_chunks.length > 0 ? (
         <RetrievedChunksRow chunks={output.retrieved_chunks} />
       ) : null}
-    </div>
+    </article>
   );
 }
 
 function JudgmentRow({ judgment }: { judgment: CriterionJudgmentDump }) {
   const score = judgment.score;
   return (
-    <li className="px-4 py-3">
+    <li className="py-3">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
         <code className="font-mono text-xs">{judgment.criterion_code}</code>
-        <CompactScoreBadge
-          score={judgment.is_na ? null : (score as number | null)}
-        />
+        <CompactScore score={judgment.is_na ? null : (score as number | null)} />
         <span className="text-xs text-muted-foreground">
           confidence: {judgment.confidence}
         </span>
@@ -175,11 +168,11 @@ function JudgmentRow({ judgment }: { judgment: CriterionJudgmentDump }) {
 
 function RetrievedChunksRow({ chunks }: { chunks: RetrievedChunkRef[] }) {
   return (
-    <details className="border-t bg-muted/20">
-      <summary className="cursor-pointer list-none px-4 py-2 text-[0.7rem] uppercase tracking-wide text-muted-foreground hover:text-foreground">
+    <details className="mt-3 bg-slate-100/60">
+      <summary className="cursor-pointer list-none px-3 py-2 text-[0.7rem] uppercase tracking-wide text-muted-foreground hover:text-foreground">
         Chunks recuperati (RAG) · {chunks.length}
       </summary>
-      <ul className="space-y-0.5 px-4 pb-3 text-xs">
+      <ul className="space-y-0.5 px-3 pb-3 text-xs">
         {chunks.map((c, i) => (
           <li
             key={`${c.chunk_id}-${i}`}
@@ -201,24 +194,20 @@ function RetrievedChunksRow({ chunks }: { chunks: RetrievedChunkRef[] }) {
   );
 }
 
-function CompactScoreBadge({ score }: { score: number | null }) {
-  let cls =
-    "inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded border px-1 text-xs font-medium tabular-nums";
+function CompactScore({ score }: { score: number | null }) {
+  let cls = "text-xs font-semibold tabular-nums ";
   let label: string;
   if (score === 2) {
-    cls +=
-      " border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+    cls += "text-emerald-700 dark:text-emerald-300";
     label = "2";
   } else if (score === 1) {
-    cls +=
-      " border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+    cls += "text-amber-700 dark:text-amber-300";
     label = "1";
   } else if (score === 0) {
-    cls +=
-      " border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300";
+    cls += "text-rose-700 dark:text-rose-300";
     label = "0";
   } else {
-    cls += " border-border bg-muted text-muted-foreground";
+    cls += "text-muted-foreground";
     label = "NA";
   }
   return <span className={cls}>{label}</span>;

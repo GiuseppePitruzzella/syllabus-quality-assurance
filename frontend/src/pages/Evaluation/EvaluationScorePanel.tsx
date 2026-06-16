@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
-import { Section } from "@/components/layout/Section";
 import { WhyThisResult } from "@/components/WhyThisResult";
 import { CORE_CRITERIA } from "@/data/rubric";
 import { useTechnicalView } from "@/context/technicalView";
@@ -19,6 +18,8 @@ import type {
   EvaluationDetail,
   NACriterionRecord,
 } from "@/lib/types";
+
+import { EvaluationSection } from "./EvaluationSection";
 
 interface Props {
   data: EvaluationDetail;
@@ -83,18 +84,17 @@ export function EvaluationScorePanel({ data }: Props) {
 
   if (!isAggregationReady) {
     return (
-      <Section
-        title="Punteggi C1-C9"
-        headerAside={
+      <EvaluationSection
+        title="Revisione dei criteri C1-C9"
+        aside={
           <span className="text-xs text-muted-foreground">in attesa</span>
         }
-        padded={false}
       >
-        <p className="px-4 py-6 text-sm text-muted-foreground">
+        <p className="py-6 text-sm text-muted-foreground">
           I punteggi saranno disponibili al termine della fase di
           aggregazione (evento <code>aggregation_completed</code>).
         </p>
-      </Section>
+      </EvaluationSection>
     );
   }
 
@@ -121,70 +121,48 @@ export function EvaluationScorePanel({ data }: Props) {
 
   return (
     <div id={CRITERIA_SECTION_ID} className="scroll-mt-24">
-    <Section
-      title="Punteggi C1-C9"
-      headerAside={
-        <button
-          type="button"
-          onClick={() => setAll(!anyExpanded)}
-          className="text-xs font-medium text-primary hover:underline"
-        >
-          {anyExpanded ? "Comprimi tutto" : "Espandi tutto"}
-        </button>
-      }
-    >
-      {hasAgentErrors ? <AgentErrorsBanner errors={agentErrors!} /> : null}
+      <EvaluationSection
+        title="Revisione dei criteri C1-C9"
+        aside={
+          <button
+            type="button"
+            onClick={() => setAll(!anyExpanded)}
+            className="text-xs font-medium text-slate-600 hover:text-slate-950"
+          >
+            {anyExpanded ? "Comprimi tutto" : "Espandi tutto"}
+          </button>
+        }
+      >
+        {hasAgentErrors ? <AgentErrorsBanner errors={agentErrors!} /> : null}
 
-      <div className="overflow-hidden rounded-md border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
-            <tr>
-              <th className="w-8 px-2 py-2" aria-hidden />
-              <th className="w-14 px-3 py-2 text-left font-medium">Crit</th>
-              <th className="px-3 py-2 text-left font-medium">Criterio</th>
-              {technical ? (
-                <th className="w-16 px-3 py-2 text-left font-medium">
-                  Agente
-                </th>
-              ) : null}
-              {technical ? (
-                <th className="w-24 px-3 py-2 text-left font-medium">
-                  Confidenza
-                </th>
-              ) : null}
-              <th className="w-20 px-3 py-2 text-right font-medium">Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {CRITERIA.map((c) => {
-              const raw = scores[c.code];
-              const score: number | null =
-                typeof raw === "number" ? raw : null;
-              const judgment = judgmentByCriterion.get(c.code) ?? null;
-              const agentError = agentErrors?.[c.owner] ?? null;
-              return (
-                <CriterionRow
-                  key={c.code}
-                  code={c.code}
-                  name={c.name}
-                  description={c.description}
-                  improvementTarget={c.improvementTarget}
-                  owner={c.owner}
-                  score={score}
-                  judgment={judgment}
-                  agentError={agentError}
-                  expanded={isExpanded(c.code)}
-                  onToggle={() => toggle(c.code)}
-                  technical={technical}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+        <div className="divide-y divide-slate-200/80">
+          {CRITERIA.map((c) => {
+            const raw = scores[c.code];
+            const score: number | null =
+              typeof raw === "number" ? raw : null;
+            const judgment = judgmentByCriterion.get(c.code) ?? null;
+            const agentError = agentErrors?.[c.owner] ?? null;
+            return (
+              <CriterionRow
+                key={c.code}
+                code={c.code}
+                name={c.name}
+                description={c.description}
+                improvementTarget={c.improvementTarget}
+                owner={c.owner}
+                score={score}
+                judgment={judgment}
+                agentError={agentError}
+                expanded={isExpanded(c.code)}
+                onToggle={() => toggle(c.code)}
+                technical={technical}
+              />
+            );
+          })}
+        </div>
 
-      {naCriteria.length > 0 ? <NaCriteriaList items={naCriteria} /> : null}
-    </Section>
+        {naCriteria.length > 0 ? <NaCriteriaList items={naCriteria} /> : null}
+      </EvaluationSection>
     </div>
   );
 }
@@ -193,9 +171,9 @@ export function EvaluationScorePanel({ data }: Props) {
 // Row
 // ---------------------------------------------------------------------------
 
-const ROW_ACCENT: Record<string, string> = {
-  "0": "border-l-2 border-rose-400",
-  "1": "border-l-2 border-amber-400",
+const ROW_TONE: Record<string, string> = {
+  "0": "bg-slate-50/95",
+  "1": "bg-slate-50/75",
 };
 
 function CriterionRow({
@@ -225,99 +203,108 @@ function CriterionRow({
 }) {
   const isNa = judgment?.is_na ?? score === null;
   const isNaTechnical = Boolean(agentError) && !judgment;
-  const accent = score !== null ? ROW_ACCENT[String(score)] ?? "" : "";
+  const tone = score !== null ? ROW_TONE[String(score)] ?? "" : "";
   const muted = score === 2 ? "text-muted-foreground" : "";
-  const colSpan = technical ? 6 : 4;
 
   return (
-    <>
-      <tr
-        className={
-          "cursor-pointer border-t transition-colors hover:bg-muted/30 " +
-          accent
-        }
+    <article className={tone}>
+      <button
+        type="button"
         onClick={onToggle}
+        aria-expanded={expanded}
+        className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-1 py-3 text-left transition-colors hover:bg-slate-100/60 sm:px-2"
       >
-        <td className="px-2 py-2 text-muted-foreground">
-          <ChevronRight
-            className={"h-4 w-4 transition-transform " + (expanded ? "rotate-90" : "")}
-            aria-hidden
-          />
-        </td>
-        <td className={"px-3 py-2 font-mono text-xs " + muted}>{code}</td>
-        <td className={"px-3 py-2 " + muted}>{name}</td>
-        {technical ? (
-          <td className="px-3 py-2 font-mono text-xs text-muted-foreground">
-            {owner}
-          </td>
-        ) : null}
-        {technical ? (
-          <td className="px-3 py-2 text-xs text-muted-foreground">
-            {judgment?.confidence ?? "—"}
-          </td>
-        ) : null}
-        <td className="px-3 py-2 text-right">
-          <ScoreBadge score={score} isNa={isNa} />
-        </td>
-      </tr>
+        <span className="text-slate-400">
+          {expanded ? (
+            <ChevronDown className="h-4 w-4" aria-hidden />
+          ) : (
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          )}
+        </span>
+        <span className="min-w-0">
+          <span className={"flex flex-wrap items-baseline gap-x-2 gap-y-0.5 " + muted}>
+            <code className="font-mono text-[11px] font-semibold text-slate-500">
+              {code}
+            </code>
+            <span className="font-medium text-slate-900">{name}</span>
+          </span>
+          {technical ? (
+            <span className="mt-0.5 block text-[11px] text-slate-500">
+              Agente {owner} · confidenza {judgment?.confidence ?? "—"}
+            </span>
+          ) : null}
+        </span>
+        <ScoreMark score={score} isNa={isNa} />
+      </button>
       {expanded ? (
-        <tr className="border-t bg-muted/20">
-          <td colSpan={colSpan} className="px-6 py-3 text-sm">
-            <WhyThisResult
-              score={score}
-              isNa={isNa}
-              isNaTechnical={isNaTechnical}
-              whatItEvaluates={description}
-              justification={judgment?.justification ?? null}
-              evidences={(judgment?.evidences ?? []).map((e) => ({
-                text: e.text,
-                sourceField: e.source_field,
-              }))}
-              improvementTarget={improvementTarget}
-              naReason={judgment?.na_reason ?? null}
-              confidence={
-                (judgment?.confidence as "low" | "medium" | "high" | null) ??
-                null
-              }
-              technical={technical}
-            />
-          </td>
-        </tr>
+        <div className="px-8 pb-5 pt-1 sm:px-10">
+          <WhyThisResult
+            score={score}
+            isNa={isNa}
+            isNaTechnical={isNaTechnical}
+            whatItEvaluates={description}
+            justification={judgment?.justification ?? null}
+            evidences={(judgment?.evidences ?? []).map((e) => ({
+              text: e.text,
+              sourceField: e.source_field,
+            }))}
+            improvementTarget={improvementTarget}
+            naReason={judgment?.na_reason ?? null}
+            confidence={
+              (judgment?.confidence as "low" | "medium" | "high" | null) ??
+              null
+            }
+            technical={technical}
+          />
+        </div>
       ) : null}
-    </>
+    </article>
   );
 }
 
-// ---------------------------------------------------------------------------
-// ScoreBadge / banners
-// ---------------------------------------------------------------------------
-
-function ScoreBadge({ score, isNa }: { score: number | null; isNa: boolean }) {
-  let cls =
-    "inline-flex h-6 w-9 items-center justify-center rounded-md border text-sm font-medium tabular-nums";
-  let label: string;
-
-  if (score === 2) {
-    // discreet — score 2 carries the least visual weight
-    cls += " border-slate-300 bg-slate-100 text-slate-600";
-    label = "2";
-  } else if (score === 1) {
-    cls += " border-amber-400 bg-amber-100 text-amber-900";
-    label = "1";
-  } else if (score === 0) {
-    cls += " border-rose-400 bg-rose-100 text-rose-900";
-    label = "0";
-  } else {
-    cls += " border-border bg-muted text-muted-foreground";
-    label = isNa ? "NA" : "—";
+function ScoreMark({ score, isNa }: { score: number | null; isNa: boolean }) {
+  if (score === 0) {
+    return (
+      <span className="text-right">
+        <strong className="block text-lg tabular-nums text-rose-700">0</strong>
+        <span className="hidden text-[10px] font-medium uppercase text-rose-700 sm:block">
+          Criticità
+        </span>
+      </span>
+    );
   }
-
-  return <span className={cls}>{label}</span>;
+  if (score === 1) {
+    return (
+      <span className="text-right">
+        <strong className="block text-lg tabular-nums text-amber-700">1</strong>
+        <span className="hidden text-[10px] font-medium uppercase text-amber-700 sm:block">
+          Da migliorare
+        </span>
+      </span>
+    );
+  }
+  if (score === 2) {
+    return (
+      <span className="text-right">
+        <strong className="block text-lg font-medium tabular-nums text-slate-500">
+          2
+        </strong>
+        <span className="hidden text-[10px] uppercase text-slate-400 sm:block">
+          Adeguato
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span className="text-right text-xs font-medium text-slate-500">
+      {isNa ? "NA" : "—"}
+    </span>
+  );
 }
 
 function AgentErrorsBanner({ errors }: { errors: Record<string, string> }) {
   return (
-    <div className="mb-4 rounded-md border border-amber-200 bg-amber-500/10 px-3 py-2 text-sm">
+    <div className="mb-4 bg-amber-100/60 px-3 py-2 text-sm">
       <p className="mb-1 text-xs font-medium uppercase tracking-wide text-amber-800 dark:text-amber-300">
         Agenti falliti
       </p>
@@ -345,7 +332,7 @@ function NaCriteriaList({ items }: { items: NACriterionRecord[] }) {
             className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5"
           >
             <code className="font-mono text-xs">{item.criterion_code}</code>
-            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            <code className="font-mono text-[10px] text-muted-foreground">
               {item.source}
             </code>
             <span className="text-xs text-muted-foreground">{item.reason}</span>

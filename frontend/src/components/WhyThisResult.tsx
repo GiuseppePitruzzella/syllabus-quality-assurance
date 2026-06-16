@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { Quote as QuoteIcon } from "lucide-react";
 
 import { truncateText } from "@/lib/text";
 
@@ -52,8 +53,8 @@ const LEAD: Record<Kind, { label: string; dot: string; text: string }> = {
 };
 
 const ACTION_CALLOUT: Record<"critical" | "improve", { title: string; box: string }> = {
-  critical: { title: "Cosa correggere", box: "border-rose-300 bg-rose-50" },
-  improve: { title: "Cosa migliorare", box: "border-amber-300 bg-amber-50" },
+  critical: { title: "Cosa correggere", box: "bg-slate-100/80 text-slate-900" },
+  improve: { title: "Cosa migliorare", box: "bg-slate-100/80 text-slate-900" },
 };
 
 /**
@@ -115,13 +116,8 @@ export function WhyThisResult({
       <Evidences evidences={evidences} technical={technical} compact={compact} />
 
       {showActionCallout ? (
-        <div
-          className={
-            "rounded-md border-l-2 px-3 py-2 " +
-            ACTION_CALLOUT[kind as "critical" | "improve"].box
-          }
-        >
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <div className={"px-4 py-3 " + ACTION_CALLOUT[kind as "critical" | "improve"].box}>
+          <p className="text-[10px] font-semibold uppercase tracking-wide opacity-65">
             {ACTION_CALLOUT[kind as "critical" | "improve"].title}
           </p>
           <p className="mt-0.5 leading-relaxed">{improvementTarget}</p>
@@ -166,7 +162,7 @@ function Evidences({
           {evidences.map((ev, i) => (
             <li key={i} className="flex flex-col gap-0.5">
               {ev.sourceField ? (
-                <code className="self-start rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                <code className="self-start bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
                   {ev.sourceField}
                 </code>
               ) : null}
@@ -240,8 +236,9 @@ function Evidences({
 
 function Quote({ text }: { text: string }) {
   return (
-    <span className="border-l-2 border-muted-foreground/20 pl-2 text-foreground/90">
-      “{text}”
+    <span className="flex gap-2 text-slate-600">
+      <QuoteIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-300" aria-hidden />
+      <span>“{text}”</span>
     </span>
   );
 }
@@ -249,7 +246,7 @@ function Quote({ text }: { text: string }) {
 function Block({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
         {label}
       </p>
       {children}

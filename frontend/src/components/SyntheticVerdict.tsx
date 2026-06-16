@@ -11,25 +11,22 @@ import { focusCriteria } from "@/lib/events";
 import { useTechnicalView } from "@/context/technicalView";
 import type { EvaluationDetail } from "@/lib/types";
 
-/** Subtle band accent — neutral surface, colour only on the edge.
- *  "buona" is sky (not success-green): a good syllabus is not a
- *  completed operation. */
 const BAND_ACCENT: Record<Verdict["band"], string> = {
-  ottima: "border-l-emerald-400",
-  buona: "border-l-sky-400",
-  discreta: "border-l-amber-400",
-  da_rivedere: "border-l-rose-400",
-  copertura_insufficiente: "border-l-amber-400",
-  non_disponibile: "border-l-slate-300",
+  ottima: "text-emerald-800",
+  buona: "text-sky-800",
+  discreta: "text-amber-800",
+  da_rivedere: "text-rose-800",
+  copertura_insufficiente: "text-amber-800",
+  non_disponibile: "text-slate-700",
 };
 
 type ChipTone = "critical" | "improve" | "ok" | "neutral";
 
 const CHIP_TONE: Record<ChipTone, string> = {
-  critical: "border-rose-300 bg-rose-50 text-rose-800",
-  improve: "border-amber-300 bg-amber-50 text-amber-800",
-  ok: "border-emerald-300 bg-emerald-50 text-emerald-800",
-  neutral: "border-slate-300 bg-slate-100 text-slate-700",
+  critical: "bg-rose-100/70 text-rose-800",
+  improve: "bg-amber-100/70 text-amber-800",
+  ok: "bg-emerald-100/70 text-emerald-800",
+  neutral: "bg-slate-100 text-slate-600",
 };
 
 function codesByScore(data: EvaluationDetail, target: number): string[] {
@@ -37,7 +34,13 @@ function codesByScore(data: EvaluationDetail, target: number): string[] {
   return CORE_CRITERION_CODES.filter((c) => s[c] === target);
 }
 
-export function SyntheticVerdict({ data }: { data: EvaluationDetail }) {
+export function SyntheticVerdict({
+  data,
+  variant = "default",
+}: {
+  data: EvaluationDetail;
+  variant?: "default" | "rail";
+}) {
   const { technical } = useTechnicalView();
   const [open, setOpen] = useState(false);
 
@@ -50,23 +53,28 @@ export function SyntheticVerdict({ data }: { data: EvaluationDetail }) {
 
   const sentence = verdictSummarySentence(verdict);
   const showBody = verdict.band !== "non_disponibile";
+  const isRail = variant === "rail";
 
   return (
-    <section
-      className={
-        "rounded-xl border border-l-4 bg-white p-5 sm:p-6 " +
-        BAND_ACCENT[verdict.band]
-      }
-    >
-      <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+    <section className={isRail ? "" : "bg-slate-100/65 px-5 py-6 sm:px-7"}>
+      <h2
+        className={
+          (isRail ? "text-2xl" : "text-2xl sm:text-3xl") +
+          " font-semibold leading-tight tracking-tight " +
+          BAND_ACCENT[verdict.band]
+        }
+      >
         {verdict.headline}
       </h2>
 
       {sentence ? (
-        <p className="mt-2 max-w-2xl text-slate-600">{sentence}</p>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
+          {sentence}
+        </p>
       ) : null}
 
-      {showBody ? <Chips data={data} verdict={verdict} /> : null}
+      {showBody && !isRail ? <Chips data={data} verdict={verdict} /> : null}
+      {showBody && isRail ? <RailCounts verdict={verdict} /> : null}
 
       <Annotations
         verdict={verdict}
@@ -75,7 +83,7 @@ export function SyntheticVerdict({ data }: { data: EvaluationDetail }) {
       />
 
       {sentence ? (
-        <div className="mt-4 border-t border-slate-100 pt-3">
+        <div className={isRail ? "mt-4" : "mt-4 border-t border-slate-200/70 pt-3"}>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -93,6 +101,22 @@ export function SyntheticVerdict({ data }: { data: EvaluationDetail }) {
         </div>
       ) : null}
     </section>
+  );
+}
+
+function RailCounts({ verdict }: { verdict: Verdict }) {
+  return (
+    <p className="mt-4 text-xs leading-relaxed text-slate-500">
+      <strong className={verdict.criticalCount > 0 ? "text-rose-700" : "text-slate-700"}>
+        {verdict.criticalCount} criticità
+      </strong>
+      {" · "}
+      <strong className={verdict.improvableCount > 0 ? "text-amber-700" : "text-slate-700"}>
+        {verdict.improvableCount} {verdict.improvableCount === 1 ? "area" : "aree"} da migliorare
+      </strong>
+      {" · "}
+      {verdict.evaluatedCount}/{verdict.totalCount} valutati
+    </p>
   );
 }
 
@@ -139,7 +163,7 @@ function Chip({
   codes?: string[];
 }) {
   const cls =
-    "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-xs font-medium " +
+    "inline-flex items-center justify-center px-2.5 py-1 text-xs font-medium " +
     CHIP_TONE[tone];
   if (codes && codes.length > 0) {
     return (

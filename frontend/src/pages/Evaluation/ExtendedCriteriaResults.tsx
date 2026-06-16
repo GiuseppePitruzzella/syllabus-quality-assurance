@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AlertTriangle, ChevronRight, Info } from "lucide-react";
 
-import { Section } from "@/components/layout/Section";
+import { useTechnicalView } from "@/context/technicalView";
 import type {
   EvaluationDetail,
   ExtendedCriteriaResultPayload,
@@ -10,6 +10,7 @@ import type {
   ExtendedJudgmentPayload,
   ExtendedNAPayload,
 } from "@/lib/types";
+import { EvaluationSection } from "./EvaluationSection";
 
 // Truncate the inline evidence preview so the table row stays compact
 // (Phase 9.D.3 evidence rule: distinguish syllabus / external without
@@ -48,6 +49,7 @@ export function ExtendedCriteriaResults({ data }: Props) {
   // Hooks first — the early returns below are after this so we
   // don't violate the rules of hooks when the run is legacy.
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const { technical } = useTechnicalView();
 
   const ext = data.extended_criteria_result;
 
@@ -83,66 +85,71 @@ export function ExtendedCriteriaResults({ data }: Props) {
   const anyExpanded = expanded.size > 0;
 
   return (
-    <Section
-      title="Criteri estesi E1-E5"
-      headerAside={
-        <div className="flex items-center gap-2">
-          <NotInCoreScorePill />
-          <button
-            type="button"
-            onClick={anyExpanded ? collapseAll : expandAll}
-            className="text-xs font-medium text-primary hover:underline"
-          >
-            {anyExpanded ? "Comprimi tutto" : "Espandi tutto"}
-          </button>
+    <div id="extended-analysis" className="scroll-mt-24">
+      <EvaluationSection
+        title="Criteri estesi E1-E5"
+        aside={
+          <div className="flex items-center gap-2">
+            <NotInCoreScorePill />
+            <button
+              type="button"
+              onClick={anyExpanded ? collapseAll : expandAll}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              {anyExpanded ? "Comprimi tutto" : "Espandi tutto"}
+            </button>
+          </div>
+        }
+      >
+        <ExtendedStatusBanner result={ext} />
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="text-[10px] uppercase tracking-wide text-slate-400">
+              <tr>
+                <th className="w-8 px-2 py-2" aria-hidden />
+                <th className="w-14 px-3 py-2 text-left font-medium">Crit</th>
+                <th className="px-3 py-2 text-left font-medium">Criterio</th>
+                {technical ? (
+                  <th className="w-24 px-3 py-2 text-left font-medium">
+                    Handler ver.
+                  </th>
+                ) : null}
+                <th className="w-32 px-3 py-2 text-right font-medium">
+                  Score / NA
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {EXTENDED_ORDER.map((c) => {
+                const judgment = judgmentByCode.get(c.code) ?? null;
+                const na = naByCode.get(c.code) ?? null;
+                const promptVersion =
+                  ext.handler_prompt_versions[c.code] ?? null;
+                const isExpanded = expanded.has(c.code);
+                return (
+                  <ExtendedRow
+                    key={c.code}
+                    code={c.code}
+                    name={c.name}
+                    judgment={judgment}
+                    na={na}
+                    handlerVersion={promptVersion}
+                    expanded={isExpanded}
+                    onToggle={() => toggle(c.code)}
+                    technical={technical}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      }
-    >
-      <ExtendedStatusBanner result={ext} />
 
-      <div className="overflow-hidden rounded-md border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
-            <tr>
-              <th className="w-8 px-2 py-2" aria-hidden />
-              <th className="w-14 px-3 py-2 text-left font-medium">Crit</th>
-              <th className="px-3 py-2 text-left font-medium">Criterio</th>
-              <th className="w-24 px-3 py-2 text-left font-medium">
-                Handler ver.
-              </th>
-              <th className="w-32 px-3 py-2 text-right font-medium">
-                Score / NA
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {EXTENDED_ORDER.map((c) => {
-              const judgment = judgmentByCode.get(c.code) ?? null;
-              const na = naByCode.get(c.code) ?? null;
-              const promptVersion =
-                ext.handler_prompt_versions[c.code] ?? null;
-              const isExpanded = expanded.has(c.code);
-              return (
-                <ExtendedRow
-                  key={c.code}
-                  code={c.code}
-                  name={c.name}
-                  judgment={judgment}
-                  na={na}
-                  handlerVersion={promptVersion}
-                  expanded={isExpanded}
-                  onToggle={() => toggle(c.code)}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {handlerErrorCodes.size > 0 ? (
-        <HandlerErrorsBanner errors={ext.handler_errors} />
-      ) : null}
-    </Section>
+        {handlerErrorCodes.size > 0 ? (
+          <HandlerErrorsBanner errors={ext.handler_errors} />
+        ) : null}
+      </EvaluationSection>
+    </div>
   );
 }
 
@@ -172,6 +179,7 @@ function ExtendedRow({
   handlerVersion,
   expanded,
   onToggle,
+  technical,
 }: {
   code: string;
   name: string;
@@ -180,13 +188,14 @@ function ExtendedRow({
   handlerVersion: string | null;
   expanded: boolean;
   onToggle: () => void;
+  technical: boolean;
 }) {
   const isTechnicalNa = na?.source === "handler_error";
   return (
     <>
       <tr
         className={
-          "cursor-pointer border-t transition-colors hover:bg-muted/30 " +
+          "cursor-pointer border-t border-slate-200/80 transition-colors hover:bg-muted/30 " +
           (isTechnicalNa ? "bg-rose-500/[0.04]" : "")
         }
         onClick={onToggle}
@@ -201,16 +210,18 @@ function ExtendedRow({
         </td>
         <td className="px-3 py-2 font-mono text-xs">{code}</td>
         <td className="px-3 py-2">{name}</td>
-        <td className="px-3 py-2 font-mono text-[11px] text-muted-foreground">
-          {handlerVersion ?? "—"}
-        </td>
+        {technical ? (
+          <td className="px-3 py-2 font-mono text-[11px] text-muted-foreground">
+            {handlerVersion ?? "—"}
+          </td>
+        ) : null}
         <td className="px-3 py-2 text-right">
           <ExtendedOutcomeBadge judgment={judgment} na={na} />
         </td>
       </tr>
       {expanded ? (
-        <tr className="border-t bg-muted/20">
-          <td colSpan={5} className="px-6 py-3 text-sm">
+        <tr className="border-t border-slate-200/80 bg-slate-50/70">
+          <td colSpan={technical ? 5 : 4} className="px-6 py-3 text-sm">
             <ExpandedExtendedDetails judgment={judgment} na={na} />
           </td>
         </tr>
@@ -234,7 +245,7 @@ function ExpandedExtendedDetails({
   if (na?.source === "handler_error") {
     return (
       <div className="space-y-2">
-        <div className="flex items-start gap-2 rounded-md border border-rose-500/30 bg-rose-500/5 px-3 py-2 text-xs text-rose-800 dark:text-rose-200">
+        <div className="flex items-start gap-2 bg-rose-50 px-3 py-2 text-xs text-rose-800 dark:text-rose-200">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
           <div className="space-y-1">
             <p className="font-medium uppercase tracking-wide">
@@ -261,7 +272,7 @@ function ExpandedExtendedDetails({
         : "NA semantico dall'handler";
     return (
       <div className="space-y-2">
-        <div className="flex items-start gap-2 rounded-md border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-900/80 dark:text-amber-200/80">
+        <div className="flex items-start gap-2 bg-amber-50 px-3 py-2 text-xs text-amber-900/80 dark:text-amber-200/80">
           <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
           <div className="space-y-1">
             <p className="font-medium uppercase tracking-wide">{label}</p>
@@ -341,17 +352,17 @@ function EvidenceRow({ evidence }: { evidence: ExtendedEvidencePayload }) {
   // pair, while E1/E2/E3/E5 numeric judgments must have at least
   // one external citation.
   let badgeCls =
-    "inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ";
+    "inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ";
   let badgeText: string;
   let detail: string | null = null;
   if (isSyllabus) {
     badgeCls +=
-      "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300";
+      "bg-sky-500/10 text-sky-700 dark:text-sky-300";
     badgeText = "Syllabus";
     detail = evidence.source_field;
   } else if (isExternal) {
     badgeCls +=
-      "border-violet-500/30 bg-violet-500/10 text-violet-700 dark:text-violet-300";
+      "bg-violet-500/10 text-violet-700 dark:text-violet-300";
     badgeText = "Documento esterno";
     detail = `doc:${evidence.source_document_id}${
       evidence.source_chunk_id ? ` · ${evidence.source_chunk_id}` : ""
@@ -360,16 +371,16 @@ function EvidenceRow({ evidence }: { evidence: ExtendedEvidencePayload }) {
     // Defensive: a well-formed payload always has exactly one
     // source; the API-side validator would have rejected the run
     // otherwise. We still render the row so debug remains possible.
-    badgeCls += "border-border bg-muted text-muted-foreground";
+    badgeCls += "bg-muted text-muted-foreground";
     badgeText = "—";
   }
 
   return (
-    <li className="rounded-md border border-border/40 bg-background/60 px-2.5 py-2 text-xs">
+    <li className="bg-slate-50/80 px-2.5 py-2 text-xs">
       <div className="mb-1 flex flex-wrap items-center gap-1.5">
         <span className={badgeCls}>{badgeText}</span>
         {detail ? (
-          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+          <code className="bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
             {detail}
           </code>
         ) : null}
@@ -408,43 +419,39 @@ function ExtendedOutcomeBadge({
 }) {
   if (na?.source === "handler_error") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-md border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-[11px] font-medium text-rose-700 dark:text-rose-300">
+      <span className="text-[11px] font-medium text-rose-700 dark:text-rose-300">
         NA tecnico
       </span>
     );
   }
   if (na?.source === "resolver") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-md border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+      <span className="text-[11px] font-medium text-muted-foreground">
         NA resolver
       </span>
     );
   }
   if (na?.source === "handler_na") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/20 bg-amber-500/5 px-2 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-200">
+      <span className="text-[11px] font-medium text-amber-800 dark:text-amber-200">
         NA semantico
       </span>
     );
   }
   const score = judgment?.score ?? null;
-  let cls =
-    "inline-flex h-6 w-9 items-center justify-center rounded-md border text-sm font-medium tabular-nums ";
+  let cls = "text-sm font-semibold tabular-nums ";
   let label: string;
   if (score === 2) {
-    cls +=
-      "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+    cls += "text-emerald-700 dark:text-emerald-300";
     label = "2";
   } else if (score === 1) {
-    cls +=
-      "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+    cls += "text-amber-700 dark:text-amber-300";
     label = "1";
   } else if (score === 0) {
-    cls +=
-      "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300";
+    cls += "text-rose-700 dark:text-rose-300";
     label = "0";
   } else {
-    cls += "border-border bg-muted text-muted-foreground";
+    cls += "text-muted-foreground";
     label = "—";
   }
   return <span className={cls}>{label}</span>;
@@ -453,7 +460,7 @@ function ExtendedOutcomeBadge({
 function NotInCoreScorePill() {
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:text-violet-300"
+      className="text-[11px] font-medium text-violet-700 dark:text-violet-300"
       title="I criteri estesi E1-E5 sono mantenuti separati dal CoreScore: non concorrono alla media C1-C9."
     >
       Non concorre al CoreScore
@@ -477,17 +484,13 @@ function ExtendedStatusBanner({
     (n) => n.source === "handler_error",
   ).length;
 
-  let statusCls =
-    "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-medium ";
+  let statusCls = "text-[11px] font-medium ";
   if (result.status === "completed") {
-    statusCls +=
-      "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+    statusCls += "text-emerald-700 dark:text-emerald-300";
   } else if (result.status === "partial") {
-    statusCls +=
-      "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+    statusCls += "text-amber-700 dark:text-amber-300";
   } else {
-    statusCls +=
-      "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-300";
+    statusCls += "text-rose-700 dark:text-rose-300";
   }
 
   return (
@@ -515,7 +518,7 @@ function HandlerErrorsBanner({
   errors: Record<string, string>;
 }) {
   return (
-    <div className="mt-4 rounded-md border border-rose-500/30 bg-rose-500/5 px-3 py-2 text-sm">
+    <div className="mt-4 bg-rose-50 px-3 py-2 text-sm">
       <p className="mb-1 flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-rose-800 dark:text-rose-300">
         <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
         Handler A5 falliti
@@ -537,11 +540,11 @@ function HandlerErrorsBanner({
 
 function ExtendedCriteriaLegacyEmptyState() {
   return (
-    <Section
+    <EvaluationSection
       title="Criteri estesi E1-E5"
-      headerAside={<NotInCoreScorePill />}
+      aside={<NotInCoreScorePill />}
     >
-      <div className="flex items-start gap-3 rounded-md border border-dashed bg-muted/20 px-4 py-4">
+      <div className="flex items-start gap-3 bg-muted/30 px-4 py-4">
         <Info
           className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground"
           aria-hidden
@@ -557,6 +560,6 @@ function ExtendedCriteriaLegacyEmptyState() {
           </p>
         </div>
       </div>
-    </Section>
+    </EvaluationSection>
   );
 }

@@ -24,7 +24,8 @@ export function TechnicalBlock({
   lastError: Event | null;
 }) {
   return (
-    <div className="mt-8 border-t pt-2 divide-y divide-slate-100">
+    <section className="mt-12 bg-slate-100/70 px-5 py-2 sm:px-7 lg:px-9">
+      <div className="divide-y divide-slate-200/80">
       <EvaluationSection title="Esecuzione">
         <ExecutionMetadata data={data} />
       </EvaluationSection>
@@ -44,7 +45,8 @@ export function TechnicalBlock({
           />
         </EvaluationSection>
       ) : null}
-    </div>
+      </div>
+    </section>
   );
 }
 
@@ -52,7 +54,7 @@ function ExecutionMetadata({ data }: { data: EvaluationDetail }) {
   const started = data.started_at ? new Date(data.started_at) : null;
   const finished = data.finished_at ? new Date(data.finished_at) : null;
   return (
-    <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs sm:grid-cols-3 lg:grid-cols-5">
+    <dl className="grid grid-cols-2 gap-x-6 gap-y-4 text-xs sm:grid-cols-3 lg:grid-cols-5">
       <Field label="Avvio">{started ? fmt(started) : "—"}</Field>
       <Field label="Fine">{finished ? fmt(finished) : "—"}</Field>
       <Field label="LLM">{data.llm_model}</Field>
