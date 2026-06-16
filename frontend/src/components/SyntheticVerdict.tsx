@@ -34,13 +34,7 @@ function codesByScore(data: EvaluationDetail, target: number): string[] {
   return CORE_CRITERION_CODES.filter((c) => s[c] === target);
 }
 
-export function SyntheticVerdict({
-  data,
-  variant = "default",
-}: {
-  data: EvaluationDetail;
-  variant?: "default" | "rail";
-}) {
+export function SyntheticVerdict({ data }: { data: EvaluationDetail }) {
   const { technical } = useTechnicalView();
   const [open, setOpen] = useState(false);
 
@@ -53,14 +47,12 @@ export function SyntheticVerdict({
 
   const sentence = verdictSummarySentence(verdict);
   const showBody = verdict.band !== "non_disponibile";
-  const isRail = variant === "rail";
 
   return (
-    <section className={isRail ? "" : "bg-slate-100/65 px-5 py-6 sm:px-7"}>
+    <section className="bg-slate-100/65 px-5 py-6 sm:px-7">
       <h2
         className={
-          (isRail ? "text-2xl" : "text-2xl sm:text-3xl") +
-          " font-semibold leading-tight tracking-tight " +
+          "text-2xl font-semibold leading-tight tracking-tight sm:text-3xl " +
           BAND_ACCENT[verdict.band]
         }
       >
@@ -73,8 +65,28 @@ export function SyntheticVerdict({
         </p>
       ) : null}
 
-      {showBody && !isRail ? <Chips data={data} verdict={verdict} /> : null}
-      {showBody && isRail ? <RailCounts verdict={verdict} /> : null}
+      {showBody ? <Chips data={data} verdict={verdict} /> : null}
+
+      {showBody ? (
+        <p className="mt-3 text-sm text-slate-600">
+          CoreScore{" "}
+          <b className="text-slate-900">
+            {typeof data.core_score === "number"
+              ? data.core_score.toFixed(2)
+              : "—"}
+          </b>
+          /2 &nbsp;·&nbsp; Copertura{" "}
+          <b className="text-slate-900">
+            {typeof data.coverage === "number"
+              ? `${Math.round(data.coverage * 100)}%`
+              : "—"}
+          </b>{" "}
+          &nbsp;·&nbsp; Criteri valutati{" "}
+          <b className="text-slate-900">
+            {verdict.evaluatedCount}/{verdict.totalCount}
+          </b>
+        </p>
+      ) : null}
 
       <Annotations
         verdict={verdict}
@@ -83,7 +95,7 @@ export function SyntheticVerdict({
       />
 
       {sentence ? (
-        <div className={isRail ? "mt-4" : "mt-4 border-t border-slate-200/70 pt-3"}>
+        <div className="mt-4 border-t border-slate-200/70 pt-3">
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -101,22 +113,6 @@ export function SyntheticVerdict({
         </div>
       ) : null}
     </section>
-  );
-}
-
-function RailCounts({ verdict }: { verdict: Verdict }) {
-  return (
-    <p className="mt-4 text-xs leading-relaxed text-slate-500">
-      <strong className={verdict.criticalCount > 0 ? "text-rose-700" : "text-slate-700"}>
-        {verdict.criticalCount} criticità
-      </strong>
-      {" · "}
-      <strong className={verdict.improvableCount > 0 ? "text-amber-700" : "text-slate-700"}>
-        {verdict.improvableCount} {verdict.improvableCount === 1 ? "area" : "aree"} da migliorare
-      </strong>
-      {" · "}
-      {verdict.evaluatedCount}/{verdict.totalCount} valutati
-    </p>
   );
 }
 
