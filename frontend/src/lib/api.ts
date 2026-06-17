@@ -109,6 +109,11 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface ChangePasswordPayload {
+  current_password: string;
+  new_password: string;
+}
+
 export const register = (payload: RegisterPayload) =>
   fetchApi<AuthResponse>("/auth/register", {
     method: "POST",
@@ -139,6 +144,13 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = () =>
   fetchApi<AuthUser>("/auth/me");
+
+export const changePassword = (payload: ChangePasswordPayload) =>
+  fetchApi<AuthUser>("/auth/change-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
 export const getDepartments = () =>
   fetchApi<Department[]>("/departments");

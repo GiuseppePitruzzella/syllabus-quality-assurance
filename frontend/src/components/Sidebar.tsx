@@ -1,5 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import {
+  BarChart3,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  UserRound,
+} from "lucide-react";
 
 import { TechnicalViewToggle } from "@/components/TechnicalViewToggle";
 import { useAuth } from "@/context/auth";
@@ -8,6 +14,7 @@ const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
   { label: "Impostazioni", icon: Settings, to: "/settings", enabled: true },
+  { label: "Profilo", icon: UserRound, to: "/profile", enabled: true },
 ];
 
 /**
@@ -57,7 +64,10 @@ export function Navbar() {
               </span>
             );
           }
-          const isActive = location.pathname === item.to;
+          const isActive =
+            item.to === "/"
+              ? location.pathname === "/"
+              : location.pathname.startsWith(item.to);
           return (
             <Link
               key={item.label}
@@ -93,20 +103,22 @@ function MockProfile() {
 
   return (
     <div className="flex h-full items-center gap-2 px-3 sm:px-5">
-      <div className="hidden text-right sm:block">
+      <Link to="/profile" className="hidden text-right sm:block">
         <p className="text-xs font-medium leading-none text-white">
           {primary}
         </p>
         <p className="mt-0.5 text-[10px] leading-none text-slate-400">
           {secondary}
         </p>
-      </div>
-      <span
-        aria-hidden
+      </Link>
+      <Link
+        to="/profile"
         className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/15 text-xs font-medium text-emerald-200"
+        aria-label="Apri profilo"
+        title="Apri profilo"
       >
         {initials}
-      </span>
+      </Link>
       <button
         type="button"
         onClick={() => void logout()}

@@ -1,5 +1,9 @@
 import { createContext, useContext } from "react";
-import type { LoginPayload, RegisterPayload } from "@/lib/api";
+import type {
+  ChangePasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+} from "@/lib/api";
 import type { AuthUser } from "@/lib/types";
 
 export interface AuthContextValue {
@@ -7,6 +11,7 @@ export interface AuthContextValue {
   loading: boolean;
   login: (payload: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
+  changePassword: (payload: ChangePasswordPayload) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 }

@@ -164,3 +164,132 @@ def test_logout_revokes_session_and_clears_cookie(client, test_db):
     assert logout.status_code == 204
     assert test_db.query(AuthSession).one().revoked_at is not None
     assert client.get("/api/auth/me").status_code == 401
+
+
+def test_change_password_requires_session(client):
+    client.cookies.clear()
+
+    response = client.post(
+        "/api/auth/change-password",
+        json={
+            "current_password": "password-demo-123",
+            "new_password": "password-demo-456",
+        },
+    )
+
+    assert response.status_code == 401
+
+
+def test_change_password_rejects_wrong_current_password(client):
+    client.post(
+        "/api/auth/register",
+        json={
+            "full_name": "Docente Demo",
+            "email": "docente@example.com",
+            "password": "password-demo-123",
+        },
+    )
+
+    response = client.post(
+        "/api/auth/change-password",
+        json={
+            "current_password": "wrong-password",
+            "new_password": "password-demo-456",
+        },
+    )
+
+    assert response.status_code == 401
+
+
+def test_change_password_rejects_same_password(client):
+    client.post(
+        "/api/auth/register",
+        json={
+            "full_name": "Docente Demo",
+            "email": "docente@example.com",
+            "password": "password-demo-123",
+        },
+    )
+
+    response = client.post(
+        "/api/auth/change-password",
+        json={
+            "current_password": "password-demo-123",
+            "new_password": "password-demo-123",
+        },
+    )
+
+    assert response.status_code == 422
+
+
+def test_change_password_updates_hash_and_login_credentials(client, test_db):
+    client.post(
+        "/api/auth/register",
+        json={
+            "full_name": "Docente Demo",
+            "email": "docente@example.com",
+            "password": "password-demo-123",
+        },
+    )
+    original_hash = test_db.query(User).one().password_hash
+
+    response = client.post(
+        "/api/auth/change-password",
+        json={
+            "current_password": "password-demo-123",
+            "new_password": "password-demo-456",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["email"] == "docente@example.com"
+    assert test_db.query(User).one().password_hash != original_hash
+
+    client.cookies.clear()
+    old_login = client.post(
+        "/api/auth/login",
+        json={"email": "docente@example.com", "password": "password-demo-123"},
+    )
+    assert old_login.status_code == 401
+
+    new_login = client.post(
+        "/api/auth/login",
+        json={"email": "docente@example.com", "password": "password-demo-456"},
+    )
+    assert new_login.status_code == 200
+
+
+def test_change_password_revokes_other_sessions(client, test_db):
+    client.post(
+        "/api/auth/register",
+        json={
+            "full_name": "Docente Demo",
+            "email": "docente@example.com",
+            "password": "password-demo-123",
+        },
+    )
+    primary_cookie = client.cookies.get(settings.auth_cookie_name)
+
+    with TestClient(app) as other:
+        other.cookies.clear()
+        other_login = other.post(
+            "/api/auth/login",
+            json={"email": "docente@example.com", "password": "password-demo-123"},
+        )
+        assert other_login.status_code == 200
+        other_cookie = other.cookies.get(settings.auth_cookie_name)
+        assert other_cookie != primary_cookie
+
+        response = client.post(
+            "/api/auth/change-password",
+            json={
+                "current_password": "password-demo-123",
+                "new_password": "password-demo-456",
+            },
+        )
+
+        assert response.status_code == 200
+        assert client.get("/api/auth/me").status_code == 200
+        assert other.get("/api/auth/me").status_code == 401
+    revoked = [s for s in test_db.query(AuthSession).all() if s.revoked_at is not None]
+    assert len(revoked) == 1

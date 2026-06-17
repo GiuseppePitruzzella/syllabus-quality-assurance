@@ -1,17 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
+from datetime import datetime
+
 from app.auth import (
     create_session,
     get_user_for_session_token,
+    hash_session_token,
     hash_password,
     revoke_session_token,
     verify_password,
 )
 from app.config import settings
 from app.database import get_db
-from app.models.user import User
-from app.schemas.auth import AuthResponse, LoginRequest, RegisterRequest, UserPublic
+from app.models.user import AuthSession, User
+from app.schemas.auth import (
+    AuthResponse,
+    ChangePasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    UserPublic,
+)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -97,4 +106,39 @@ def logout(request: Request, response: Response, db: Session = Depends(get_db)):
 
 @router.get("/me", response_model=UserPublic)
 def me(user: User = Depends(current_user)):
+    return UserPublic.model_validate(user)
+
+
+@router.post("/change-password", response_model=UserPublic)
+def change_password(
+    payload: ChangePasswordRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(current_user),
+):
+    if not verify_password(payload.current_password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Current password is not valid",
+        )
+    if verify_password(payload.new_password, user.password_hash):
+        raise HTTPException(
+            status_code=422,
+            detail="New password must be different from the current password",
+        )
+
+    token = request.cookies.get(settings.auth_cookie_name)
+    current_hash = hash_session_token(token) if token else None
+    now = datetime.utcnow()
+
+    user.password_hash = hash_password(payload.new_password)
+    (
+        db.query(AuthSession)
+        .filter(AuthSession.user_id == user.id)
+        .filter(AuthSession.revoked_at.is_(None))
+        .filter(AuthSession.token_hash != current_hash)
+        .update({AuthSession.revoked_at: now}, synchronize_session=False)
+    )
+    db.commit()
+    db.refresh(user)
     return UserPublic.model_validate(user)
