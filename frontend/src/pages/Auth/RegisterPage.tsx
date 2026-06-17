@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth";
 import { ApiError } from "@/lib/api";
+import { REGISTERABLE_ROLE_OPTIONS } from "@/lib/roles";
+import type { RegisterableUserRole } from "@/lib/types";
 import { AuthShell } from "./AuthShell";
 
 export function RegisterPage() {
@@ -14,8 +16,10 @@ export function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<RegisterableUserRole>("quality_reviewer");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const selectedRole = REGISTERABLE_ROLE_OPTIONS.find((option) => option.value === role);
 
   if (user) {
     return <Navigate to="/" replace />;
@@ -34,6 +38,7 @@ export function RegisterPage() {
         full_name: fullName,
         email,
         password,
+        role,
       });
       navigate("/", { replace: true });
     } catch (err) {
@@ -57,8 +62,8 @@ export function RegisterPage() {
           Crea il tuo accesso.
         </h1>
         <p className="mt-4 text-sm leading-6 text-slate-600">
-          Il profilo abilita l&apos;accesso alla piattaforma e sostituisce il
-          profilo demo nella barra di navigazione.
+          Scegli il profilo operativo: guidato per la revisione dei risultati,
+          tecnico per ispezionare agenti, RAG e tracciabilità.
         </p>
       </div>
 
@@ -105,6 +110,26 @@ export function RegisterPage() {
           />
           <span className="mt-2 block text-xs text-slate-500">
             Almeno 8 caratteri.
+          </span>
+        </label>
+
+        <label className="block">
+          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+            Tipo account
+          </span>
+          <select
+            className="mt-2 h-11 w-full rounded-none border-0 border-b border-slate-300 bg-transparent px-0 text-base text-slate-950 outline-none transition-colors focus:border-slate-950"
+            value={role}
+            onChange={(event) => setRole(event.target.value as RegisterableUserRole)}
+          >
+            {REGISTERABLE_ROLE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <span className="mt-2 block text-xs leading-5 text-slate-500">
+            {selectedRole?.description}
           </span>
         </label>
 

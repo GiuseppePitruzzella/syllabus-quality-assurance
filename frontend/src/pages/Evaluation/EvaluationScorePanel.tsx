@@ -321,8 +321,8 @@ function GuidedAgentErrorNotice({ failed }: { failed: boolean }) {
   return (
     <div className="mb-4 bg-slate-100 px-3 py-2.5 text-sm text-slate-600">
       {failed
-        ? "La valutazione non è stata completata per un errore tecnico durante l'esecuzione. Passa alla Vista tecnica per vedere i dettagli."
-        : "Alcuni controlli non sono stati completati per un errore tecnico; i criteri interessati risultano non valutabili. Passa alla Vista tecnica per i dettagli."}
+        ? "La valutazione non è stata completata per un errore tecnico durante l'esecuzione. I dettagli sono disponibili agli account con ruolo tecnico o amministrativo."
+        : "Alcuni controlli non sono stati completati per un errore tecnico; i criteri interessati risultano non valutabili. I dettagli sono disponibili agli account con ruolo tecnico o amministrativo."}
     </div>
   );
 }
@@ -354,7 +354,8 @@ function GuidedNaCriteriaNotice({ items }: { items: NACriterionRecord[] }) {
   return (
     <div className="mt-4 bg-slate-100 px-3 py-2.5 text-sm text-slate-600">
       Alcuni criteri non sono stati valutati per un problema tecnico
-      {codes ? ` (${codes})` : ""}. Passa alla Vista tecnica per i dettagli.
+      {codes ? ` (${codes})` : ""}. I dettagli sono disponibili agli account
+      con ruolo tecnico o amministrativo.
     </div>
   );
 }

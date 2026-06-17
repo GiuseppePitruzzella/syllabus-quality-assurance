@@ -48,6 +48,7 @@ def _register(
     full_name: str = "Docente Demo",
     email: str = "docente@example.com",
     password: str = "password-demo-123",
+    role: str = "quality_reviewer",
 ):
     return client.post(
         "/api/auth/register",
@@ -55,6 +56,7 @@ def _register(
             "full_name": full_name,
             "email": email,
             "password": password,
+            "role": role,
         },
     )
 
@@ -95,6 +97,35 @@ def test_register_assigns_reviewer_role_after_bootstrap_admin(client):
 
     assert second.status_code == 201
     assert second.json()["user"]["role"] == "quality_reviewer"
+
+
+def test_register_accepts_technical_reviewer_role_after_bootstrap_admin(client):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+
+    response = _register(
+        client,
+        full_name="Revisore Tecnico",
+        email="technical@example.com",
+        role="technical_reviewer",
+    )
+
+    assert response.status_code == 201
+    assert response.json()["user"]["role"] == "technical_reviewer"
+
+
+def test_register_rejects_admin_role_for_public_registration(client):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+
+    response = _register(
+        client,
+        full_name="Admin Libero",
+        email="free-admin@example.com",
+        role="admin",
+    )
+
+    assert response.status_code == 422
 
 
 def test_me_returns_current_user_after_register(client):
@@ -387,6 +418,34 @@ def test_admin_can_promote_reviewer(client, test_db):
     assert response.status_code == 200
     assert response.json()["role"] == "admin"
     assert test_db.query(User).filter(User.email == "reviewer@example.com").one().role == "admin"
+
+
+def test_admin_can_assign_technical_reviewer_role(client, test_db):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+    assert _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    ).status_code == 201
+    reviewer = test_db.query(User).filter(User.email == "reviewer@example.com").one()
+    client.cookies.clear()
+    assert client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password-demo-123"},
+    ).status_code == 200
+
+    response = client.patch(
+        f"/api/auth/users/{reviewer.id}",
+        json={"role": "technical_reviewer"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["role"] == "technical_reviewer"
+    assert (
+        test_db.query(User).filter(User.email == "reviewer@example.com").one().role
+        == "technical_reviewer"
+    )
 
 
 def test_admin_can_deactivate_reviewer_and_revoke_sessions(client, test_db):

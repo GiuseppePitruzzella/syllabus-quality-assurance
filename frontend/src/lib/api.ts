@@ -15,6 +15,8 @@ import type {
   ResolutionPreview,
   AuthResponse,
   AuthUser,
+  RegisterableUserRole,
+  UserRole,
 } from "./types";
 
 const BASE_URL = "http://localhost:8000/api";
@@ -102,6 +104,7 @@ export interface RegisterPayload {
   full_name: string;
   email: string;
   password: string;
+  role: RegisterableUserRole;
 }
 
 export interface LoginPayload {
@@ -113,8 +116,6 @@ export interface ChangePasswordPayload {
   current_password: string;
   new_password: string;
 }
-
-export type UserRole = "admin" | "quality_reviewer";
 
 export interface UpdateUserPayload {
   role?: UserRole;
