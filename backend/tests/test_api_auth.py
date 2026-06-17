@@ -42,6 +42,23 @@ def client(test_db):
     app.dependency_overrides.clear()
 
 
+def _register(
+    client: TestClient,
+    *,
+    full_name: str = "Docente Demo",
+    email: str = "docente@example.com",
+    password: str = "password-demo-123",
+):
+    return client.post(
+        "/api/auth/register",
+        json={
+            "full_name": full_name,
+            "email": email,
+            "password": password,
+        },
+    )
+
+
 def test_register_creates_user_hashes_password_and_sets_session_cookie(client, test_db):
     response = client.post(
         "/api/auth/register",
@@ -56,13 +73,28 @@ def test_register_creates_user_hashes_password_and_sets_session_cookie(client, t
     body = response.json()
     assert body["user"]["email"] == "giuseppe@example.com"
     assert body["user"]["full_name"] == "Giuseppe Pitruzzella"
-    assert body["user"]["role"] == "quality_reviewer"
+    assert body["user"]["role"] == "admin"
     assert settings.auth_cookie_name in response.cookies
 
     user = test_db.query(User).one()
     assert user.password_hash != "super-secret-password"
     assert user.password_hash.startswith("pbkdf2_sha256$")
     assert test_db.query(AuthSession).count() == 1
+
+
+def test_register_assigns_reviewer_role_after_bootstrap_admin(client):
+    first = _register(client, email="admin@example.com")
+    assert first.status_code == 201
+    client.cookies.clear()
+
+    second = _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    )
+
+    assert second.status_code == 201
+    assert second.json()["user"]["role"] == "quality_reviewer"
 
 
 def test_me_returns_current_user_after_register(client):
@@ -293,3 +325,112 @@ def test_change_password_revokes_other_sessions(client, test_db):
         assert other.get("/api/auth/me").status_code == 401
     revoked = [s for s in test_db.query(AuthSession).all() if s.revoked_at is not None]
     assert len(revoked) == 1
+
+
+def test_admin_can_list_users(client):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+    assert _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    ).status_code == 201
+    client.cookies.clear()
+    assert client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password-demo-123"},
+    ).status_code == 200
+
+    response = client.get("/api/auth/users")
+
+    assert response.status_code == 200
+    assert [u["email"] for u in response.json()] == [
+        "admin@example.com",
+        "reviewer@example.com",
+    ]
+
+
+def test_reviewer_cannot_list_users(client):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+    assert _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    ).status_code == 201
+
+    response = client.get("/api/auth/users")
+
+    assert response.status_code == 403
+
+
+def test_admin_can_promote_reviewer(client, test_db):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+    assert _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    ).status_code == 201
+    reviewer = test_db.query(User).filter(User.email == "reviewer@example.com").one()
+    client.cookies.clear()
+    assert client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password-demo-123"},
+    ).status_code == 200
+
+    response = client.patch(
+        f"/api/auth/users/{reviewer.id}",
+        json={"role": "admin"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["role"] == "admin"
+    assert test_db.query(User).filter(User.email == "reviewer@example.com").one().role == "admin"
+
+
+def test_admin_can_deactivate_reviewer_and_revoke_sessions(client, test_db):
+    assert _register(client, email="admin@example.com").status_code == 201
+    client.cookies.clear()
+    assert _register(
+        client,
+        full_name="Secondo Revisore",
+        email="reviewer@example.com",
+    ).status_code == 201
+    reviewer_cookie = client.cookies.get(settings.auth_cookie_name)
+    reviewer = test_db.query(User).filter(User.email == "reviewer@example.com").one()
+    client.cookies.clear()
+    assert client.post(
+        "/api/auth/login",
+        json={"email": "admin@example.com", "password": "password-demo-123"},
+    ).status_code == 200
+
+    response = client.patch(
+        f"/api/auth/users/{reviewer.id}",
+        json={"is_active": False},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["is_active"] is False
+    revoked_hashes = {
+        session.token_hash
+        for session in test_db.query(AuthSession).all()
+        if session.revoked_at is not None
+    }
+    assert revoked_hashes
+
+    client.cookies.set(settings.auth_cookie_name, reviewer_cookie)
+    assert client.get("/api/auth/me").status_code == 401
+
+
+def test_admin_cannot_demote_self(client, test_db):
+    assert _register(client, email="admin@example.com").status_code == 201
+    admin = test_db.query(User).filter(User.email == "admin@example.com").one()
+
+    response = client.patch(
+        f"/api/auth/users/{admin.id}",
+        json={"role": "quality_reviewer"},
+    )
+
+    assert response.status_code == 422
+    assert test_db.query(User).filter(User.email == "admin@example.com").one().role == "admin"

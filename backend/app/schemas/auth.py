@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -15,6 +16,7 @@ class UserPublic(BaseModel):
     email: str
     full_name: str
     role: str
+    is_active: bool
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -53,6 +55,9 @@ class AuthResponse(BaseModel):
     user: UserPublic
 
 
+UserRole = Literal["admin", "quality_reviewer"]
+
+
 class ChangePasswordRequest(BaseModel):
     current_password: str = Field(min_length=1, max_length=256)
     new_password: str = Field(min_length=8, max_length=256)
@@ -63,3 +68,8 @@ class ChangePasswordRequest(BaseModel):
         if value.strip() != value:
             raise ValueError("La nuova password non deve iniziare o finire con spazi.")
         return value
+
+
+class UserAdminUpdateRequest(BaseModel):
+    role: UserRole | None = None
+    is_active: bool | None = None

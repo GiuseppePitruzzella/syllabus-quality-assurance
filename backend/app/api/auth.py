@@ -19,10 +19,14 @@ from app.schemas.auth import (
     ChangePasswordRequest,
     LoginRequest,
     RegisterRequest,
+    UserAdminUpdateRequest,
     UserPublic,
 )
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
+
+ADMIN_ROLE = "admin"
+REVIEWER_ROLE = "quality_reviewer"
 
 
 def _set_session_cookie(response: Response, token: str) -> None:
@@ -60,6 +64,15 @@ def current_user(request: Request, db: Session = Depends(get_db)) -> User:
     return user
 
 
+def require_admin(user: User = Depends(current_user)) -> User:
+    if user.role != ADMIN_ROLE:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Administrator privileges required",
+        )
+    return user
+
+
 @router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
 def register(payload: RegisterRequest, response: Response, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == payload.email).first()
@@ -69,10 +82,12 @@ def register(payload: RegisterRequest, response: Response, db: Session = Depends
             detail="Email already registered",
         )
 
+    role = ADMIN_ROLE if db.query(User).count() == 0 else REVIEWER_ROLE
     user = User(
         email=payload.email,
         full_name=payload.full_name,
         password_hash=hash_password(payload.password),
+        role=role,
     )
     db.add(user)
     db.commit()
@@ -109,6 +124,14 @@ def me(user: User = Depends(current_user)):
     return UserPublic.model_validate(user)
 
 
+@router.get("/users", response_model=list[UserPublic])
+def list_users(
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+) -> list[User]:
+    return db.query(User).order_by(User.created_at.asc(), User.id.asc()).all()
+
+
 @router.post("/change-password", response_model=UserPublic)
 def change_password(
     payload: ChangePasswordRequest,
@@ -142,3 +165,66 @@ def change_password(
     db.commit()
     db.refresh(user)
     return UserPublic.model_validate(user)
+
+
+@router.patch("/users/{user_id}", response_model=UserPublic)
+def update_user(
+    user_id: int,
+    payload: UserAdminUpdateRequest,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin),
+) -> UserPublic:
+    target = db.query(User).filter(User.id == user_id).first()
+    if target is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if payload.role is None and payload.is_active is None:
+        return UserPublic.model_validate(target)
+
+    if target.id == admin.id and (
+        payload.is_active is False
+        or (payload.role is not None and payload.role != ADMIN_ROLE)
+    ):
+        raise HTTPException(
+            status_code=422,
+            detail="Administrators cannot deactivate or demote their own account",
+        )
+
+    next_role = payload.role if payload.role is not None else target.role
+    next_active = (
+        payload.is_active if payload.is_active is not None else target.is_active
+    )
+    if target.role == ADMIN_ROLE and (
+        next_role != ADMIN_ROLE or not next_active
+    ) and not _has_other_active_admin(db, target.id):
+        raise HTTPException(
+            status_code=422,
+            detail="At least one active administrator is required",
+        )
+
+    if payload.role is not None:
+        target.role = payload.role
+    if payload.is_active is not None:
+        target.is_active = payload.is_active
+        if not payload.is_active:
+            now = datetime.utcnow()
+            (
+                db.query(AuthSession)
+                .filter(AuthSession.user_id == target.id)
+                .filter(AuthSession.revoked_at.is_(None))
+                .update({AuthSession.revoked_at: now}, synchronize_session=False)
+            )
+    db.commit()
+    db.refresh(target)
+    return UserPublic.model_validate(target)
+
+
+def _has_other_active_admin(db: Session, user_id: int) -> bool:
+    return (
+        db.query(User)
+        .filter(User.id != user_id)
+        .filter(User.role == ADMIN_ROLE)
+        .filter(User.is_active.is_(True))
+        .first()
+        is not None
+    )
