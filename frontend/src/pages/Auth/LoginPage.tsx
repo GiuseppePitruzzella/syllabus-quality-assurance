@@ -104,7 +104,7 @@ export function LoginPage() {
 
         <Button
           type="submit"
-          className="h-11 w-full rounded-none bg-slate-950"
+          className="h-11 w-full rounded-none border border-cyan-300 bg-cyan-50 text-cyan-800 hover:bg-cyan-100"
           disabled={submitting}
         >
           <LogIn className="h-4 w-4" aria-hidden />

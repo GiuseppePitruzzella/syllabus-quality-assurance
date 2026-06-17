@@ -141,7 +141,7 @@ export function RegisterPage() {
 
         <Button
           type="submit"
-          className="h-11 w-full rounded-none bg-slate-950"
+          className="h-11 w-full rounded-none border border-cyan-300 bg-cyan-50 text-cyan-800 hover:bg-cyan-100"
           disabled={submitting}
         >
           <UserPlus className="h-4 w-4" aria-hidden />
