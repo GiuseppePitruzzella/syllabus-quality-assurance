@@ -114,6 +114,13 @@ export interface ChangePasswordPayload {
   new_password: string;
 }
 
+export type UserRole = "admin" | "quality_reviewer";
+
+export interface UpdateUserPayload {
+  role?: UserRole;
+  is_active?: boolean;
+}
+
 export const register = (payload: RegisterPayload) =>
   fetchApi<AuthResponse>("/auth/register", {
     method: "POST",
@@ -148,6 +155,16 @@ export const getCurrentUser = () =>
 export const changePassword = (payload: ChangePasswordPayload) =>
   fetchApi<AuthUser>("/auth/change-password", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+export const listUsers = () =>
+  fetchApi<AuthUser[]>("/auth/users");
+
+export const updateUser = (userId: number, payload: UpdateUserPayload) =>
+  fetchApi<AuthUser>(`/auth/users/${userId}`, {
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });

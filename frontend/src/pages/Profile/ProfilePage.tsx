@@ -1,11 +1,23 @@
-import { FormEvent, useState, type ReactNode } from "react";
-import { CheckCircle2, KeyRound, ShieldCheck, UserRound } from "lucide-react";
+import { FormEvent, useEffect, useState, type ReactNode } from "react";
+import {
+  CheckCircle2,
+  KeyRound,
+  ShieldCheck,
+  UserCog,
+  UserRound,
+} from "lucide-react";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/auth";
-import { ApiError } from "@/lib/api";
+import {
+  ApiError,
+  listUsers,
+  updateUser,
+  type UserRole,
+} from "@/lib/api";
+import type { AuthUser } from "@/lib/types";
 
 export function ProfilePage() {
   const { user, changePassword } = useAuth();
@@ -163,6 +175,8 @@ export function ProfilePage() {
           </Button>
         </form>
       </section>
+
+      {user?.role === "admin" ? <UserAdministrationSection currentUser={user} /> : null}
     </div>
   );
 }
@@ -219,8 +233,172 @@ function PasswordField({
 }
 
 function roleLabel(role: string | undefined): string {
+  if (role === "admin") return "Amministratore";
   if (role === "quality_reviewer") return "Presidio qualità";
   return role ?? "Utente";
+}
+
+function UserAdministrationSection({ currentUser }: { currentUser: AuthUser }) {
+  const [users, setUsers] = useState<AuthUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingId, setSavingId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    listUsers()
+      .then((rows) => {
+        if (!cancelled) setUsers(rows);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError("Non riesco a caricare gli utenti in questo momento.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function patchUser(userId: number, payload: { role?: UserRole; is_active?: boolean }) {
+    setError(null);
+    setSuccess(null);
+    setSavingId(userId);
+    try {
+      const updated = await updateUser(userId, payload);
+      setUsers((prev) => prev.map((row) => (row.id === userId ? updated : row)));
+      setSuccess("Utente aggiornato.");
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 422) {
+        setError("Operazione non consentita: deve restare almeno un amministratore attivo.");
+      } else if (err instanceof ApiError && err.status === 403) {
+        setError("Solo un amministratore può gestire gli utenti.");
+      } else {
+        setError("Aggiornamento utente non riuscito.");
+      }
+    } finally {
+      setSavingId(null);
+    }
+  }
+
+  return (
+    <section className="border-t border-slate-200 pt-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <UserCog className="h-4 w-4" aria-hidden />
+            Gestione utenti
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold text-slate-950">
+            Account autorizzati
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            Gli amministratori possono attivare o sospendere account e assegnare
+            il ruolo operativo. Le modifiche sono intenzionalmente essenziali:
+            non introducono ancora una matrice permessi granulare.
+          </p>
+        </div>
+        <span className="text-sm text-slate-500">
+          {loading ? "Caricamento..." : `${users.length} utenti`}
+        </span>
+      </div>
+
+      {error ? (
+        <p className="mt-5 border-l-2 border-rose-400 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+          {error}
+        </p>
+      ) : null}
+      {success ? (
+        <p className="mt-5 border-l-2 border-emerald-400 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+          {success}
+        </p>
+      ) : null}
+
+      <div className="mt-6 overflow-x-auto border-y border-slate-200">
+        <table className="min-w-full text-left text-sm">
+          <thead>
+            <tr className="text-[10px] uppercase tracking-[0.16em] text-slate-500">
+              <th className="py-3 pr-6 font-semibold">Utente</th>
+              <th className="px-4 py-3 font-semibold">Ruolo</th>
+              <th className="px-4 py-3 font-semibold">Stato</th>
+              <th className="py-3 pl-4 text-right font-semibold">Azioni</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200">
+            {users.map((row) => {
+              const isSelf = row.id === currentUser.id;
+              const isSaving = savingId === row.id;
+              return (
+                <tr key={row.id} className={row.is_active ? "" : "text-slate-400"}>
+                  <td className="py-4 pr-6 align-top">
+                    <p className="font-medium text-slate-950">{row.full_name}</p>
+                    <p className="mt-1 text-xs text-slate-500">{row.email}</p>
+                    {isSelf ? (
+                      <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-700">
+                        Account corrente
+                      </p>
+                    ) : null}
+                  </td>
+                  <td className="px-4 py-4 align-top">
+                    <select
+                      className="h-9 min-w-44 border-0 border-b border-slate-300 bg-transparent px-0 text-sm text-slate-900 outline-none focus:border-slate-950"
+                      value={row.role}
+                      disabled={isSelf || isSaving}
+                      onChange={(event) =>
+                        void patchUser(row.id, {
+                          role: event.target.value as UserRole,
+                        })
+                      }
+                    >
+                      <option value="admin">Amministratore</option>
+                      <option value="quality_reviewer">Presidio qualità</option>
+                    </select>
+                  </td>
+                  <td className="px-4 py-4 align-top">
+                    <span
+                      className={
+                        "inline-flex border-b px-0 pb-1 text-xs font-medium " +
+                        (row.is_active
+                          ? "border-emerald-400 text-emerald-700"
+                          : "border-amber-400 text-amber-700")
+                      }
+                    >
+                      {row.is_active ? "Attivo" : "Sospeso"}
+                    </span>
+                  </td>
+                  <td className="py-4 pl-4 text-right align-top">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-none"
+                      disabled={isSelf || isSaving}
+                      onClick={() =>
+                        void patchUser(row.id, { is_active: !row.is_active })
+                      }
+                    >
+                      {row.is_active ? "Sospendi" : "Riattiva"}
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
+            {!loading && users.length === 0 ? (
+              <tr>
+                <td className="py-6 text-sm text-slate-500" colSpan={4}>
+                  Nessun utente registrato.
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
 }
 
 function formatDate(value: string | undefined): string {

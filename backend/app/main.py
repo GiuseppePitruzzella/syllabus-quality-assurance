@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import inspect, text
 
 from app.config import settings
-from app.database import Base, engine
+from app.database import Base, SessionLocal, engine
+from app.models.user import User
 from app.api import (
     auth,
     cdl,
@@ -61,6 +62,39 @@ def _ensure_sqlite_schema_compatibility() -> None:
                 )
 
 
+def _ensure_auth_admin_bootstrap() -> None:
+    """Guarantee one admin for local/prototype installations.
+
+    Phase 11.D introduces admin-only account management. Fresh
+    installs get an admin through "first registered user wins"; this
+    compatibility hook protects already-created local DBs that may
+    contain only ``quality_reviewer`` users from Phase 11.A-C.
+    """
+    db = SessionLocal()
+    try:
+        has_admin = (
+            db.query(User)
+            .filter(User.role == "admin")
+            .filter(User.is_active.is_(True))
+            .first()
+            is not None
+        )
+        if has_admin:
+            return
+        first_active_user = (
+            db.query(User)
+            .filter(User.is_active.is_(True))
+            .order_by(User.created_at.asc(), User.id.asc())
+            .first()
+        )
+        if first_active_user is None:
+            return
+        first_active_user.role = "admin"
+        db.commit()
+    finally:
+        db.close()
+
+
 def _ensure_evaluation_results_schema() -> None:
     """Drop+recreate ``evaluation_results`` when the stub schema is detected.
 
@@ -92,6 +126,7 @@ async def lifespan(app: FastAPI):
     # Schema migrations BEFORE create_all so dropped tables are recreated.
     _ensure_evaluation_results_schema()
     Base.metadata.create_all(engine)
+    _ensure_auth_admin_bootstrap()
     _ensure_sqlite_schema_compatibility()
     yield
 
