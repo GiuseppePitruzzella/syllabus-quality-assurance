@@ -196,9 +196,8 @@ function Header({
 function GuidedTechnicalHint() {
   return (
     <p className="mt-10 border-t border-dashed border-slate-300 pt-4 text-sm text-slate-500">
-      Attiva la{" "}
-      <span className="font-medium text-slate-700">Vista tecnica</span> (in alto
-      a destra) per vedere agenti, RAG, esecuzione e timeline.
+      I dettagli su agenti, RAG, esecuzione e timeline sono disponibili
+      automaticamente per gli account con ruolo tecnico o amministrativo.
     </p>
   );
 }

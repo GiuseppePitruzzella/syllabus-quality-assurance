@@ -1,32 +1,19 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
-import {
-  TECHNICAL_VIEW_STORAGE_KEY,
-  TechnicalViewContext,
-  readInitialTechnicalView,
-} from "./technicalView";
+import { useCallback, useMemo, type ReactNode } from "react";
+
+import { useAuth } from "@/context/auth";
+import { hasAutomaticTechnicalView } from "@/lib/roles";
+
+import { TechnicalViewContext } from "./technicalView";
 
 export function TechnicalViewProvider({ children }: { children: ReactNode }) {
-  const [technical, setTechnical] = useState<boolean>(readInitialTechnicalView);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(TECHNICAL_VIEW_STORAGE_KEY, String(technical));
-    } catch {
-      // localStorage unavailable: keep state in memory only
-    }
-  }, [technical]);
-
-  const toggle = useCallback(() => setTechnical((v) => !v), []);
+  const { user } = useAuth();
+  const technical = hasAutomaticTechnicalView(user?.role);
+  const setTechnical = useCallback(() => undefined, []);
+  const toggle = useCallback(() => undefined, []);
 
   const value = useMemo(
     () => ({ technical, setTechnical, toggle }),
-    [technical, toggle],
+    [setTechnical, technical, toggle],
   );
 
   return (

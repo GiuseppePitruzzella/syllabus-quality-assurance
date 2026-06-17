@@ -261,7 +261,7 @@ function ExpandedExtendedDetails({
             <p className="text-rose-900/90 dark:text-rose-100/90">
               {technical
                 ? na.reason
-                : "Il criterio non è stato valutato per un problema tecnico. Passa alla Vista tecnica per i dettagli."}
+                : "Il criterio non è stato valutato per un problema tecnico. I dettagli sono disponibili agli account con ruolo tecnico o amministrativo."}
             </p>
           </div>
         </div>

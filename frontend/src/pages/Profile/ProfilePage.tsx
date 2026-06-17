@@ -15,9 +15,9 @@ import {
   ApiError,
   listUsers,
   updateUser,
-  type UserRole,
 } from "@/lib/api";
-import type { AuthUser } from "@/lib/types";
+import { ROLE_OPTIONS, roleLabel } from "@/lib/roles";
+import type { AuthUser, UserRole } from "@/lib/types";
 
 export function ProfilePage() {
   const { user, changePassword } = useAuth();
@@ -115,8 +115,9 @@ export function ProfilePage() {
 
           <div className="border-l-2 border-sky-400 bg-sky-50/70 px-4 py-3 text-sm leading-6 text-slate-700">
             Questo profilo controlla l’accesso alla dashboard, alle valutazioni,
-            ai documenti locali e agli stream tecnici. La gestione dei ruoli
-            avanzati resta fuori da questa fase.
+            ai documenti locali e agli stream tecnici. Gli account tecnici e
+            amministrativi aprono automaticamente la vista tecnica; i revisori
+            qualità lavorano nella vista guidata.
           </div>
         </div>
 
@@ -232,12 +233,6 @@ function PasswordField({
   );
 }
 
-function roleLabel(role: string | undefined): string {
-  if (role === "admin") return "Amministratore";
-  if (role === "quality_reviewer") return "Presidio qualità";
-  return role ?? "Utente";
-}
-
 function UserAdministrationSection({ currentUser }: { currentUser: AuthUser }) {
   const [users, setUsers] = useState<AuthUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -299,8 +294,8 @@ function UserAdministrationSection({ currentUser }: { currentUser: AuthUser }) {
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
             Gli amministratori possono attivare o sospendere account e assegnare
-            il ruolo operativo. Le modifiche sono intenzionalmente essenziali:
-            non introducono ancora una matrice permessi granulare.
+            il ruolo operativo. Il ruolo determina anche se l’interfaccia usa
+            sempre la vista tecnica o la lettura guidata.
           </p>
         </div>
         <span className="text-sm text-slate-500">
@@ -355,8 +350,11 @@ function UserAdministrationSection({ currentUser }: { currentUser: AuthUser }) {
                         })
                       }
                     >
-                      <option value="admin">Amministratore</option>
-                      <option value="quality_reviewer">Presidio qualità</option>
+                      {ROLE_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </td>
                   <td className="px-4 py-4 align-top">

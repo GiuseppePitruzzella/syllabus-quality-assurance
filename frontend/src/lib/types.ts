@@ -90,11 +90,14 @@ export interface Stats {
   with_english: number;
 }
 
+export type UserRole = "admin" | "quality_reviewer" | "technical_reviewer";
+export type RegisterableUserRole = "quality_reviewer" | "technical_reviewer";
+
 export interface AuthUser {
   id: number;
   email: string;
   full_name: string;
-  role: string;
+  role: UserRole;
   is_active: boolean;
   created_at: string;
 }

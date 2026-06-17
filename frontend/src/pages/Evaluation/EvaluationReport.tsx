@@ -31,8 +31,8 @@ export function EvaluationReport({ data }: Props) {
         {redactRawReport ? (
           <p className="text-sm text-slate-600">
             Il report non è disponibile perché la valutazione non è stata
-            completata. Passa alla Vista tecnica per consultare i dettagli di
-            esecuzione.
+            completata. I dettagli di esecuzione sono disponibili agli account
+            con ruolo tecnico o amministrativo.
           </p>
         ) : (
           <ReportPanel data={data} />

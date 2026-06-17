@@ -26,7 +26,6 @@ from app.schemas.auth import (
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 ADMIN_ROLE = "admin"
-REVIEWER_ROLE = "quality_reviewer"
 
 
 def _set_session_cookie(response: Response, token: str) -> None:
@@ -82,7 +81,7 @@ def register(payload: RegisterRequest, response: Response, db: Session = Depends
             detail="Email already registered",
         )
 
-    role = ADMIN_ROLE if db.query(User).count() == 0 else REVIEWER_ROLE
+    role = ADMIN_ROLE if db.query(User).count() == 0 else payload.role
     user = User(
         email=payload.email,
         full_name=payload.full_name,

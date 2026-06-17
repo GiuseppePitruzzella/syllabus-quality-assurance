@@ -22,10 +22,15 @@ class UserPublic(BaseModel):
     model_config = {"from_attributes": True}
 
 
+UserRole = Literal["admin", "quality_reviewer", "technical_reviewer"]
+PublicRegistrationRole = Literal["quality_reviewer", "technical_reviewer"]
+
+
 class RegisterRequest(BaseModel):
     full_name: str = Field(min_length=2, max_length=120)
     email: str = Field(min_length=3, max_length=320)
     password: str = Field(min_length=8, max_length=256)
+    role: PublicRegistrationRole = "quality_reviewer"
 
     @field_validator("email")
     @classmethod
@@ -53,9 +58,6 @@ class LoginRequest(BaseModel):
 
 class AuthResponse(BaseModel):
     user: UserPublic
-
-
-UserRole = Literal["admin", "quality_reviewer"]
 
 
 class ChangePasswordRequest(BaseModel):

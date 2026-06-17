@@ -7,8 +7,8 @@ import {
   UserRound,
 } from "lucide-react";
 
-import { TechnicalViewToggle } from "@/components/TechnicalViewToggle";
 import { useAuth } from "@/context/auth";
+import { roleShortLabel } from "@/lib/roles";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
@@ -87,7 +87,6 @@ export function Navbar() {
       </nav>
 
       <div className="flex h-full items-center gap-1 pr-1">
-        <TechnicalViewToggle />
         <MockProfile />
       </div>
     </div>
@@ -99,7 +98,7 @@ function MockProfile() {
 
   const initials = getInitials(user?.full_name ?? user?.email ?? "Utente");
   const primary = user?.full_name ?? "Utente";
-  const secondary = user?.role === "quality_reviewer" ? "Presidio qualità" : user?.email;
+  const secondary = user ? roleShortLabel(user.role) : "Utente";
 
   return (
     <div className="flex h-full items-center gap-2 px-3 sm:px-5">
