@@ -51,3 +51,15 @@ class LoginRequest(BaseModel):
 
 class AuthResponse(BaseModel):
     user: UserPublic
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(min_length=1, max_length=256)
+    new_password: str = Field(min_length=8, max_length=256)
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_new_password(cls, value: str) -> str:
+        if value.strip() != value:
+            raise ValueError("La nuova password non deve iniziare o finire con spazi.")
+        return value

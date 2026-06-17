@@ -10,6 +10,7 @@ import { Dashboard } from "@/pages/Dashboard/Dashboard";
 import { LoginPage } from "@/pages/Auth/LoginPage";
 import { RegisterPage } from "@/pages/Auth/RegisterPage";
 import { EvaluationPage } from "@/pages/Evaluation/EvaluationPage";
+import { ProfilePage } from "@/pages/Profile/ProfilePage";
 import { SettingsPage } from "@/pages/Settings/SettingsPage";
 import { SyllabusViewer } from "@/pages/SyllabusViewer/SyllabusViewer";
 import { TechnicalViewProvider } from "@/context/TechnicalViewProvider";
@@ -76,6 +77,16 @@ export default function App() {
                       <ProtectedRoute>
                         <Chromed>
                           <SettingsPage />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <ProfilePage />
                         </Chromed>
                       </ProtectedRoute>
                     }

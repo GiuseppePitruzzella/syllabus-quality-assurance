@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import {
+  changePassword as changePasswordRequest,
   getCurrentUser,
   login as loginRequest,
   logout as logoutRequest,
   register as registerRequest,
+  type ChangePasswordPayload,
   type LoginPayload,
   type RegisterPayload,
   ApiError,
@@ -25,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error instanceof ApiError && error.status === 401) {
         setUser(null);
       } else {
-        throw error;
+        setUser(null);
       }
     } finally {
       setLoading(false);
@@ -46,14 +48,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(response.user);
   }, []);
 
+  const changePassword = useCallback(async (payload: ChangePasswordPayload) => {
+    const nextUser = await changePasswordRequest(payload);
+    setUser(nextUser);
+  }, []);
+
   const logout = useCallback(async () => {
     await logoutRequest();
     setUser(null);
   }, []);
 
   const value = useMemo(
-    () => ({ user, loading, login, register, logout, refresh }),
-    [loading, login, logout, refresh, register, user],
+    () => ({ user, loading, login, register, changePassword, logout, refresh }),
+    [changePassword, loading, login, logout, refresh, register, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
