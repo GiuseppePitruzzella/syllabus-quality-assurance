@@ -15,12 +15,13 @@ export function AuthShell({ children }: { children: ReactNode }) {
                 Tesi di Laurea Magistrale · LM-18 UNICT · A.A. 2025/2026
               </p>
               <h1 className="mt-6 text-6xl font-semibold leading-[0.95] tracking-tight">
-                Entra nel laboratorio di revisione dei syllabus.
+                Architettura Multi-Agente per la Quality Assurance nei Syllabus
+                Universitari.
               </h1>
               <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-600">
-                Una piattaforma per trasformare rubriche, agenti e documenti
-                accademici in valutazioni leggibili, tracciabili e utili alla
-                revisione qualitativa dei corsi.
+                Una piattaforma utile alla revisione qualitativa di tutti i
+                corsi dell&apos;Università Degli Studi di Catania, attraverso:
+                criteri, agenti e riferimenti a documenti normativi.
               </p>
             </div>
           </div>
