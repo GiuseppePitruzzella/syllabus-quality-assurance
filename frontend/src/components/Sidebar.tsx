@@ -11,7 +11,7 @@ import { roleShortLabel } from "@/lib/roles";
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
-  { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
+  { label: "Risultati", icon: BarChart3, to: "/results", enabled: true },
   { label: "Impostazioni", icon: Settings, to: "/settings", enabled: true },
 ];
 

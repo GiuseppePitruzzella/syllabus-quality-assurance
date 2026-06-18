@@ -48,7 +48,7 @@ from app.local_documents.resolver import (
     ResolverInput,
     ResolverOutput,
 )
-from app.models import EvaluationResult, Syllabus
+from app.models import CorsoDiLaurea, Department, EvaluationResult, Syllabus
 from app.models.evaluation_external_document import EvaluationExternalDocument
 from app.models.local_document import LocalDocument
 
@@ -72,6 +72,9 @@ DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
     "A4": "a4_v2",
     "A5": "a5_v1",
 }
+
+CORE_CRITERIA: tuple[str, ...] = tuple(f"C{i}" for i in range(1, 10))
+TERMINAL_STATUSES: tuple[str, ...] = ("completed", "partial", "failed")
 
 
 SessionFactory = Callable[[], Session]
@@ -102,6 +105,49 @@ class InvalidSelectedDocumentIdsError(ValueError):
     def __init__(self, message: str, *, code: str) -> None:
         super().__init__(message)
         self.code = code
+
+
+def _normalise_score(value: Any) -> int | None:
+    """Return ``0`` / ``1`` / ``2`` for persisted JSON score values."""
+    if value in (0, 1, 2):
+        return int(value)
+    if value in ("0", "1", "2"):
+        return int(value)
+    return None
+
+
+def _core_score_counts(scores: Any) -> dict[str, int]:
+    """Count C1-C9 outcomes for one evaluation row.
+
+    Missing/non-dict scores are treated as unavailable — this is the
+    expected shape for failed runs, which the Results page reports via
+    status rather than pretending all nine criteria were NA.
+    """
+    out = {
+        "critical_count": 0,
+        "improvable_count": 0,
+        "adequate_count": 0,
+        "na_count": 0,
+    }
+    if not isinstance(scores, dict):
+        return out
+    for code in CORE_CRITERIA:
+        score = _normalise_score(scores.get(code))
+        if score == 0:
+            out["critical_count"] += 1
+        elif score == 1:
+            out["improvable_count"] += 1
+        elif score == 2:
+            out["adequate_count"] += 1
+        else:
+            out["na_count"] += 1
+    return out
+
+
+def _mean_or_none(values: list[float]) -> float | None:
+    if not values:
+        return None
+    return round(sum(values) / len(values), 4)
 
 
 @dataclass(frozen=True)
@@ -512,6 +558,125 @@ class EvaluationService:
             for r in rows:
                 session.expunge(r)
             return rows
+
+    def build_results_summary(self) -> dict[str, Any]:
+        """Aggregate the latest terminal evaluation per syllabus.
+
+        Phase 12 uses this method as the single source of truth for the
+        Results page. The method intentionally works over terminal runs
+        only (``completed`` / ``partial`` / ``failed``):
+
+          * the latest terminal run per syllabus defines the current
+            experimental picture;
+          * failed runs are counted in status totals and shown in the
+            table, but excluded from CoreScore/coverage averages and
+            per-criterion distributions;
+          * repeated historical runs do not inflate the distribution.
+        """
+        with self._session_factory() as session:
+            rows = (
+                session.query(EvaluationResult, Syllabus, CorsoDiLaurea, Department)
+                .join(Syllabus, EvaluationResult.syllabus_id == Syllabus.id)
+                .join(CorsoDiLaurea, Syllabus.cdl_id == CorsoDiLaurea.id)
+                .join(Department, CorsoDiLaurea.department_id == Department.id)
+                .filter(EvaluationResult.status.in_(TERMINAL_STATUSES))
+                .order_by(
+                    EvaluationResult.started_at.desc(),
+                    EvaluationResult.id.desc(),
+                )
+                .all()
+            )
+
+            latest_by_syllabus: dict[int, tuple[
+                EvaluationResult, Syllabus, CorsoDiLaurea, Department,
+            ]] = {}
+            for evaluation, syllabus, cdl, department in rows:
+                latest_by_syllabus.setdefault(
+                    evaluation.syllabus_id,
+                    (evaluation, syllabus, cdl, department),
+                )
+
+            latest_rows = list(latest_by_syllabus.values())
+            status_counts = {status: 0 for status in TERMINAL_STATUSES}
+            core_scores: list[float] = []
+            coverages: list[float] = []
+            criteria = {
+                code: {"criterion_code": code, "score_0": 0, "score_1": 0,
+                       "score_2": 0, "na": 0}
+                for code in CORE_CRITERIA
+            }
+            table_rows: list[dict[str, Any]] = []
+            total_critical = 0
+            total_improvable = 0
+            total_na = 0
+
+            for evaluation, syllabus, cdl, department in latest_rows:
+                status_counts[evaluation.status] = (
+                    status_counts.get(evaluation.status, 0) + 1
+                )
+                counts = _core_score_counts(evaluation.criterion_scores)
+                total_critical += counts["critical_count"]
+                total_improvable += counts["improvable_count"]
+                if evaluation.status != "failed" and isinstance(
+                    evaluation.criterion_scores, dict
+                ):
+                    total_na += counts["na_count"]
+                    for code in CORE_CRITERIA:
+                        score = _normalise_score(
+                            evaluation.criterion_scores.get(code),
+                        )
+                        if score is None:
+                            criteria[code]["na"] += 1
+                        else:
+                            criteria[code][f"score_{score}"] += 1
+                    if evaluation.core_score is not None:
+                        core_scores.append(float(evaluation.core_score))
+                    if evaluation.coverage is not None:
+                        coverages.append(float(evaluation.coverage))
+
+                table_rows.append(
+                    {
+                        "evaluation_uuid": evaluation.evaluation_uuid,
+                        "syllabus_seuid": evaluation.syllabus_seuid_snapshot,
+                        "course_name": evaluation.course_name_snapshot,
+                        "cdl_name": cdl.name,
+                        "cdl_code": cdl.code,
+                        "department_name": department.name,
+                        "status": evaluation.status,
+                        "started_at": evaluation.started_at,
+                        "finished_at": evaluation.finished_at,
+                        "core_score": evaluation.core_score,
+                        "coverage": evaluation.coverage,
+                        **counts,
+                    },
+                )
+
+            return {
+                "generated_at": datetime.now(timezone.utc),
+                "overview": {
+                    "latest_evaluations_count": len(latest_rows),
+                    "terminal_runs_count": len(rows),
+                    "completed_count": status_counts.get("completed", 0),
+                    "partial_count": status_counts.get("partial", 0),
+                    "failed_count": status_counts.get("failed", 0),
+                    "average_core_score": _mean_or_none(core_scores),
+                    "average_coverage": _mean_or_none(coverages),
+                    "total_critical_criteria": total_critical,
+                    "total_improvable_criteria": total_improvable,
+                    "total_na_criteria": total_na,
+                },
+                "criteria": list(criteria.values()),
+                "evaluations": table_rows,
+                "human_validation": {
+                    "status": "in_preparation",
+                    "title": "Validazione umana in preparazione",
+                    "description": (
+                        "La sezione raccoglierà il confronto tra giudizi del "
+                        "sistema e valutazione esperta: accordo per criterio, "
+                        "errore medio e casi di maggiore disaccordo."
+                    ),
+                },
+            }
 
     # ---- internals ----
 
