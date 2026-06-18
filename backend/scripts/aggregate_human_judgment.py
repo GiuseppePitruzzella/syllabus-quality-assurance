@@ -6,11 +6,11 @@ recorded in `data/calibration/validation_lm18/<seuid>__evaluation.json`.
 
 Metrics per criterion (C1..C9):
 
-  - weighted Cohen's kappa (linear weights on the 0/1/2 ordinal scale,
-    treating NA as a distinct fourth category — strict but unbiased)
-  - accuracy (exact agreement)
-  - mean absolute error (integer scores only, NA excluded)
-  - confusion matrix system × human (3x3 + NA marginal)
+  - weighted Cohen's kappa (linear weights on numeric 0/1/2 pairs only)
+  - accuracy (exact agreement on numeric 0/1/2 pairs only)
+  - mean absolute error (numeric 0/1/2 pairs only)
+  - coverage counts for NA and missing cells, reported separately
+  - confusion matrix system × human, including NA/missing process labels
 
 Aggregate (across criteria):
 
@@ -20,8 +20,11 @@ Aggregate (across criteria):
 
 When two or more evaluators are present:
 
-  - human-human kappa (consensus check)
-  - system vs evaluator-1, system vs evaluator-2, system vs majority
+  - human-human kappa for the first two evaluators as a rubric stability check
+  - system vs each evaluator separately
+
+No majority/consensus score is computed automatically. With two evaluators,
+consensus must be produced only through a documented post-hoc discussion.
 
 Output: `data/human_judgment/aggregate.json` + `aggregate.md`.
 """
@@ -48,8 +51,10 @@ VALIDATION = _PROJECT_ROOT / "data" / "calibration" / "validation_lm18"
 HJ_DIR = _PROJECT_ROOT / "data" / "human_judgment"
 
 CRITERIA = ("C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9")
-# Label set for kappa: integer scores 0/1/2 + an explicit NA category.
-LABELS: tuple[str | int, ...] = (0, 1, 2, "NA")
+# Primary metrics are defined only on the ordinal score scale.
+SCORE_LABELS: tuple[int, ...] = (0, 1, 2)
+# Process labels are retained for audit, confusion matrices, and exclusions.
+REPORT_LABELS: tuple[str | int, ...] = (0, 1, 2, "NA", "MISSING")
 
 console = Console()
 app = typer.Typer(help=__doc__, no_args_is_help=False)
@@ -136,42 +141,41 @@ def _label_of(score: int | None, is_na: bool) -> str | int | None:
     if is_na:
         return "NA"
     if score is None:
-        return None  # missing / unfilled
+        return "MISSING"
+    if score not in SCORE_LABELS:
+        return "MISSING"
     return score
 
 
 def _weighted_cohen_kappa(
     pairs: list[tuple[Any, Any]], weights: str = "linear"
 ) -> float | None:
-    """Weighted Cohen's kappa over labels in LABELS (0, 1, 2, "NA").
+    """Weighted Cohen's kappa over numeric labels 0, 1 and 2.
 
-    Linear weights: distance between integer labels normalised to the
-    maximum range (here 2). NA is treated as maximally distant from any
-    integer (weight = 1.0), which is the strict / unbiased choice.
-
-    Returns None if there are no pairs or no observed disagreement.
+    NA and missing values are intentionally excluded before this helper is
+    called. They are reported as process counts, not treated as ordinal quality
+    categories.
     """
     if not pairs:
         return None
-    labels = LABELS
-    n = len(pairs)
+    labels = SCORE_LABELS
     obs = {(a, b): 0 for a in labels for b in labels}
     a_marg = dict.fromkeys(labels, 0)
     b_marg = dict.fromkeys(labels, 0)
+    n = 0
     for a, b in pairs:
         if a not in labels or b not in labels:
             continue
+        n += 1
         obs[(a, b)] += 1
         a_marg[a] += 1
         b_marg[b] += 1
+    if n == 0:
+        return None
 
     def w(x: Any, y: Any) -> float:
         if x == y:
             return 0.0
-        # NA vs anything else = max distance
-        if x == "NA" or y == "NA":
-            return 1.0
-        # integer labels: linear over 0..2
         return abs(int(x) - int(y)) / 2.0
 
     obs_disagree = sum(w(a, b) * c for (a, b), c in obs.items()) / n
@@ -190,26 +194,56 @@ def _accuracy(pairs: list[tuple[Any, Any]]) -> float | None:
 
 
 def _mae(pairs: list[tuple[Any, Any]]) -> float | None:
-    """MAE over integer score pairs. Drops NA / missing on either side."""
-    ints = [
+    """MAE over integer score pairs."""
+    if not pairs:
+        return None
+    return round(sum(abs(a - b) for a, b in pairs) / len(pairs), 3)
+
+
+def _confusion_matrix(pairs: list[tuple[Any, Any]]) -> dict[str, dict[str, int]]:
+    """Confusion matrix system (rows) × human (cols), including process labels."""
+    mat: dict[str, dict[str, int]] = {
+        str(a): {str(b): 0 for b in REPORT_LABELS} for a in REPORT_LABELS
+    }
+    for sys_l, hum_l in pairs:
+        if sys_l in REPORT_LABELS and hum_l in REPORT_LABELS:
+            mat[str(sys_l)][str(hum_l)] += 1
+    return mat
+
+
+def _primary_pairs(pairs: list[tuple[Any, Any]]) -> list[tuple[int, int]]:
+    """Return only numeric 0/1/2 pairs used by primary metrics."""
+    return [
         (a, b)
         for a, b in pairs
         if isinstance(a, int) and isinstance(b, int)
     ]
-    if not ints:
-        return None
-    return round(sum(abs(a - b) for a, b in ints) / len(ints), 3)
 
 
-def _confusion_matrix(pairs: list[tuple[Any, Any]]) -> dict[str, dict[str, int]]:
-    """Confusion matrix system (rows) × human (cols). Keys stringified."""
-    mat: dict[str, dict[str, int]] = {
-        str(a): {str(b): 0 for b in LABELS} for a in LABELS
+def _exclusion_counts(pairs: list[tuple[Any, Any]]) -> dict[str, int]:
+    """Count why observations do not enter primary metrics."""
+    missing = 0
+    na = 0
+    for a, b in pairs:
+        if a == "MISSING" or b == "MISSING":
+            missing += 1
+        elif a == "NA" or b == "NA":
+            na += 1
+    return {"n_excluded_na": na, "n_excluded_missing": missing}
+
+
+def _metric_summary(pairs: list[tuple[Any, Any]]) -> dict[str, Any]:
+    """Primary metrics plus explicit NA/missing exclusions."""
+    primary = _primary_pairs(pairs)
+    counts = _exclusion_counts(pairs)
+    return {
+        "n_observations": len(pairs),
+        "n_primary_pairs": len(primary),
+        **counts,
+        "kappa_linear_weighted": _weighted_cohen_kappa(primary),
+        "accuracy": _accuracy(primary),
+        "mae": _mae(primary),
     }
-    for sys_l, hum_l in pairs:
-        if sys_l in LABELS and hum_l in LABELS:
-            mat[str(sys_l)][str(hum_l)] += 1
-    return mat
 
 
 # ---------------------------------------------------------------------------
@@ -272,8 +306,7 @@ def _evaluator_analysis(
             h = hum.get(c, {})
             sys_label = _label_of(s.get("score"), s.get("is_na", False))
             hum_label = _label_of(h.get("score"), h.get("is_na", False))
-            if sys_label is not None and hum_label is not None:
-                per_criterion_pairs[c].append((sys_label, hum_label, seuid))
+            per_criterion_pairs[c].append((sys_label, hum_label, seuid))
 
     # Per-criterion metrics
     per_criterion = {}
@@ -283,15 +316,12 @@ def _evaluator_analysis(
         triples = per_criterion_pairs[c]
         pairs = [(a, b) for a, b, _ in triples]
         per_criterion[c] = {
-            "n": len(pairs),
-            "kappa_linear_weighted": _weighted_cohen_kappa(pairs),
-            "accuracy": _accuracy(pairs),
-            "mae": _mae(pairs),
+            **_metric_summary(pairs),
             "confusion_matrix": _confusion_matrix(pairs),
         }
         all_pairs.extend(pairs)
         for sys_label, hum_label, seuid in triples:
-            if sys_label != hum_label:
+            if sys_label != hum_label and "MISSING" not in {sys_label, hum_label}:
                 hum_j = judgments_by_seuid[seuid].get(c, {})
                 sys_j = _read_system_judgments(seuid).get(c, {})
                 disagreements.append({
@@ -308,10 +338,7 @@ def _evaluator_analysis(
     disagreements.sort(key=lambda d: -d["delta"])
 
     macro = {
-        "kappa_linear_weighted": _weighted_cohen_kappa(all_pairs),
-        "accuracy": _accuracy(all_pairs),
-        "mae": _mae(all_pairs),
-        "n_pairs": len(all_pairs),
+        **_metric_summary(all_pairs),
     }
 
     # CoreScore correlation (system vs human)
@@ -342,7 +369,7 @@ def _evaluator_analysis(
 def _label_distance(a: Any, b: Any) -> float:
     if a == b:
         return 0.0
-    if a == "NA" or b == "NA":
+    if a in {"NA", "MISSING"} or b in {"NA", "MISSING"}:
         return 2.0
     return abs(int(a) - int(b))
 
@@ -374,28 +401,21 @@ def _human_human_analysis(
         for c in CRITERIA:
             a = _label_of(h1.get(c, {}).get("score"), h1.get(c, {}).get("is_na", False))
             b = _label_of(h2.get(c, {}).get("score"), h2.get(c, {}).get("is_na", False))
-            if a is not None and b is not None:
-                pairs_by_criterion[c].append((a, b))
+            pairs_by_criterion[c].append((a, b))
 
     per_crit = {}
     all_pairs: list[tuple[Any, Any]] = []
     for c in CRITERIA:
         pairs = pairs_by_criterion[c]
         per_crit[c] = {
-            "n": len(pairs),
-            "kappa_linear_weighted": _weighted_cohen_kappa(pairs),
-            "accuracy": _accuracy(pairs),
-            "mae": _mae(pairs),
+            **_metric_summary(pairs),
         }
         all_pairs.extend(pairs)
     return {
         "evaluator_a": e1_id,
         "evaluator_b": e2_id,
         "macro": {
-            "kappa_linear_weighted": _weighted_cohen_kappa(all_pairs),
-            "accuracy": _accuracy(all_pairs),
-            "mae": _mae(all_pairs),
-            "n_pairs": len(all_pairs),
+            **_metric_summary(all_pairs),
         },
         "per_criterion": per_crit,
     }
@@ -411,27 +431,40 @@ def _render_markdown(report: dict[str, Any]) -> str:
     L += [
         f"- Generated at: `{report['generated_at']}`",
         f"- Evaluators: **{len(report['evaluators'])}**",
+        "- Primary metrics exclude `NA` and missing cells; those observations "
+        "are reported separately as process counts.",
+        "- No automatic majority/consensus score is computed.",
         "",
     ]
+    if len(report["evaluators"]) == 1:
+        L += [
+            "> Single-rater diagnostic validation: this report supports a "
+            "system-vs-expert comparison, not inter-rater reliability.",
+            "",
+        ]
     if report.get("human_human"):
         hh = report["human_human"]
         L += [
             "## Inter-evaluator agreement (human vs human)",
             "",
             f"- {hh['evaluator_a']} vs {hh['evaluator_b']}",
-            f"- N pairs = {hh['macro']['n_pairs']}",
+            f"- Total observations = {hh['macro']['n_observations']}",
+            f"- Primary numeric pairs = {hh['macro']['n_primary_pairs']}",
+            f"- Excluded NA = {hh['macro']['n_excluded_na']}",
+            f"- Excluded missing = {hh['macro']['n_excluded_missing']}",
             f"- Macro kappa = **{hh['macro']['kappa_linear_weighted']}**",
             f"- Macro accuracy = **{hh['macro']['accuracy']}**",
             f"- Macro MAE = **{hh['macro']['mae']}**",
             "",
-            "| Crit | n | κ | acc | MAE |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| Crit | obs | primary | NA excl. | missing excl. | κ | acc | MAE |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
         for c in CRITERIA:
             s = hh["per_criterion"][c]
             L.append(
-                f"| {c} | {s['n']} | {s['kappa_linear_weighted']} | "
-                f"{s['accuracy']} | {s['mae']} |"
+                f"| {c} | {s['n_observations']} | {s['n_primary_pairs']} | "
+                f"{s['n_excluded_na']} | {s['n_excluded_missing']} | "
+                f"{s['kappa_linear_weighted']} | {s['accuracy']} | {s['mae']} |"
             )
         L.append("")
 
@@ -440,7 +473,10 @@ def _render_markdown(report: dict[str, Any]) -> str:
             f"## System vs evaluator `{ev['evaluator_id']}`",
             "",
             f"- N syllabi: **{ev['n_syllabi']}**",
-            f"- N criterion pairs: **{ev['macro']['n_pairs']}**",
+            f"- Total observations: **{ev['macro']['n_observations']}**",
+            f"- Primary numeric pairs: **{ev['macro']['n_primary_pairs']}**",
+            f"- Excluded NA: **{ev['macro']['n_excluded_na']}**",
+            f"- Excluded missing: **{ev['macro']['n_excluded_missing']}**",
             f"- Macro kappa = **{ev['macro']['kappa_linear_weighted']}**",
             f"- Macro accuracy = **{ev['macro']['accuracy']}**",
             f"- Macro MAE = **{ev['macro']['mae']}**",
@@ -450,14 +486,15 @@ def _render_markdown(report: dict[str, Any]) -> str:
             "",
             "### Per-criterion (system vs this evaluator)",
             "",
-            "| Crit | n | κ weighted | acc | MAE |",
-            "| --- | ---: | ---: | ---: | ---: |",
+            "| Crit | obs | primary | NA excl. | missing excl. | κ weighted | acc | MAE |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
         for c in CRITERIA:
             s = ev["per_criterion"][c]
             L.append(
-                f"| {c} | {s['n']} | {s['kappa_linear_weighted']} | "
-                f"{s['accuracy']} | {s['mae']} |"
+                f"| {c} | {s['n_observations']} | {s['n_primary_pairs']} | "
+                f"{s['n_excluded_na']} | {s['n_excluded_missing']} | "
+                f"{s['kappa_linear_weighted']} | {s['accuracy']} | {s['mae']} |"
             )
         L += [
             "",
@@ -493,7 +530,9 @@ def _print_summary_table(report: dict[str, Any]) -> None:
     table = Table(title="System vs human — macro metrics", show_header=True)
     table.add_column("evaluator")
     table.add_column("n_syllabi", justify="right")
-    table.add_column("n_pairs", justify="right")
+    table.add_column("primary", justify="right")
+    table.add_column("NA excl.", justify="right")
+    table.add_column("missing excl.", justify="right")
     table.add_column("κ weighted", justify="right")
     table.add_column("accuracy", justify="right")
     table.add_column("MAE", justify="right")
@@ -502,7 +541,9 @@ def _print_summary_table(report: dict[str, Any]) -> None:
         table.add_row(
             ev["evaluator_id"],
             str(ev["n_syllabi"]),
-            str(ev["macro"]["n_pairs"]),
+            str(ev["macro"]["n_primary_pairs"]),
+            str(ev["macro"]["n_excluded_na"]),
+            str(ev["macro"]["n_excluded_missing"]),
             str(ev["macro"]["kappa_linear_weighted"]),
             str(ev["macro"]["accuracy"]),
             str(ev["macro"]["mae"]),

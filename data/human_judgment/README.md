@@ -1,13 +1,14 @@
 # Phase 5.8 — Human-judgment validation protocol
 
-Operational status: infrastructure ready; actual expert evaluation postponed
-until the thesis advisor and/or domain experts are available.
+Operational status: infrastructure ready; actual expert evaluation can proceed
+with the thesis advisor as a single blind expert evaluator, or with additional
+domain experts if they become available.
 
-Eight LM-18 syllabi are evaluated by one or more domain experts
-against the same 9 criteria (C1-C9) the multi-agent system
-scored automatically in Phase 5.7. Inter-rater agreement
-(weighted Cohen's kappa, MAE, CoreScore correlation) is the
-external validation of the system's output.
+Eight LM-18 syllabi are evaluated against the same 9 criteria (C1-C9)
+the multi-agent system scored automatically in Phase 5.7. With one
+evaluator, the output is a single-rater diagnostic comparison between
+system and expert. With two or more evaluators, inter-rater agreement
+can additionally be reported as a rubric-stability check.
 
 ## Two phases
 
@@ -62,38 +63,38 @@ columns. Keep the order of the rows.
 
 ## The 8 syllabi
 
-1. **01_COMPUTER_VISION_LAB** — `88B7C1CE`  
-   COMPUTER VISION E LABORATORIO / EN: *COMPUTER VISION E LABORATORIO*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=88B7C1CE-B595-46A5-A37A-C5414AD807B5  
+1. **01_COMPUTER_VISION_LAB** — `88B7C1CE`
+   COMPUTER VISION E LABORATORIO / EN: *COMPUTER VISION E LABORATORIO*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=88B7C1CE-B595-46A5-A37A-C5414AD807B5
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=88B7C1CE-B595-46A5-A37A-C5414AD807B5&eng
-2. **02_INTERNET_OF_THINGS** — `0B53E8E2`  
-   INTERNET OF THINGS / EN: *INTERNET OF THINGS*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=0B53E8E2-4B90-426F-A25C-3AA31FA4B649  
+2. **02_INTERNET_OF_THINGS** — `0B53E8E2`
+   INTERNET OF THINGS / EN: *INTERNET OF THINGS*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=0B53E8E2-4B90-426F-A25C-3AA31FA4B649
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=0B53E8E2-4B90-426F-A25C-3AA31FA4B649&eng
-3. **03_PEER_TO_PEER_LAB** — `F4AF1512`  
-   PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO / EN: *PEER TO PEER AND WIRELESS NETWORKS AND LABORATORY*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=F4AF1512-9D7A-4256-B57D-E103E05B009B  
+3. **03_PEER_TO_PEER_LAB** — `F4AF1512`
+   PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO / EN: *PEER TO PEER AND WIRELESS NETWORKS AND LABORATORY*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=F4AF1512-9D7A-4256-B57D-E103E05B009B
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=F4AF1512-9D7A-4256-B57D-E103E05B009B&eng
-4. **04_MULTIMEDIA_LAB** — `9A90BBCE`  
-   MULTIMEDIA E LABORATORIO / EN: *MULTIMEDIA AND LABORATORY*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791  
+4. **04_MULTIMEDIA_LAB** — `9A90BBCE`
+   MULTIMEDIA E LABORATORIO / EN: *MULTIMEDIA AND LABORATORY*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791&eng
-5. **05_COMPUTER_VISION** — `89E21813`  
-   COMPUTER VISION / EN: *COMPUTER VISION*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=89E21813-A17C-4C85-AF65-C295EE11ED59  
+5. **05_COMPUTER_VISION** — `89E21813`
+   COMPUTER VISION / EN: *COMPUTER VISION*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=89E21813-A17C-4C85-AF65-C295EE11ED59
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=89E21813-A17C-4C85-AF65-C295EE11ED59&eng
-6. **06_OTTIMIZZAZIONE** — `E2446DF6`  
-   OTTIMIZZAZIONE / EN: *OPTIMIZATION*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=E2446DF6-59A1-46FD-B8D8-635EB937C1B3  
+6. **06_OTTIMIZZAZIONE** — `E2446DF6`
+   OTTIMIZZAZIONE / EN: *OPTIMIZATION*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=E2446DF6-59A1-46FD-B8D8-635EB937C1B3
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=E2446DF6-59A1-46FD-B8D8-635EB937C1B3&eng
-7. **07_DEEP_LEARNING** — `3540D939`  
-   Deep Learning / EN: *Deep Learning*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=3540D939-DA16-4C1D-983C-E6B85C403F2F  
+7. **07_DEEP_LEARNING** — `3540D939`
+   Deep Learning / EN: *Deep Learning*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=3540D939-DA16-4C1D-983C-E6B85C403F2F
    EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=3540D939-DA16-4C1D-983C-E6B85C403F2F&eng
-8. **08_MACHINE_LEARNING** — `FE97232C`  
-   MACHINE LEARNING / EN: *MACHINE LEARNING*  
-   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=FE97232C-4F07-41F8-A82F-FF73592265EC  
-   EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=FE97232C-4F07-41F8-A82F-FF73592265EC&eng
+8. **08_VULN_ASSESSMENT_PT** — `46D62804`
+   VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT) / EN: *VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)*
+   IT: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=46D62804-0FCD-4478-A51D-A752B64A7DCB
+   EN: https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=46D62804-0FCD-4478-A51D-A752B64A7DCB&eng
 
 ## After Phase 1
 
@@ -106,8 +107,10 @@ uv run python scripts/aggregate_human_judgment.py
 ```
 
 The aggregator computes weighted Cohen's kappa per criterion,
-MAE on integer scores, accuracy, CoreScore correlation, and
-the top-N strongest disagreements. Output:
+MAE on integer scores, accuracy, CoreScore comparison, explicit
+NA/missing exclusion counts, and the top-N strongest disagreements.
+NA and missing cells are excluded from primary metrics and reported
+separately. No automatic majority/consensus score is computed. Output:
 `data/human_judgment/aggregate.json` and `aggregate.md`.
 
 ## Format details
