@@ -19,9 +19,10 @@ export function AuthShell({ children }: { children: ReactNode }) {
                 Universitari.
               </h1>
               <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-600">
-                Una piattaforma utile alla revisione qualitativa di tutti i
-                corsi dell&apos;Università Degli Studi di Catania, attraverso:
-                criteri, agenti e riferimenti a documenti normativi.
+                Una piattaforma per valutare e migliorare la qualità dei
+                syllabus universitari, combinando criteri metodologici, agenti
+                specializzati e riferimenti documentali dell&apos;Università
+                degli Studi di Catania.
               </p>
             </div>
           </div>
