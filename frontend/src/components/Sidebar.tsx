@@ -36,10 +36,10 @@ export function Navbar() {
     <div className="relative flex h-14 w-full items-center justify-between text-slate-900">
       <Link
         to="/"
-        className="flex h-full items-center gap-2 px-4 text-sm font-semibold tracking-wide text-slate-950 transition-colors hover:text-cyan-700 sm:px-5"
+        className="flex h-full items-center gap-2 px-4 text-sm font-semibold tracking-wide text-slate-950 transition-colors hover:text-sky-700 sm:px-5"
       >
         <span
-          className="inline-block h-2 w-2 rounded-sm bg-cyan-500"
+          className="inline-block h-2 w-2 rounded-sm bg-sky-500"
           aria-hidden
         />
         Syllabus Quality Assurance
@@ -73,8 +73,8 @@ export function Navbar() {
               className={
                 "pointer-events-auto flex h-full items-center gap-2 border-b-2 px-4 text-xs transition-colors " +
                 (isActive
-                  ? "border-cyan-500 text-slate-950 font-medium"
-                  : "border-transparent text-slate-600 hover:text-cyan-700")
+                  ? "border-sky-500 text-slate-950 font-medium"
+                  : "border-transparent text-slate-600 hover:text-sky-700")
               }
             >
               <item.icon className="h-3.5 w-3.5" aria-hidden />
@@ -110,7 +110,7 @@ function MockProfile() {
       </Link>
       <Link
         to="/profile"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-cyan-200 bg-cyan-50 text-xs font-medium text-cyan-700"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-sky-200 bg-sky-50 text-xs font-medium text-sky-700"
         aria-label="Apri profilo"
         title="Apri profilo"
       >
