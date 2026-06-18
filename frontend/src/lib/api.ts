@@ -16,6 +16,7 @@ import type {
   AuthResponse,
   AuthUser,
   RegisterableUserRole,
+  ResultsSummary,
   UserRole,
 } from "./types";
 
@@ -266,6 +267,13 @@ export const listEvaluationsForSyllabus = (seuid: string, limit?: number) => {
   const qs = typeof limit === "number" ? `?limit=${limit}` : "";
   return fetchApi<EvaluationSummary[]>(`/syllabi/${seuid}/evaluations${qs}`);
 };
+
+/**
+ * Phase 12 — cross-syllabus summary over the latest terminal
+ * evaluation per syllabus. This powers the navbar "Risultati" page.
+ */
+export const getResultsSummary = () =>
+  fetchApi<ResultsSummary>("/results/summary");
 
 // ---------------------------------------------------------------------------
 // Phase 8 — local-document registry

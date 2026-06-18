@@ -11,6 +11,7 @@ import { LoginPage } from "@/pages/Auth/LoginPage";
 import { RegisterPage } from "@/pages/Auth/RegisterPage";
 import { EvaluationPage } from "@/pages/Evaluation/EvaluationPage";
 import { ProfilePage } from "@/pages/Profile/ProfilePage";
+import { ResultsPage } from "@/pages/Results/ResultsPage";
 import { SettingsPage } from "@/pages/Settings/SettingsPage";
 import { SyllabusViewer } from "@/pages/SyllabusViewer/SyllabusViewer";
 import { TechnicalViewProvider } from "@/context/TechnicalViewProvider";
@@ -65,6 +66,16 @@ export default function App() {
                       <ProtectedRoute>
                         <Chromed>
                           <EvaluationPage />
+                        </Chromed>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/results"
+                    element={
+                      <ProtectedRoute>
+                        <Chromed>
+                          <ResultsPage />
                         </Chromed>
                       </ProtectedRoute>
                     }

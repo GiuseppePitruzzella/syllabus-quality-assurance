@@ -191,6 +191,75 @@ export interface EvaluationDetail extends EvaluationSummary {
 }
 
 // ---------------------------------------------------------------------------
+// Phase 12 — Results summary page
+// ---------------------------------------------------------------------------
+
+export type CoreCriterionCode =
+  | "C1"
+  | "C2"
+  | "C3"
+  | "C4"
+  | "C5"
+  | "C6"
+  | "C7"
+  | "C8"
+  | "C9";
+
+export interface ResultsOverview {
+  latest_evaluations_count: number;
+  terminal_runs_count: number;
+  completed_count: number;
+  partial_count: number;
+  failed_count: number;
+  average_core_score: number | null;
+  average_coverage: number | null;
+  total_critical_criteria: number;
+  total_improvable_criteria: number;
+  total_na_criteria: number;
+}
+
+export interface CriterionDistribution {
+  criterion_code: CoreCriterionCode;
+  score_0: number;
+  score_1: number;
+  score_2: number;
+  na: number;
+  evaluated: number;
+}
+
+export interface ResultsEvaluationRow {
+  evaluation_uuid: string;
+  syllabus_seuid: string;
+  course_name: string;
+  cdl_name: string | null;
+  cdl_code: string | null;
+  department_name: string | null;
+  status: Extract<EvaluationStatus, "completed" | "partial" | "failed">;
+  started_at: string;
+  finished_at: string | null;
+  core_score: number | null;
+  coverage: number | null;
+  critical_count: number;
+  improvable_count: number;
+  adequate_count: number;
+  na_count: number;
+}
+
+export interface HumanValidationSummary {
+  status: "not_available" | "in_preparation";
+  title: string;
+  description: string;
+}
+
+export interface ResultsSummary {
+  generated_at: string;
+  overview: ResultsOverview;
+  criteria: CriterionDistribution[];
+  evaluations: ResultsEvaluationRow[];
+  human_validation: HumanValidationSummary;
+}
+
+// ---------------------------------------------------------------------------
 // Phase 9.D.1 — Extended-criteria (E1-E5) payloads (mirror of
 // app/schemas/evaluation.py)
 // ---------------------------------------------------------------------------

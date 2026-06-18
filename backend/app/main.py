@@ -13,6 +13,7 @@ from app.api import (
     departments,
     evaluation,
     local_documents,
+    results,
     scrape_departments,
     scrape_stream,
     stats,
@@ -152,6 +153,7 @@ app.include_router(departments.router, dependencies=_AUTHENTICATED_API)
 app.include_router(scrape_departments.router, dependencies=_AUTHENTICATED_API)
 app.include_router(scrape_stream.router, dependencies=_AUTHENTICATED_API)
 app.include_router(evaluation.router, dependencies=_AUTHENTICATED_API)
+app.include_router(results.router, dependencies=_AUTHENTICATED_API)
 app.include_router(cdl.router, dependencies=_AUTHENTICATED_API)
 app.include_router(syllabi.router, dependencies=_AUTHENTICATED_API)
 app.include_router(stats.router, dependencies=_AUTHENTICATED_API)
