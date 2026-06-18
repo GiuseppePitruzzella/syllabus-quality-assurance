@@ -59,7 +59,7 @@ function ReportPanel({ data }: { data: EvaluationDetail }) {
  * subtle borders. Nothing screams "blog post"; the goal is a
  * consultable, print-friendly document.
  */
-function ReportMarkdown({ source }: { source: string }) {
+export function ReportMarkdown({ source }: { source: string }) {
   return (
     <div className="max-w-none overflow-visible break-words text-[0.925rem] leading-7 text-slate-700 [overflow-wrap:anywhere]">
       <ReactMarkdown

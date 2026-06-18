@@ -8,7 +8,7 @@ import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
-import { EvaluationReport } from "./EvaluationReport";
+import { AnnotatedSyllabus } from "./AnnotatedSyllabus";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
@@ -102,7 +102,7 @@ export function EvaluationPage() {
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
-          <EvaluationReport data={data} />
+          <AnnotatedSyllabus data={data} />
         </div>
       ) : (
         <>
@@ -110,7 +110,7 @@ export function EvaluationPage() {
           {data.status !== "failed" ? <PriorityStrip data={data} /> : null}
           <div className="min-w-0 divide-y divide-slate-200/80">
             <EvaluationScorePanel data={data} />
-            <EvaluationReport data={data} />
+            <AnnotatedSyllabus data={data} />
             <ExtendedCriteriaResults data={data} />
             <ExternalDocumentsUsed data={data} />
           </div>
