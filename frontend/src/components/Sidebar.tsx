@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
-  UserRound,
 } from "lucide-react";
 
 import { useAuth } from "@/context/auth";
@@ -14,7 +13,6 @@ const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, to: "/", enabled: true },
   { label: "Risultati", icon: BarChart3, to: "#", enabled: false },
   { label: "Impostazioni", icon: Settings, to: "/settings", enabled: true },
-  { label: "Profilo", icon: UserRound, to: "/profile", enabled: true },
 ];
 
 /**
