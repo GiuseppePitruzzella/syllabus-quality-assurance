@@ -24,11 +24,9 @@ const queryClient = new QueryClient({
 /**
  * Phase 6.1.B (rev) — SaaS shell.
  *
- * No global fixed navbar anymore. Each page owns its own dark
- * "rounded shell" at the top: Dashboard combines navbar + hero in
- * one shell; the other pages (SyllabusViewer, EvaluationPage) use
- * the lightweight `Chromed` wrapper which renders only the navbar
- * in a rounded slate-950 shell above the page content.
+ * No global fixed navbar anymore. Each protected page uses the
+ * lightweight `Chromed` wrapper, which renders the shared light
+ * navbar above the page content.
  */
 export default function App() {
   return (
@@ -105,7 +103,7 @@ export default function App() {
 function Chromed({ children }: { children: ReactNode }) {
   return (
     <div>
-      <header className="bg-slate-950">
+      <header className="border-b border-slate-200 bg-white/95 shadow-sm shadow-slate-200/40">
         <Navbar />
       </header>
       <div className="px-4 py-8 sm:px-6 lg:px-10 lg:py-10">{children}</div>
