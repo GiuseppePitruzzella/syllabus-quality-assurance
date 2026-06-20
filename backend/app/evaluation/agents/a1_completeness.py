@@ -35,6 +35,7 @@ from app.evaluation.agents.prompts.a1_prompt import build_a1_prompt
 A1_RELEVANT_FIELDS: tuple[str, ...] = (
     # course identity (titolo) + bilingual flag
     "course_name",
+    "course_name_en",
     "has_english",
     # RA — risultati di apprendimento (C1 IT + C2 IT/EN)
     "learning_outcomes_it",
@@ -102,7 +103,13 @@ class CompletenessAgent(BaseAgent):
     #   prerequisites. The advisory paragraph for C5 in
     #   ``A1_SPECIFIC_INSTRUCTIONS`` was updated for internal
     #   consistency with the new anchors. C1 and C2 are unchanged.
-    prompt_version = "a1_v5"
+    # - a1_v6: targeted C5 recalibration after the LM-18 validation
+    #   showed zero variance (30/30 C5=1). Score=2 no longer requires
+    #   the explicit culturali/disciplinari distinction; it rewards
+    #   prerequisites that are specific and operationally useful for
+    #   student self-assessment. The distinction and utili/importanti/
+    #   indispensabili gradation remain positive signals, not hard gates.
+    prompt_version = "a1_v6"
 
     # D030.bis: A1 needs more headroom than the global 8192 budget on
     # the longest LM-18 syllabi (e.g. Machine Learning triggered a

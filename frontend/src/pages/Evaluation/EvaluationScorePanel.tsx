@@ -251,6 +251,7 @@ function CriterionRow({
       {expanded ? (
         <div className="px-8 pb-5 pt-1 sm:px-10">
           <WhyThisResult
+            criterionCode={code}
             score={score}
             isNa={isNa}
             isNaTechnical={isNaTechnical}

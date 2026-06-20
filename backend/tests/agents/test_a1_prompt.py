@@ -87,6 +87,23 @@ def test_prompt_contains_role_and_payloads():
     assert "Rispondi ora esclusivamente con il JSON valido richiesto." in prompt
 
 
+def test_prompt_uses_course_name_en_for_english_title_boundary():
+    """C2 must use the scraped English title field, not infer from course_name."""
+    prompt = build_a1_prompt(
+        _agent_input(
+            {
+                "course_name": "OTTIMIZZAZIONE",
+                "course_name_en": "OPTIMIZATION",
+                "has_english": True,
+            }
+        )
+    )
+
+    assert "course_name_en" in prompt
+    assert "NON dedurre che il titolo inglese manchi" in prompt
+    assert "OPTIMIZATION" in prompt
+
+
 def test_a1_specific_does_not_duplicate_anchors():
     """Anchor strings are owned by A1_CRITERIA_SPECS, NOT by the narrative block.
 
@@ -170,50 +187,42 @@ def test_prompt_accepts_dict_input():
     assert "Some Course" in prompt
 
 
-def test_a1_c5_anchors_require_explicit_culturali_disciplinari_distinction_for_score_2():
-    """a1_v5: C5 = 2 requires both specificity AND the explicit distinction.
+def test_a1_c5_anchors_reward_operational_prerequisites_without_taxonomy_gate():
+    """a1_v6: C5=2 rewards usefulness for self-assessment.
 
-    The 5.4.I E2E calibration found C5 drifting systematically from 1 to 2
-    on 3/4 non-NA syllabi because the a1_v4 anchors let "specific but
-    without the culturali/disciplinari distinction" earn a 2. a1_v5 moves
-    that bar: score=2 now requires both criteria; score=1 explicitly
-    covers the specific-but-no-distinction case.
+    The LM-18 validation showed C5 collapsing to 1 on every latest run:
+    a1_v5 made the culturali/disciplinari distinction too close to a hard
+    gate. a1_v6 keeps that distinction as a positive signal, but lets a
+    specific and operational prerequisite earn the maximum score.
     """
     c5_spec = next(s for s in A1_CRITERIA_SPECS if s["criterion_code"] == "C5")
     anchor_2 = c5_spec["anchors"]["2"].lower()
     anchor_1 = c5_spec["anchors"]["1"].lower()
 
-    # Score=2 requires the distinction, in both dimensions.
-    assert "distint" in anchor_2 or "distinzione" in anchor_2
-    assert "cultural" in anchor_2 and "disciplinar" in anchor_2
+    assert "autovalutazione" in anchor_2
+    assert "specific" in anchor_2
+    assert "non sono obbligatorie" in anchor_2
 
-    # Score=1 covers "specific but no distinction".
-    assert "specifici" in anchor_1
-    assert "senza distinzione" in anchor_1
+    assert "parzialmente operativi" in anchor_1
+    assert "livello atteso" in anchor_1
+    assert "priorità" in anchor_1
 
 
-def test_a1_c5_narrative_is_consistent_with_new_anchors():
-    """The narrative paragraph for C5 must match the new a1_v5 anchors.
+def test_a1_c5_narrative_frames_distinction_and_gradation_as_positive_signals():
+    """The narrative paragraph for C5 must match the new a1_v6 anchors.
 
-    a1_v4 said the gradation/distinction "raccomandano (non impongono)";
-    a1_v5 tightens the C5=2 bar but keeps the *gradation* (utili /
-    importanti / indispensabili) as a non-mandatory recommendation.
+    The prompt should prevent a one-size-fits-all reading of C5: the
+    taxonomy and gradation are useful evidence, not mandatory conditions
+    for score=2 when the text is already specific and operational.
     """
     spec_text = A1_SPECIFIC_INSTRUCTIONS
 
-    # The advisory must explicitly say "score 2 requires the distinction".
     assert "Il punteggio 2 richiede" in spec_text
-    assert "distinzione esplicita" in spec_text
+    assert "autovalutarsi" in spec_text
     assert "cultural" in spec_text and "disciplinar" in spec_text
-
-    # The gradation utili/importanti/indispensabili must still be framed
-    # as recommended, not mandatory.
-    assert "raccomandata" in spec_text or "raccomanda" in spec_text
-    assert "non è di per sé sufficiente né necessaria" in spec_text
-
-    # No lingering a1_v4 softening on the distinction itself.
-    assert "non lo determina da sola" not in spec_text
-    assert "RACCOMANDANO" not in spec_text  # all-caps emphasis from a1_v4
+    assert "segnali positivi" in spec_text
+    assert "NON sono condizioni obbligatorie" in spec_text
+    assert "distinzione esplicita" not in spec_text
 
 
 def test_build_a1_prompt_defaults_to_a1_criteria_specs_when_empty():

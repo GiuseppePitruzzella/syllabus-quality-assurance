@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from app.scraper.syllabus_list import parse_syllabus_list
+from app.scraper.syllabus_list import build_english_syllabus_url, parse_syllabus_list
 
 FIXTURES = Path(__file__).parent / "fixtures"
 CDL_URL = "https://web.dmi.unict.it/corsi/lm-18"
@@ -82,14 +82,26 @@ def test_url_it_starts_with_http(lm18_syllabi):
         assert syl["url_it"].startswith("http"), f"Bad url_it: {syl['url_it']}"
 
 
-def test_url_en_ends_with_eng(lm18_syllabi):
+def test_url_en_uses_current_english_course_units_endpoint(lm18_syllabi):
     for syl in lm18_syllabi:
-        assert syl["url_en"].endswith("&eng"), f"Bad url_en: {syl['url_en']}"
+        assert "/en/courses/lm-18/course-units" in syl["url_en"], (
+            f"Bad url_en: {syl['url_en']}"
+        )
+        assert "seuid" in syl["url_en"] or "seuidm" in syl["url_en"]
 
 
-def test_url_en_is_url_it_plus_eng(lm18_syllabi):
-    for syl in lm18_syllabi:
-        assert syl["url_en"] == syl["url_it"] + "&eng"
+def test_build_english_syllabus_url_handles_legacy_detail_url():
+    url_it = "https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=ABC"
+    assert build_english_syllabus_url(url_it) == (
+        "https://web.dmi.unict.it/en/courses/lm-18/course-units?seuid=ABC"
+    )
+
+
+def test_build_english_syllabus_url_preserves_seuidm_query_key():
+    url_it = "https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuidm=ABC"
+    assert build_english_syllabus_url(url_it) == (
+        "https://web.dmi.unict.it/en/courses/lm-18/course-units?seuidm=ABC"
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -77,7 +77,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Completezza",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v5",
+    prompt_version: "a1_v6",
     description:
       "Verifica la presenza e compilazione sostanziale di tutte le sezioni previste dalle Linee Guida UniCT: risultati di apprendimento, prerequisiti, contenuti, modalità di valutazione, esempi di domande, testi adottati, modalità di svolgimento, modalità di frequenza, programmazione del corso.",
     anchors: [
@@ -93,7 +93,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Bilinguismo",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v5",
+    prompt_version: "a1_v6",
     description:
       "Verifica la disponibilità della versione inglese sul perimetro minimo: titolo, risultati di apprendimento, contenuti, modalità di verifica. L'assenza reale della versione inglese non rende NA il criterio: incide sul punteggio.",
     anchors: [
@@ -143,17 +143,17 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Completezza",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v5",
+    prompt_version: "a1_v6",
     description:
-      "Valuta se i prerequisiti sono formulati in modo utile allo studente. Per il punteggio massimo serve specificità + distinzione esplicita tra conoscenze culturali/generali e disciplinari/specialistiche (o organizzazione equivalente).",
+      "Valuta se i prerequisiti sono formulati in modo utile allo studente per autovalutarsi prima del corso. Per il punteggio massimo serve una formulazione specifica e operativa; la distinzione culturali/disciplinari o la gradazione di importanza sono segnali positivi, non condizioni obbligatorie.",
     anchors: [
-      { score: 0, description: "Prerequisiti assenti o formulati in modo generico." },
-      { score: 1, description: "Prerequisiti specifici ma senza distinzione fra culturali e disciplinari." },
-      { score: 2, description: "Prerequisiti specifici con distinzione esplicita culturali/disciplinari." },
+      { score: 0, description: "Prerequisiti assenti, tautologici o ridotti a nomi/codici di insegnamenti." },
+      { score: 1, description: "Prerequisiti presenti ma poco operativi o privi di livello/priorità chiara." },
+      { score: 2, description: "Prerequisiti specifici e utili all'autovalutazione dello studente." },
       { score: "NA", description: "Sezione non recuperabile per ragioni tecniche." },
     ],
     notes:
-      "Ricalibrato in a1_v5 (Phase 5.4.J) per ristabilire un bordo netto tra punteggio 1 e 2.",
+      "Ricalibrato in a1_v6: il massimo premia la reale utilità per lo studente, non solo la presenza di una tassonomia culturale/disciplinare esplicita.",
   },
   {
     code: "C6",
@@ -211,13 +211,13 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Editoriale",
     agent: "A4",
     weight: 1.0,
-    prompt_version: "a4_v2",
+    prompt_version: "a4_v10",
     description:
-      "Valuta la coerenza interna del documento come artefatto scritto: refusi, residui redazionali, formattazione, qualità dei riferimenti, incongruenze formali evidenti. Non penalizza artefatti del parser non presenti nell'originale, né la sola assenza della versione inglese (ricade su C2).",
+      "Valuta la cura editoriale osservabile del documento: refusi reali, qualità dei riferimenti e incongruenze formali evidenti. Non penalizza frammenti tecnici dei campi Dublin, artefatti plausibilmente introdotti dal parser, refusi localizzati ripetuti in campi duplicati, né contraddizioni semantiche IT/EN che ricadono su altri criteri.",
     anchors: [
       { score: 0, description: "Refusi sistematici, incongruenze formali macroscopiche, riferimenti malformati." },
-      { score: 1, description: "Refusi puntuali o riferimenti migliorabili, ma documento leggibile." },
-      { score: 2, description: "Documento curato, riferimenti coerenti, formattazione uniforme." },
+      { score: 1, description: "Almeno due difetti editoriali concreti e indipendenti in campi distinti, oppure un difetto redazionale grave." },
+      { score: 2, description: "Documento curato o con soli difetti minori, localizzati, duplicati o non verificabili." },
       { score: "NA", description: "Riservato a casi tecnici eccezionali." },
     ],
   },

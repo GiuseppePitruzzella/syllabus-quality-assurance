@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import argparse
 import re
-from urllib.parse import parse_qs, urljoin, urlparse
+from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 
 from app.scraper.utils import RateLimitedSession, parse_html
 
@@ -34,6 +34,43 @@ def _extract_seuid(href: str) -> str | None:
         if key in qs:
             return qs[key][0]
     return None
+
+
+def build_english_syllabus_url(url_it: str) -> str:
+    """Return UniCT's canonical English syllabus URL for an IT detail URL.
+
+    SmartEdu used to serve English syllabi by appending ``&eng`` to the
+    Italian ``/corsi/{code}/insegnamenti`` endpoint. The current public
+    website exposes the real English page under
+    ``/en/courses/{code}/course-units`` instead; ``&eng`` now resolves to
+    Italian content and makes the detail scraper think no EN sections exist.
+    """
+    parsed = urlparse(url_it)
+    qs = parse_qs(parsed.query)
+    query_key = next((key for key in ("seuid", "seuidm") if qs.get(key)), None)
+    query_value = qs[query_key][0] if query_key is not None else None
+
+    path_match = re.match(
+        r"^/(?:en/)?(?:corsi|courses)/([^/]+)/(?:insegnamenti|course-units)/?$",
+        parsed.path,
+    )
+    if path_match and query_key is not None and query_value:
+        cdl_code = path_match.group(1)
+        return urlunparse(
+            (
+                parsed.scheme,
+                parsed.netloc,
+                f"/en/courses/{cdl_code}/course-units",
+                "",
+                urlencode({query_key: query_value}),
+                "",
+            )
+        )
+
+    if "eng" in parse_qs(parsed.query, keep_blank_values=True):
+        return url_it
+    separator = "&" if parsed.query else "?"
+    return f"{url_it}{separator}eng"
 
 
 def parse_syllabus_list(html: str, cdl_url: str, cdl_id: int) -> list[dict]:
@@ -100,13 +137,12 @@ def parse_syllabus_list(html: str, cdl_url: str, cdl_id: int) -> list[dict]:
             continue
 
         # Build absolute URLs
-        base = cdl_url.rstrip("/")
         # href is a relative path like /corsi/lm-18/insegnamenti?seuid=...
         # urljoin with the site root handles this correctly
         parsed_cdl = urlparse(cdl_url)
         site_root = f"{parsed_cdl.scheme}://{parsed_cdl.netloc}"
         url_it = urljoin(site_root, href)
-        url_en = url_it + "&eng"
+        url_en = build_english_syllabus_url(url_it)
 
         # Parse course code + name from link text.
         # Collapse all whitespace (including embedded newlines) to single spaces.

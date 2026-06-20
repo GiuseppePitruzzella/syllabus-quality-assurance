@@ -20,6 +20,7 @@ def _full_syllabus() -> SimpleNamespace:
     return SimpleNamespace(
         seuid="SEUID-1",
         course_name="ALGORITMI E COMPLESSITA'",
+        course_name_en="ALGORITHMS AND COMPLEXITY",
         has_english=True,
         # Obligatory sections (RA, PR, CN, MV, ED, TD, MS, MF, PRG)
         learning_outcomes_it="Conoscenze e capacità di comprensione...",
@@ -78,6 +79,7 @@ def test_relevant_fields_contains_c2_perimeter_en_side():
     """C2's bilingual perimeter EN side must be in the field list."""
     c2_en = {
         "course_name",  # title
+        "course_name_en",  # title from the EN detail page
         "has_english",
         "learning_outcomes_en",
         "course_content_en",
@@ -130,6 +132,7 @@ def test_get_relevant_syllabus_fields_includes_obligatory_section_value():
     agent = CompletenessAgent(retriever=MagicMock(), llm_client=MagicMock())
     out = agent.get_relevant_syllabus_fields(_full_syllabus())
     assert out["course_name"] == "ALGORITMI E COMPLESSITA'"
+    assert out["course_name_en"] == "ALGORITHMS AND COMPLEXITY"
     assert out["prerequisites_it"] == "Programmazione e algebra."
     assert out["prerequisites_en"] == "Programming and algebra."
     assert out["assessment_methods_en"] == "Written + oral exam."
@@ -147,11 +150,13 @@ def test_get_relevant_syllabus_fields_handles_missing_attributes():
     minimal = SimpleNamespace(
         seuid="x",
         course_name="X",
+        course_name_en=None,
         has_english=False,
     )
     agent = CompletenessAgent(retriever=MagicMock(), llm_client=MagicMock())
     out = agent.get_relevant_syllabus_fields(minimal)
     assert out["course_name"] == "X"
+    assert out["course_name_en"] is None
     assert out["has_english"] is False
     # Missing fields preserved as None — A1 can score them as 0.
     assert out["prerequisites_it"] is None
@@ -173,7 +178,7 @@ def test_completeness_agent_advertises_correct_codes():
     agent = CompletenessAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A1"
     assert agent.criteria_codes == ["C1", "C2", "C5"]
-    assert agent.prompt_version == "a1_v5"
+    assert agent.prompt_version == "a1_v6"
 
 
 def test_completeness_agent_declares_token_budget_override():

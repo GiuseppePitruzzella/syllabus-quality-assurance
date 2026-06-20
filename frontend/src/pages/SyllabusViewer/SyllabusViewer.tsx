@@ -81,6 +81,29 @@ function SourceLink({
   );
 }
 
+function normaliseEnglishSourceUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.endsWith("unict.it")) return url;
+
+    const seuid =
+      parsed.searchParams.get("seuid") ?? parsed.searchParams.get("seuidm");
+    const pathMatch = parsed.pathname.match(
+      /^\/(?:en\/)?(?:corsi|courses)\/([^/]+)\/(?:insegnamenti|course-units)\/?$/,
+    );
+    if (pathMatch && seuid) {
+      const [, cdlCode] = pathMatch;
+      const queryKey = parsed.searchParams.has("seuidm") ? "seuidm" : "seuid";
+      parsed.pathname = `/en/courses/${cdlCode}/course-units`;
+      parsed.search = new URLSearchParams([[queryKey, seuid]]).toString();
+      parsed.hash = "";
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 export function SyllabusViewer() {
   const { seuid } = useParams<{ seuid: string }>();
   const [lang, setLang] = useState<"it" | "en">("it");
@@ -173,7 +196,10 @@ export function SyllabusViewer() {
           <>
             <SourceLink href={data.url_it} label="Fonte IT" />
             {data.has_english ? (
-              <SourceLink href={data.url_en} label="Fonte EN" />
+              <SourceLink
+                href={normaliseEnglishSourceUrl(data.url_en)}
+                label="Fonte EN"
+              />
             ) : null}
             <LanguageToggle
               value={lang}

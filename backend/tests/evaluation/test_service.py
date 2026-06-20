@@ -403,15 +403,16 @@ def test_list_evaluations_for_unknown_seuid_raises(session_factory, fake_setting
 def test_default_prompt_versions_track_current_agent_releases():
     """The dict baked into every persisted record is the policy under test.
 
-    A bump on any agent (e.g. a1_v5 in 5.4.J) must be reflected here so
+    A bump on any agent (e.g. a1_v6 in the targeted C5 recalibration)
+    must be reflected here so
     that ``EvaluationResult.prompt_versions`` records the version that
     actually produced the run. D026 / D043.
     """
     assert DEFAULT_PROMPT_VERSIONS == {
-        "A1": "a1_v5",
+        "A1": "a1_v6",
         "A2": "a2_v1",
         "A3": "a3_v1",
-        "A4": "a4_v2",
+        "A4": "a4_v10",
         # Phase 9.C.5.3: A5 added at coordinator-level. The per-E*
         # handler versions live in
         # ``EvaluationResult.extended_criteria_result.agent_output

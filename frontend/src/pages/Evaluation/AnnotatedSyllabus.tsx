@@ -109,7 +109,7 @@ export function AnnotatedSyllabus({ data }: Props) {
       }
     >
       <div className="space-y-8">
-        <article className="mx-auto max-w-[78ch] bg-white text-slate-900">
+        <article className="mx-auto w-full max-w-[1120px] text-slate-900">
           <DocumentHeader syllabus={syllabus} />
 
           <div className="space-y-10">
@@ -347,7 +347,7 @@ function ReportFallback({
 }) {
   const redactRawReport = !technical && data.status === "failed";
   return (
-    <details className="mx-auto max-w-[78ch] border-t border-slate-200 pt-4">
+    <details className="mx-auto w-full max-w-[1120px] border-t border-slate-200 pt-4">
       <summary className="cursor-pointer text-sm font-medium text-slate-700 hover:text-slate-950">
         Report testuale della valutazione
       </summary>

@@ -110,8 +110,8 @@ def _seed_evaluation(Session, *, extended_dump=None) -> str:
             gcp_project_id="p",
             gcp_location="europe-west1",
             prompt_versions={
-                "A1": "a1_v5", "A2": "a2_v1", "A3": "a3_v1",
-                "A4": "a4_v2", "A5": "a5_v1",
+                "A1": "a1_v6", "A2": "a2_v1", "A3": "a3_v1",
+                "A4": "a4_v10", "A5": "a5_v1",
             },
             core_score=2.0,
             coverage=1.0,

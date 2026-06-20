@@ -119,7 +119,7 @@ def _make_syllabus(
         academic_year="",
         year_of_study=year_of_study,
         url_it=f"https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid={seuid}",
-        url_en=f"https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid={seuid}&eng",
+        url_en=f"https://web.dmi.unict.it/en/courses/lm-18/course-units?seuid={seuid}",
         has_english=has_english,
         scraped_at=datetime.now(timezone.utc),
         **_EMPTY_CONTENT,
@@ -153,6 +153,20 @@ def test_list_syllabi_with_data(client, test_db):
     assert len(data) == 1
     assert data[0]["seuid"] == "AAAA-1111"
     assert data[0]["course_name"] == "Advanced Computer Graphics"
+    assert data[0]["content_scraped"] is False
+
+
+def test_list_syllabi_marks_content_scraped_when_detail_fields_exist(client, test_db):
+    dept = _make_dept(test_db)
+    cdl = _make_cdl(test_db, dept.id)
+    syl = _make_syllabus(test_db, cdl.id, seuid="AAAA-1111")
+    syl.learning_outcomes_it = "Risultati di apprendimento presenti."
+    test_db.commit()
+
+    resp = client.get(f"/api/cdl/{cdl.id}/syllabi")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data[0]["content_scraped"] is True
 
 
 def test_list_syllabi_ordered_by_year_then_name(client, test_db):

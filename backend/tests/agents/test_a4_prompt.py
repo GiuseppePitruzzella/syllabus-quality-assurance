@@ -26,6 +26,7 @@ def _agent_input(syllabus_data: dict | None = None) -> AgentInput:
         syllabus_data=syllabus_data
         or {
             "course_name": "Sample course",
+            "course_name_en": "Sample course",
             "has_english": True,
             "course_content_it": "Topic A.\nTopic B.",
             "references_it": "Smith J., 'Title', 2020.",
@@ -77,10 +78,12 @@ def test_a4_criteria_specs_exactly_one():
     assert set(spec["anchors"].keys()) == {"0", "1", "2"}
 
 
-def test_a4_anchor_2_uses_soft_normative_wording():
+def test_a4_anchor_2_tolerates_parser_artifacts_when_not_real_defects():
     spec = A4_CRITERIA_SPECS[0]
     score_2 = spec["anchors"]["2"].lower()
-    assert "raccoman" in score_2, "C9 score-2 anchor must use raccomandano/raccomandato"
+    assert "artefatti di parsing" in score_2
+    assert "non bastano ad abbassare il punteggio" in score_2
+    assert "-->" in score_2
 
 
 def test_a4_specifies_prudent_posture_and_default_medium_confidence():
@@ -149,7 +152,7 @@ def test_a4_link_wording_avoids_unverifiable_broken_link_claim():
 def test_a4_relevant_fields_covers_whole_syllabus():
     """A4 reads the syllabus as a unit: most fields are present."""
     must_include = {
-        "course_code", "course_name", "module", "teacher",
+        "course_code", "course_name", "course_name_en", "module", "teacher",
         "academic_year", "year_of_study", "has_english",
         "learning_outcomes_it", "learning_outcomes_en",
         "dublin_knowledge_it", "dublin_knowledge_en",
@@ -234,12 +237,67 @@ def test_a4_anchor_0_is_for_grave_diffuse_systematic_defects():
     assert "non va assegnato" in score_0 or "non va a 0" in score_0
 
 
-def test_a4_anchor_1_is_default_for_isolated_residues():
-    """C9=1 is the default for typical real syllabi: scattered typos and
-    localised formatting residues."""
+def test_a4_anchor_1_requires_real_observable_defects_not_parser_artifacts():
+    """C9=1 requires actual editorial defects after the a4_v10 recalibration."""
     c9 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")
     score_1 = c9["anchors"]["1"].lower()
-    assert "default" in score_1 or "maggior parte" in score_1
+    assert "reali e osservabili" in score_1
+    assert "almeno due difetti concreti" in score_1
+    assert "indipendenti" in score_1
+    assert "campi distinti" in score_1
+    assert "non assegnare 1" in score_1
+    assert "artefatti di scraping/parsing" in score_1
+    assert "dublin_* frammentari" in score_1
+    assert "inglese comprensibile" in score_1
+    assert "stile dei riferimenti" in score_1
+
+
+def test_a4_anchor_1_does_not_count_duplicated_typos_as_independent_defects():
+    """A repeated typo in duplicated/derived fields is still one defect.
+
+    Regression for VAPT: the same "indipendently" typo appeared in
+    learning_outcomes_en and dublin_applying_en and was incorrectly
+    treated as part of a multi-field defect cluster.
+    """
+    c9 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")
+    score_1 = c9["anchors"]["1"].lower()
+    score_2 = c9["anchors"]["2"].lower()
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+
+    assert "ripetizione dello stesso refuso" in score_1
+    assert "campi duplicati/derivati" in score_1
+    assert "un solo difetto minore o localizzato" in score_1
+    assert "un refuso localizzato più una citazione tecnica mista" in score_1
+    assert "non costituiscono due difetti indipendenti" in score_1
+    assert "anche se ripetuto in campi duplicati o derivati" in score_2
+    assert "conta come un solo difetto" in spec
+    assert "assegna c9=2" in spec
+    assert "occorrenze ripetute dello stesso refuso" in schema
+
+
+def test_a4_prompt_tolerates_intelligible_mixed_language_technical_citations():
+    """Mixed IT/EN technical citations are not automatically editorial defects.
+
+    Regression for VAPT: lines such as "Chapter 4 ... e Capitolo 8"
+    and technical titles such as "Distro Offensive" are understandable
+    syllabus content, not standalone C9 defects.
+    """
+    c9 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")
+    score_1 = c9["anchors"]["1"].lower()
+    score_2 = c9["anchors"]["2"].lower()
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+
+    assert "titoli tecnici/citazioni bibliografiche" in score_1
+    assert "mescolano parole italiane e inglesi" in score_1
+    assert "titoli tecnici" in score_2
+    assert "citazioni bibliografiche" in score_2
+    assert "riga bibliografica o di programmazione" in spec
+    assert "normali in syllabus bilingui/tecnici" in schema
+    assert "non citarli nelle evidences" in schema
+    assert "non sono evidenze valide per abbassare c9" in schema
+    assert "non usare come difetti c9 titoli tecnici" in schema
 
 
 def test_a4_default_confidence_is_explicitly_medium():
@@ -250,6 +308,87 @@ def test_a4_default_confidence_is_explicitly_medium():
     assert "medium" in spec
     # The 'high' bar must be explicit in the spec.
     assert "numerosi" in spec or "concordanti" in spec or "distribuiti" in spec
+
+
+def test_a4_prompt_does_not_default_toward_c9_1():
+    """a4_v10 must be neutral on the 1/2 boundary.
+
+    The LM-18 validation showed C9 collapsing to 1 in almost every latest
+    run. The prompt now explicitly allows score=2 when no concrete,
+    text-attributable editorial defects are found.
+    """
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    assert "postura neutrale sul 1/2" in spec
+    assert "non partire dal presupposto" in spec
+    assert "assegna c9=2" in spec
+    assert "uno solo difetto minore" in spec
+    assert "almeno due difetti editoriali concreti" in spec
+
+
+def test_a4_prompt_treats_scraping_parsing_artifacts_as_technical_limits():
+    """Markers such as '-->' or isolated leading dots are not primary C9 defects."""
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+    assert "artefatti di parsing" in spec
+    assert "scraping/parsing" in spec
+    assert "-->" in spec
+    assert "punti isolati" in spec
+    assert "\\n" in spec
+    assert "non usarli come ragione principale" in spec
+    assert "non usare come evidenza principale possibili artefatti" in schema
+    assert "\\n" in schema
+
+
+def test_a4_prompt_renders_syllabus_text_without_json_escaped_newlines():
+    """The A4 syllabus block must not expose line breaks as literal \\n."""
+    prompt = build_a4_prompt(_agent_input({"course_content_it": "Topic A.\nTopic B."}))
+    syllabus_block = prompt.split("DATI DEL SYLLABUS DA VALUTARE:\n", 1)[1].split(
+        "CONTESTO NORMATIVO RECUPERATO VIA RAG:", 1
+    )[0]
+
+    assert "### course_content_it" in syllabus_block
+    assert "Topic A.\nTopic B." in syllabus_block
+    assert "\\n" not in syllabus_block
+
+
+def test_a4_prompt_is_tolerant_on_english_and_references():
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+    score_2 = next(
+        s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9"
+    )["anchors"]["2"].lower()
+
+    assert "inglese comprensibile" in spec
+    assert "sufficientemente comprensibile" in schema
+    assert "non perfettamente idiomatic" in spec
+    assert "riferimenti e fonti" in spec
+    assert "non richiedere uno stile bibliografico uniforme" in schema
+    assert "riferimenti sufficientemente chiari" in score_2
+
+
+def test_a4_prompt_excludes_dublin_field_fragmentation_from_c9():
+    """Dublin sub-field fragments are not editorial defects by themselves."""
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+    score_2 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")["anchors"]["2"].lower()
+
+    assert "campi dublin" in spec
+    assert "non penalizzare un dublin_* solo perché" in spec
+    assert "frammentarietà dei campi dublin_*" in score_2
+    assert "i campi dublin_* non vanno usati" in schema
+
+
+def test_a4_prompt_excludes_semantic_it_en_contradictions_from_c9():
+    """Semantic IT/EN mismatch belongs to E4/C2/C5, not editorial care."""
+    spec = A4_SPECIFIC_INSTRUCTIONS.lower()
+    schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
+    score_1 = next(s for s in A4_CRITERIA_SPECS if s["criterion_code"] == "C9")["anchors"]["1"].lower()
+
+    assert "contraddizioni it/en" in spec
+    assert "l'equivalenza semantica it/en appartiene a e4" in spec
+    assert 'prerequisites_en = "none"' in spec
+    assert "contraddizioni semantiche it/en" in score_1
+    assert "contraddizioni semantiche it/en" in schema
 
 
 def test_a4_anti_english_exclusion_is_severe():
@@ -276,7 +415,7 @@ def test_a4_anti_english_exclusion_is_severe():
 
 def test_a4_caps_evidences_at_five():
     """Evidence inflation triggered MAX_TOKENS in the diagnostic run.
-    a4_v2 caps evidences at 5 representative items."""
+    A4 caps evidences at 5 representative items."""
     spec = A4_SPECIFIC_INSTRUCTIONS.lower()
     schema = A4_OUTPUT_SCHEMA_INSTRUCTIONS.lower()
     assert "massimo 5 evidences" in spec or "max 5" in spec or "limite evidences" in spec

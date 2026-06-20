@@ -19,8 +19,8 @@ Gli anchor di punteggio per ciascun criterio sono nel blocco "SPECIFICHE CRITERI
 
 Avvertenze specifiche per A1:
 - Le 9 sezioni obbligatorie da verificare per C1 sono: RA (risultati di apprendimento), PR (prerequisiti), CN (contenuti del corso), MV (modalità di verifica), ED (esempi domande), TD (testi/riferimenti), MS (modalità di svolgimento e metodi didattici), MF (modalità di frequenza), PRG (programmazione).
-- Per C2 il perimetro minimo bilingue è: titolo del corso, risultati di apprendimento, contenuti, modalità di verifica. Il flag "has_english" non basta: verifica i campi "_en" effettivi nel syllabus.
-- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Anche un elenco nudo di codici di esami è 0. Prerequisiti formulati come aree tematiche generiche, tautologici o privi di contenuto specifico restano 0. Il punteggio 1 richiede prerequisiti presenti e specifici in termini di conoscenze, ma senza distinzione esplicita tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche. Il punteggio 2 richiede, oltre alla specificità, la distinzione esplicita tra le due dimensioni (o un'organizzazione equivalente chiaramente separabile). La gradazione utili/importanti/indispensabili è raccomandata dalle LG UniCT ma non è di per sé sufficiente né necessaria per il punteggio massimo.
+- Per C2 il perimetro minimo bilingue è: titolo del corso, risultati di apprendimento, contenuti, modalità di verifica. Il flag "has_english" non basta: verifica i campi "_en" effettivi nel syllabus. Per il titolo inglese usa il campo dedicato "course_name_en": se è valorizzato, NON dedurre che il titolo inglese manchi solo perché "course_name" contiene il titolo italiano.
+- Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Un elenco nudo di codici o nomi di insegnamenti, senza indicare le conoscenze richieste, resta 0. Il punteggio 1 copre prerequisiti presenti ma ancora poco operativi per lo studente: aree molto generiche, nomi di insegnamenti con scarso dettaglio, oppure conoscenze specifiche ma senza livello atteso / priorità / contesto d'uso. Il punteggio 2 richiede prerequisiti specifici, formulati come conoscenze o abilità effettivamente utili allo studente per autovalutarsi. La distinzione tra prerequisiti culturali/generali e disciplinari/specialistici, o la gradazione utili/importanti/indispensabili, sono segnali positivi ma NON sono condizioni obbligatorie per il punteggio massimo se la formulazione è già specifica e operativa.
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto (stringa vuota o null), considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
@@ -50,9 +50,9 @@ A1_CRITERIA_SPECS: list[dict[str, Any]] = [
         "name": "Chiarezza dei prerequisiti",
         "owned_by": "A1",
         "anchors": {
-            "0": "Prerequisiti assenti, generici, tautologici, o formulati principalmente come rimando a insegnamenti specifici.",
-            "1": "Prerequisiti presenti e anche specifici, ma senza distinzione esplicita tra prerequisiti culturali/generali e disciplinari/specialistici.",
-            "2": "Prerequisiti specifici, formulati in termini di conoscenze richieste, e distinti esplicitamente tra conoscenze culturali/generali e conoscenze disciplinari/specialistiche, oppure organizzati in modo equivalente e chiaramente separabile.",
+            "0": "Prerequisiti assenti, tautologici, o formulati solo come codici/nomi di insegnamenti senza indicare le conoscenze richieste.",
+            "1": "Prerequisiti presenti ma parzialmente operativi: aree molto generiche, nomi di insegnamenti con scarso dettaglio, oppure conoscenze specifiche senza livello atteso / priorità / contesto d'uso.",
+            "2": "Prerequisiti specifici e utili all'autovalutazione dello studente: indicano conoscenze o abilità richieste con sufficiente granularità; la distinzione culturali/disciplinari o la gradazione utili/importanti/indispensabili rafforzano il giudizio ma non sono obbligatorie.",
         },
     },
 ]
