@@ -8,7 +8,7 @@ import { useEvaluationStream } from "@/hooks/useEvaluationStream";
 import { getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
-import { EvaluationReport } from "./EvaluationReport";
+import { AnnotatedSyllabus } from "./AnnotatedSyllabus";
 import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
@@ -27,15 +27,12 @@ const TERMINAL_STATUSES = new Set<EvaluationStatus>([
 const POLL_MS = 3000;
 
 /**
- * Phase 10.A R2 — full-width two-column review layout.
+ * Phase 10.B/13 — full-width guided review layout.
  *
- *   - Live run (pending/running): timeline + progress precede the
- *     review layout in a single column; the full rail appears once
- *     scores are available (terminated).
- *   - Terminated run: header (KPI strip) + two columns — main (C1-C9,
- *     report, extended analysis) and a sticky review rail (verdict,
- *     priorities). Technical surfaces live in a full-width block below,
- *     only in Vista tecnica.
+ *   - Live run (pending/running): timeline + progress precede the guided
+ *     reading layout.
+ *   - Terminated run: verdict, priorities, annotated syllabus, then C1-C9
+ *     review and extended/technical surfaces.
  */
 export function EvaluationPage() {
   const { evaluation_uuid } = useParams<{ evaluation_uuid: string }>();
@@ -99,18 +96,18 @@ export function EvaluationPage() {
             lastError={stream.lastError}
           />
           <SyntheticVerdict data={data} />
+          <AnnotatedSyllabus data={data} />
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
           <ExternalDocumentsUsed data={data} />
-          <EvaluationReport data={data} />
         </div>
       ) : (
         <>
           <SyntheticVerdict data={data} />
           {data.status !== "failed" ? <PriorityStrip data={data} /> : null}
           <div className="min-w-0 divide-y divide-slate-200/80">
+            <AnnotatedSyllabus data={data} />
             <EvaluationScorePanel data={data} />
-            <EvaluationReport data={data} />
             <ExtendedCriteriaResults data={data} />
             <ExternalDocumentsUsed data={data} />
           </div>

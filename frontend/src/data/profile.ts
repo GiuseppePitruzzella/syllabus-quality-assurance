@@ -50,10 +50,10 @@ export const ACTIVE_PROFILE: EvaluationProfile = {
   rag_similarity_threshold: 0.6,
   gcp_location: "europe-west1",
   prompt_versions: [
-    { agent: "A1", version: "a1_v5" },
+    { agent: "A1", version: "a1_v6" },
     { agent: "A2", version: "a2_v1" },
     { agent: "A3", version: "a3_v1" },
-    { agent: "A4", version: "a4_v2" },
+    { agent: "A4", version: "a4_v10" },
   ],
   locked: true,
   locked_reason:

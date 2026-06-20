@@ -168,7 +168,10 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  <LanguageBadge hasEnglish={syl.has_english} />
+                  <LanguageBadge
+                    hasEnglish={syl.has_english}
+                    contentScraped={syl.content_scraped}
+                  />
                 </TableCell>
                 <TableCell className="truncate text-sm text-muted-foreground">
                   {syl.teacher || "—"}
@@ -192,7 +195,21 @@ export function SyllabiTable({ cdlId }: SyllabiTableProps) {
   );
 }
 
-function LanguageBadge({ hasEnglish }: { hasEnglish: boolean }) {
+function LanguageBadge({
+  hasEnglish,
+  contentScraped,
+}: {
+  hasEnglish: boolean;
+  contentScraped: boolean;
+}) {
+  if (!contentScraped) {
+    return (
+      <span className="inline-flex bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+        Da verificare
+      </span>
+    );
+  }
+
   return hasEnglish ? (
     <span className="inline-flex bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-800">
       IT + EN

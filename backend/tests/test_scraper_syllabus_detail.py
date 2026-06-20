@@ -557,7 +557,13 @@ def test_scrape_syllabus_detail_propagates_bilingual_titles():
             self.responses = iter(
                 [
                     Response("<html><body><h1>OTTIMIZZAZIONE</h1></body></html>"),
-                    Response("<html><body><h1>OPTIMIZATION</h1></body></html>"),
+                    Response("""
+                    <html><body>
+                      <h1>OPTIMIZATION</h1>
+                      <h2>Expected Learning Outcomes</h2>
+                      <p>Translated learning outcomes.</p>
+                    </body></html>
+                    """),
                 ]
             )
 
@@ -570,3 +576,76 @@ def test_scrape_syllabus_detail_propagates_bilingual_titles():
     assert "course_name_it" not in result
     # EN title survives, ready to be persisted on Syllabus.course_name_en.
     assert result["course_name_en"] == "OPTIMIZATION"
+
+
+def test_scrape_syllabus_detail_falls_back_to_current_english_url_when_legacy_url_is_it_shell():
+    """UniCT no longer serves EN detail pages through ``&eng``.
+
+    If the stored legacy URL yields only a title/no EN sections, the scraper
+    must try the current ``/en/courses/{code}/course-units`` endpoint before
+    deciding the syllabus is IT-only.
+    """
+
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.urls: list[str] = []
+            self.responses = iter(
+                [
+                    Response("<html><body><h1>Deep Learning</h1></body></html>"),
+                    Response("<html><body><h1>Deep Learning</h1></body></html>"),
+                    Response("""
+                    <html><body>
+                      <h1>Deep Learning</h1>
+                      <h2>Expected Learning Outcomes</h2>
+                      <p>Real English learning outcomes.</p>
+                      <h2>Detailed Course Content</h2>
+                      <p>Real English course content.</p>
+                    </body></html>
+                    """),
+                ]
+            )
+
+        def get(self, url):
+            self.urls.append(url)
+            return next(self.responses)
+
+    session = FakeSession()
+    url_it = "https://web.dmi.unict.it/corsi/lm-18/insegnamenti?seuid=ABC"
+    url_en = f"{url_it}&eng"
+    result = scrape_syllabus_detail(url_it, url_en, session=session)
+
+    assert session.urls == [
+        url_it,
+        url_en,
+        "https://web.dmi.unict.it/en/courses/lm-18/course-units?seuid=ABC",
+    ]
+    assert result["has_english"] is True
+    assert result["course_name_en"] == "Deep Learning"
+    assert result["learning_outcomes_en"] == "Real English learning outcomes."
+
+
+def test_scrape_syllabus_detail_does_not_mark_title_only_en_response_as_english():
+    class Response:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeSession:
+        def __init__(self):
+            self.responses = iter(
+                [
+                    Response("<html><body><h1>OTTIMIZZAZIONE</h1></body></html>"),
+                    Response("<html><body><h1>OPTIMIZATION</h1></body></html>"),
+                    Response("<html><body><h1>OPTIMIZATION</h1></body></html>"),
+                ]
+            )
+
+        def get(self, _url):
+            return next(self.responses)
+
+    result = scrape_syllabus_detail("http://it", "http://en", session=FakeSession())
+    assert result["has_english"] is False
+    assert result["course_name_en"] is None

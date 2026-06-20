@@ -11,6 +11,7 @@ class SyllabusListItem(BaseModel):
     seuid: str
     course_code: str
     course_name: str
+    course_name_en: str | None = None
     module: str | None
     teacher: str
     academic_year: str
@@ -18,6 +19,7 @@ class SyllabusListItem(BaseModel):
     url_it: str
     url_en: str
     has_english: bool
+    content_scraped: bool = False
     scraped_at: datetime
 
     model_config = {"from_attributes": True}

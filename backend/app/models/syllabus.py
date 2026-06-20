@@ -67,3 +67,45 @@ class Syllabus(Base):
 
     cdl = relationship("CorsoDiLaurea", back_populates="syllabi")
     evaluations = relationship("EvaluationResult", back_populates="syllabus", cascade="all, delete-orphan")
+
+    @property
+    def content_scraped(self) -> bool:
+        """Whether detail-page content has been scraped at least once.
+
+        Rows created by the CdL list scraper intentionally contain metadata
+        only. For those rows ``has_english=False`` means "unknown so far", not
+        "the syllabus is definitely IT-only"; the detail scraper materialises
+        the real language availability.
+        """
+        text_fields = (
+            "learning_outcomes_it",
+            "dublin_knowledge_it",
+            "dublin_applying_it",
+            "dublin_judgement_it",
+            "dublin_communication_it",
+            "dublin_learning_it",
+            "teaching_methods_it",
+            "prerequisites_it",
+            "attendance_it",
+            "course_content_it",
+            "references_it",
+            "assessment_methods_it",
+            "sample_questions_it",
+            "learning_outcomes_en",
+            "dublin_knowledge_en",
+            "dublin_applying_en",
+            "dublin_judgement_en",
+            "dublin_communication_en",
+            "dublin_learning_en",
+            "teaching_methods_en",
+            "prerequisites_en",
+            "attendance_en",
+            "course_content_en",
+            "references_en",
+            "assessment_methods_en",
+            "sample_questions_en",
+        )
+        return any(
+            isinstance(value := getattr(self, field), str) and bool(value.strip())
+            for field in text_fields
+        ) or bool(self.schedule_it or self.schedule_en)

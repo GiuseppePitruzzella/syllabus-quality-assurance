@@ -9,11 +9,15 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
-from app.evaluation.agents.a4_editorial import EditorialCareAgent
+from app.evaluation.agents.a4_editorial import (
+    EditorialCareAgent,
+    _postprocess_c9_judgment,
+)
 from app.evaluation.agents.prompts.a4_prompt import (
     A4_RELEVANT_FIELDS,
     build_a4_prompt,
 )
+from app.evaluation.agents.schemas import CriterionEvidence, CriterionJudgment
 
 
 def _full_syllabus() -> SimpleNamespace:
@@ -26,6 +30,7 @@ def _full_syllabus() -> SimpleNamespace:
         # Editorial metadata
         course_code="9999X",
         course_name="Deep Learning",
+        course_name_en="Deep Learning",
         module="Modulo 1",
         teacher="Mario Rossi",
         academic_year="2025/2026",
@@ -73,7 +78,7 @@ def _full_syllabus() -> SimpleNamespace:
 
 def test_a4_relevant_fields_includes_editorial_metadata():
     expected = {
-        "course_code", "course_name", "module", "teacher",
+        "course_code", "course_name", "course_name_en", "module", "teacher",
         "academic_year", "year_of_study", "has_english",
     }
     assert expected.issubset(set(A4_RELEVANT_FIELDS))
@@ -146,6 +151,43 @@ def test_get_relevant_syllabus_fields_preserves_schedule_list():
     assert isinstance(out["schedule_en"], list)
 
 
+def test_get_relevant_syllabus_fields_strips_dublin_leading_dot_artifact():
+    """A4 must not see parser-introduced leading dots as editorial defects."""
+    agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
+    s = _full_syllabus()
+    s.dublin_applying_en = "  . Students independently conduct VAPT sessions."
+    s.learning_outcomes_en = "  . This non-Dublin field keeps its text."
+
+    out = agent.get_relevant_syllabus_fields(s)
+
+    assert out["dublin_applying_en"] == "Students independently conduct VAPT sessions."
+    assert out["learning_outcomes_en"] == "  . This non-Dublin field keeps its text."
+
+
+def test_get_relevant_syllabus_fields_normalises_quote_artifacts():
+    """A4 must not treat mixed quote glyphs as citation defects."""
+    agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
+    out = agent.get_relevant_syllabus_fields(
+        {
+            "schedule_it": '[2] Blocco di slide denominato \u201cDistro Offensive"',
+            "references_it": "\u00abMateriale del docente\u00bb",
+        }
+    )
+
+    assert out["schedule_it"] == '[2] Blocco di slide denominato "Distro Offensive"'
+    assert out["references_it"] == '"Materiale del docente"'
+
+
+def test_get_relevant_syllabus_fields_normalises_literal_line_break_artifacts():
+    """A4 must not see literal backslash+n as official page text."""
+    agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
+    out = agent.get_relevant_syllabus_fields(
+        {"learning_outcomes_en": "Students learn A.\\nThey apply B."}
+    )
+
+    assert out["learning_outcomes_en"] == "Students learn A.\nThey apply B."
+
+
 def test_get_relevant_syllabus_fields_handles_missing_attributes():
     minimal = SimpleNamespace(seuid="x", course_name="X", has_english=False)
     agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
@@ -170,6 +212,55 @@ def test_get_relevant_syllabus_fields_accepts_dict_syllabus():
 
 
 # ---------------------------------------------------------------------------
+# C9 post-processing guard
+# ---------------------------------------------------------------------------
+
+
+def test_postprocess_c9_upgrades_one_typo_plus_mixed_technical_citation():
+    judgment = CriterionJudgment(
+        criterion_code="C9",
+        score=1,
+        justification="Refuso localizzato più citazione tecnica mista.",
+        confidence="medium",
+        evidences=[
+            CriterionEvidence(
+                text="They also become able to indipendently conduct real VAPT sessions.",
+                source_field="learning_outcomes_en",
+            ),
+            CriterionEvidence(
+                text='[1] Chapter 4 "The Drive" e Capitolo 8 "Special Teams"; [2] Online resources',
+                source_field="schedule_en",
+            ),
+        ],
+    )
+
+    out = _postprocess_c9_judgment(judgment)
+
+    assert out.score == 2
+    assert out.confidence == "medium"
+    assert [e.source_field for e in out.evidences] == ["learning_outcomes_en"]
+    assert "citazioni tecniche miste" in out.justification
+
+
+def test_postprocess_c9_keeps_two_real_defects_at_one():
+    judgment = CriterionJudgment(
+        criterion_code="C9",
+        score=1,
+        justification="Due difetti editoriali reali in campi distinti.",
+        confidence="medium",
+        evidences=[
+            CriterionEvidence(text="indipendently", source_field="learning_outcomes_en"),
+            CriterionEvidence(text="Riferimento bibliografico incompleto: Smith, 2020", source_field="references_it"),
+        ],
+    )
+
+    out = _postprocess_c9_judgment(judgment)
+
+    assert out.score == 1
+    assert len(out.evidences) == 2
+
+
+# ---------------------------------------------------------------------------
 # Class metadata
 # ---------------------------------------------------------------------------
 
@@ -178,7 +269,7 @@ def test_editorial_care_agent_advertises_correct_codes():
     agent = EditorialCareAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A4"
     assert agent.criteria_codes == ["C9"]
-    assert agent.prompt_version == "a4_v2"
+    assert agent.prompt_version == "a4_v10"
 
 
 def test_editorial_care_agent_uses_a4_prompt_builder():

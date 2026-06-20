@@ -26,6 +26,7 @@ export interface SyllabusListItem {
   seuid: string;
   course_code: string;
   course_name: string;
+  course_name_en: string | null;
   module: string | null;
   teacher: string;
   academic_year: string;
@@ -33,6 +34,7 @@ export interface SyllabusListItem {
   url_it: string;
   url_en: string;
   has_english: boolean;
+  content_scraped: boolean;
   scraped_at: string;
 }
 

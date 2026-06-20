@@ -12,6 +12,7 @@ export interface WhyThisResultEvidence {
 }
 
 export interface WhyThisResultProps {
+  criterionCode?: string;
   score: number | null;
   isNa: boolean;
   /** NA caused by a technical failure (agent error), not a semantic call. */
@@ -67,6 +68,7 @@ const ACTION_CALLOUT: Record<"critical" | "improve", { title: string; box: strin
  * compact and discreet; technical view adds source fields + confidence.
  */
 export function WhyThisResult({
+  criterionCode,
   score,
   isNa,
   isNaTechnical = false,
@@ -93,7 +95,7 @@ export function WhyThisResult({
       </div>
 
       {!compact ? (
-        <p className="text-xs text-muted-foreground">Valuta: {whatItEvaluates}</p>
+        <p className="text-xs text-muted-foreground">{whatItEvaluates}</p>
       ) : null}
 
       {justification ? (
@@ -113,7 +115,14 @@ export function WhyThisResult({
         </p>
       ) : null}
 
-      <Evidences evidences={evidences} technical={technical} compact={compact} />
+      <Evidences
+        criterionCode={criterionCode}
+        score={score}
+        isNa={isNa}
+        evidences={evidences}
+        technical={technical}
+        compact={compact}
+      />
 
       {showActionCallout ? (
         <div className={"px-4 py-3 " + ACTION_CALLOUT[kind as "critical" | "improve"].box}>
@@ -132,10 +141,16 @@ export function WhyThisResult({
 }
 
 function Evidences({
+  criterionCode,
+  score,
+  isNa,
   evidences,
   technical,
   compact,
 }: {
+  criterionCode: string | undefined;
+  score: number | null;
+  isNa: boolean;
   evidences: WhyThisResultEvidence[];
   technical: boolean;
   compact: boolean;
@@ -197,7 +212,11 @@ function Evidences({
           const { text, truncated } = truncateText(ev.text, MAX_EVIDENCE_CHARS);
           const display = open || !truncated ? ev.text : text;
           return (
-            <li key={i} className="flex flex-col gap-0.5">
+            <li key={i} className="flex flex-col gap-1.5">
+              <p className="text-xs leading-relaxed text-slate-500">
+                <span className="font-medium text-slate-700">Perché conta: </span>
+                {evidenceBridgeText({ criterionCode, score, isNa })}
+              </p>
               <Quote text={display} />
               {truncated ? (
                 <button
@@ -241,6 +260,33 @@ function Quote({ text }: { text: string }) {
       <span>“{text}”</span>
     </span>
   );
+}
+
+function evidenceBridgeText({
+  criterionCode,
+  score,
+  isNa,
+}: {
+  criterionCode: string | undefined;
+  score: number | null;
+  isNa: boolean;
+}): string {
+  if (isNa || score === null) {
+    return "la citazione mostra il punto del syllabus che ha reso incerto o non valutabile il criterio.";
+  }
+  if (criterionCode === "C9") {
+    if (score === 2) {
+      return "la citazione delimita un passaggio controllato; non indica da sola una criticità editoriale.";
+    }
+    return "la citazione è usata come prova testuale del difetto editoriale descritto nella motivazione, non come semplice preferenza di stile.";
+  }
+  if (score === 0) {
+    return "la citazione documenta il punto del syllabus che sostiene la criticità indicata nella motivazione.";
+  }
+  if (score === 1) {
+    return "la citazione documenta l'aspetto presente ma ancora migliorabile richiamato nella motivazione.";
+  }
+  return "la citazione mostra un passaggio considerato adeguato rispetto al criterio.";
 }
 
 function Block({ label, children }: { label: string; children: ReactNode }) {

@@ -14,6 +14,7 @@ from typing import Any
 
 from bs4 import BeautifulSoup, Tag
 
+from app.scraper.syllabus_list import build_english_syllabus_url
 from app.scraper.utils import RateLimitedSession, parse_html
 
 # ---------------------------------------------------------------------------
@@ -376,6 +377,32 @@ def _split_assessment(html_fragment: str, lang: str) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 
 
+def _has_content(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, list):
+        return len(value) > 0
+    return value is not None
+
+
+def _has_english_section_content(parsed_en: dict[str, Any]) -> bool:
+    """True only when the EN page has real content beyond the H1 title."""
+    return any(
+        _has_content(value)
+        for key, value in parsed_en.items()
+        if key != "course_name"
+    )
+
+
+def _english_url_candidates(url_it: str, url_en: str) -> list[str]:
+    """Try the stored EN URL first, then the current canonical UniCT URL."""
+    candidates: list[str] = []
+    for candidate in (url_en, build_english_syllabus_url(url_it)):
+        if candidate and candidate not in candidates:
+            candidates.append(candidate)
+    return candidates
+
+
 def parse_syllabus_page(html: str, lang: str = "it") -> dict[str, Any]:
     """Parse a single syllabus page (IT or EN) and return extracted fields.
 
@@ -453,8 +480,22 @@ def scrape_syllabus_detail(
     resp_it = session.get(url_it)
     parsed_it = parse_syllabus_page(resp_it.text, lang="it")
 
-    resp_en = session.get(url_en)
-    parsed_en = parse_syllabus_page(resp_en.text, lang="en")
+    parsed_en: dict[str, Any] | None = None
+    first_parsed_en: dict[str, Any] | None = None
+    for candidate_url in _english_url_candidates(url_it, url_en):
+        resp_en = session.get(candidate_url)
+        candidate = parse_syllabus_page(resp_en.text, lang="en")
+        if first_parsed_en is None:
+            first_parsed_en = candidate
+        if _has_english_section_content(candidate):
+            parsed_en = candidate
+            break
+    if parsed_en is None:
+        parsed_en = first_parsed_en or parse_syllabus_page("", lang="en")
+        # A title-only response usually means the URL resolved to an IT shell
+        # or to a non-detail EN page. Do not persist it as a translated title:
+        # downstream agents should not infer that an EN syllabus exists.
+        parsed_en["course_name"] = None
 
     # Merge with _it / _en suffixes
     result: dict[str, Any] = {}
@@ -471,17 +512,10 @@ def scrape_syllabus_detail(
     # alongside the canonical IT one (ISSUE-PARSER-004).
     result.pop("course_name_it", None)
 
-    # has_english: True if any parsed EN field contains real content.
+    # has_english: True if any parsed EN section contains real content.
     # Some SmartEdu pages provide English sections without Dublin labels; using
     # only dublin_* would hide an existing English version in the frontend.
-    def _has_content(value: Any) -> bool:
-        if isinstance(value, str):
-            return bool(value.strip())
-        if isinstance(value, list):
-            return len(value) > 0
-        return value is not None
-
-    result["has_english"] = any(_has_content(value) for value in parsed_en.values())
+    result["has_english"] = _has_english_section_content(parsed_en)
 
     return result
 
