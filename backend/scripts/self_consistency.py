@@ -188,3 +188,204 @@ def build_manifest(
         "prompt_versions": dict(DEFAULT_PROMPT_VERSIONS),
         "output_dir": str(output_dir),
     }
+
+
+from app.evaluation.analysis.human_sample import OFFICIAL_HUMAN_SAMPLE  # noqa: E402
+from app.evaluation.analysis.reporting import (  # noqa: E402
+    render_corescore_stability_tex,
+    render_criterion_stability_tex,
+    render_protocol_md,
+    render_run_status_tex,
+    render_summary_md,
+)
+from app.evaluation.analysis.self_consistency import (  # noqa: E402
+    CRITERIA_ORDER,
+    RunRecord,
+    compute_self_consistency,
+)
+
+_AVG_RUN_SECONDS = 90  # for the dry-run wall-clock estimate only
+
+
+def resolve_sample(seuids: list[str] | None) -> list[tuple[str, str]]:
+    """Return [(seuid, slug)]; default = the official 8-syllabus sample.
+
+    Manual --seuid overrides the default. Known seuids keep their slug;
+    unknown ones get the "CUSTOM" label.
+    """
+    if not seuids:
+        return list(OFFICIAL_HUMAN_SAMPLE)
+    known = dict(OFFICIAL_HUMAN_SAMPLE)
+    return [(s, known.get(s, "CUSTOM")) for s in seuids]
+
+
+def _build_runs_matrix(
+    records: list[dict[str, Any]], seuids_with_slug: list[tuple[str, str]]
+) -> dict[str, Any]:
+    matrix: dict[str, Any] = {"_slugs": dict(seuids_with_slug)}
+    for seuid, _ in seuids_with_slug:
+        runs = sorted(
+            (r for r in records if r["seuid"] == seuid), key=lambda r: r["run_index"]
+        )
+        matrix[seuid] = {
+            crit: [r["criterion_scores"].get(crit) for r in runs]
+            for crit in CRITERIA_ORDER
+        }
+    return matrix
+
+
+def write_outputs(
+    output_dir: Path,
+    records: list[dict[str, Any]],
+    seuids_with_slug: list[tuple[str, str]],
+    manifest: dict[str, Any],
+) -> None:
+    """Compute metrics and write every artifact to ``output_dir``."""
+    slug_map = dict(seuids_with_slug)
+    metrics = compute_self_consistency([
+        RunRecord(
+            seuid=r["seuid"], run_index=r["run_index"], status=r["status"],
+            criterion_scores=r["criterion_scores"], core_score=r["core_score"],
+            coverage=r["coverage"], agent_errors=r.get("agent_errors") or {},
+        )
+        for r in records
+    ])
+
+    _write_json(output_dir / "metrics.json", metrics.model_dump())
+    _write_json(output_dir / "runs_matrix.json",
+                _build_runs_matrix(records, seuids_with_slug))
+    _write_json(output_dir / "manifest.json", manifest)
+    (output_dir / "protocol.md").write_text(
+        render_protocol_md(manifest, metrics, slug_map), encoding="utf-8"
+    )
+    (output_dir / "summary.md").write_text(
+        render_summary_md(metrics, slug_map), encoding="utf-8"
+    )
+    tables = output_dir / "tables"
+    tables.mkdir(parents=True, exist_ok=True)
+    (tables / "tbl_criterion_stability.tex").write_text(
+        render_criterion_stability_tex(metrics), encoding="utf-8"
+    )
+    (tables / "tbl_corescore_stability.tex").write_text(
+        render_corescore_stability_tex(metrics, slug_map), encoding="utf-8"
+    )
+    (tables / "tbl_run_status.tex").write_text(
+        render_run_status_tex(metrics), encoding="utf-8"
+    )
+
+
+def _load_syllabus_rows(
+    seuids: list[str],
+) -> dict[str, tuple[dict[str, Any], str]]:
+    """Read-only snapshot of each syllabus. Raises if any seuid is absent."""
+    from app.database import SessionLocal
+    from app.evaluation.state import snapshot_syllabus
+    from app.models.syllabus import Syllabus
+
+    out: dict[str, tuple[dict[str, Any], str]] = {}
+    with SessionLocal() as session:
+        for seuid in seuids:
+            row = session.query(Syllabus).filter(Syllabus.seuid == seuid).first()
+            if row is None:
+                raise ValueError(f"seuid not found in DB: {seuid!r}")
+            out[seuid] = (snapshot_syllabus(row), row.course_name)
+    return out
+
+
+def _build_production_graph_invoker() -> GraphInvoker:
+    import chromadb
+
+    from app.evaluation.agents.llm_client import VertexAILLMClient
+    from app.evaluation.orchestrator import build_graph
+    from app.evaluation.rag.embeddings import VertexAIEmbeddings
+    from app.evaluation.rag.retriever import NormativeRetriever
+
+    project_id, location = settings.require_vertex_ai_config()
+    sci = settings.scientific
+    chroma = chromadb.PersistentClient(path=settings.chroma_persist_dir)
+    embeddings = VertexAIEmbeddings(
+        project_id=project_id, location=location, model_name=sci.embedding_model,
+        output_dimensionality=sci.embedding_output_dimensionality,
+    )
+    retriever = NormativeRetriever(chroma, embeddings, sci)
+    llm_client = VertexAILLMClient(
+        project_id=project_id, location=location, scientific=sci
+    )
+    graph = build_graph(retriever=retriever, llm_client=llm_client)  # A5 off
+
+    def _invoke(initial_state: dict[str, Any]) -> dict[str, Any]:
+        return graph.invoke(initial_state)
+
+    return _invoke
+
+
+def _format_plan(
+    sample: list[tuple[str, str]],
+    runs: int,
+    output_dir: Path,
+    rows: dict[str, tuple[dict[str, Any], str]],
+) -> str:
+    total = len(sample) * runs
+    est_min = round(total * _AVG_RUN_SECONDS / 60, 1)
+    lines = [
+        "Piano esecuzione self-consistency:",
+        f"  output dir : {output_dir}",
+        f"  syllabi    : {len(sample)}   run/syllabus: {runs}   "
+        f"run totali: {total}",
+        f"  stima      : ~{est_min} min (a ~{_AVG_RUN_SECONDS}s/run, Vertex reale)",
+        "  campione   :",
+    ]
+    for seuid, slug in sample:
+        _, course_name = rows[seuid]
+        lines.append(f"    - {slug}  [{seuid[:8]}]  {course_name}")
+    return "\n".join(lines)
+
+
+def main() -> None:
+    import typer
+    from rich.console import Console
+    from rich.prompt import Confirm
+
+    console = Console()
+
+    def _command(
+        seuid: list[str] = typer.Option(
+            None, "--seuid",
+            help="Override manuale del campione (ripetibile). "
+                 "Default = campione umano ufficiale (8 syllabi).",
+        ),
+        runs: int = typer.Option(5, "--runs", help="Ripetizioni per syllabus."),
+        output_dir: Path = typer.Option(
+            _PROJECT_ROOT / "data" / "calibration" / "self_consistency_v1",
+            "--output-dir",
+        ),
+        resume: bool = typer.Option(True, "--resume/--no-resume"),
+        dry_run: bool = typer.Option(
+            False, "--dry-run", help="Stampa il piano ed esce (nessuna chiamata Vertex)."
+        ),
+        yes: bool = typer.Option(False, "--yes", help="Salta la conferma interattiva."),
+    ) -> None:
+        sample = resolve_sample(seuid)
+        rows = _load_syllabus_rows([s for s, _ in sample])  # read-only preflight
+        console.print(_format_plan(sample, runs, output_dir, rows))
+
+        if dry_run:
+            raise typer.Exit(0)
+        if not yes and not Confirm.ask("Procedo con le chiamate Vertex reali?"):
+            console.print("[yellow]Annullato.[/yellow]")
+            raise typer.Exit(1)
+
+        invoker = _build_production_graph_invoker()
+        records = run_campaign(
+            seuids_with_slug=sample, runs=runs, output_dir=output_dir,
+            graph_invoker=invoker, syllabus_rows=rows, resume=resume, console=console,
+        )
+        manifest = build_manifest(sample, runs, output_dir)
+        write_outputs(output_dir, records, sample, manifest)
+        console.print(f"\n[green]Artifacts written to[/green] {output_dir}")
+
+    typer.run(_command)
+
+
+if __name__ == "__main__":
+    main()

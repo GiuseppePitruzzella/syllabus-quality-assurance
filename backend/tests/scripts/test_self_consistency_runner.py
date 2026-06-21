@@ -83,3 +83,40 @@ def test_build_manifest_has_git_and_config():
     assert set(manifest["git"]) == {"commit", "branch", "dirty"}
     assert manifest["scientific_config"]["llm_model"] == "gemini-2.5-flash"
     assert manifest["prompt_versions"]  # non-empty
+
+
+def test_write_outputs_creates_all_artifacts(tmp_path):
+    scores = {f"C{i}": 2 for i in range(1, 10)}
+    records = [
+        {"seuid": "S1", "run_index": i, "status": "completed",
+         "criterion_scores": scores, "core_score": 2.0, "coverage": 1.0,
+         "na_criteria": [], "agent_errors": {}, "duration_ms": 1000}
+        for i in range(1, 6)
+    ]
+    sample = [("S1", "01_COMPUTER_VISION_LAB")]
+    manifest = runner.build_manifest(sample, 5, tmp_path)
+    runner.write_outputs(tmp_path, records, sample, manifest)
+
+    assert (tmp_path / "metrics.json").exists()
+    assert (tmp_path / "runs_matrix.json").exists()
+    assert (tmp_path / "manifest.json").exists()
+    assert (tmp_path / "protocol.md").exists()
+    assert (tmp_path / "summary.md").exists()
+    assert (tmp_path / "tables" / "tbl_criterion_stability.tex").exists()
+    assert (tmp_path / "tables" / "tbl_corescore_stability.tex").exists()
+    assert (tmp_path / "tables" / "tbl_run_status.tex").exists()
+
+    matrix = json.loads((tmp_path / "runs_matrix.json").read_text())
+    assert matrix["S1"]["C1"] == [2, 2, 2, 2, 2]
+
+
+def test_resolve_sample_defaults_to_official_eight():
+    sample = runner.resolve_sample(None)
+    assert len(sample) == 8
+    assert sample[7][1] == "08_VULN_ASSESSMENT_PT"
+
+
+def test_resolve_sample_custom_seuids_keep_known_slugs():
+    sample = runner.resolve_sample(["46D62804-0FCD-4478-A51D-A752B64A7DCB", "ZZZ"])
+    assert sample[0] == ("46D62804-0FCD-4478-A51D-A752B64A7DCB", "08_VULN_ASSESSMENT_PT")
+    assert sample[1] == ("ZZZ", "CUSTOM")
