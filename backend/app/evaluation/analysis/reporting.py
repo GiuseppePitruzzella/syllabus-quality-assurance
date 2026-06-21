@@ -136,3 +136,75 @@ def render_summary_md(
         "",
     ]
     return "\n".join(lines) + "\n"
+
+
+def _tex_escape(text: str) -> str:
+    """Escape the LaTeX-special characters that appear in our slugs."""
+    return (
+        text.replace("\\", r"\textbackslash{}")
+        .replace("_", r"\_")
+        .replace("&", r"\&")
+        .replace("%", r"\%")
+        .replace("#", r"\#")
+    )
+
+
+def _tabularx(colspec: str, header: str, rows: list[str]) -> str:
+    lines = [
+        rf"\begin{{tabularx}}{{\textwidth}}{{{colspec}}}",
+        r"  \toprule",
+        f"  {header} \\\\",
+        r"  \midrule",
+        *[f"  {r} \\\\" for r in rows],
+        r"  \bottomrule",
+        r"\end{tabularx}",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def render_criterion_stability_tex(metrics: SelfConsistencyMetrics) -> str:
+    by_crit = {ca.criterion: ca for ca in metrics.criterion_aggregates}
+    colspec = (
+        "l S[table-format=1.2] S[table-format=1.2] S[table-format=1.2] "
+        "S[table-format=1.0] S[table-format=2.0]"
+    )
+    header = "Criterio & {Unanimità} & {Stdev media} & {Flip rate} & {Swing max} & {NA-flip}"
+    rows = [
+        f"{c} & {by_crit[c].unanimity_rate:.2f} & {by_crit[c].mean_stdev:.2f} "
+        f"& {by_crit[c].flip_rate:.2f} & {by_crit[c].max_swing} "
+        f"& {by_crit[c].na_flip_count}"
+        for c in CRITERIA_ORDER
+    ]
+    return _tabularx(colspec, header, rows)
+
+
+def render_corescore_stability_tex(
+    metrics: SelfConsistencyMetrics, slug_map: dict[str, str]
+) -> str:
+    colspec = "X S[table-format=1.2] S[table-format=1.2] S[table-format=1.2]"
+    header = "Syllabus & {CoreScore medio} & {Stdev} & {Range}"
+
+    def _num(value: float | None) -> str:
+        return f"{value:.2f}" if value is not None else "{--}"
+
+    rows = [
+        f"{_tex_escape(slug_map.get(it.seuid, it.seuid))} & {_num(it.mean)} "
+        f"& {_num(it.stdev)} & {_num(it.score_range)}"
+        for it in metrics.corescore_items
+    ]
+    return _tabularx(colspec, header, rows)
+
+
+def render_run_status_tex(metrics: SelfConsistencyMetrics) -> str:
+    rs = metrics.run_status
+    colspec = "l S[table-format=3.0]"
+    header = "Esito & {Run}"
+    rows = [
+        f"completed & {rs.completed}",
+        f"partial & {rs.partial}",
+        f"failed & {rs.failed}",
+        f"altro & {rs.other}",
+        f"con agent\\_errors & {rs.agent_error_incidence}",
+        f"totale & {rs.total}",
+    ]
+    return _tabularx(colspec, header, rows)

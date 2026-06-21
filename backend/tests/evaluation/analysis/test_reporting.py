@@ -59,3 +59,30 @@ def test_summary_md_has_tables_and_narrative():
     assert "| C9 |" in md
     assert "CoreScore" in md
     assert "01_COMPUTER_VISION_LAB" in md
+
+
+def test_criterion_stability_tex_is_booktabs():
+    from app.evaluation.analysis.reporting import render_criterion_stability_tex
+    tex = render_criterion_stability_tex(_metrics())
+    assert r"\begin{tabularx}{\textwidth}" in tex
+    assert r"\toprule" in tex and r"\midrule" in tex and r"\bottomrule" in tex
+    assert r"\end{tabularx}" in tex
+    assert "{Unanimità}" in tex          # braced siunitx header
+    assert "C9 &" in tex
+    # every C1..C9 row present
+    for c in CRITERIA_ORDER:
+        assert f"{c} &" in tex
+
+
+def test_corescore_stability_tex_handles_slug_and_missing():
+    from app.evaluation.analysis.reporting import render_corescore_stability_tex
+    tex = render_corescore_stability_tex(_metrics(), SLUGS)
+    assert r"\begin{tabularx}{\textwidth}" in tex
+    assert "01\\_COMPUTER\\_VISION\\_LAB" in tex  # underscores escaped for LaTeX
+
+
+def test_run_status_tex_present():
+    from app.evaluation.analysis.reporting import render_run_status_tex
+    tex = render_run_status_tex(_metrics())
+    assert r"\begin{tabularx}{\textwidth}" in tex
+    assert "completed" in tex
