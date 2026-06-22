@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "03_PEER_TO_PEER_LAB",
+  "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+  "run_index": 2,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 1,
+    "C2": 0,
+    "C5": 1,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.44,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 78136
+}

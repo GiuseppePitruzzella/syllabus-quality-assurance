@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "08_VULN_ASSESSMENT_PT",
+  "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+  "run_index": 5,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 2,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 2
+  },
+  "core_score": 1.89,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 147244
+}

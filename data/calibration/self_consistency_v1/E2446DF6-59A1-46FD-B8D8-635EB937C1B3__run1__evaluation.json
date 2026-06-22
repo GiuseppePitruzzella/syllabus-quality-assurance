@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "06_OTTIMIZZAZIONE",
+  "seuid": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+  "run_index": 1,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 2,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.78,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 80276
+}

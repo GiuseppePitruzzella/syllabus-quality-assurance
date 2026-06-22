@@ -1,0 +1,31 @@
+{
+  "phase": "self_consistency",
+  "slug": "03_PEER_TO_PEER_LAB",
+  "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+  "run_index": 5,
+  "status": "partial",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 1,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": null
+  },
+  "core_score": 1.75,
+  "coverage": 0.8888888888888888,
+  "na_criteria": [
+    {
+      "criterion_code": "C9",
+      "reason": "A4 failed: ReadError: [Errno 54] Connection reset by peer",
+      "source": "agent_error"
+    }
+  ],
+  "agent_errors": {
+    "A4": "ReadError: [Errno 54] Connection reset by peer"
+  },
+  "duration_ms": 1485025
+}
