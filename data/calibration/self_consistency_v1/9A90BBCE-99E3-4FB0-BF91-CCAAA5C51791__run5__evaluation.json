@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "04_MULTIMEDIA_LAB",
+  "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+  "run_index": 5,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 1,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.67,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 109856
+}

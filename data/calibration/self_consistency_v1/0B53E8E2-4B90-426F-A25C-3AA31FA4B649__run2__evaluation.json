@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "02_INTERNET_OF_THINGS",
+  "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+  "run_index": 2,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 1,
+    "C2": 0,
+    "C5": 1,
+    "C3": 1,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.33,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 92405
+}

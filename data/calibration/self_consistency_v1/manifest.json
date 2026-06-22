@@ -1,0 +1,62 @@
+{
+  "experiment": "self_consistency_v1",
+  "datetime": "2026-06-22T07:40:35.208674+00:00",
+  "git": {
+    "commit": "416036149774519287ba8055423b8a71db4bc994",
+    "branch": "feature/self-consistency-experiment",
+    "dirty": true
+  },
+  "n_runs_per_seuid": 5,
+  "sample": [
+    {
+      "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+      "slug": "01_COMPUTER_VISION_LAB"
+    },
+    {
+      "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "slug": "02_INTERNET_OF_THINGS"
+    },
+    {
+      "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+      "slug": "03_PEER_TO_PEER_LAB"
+    },
+    {
+      "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+      "slug": "04_MULTIMEDIA_LAB"
+    },
+    {
+      "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+      "slug": "05_COMPUTER_VISION"
+    },
+    {
+      "seuid": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+      "slug": "06_OTTIMIZZAZIONE"
+    },
+    {
+      "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+      "slug": "07_DEEP_LEARNING"
+    },
+    {
+      "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+      "slug": "08_VULN_ASSESSMENT_PT"
+    }
+  ],
+  "scientific_config": {
+    "llm_model": "gemini-2.5-flash",
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "embedding_model": "gemini-embedding-001",
+    "embedding_output_dimensionality": 3072,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6
+  },
+  "prompt_versions": {
+    "A1": "a1_v6",
+    "A2": "a2_v1",
+    "A3": "a3_v1",
+    "A4": "a4_v10",
+    "A5": "a5_v1"
+  },
+  "output_dir": "/Users/giuseppepitruzzella/syllabus-quality-assurance/data/calibration/self_consistency_v1"
+}

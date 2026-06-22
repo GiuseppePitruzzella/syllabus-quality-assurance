@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "07_DEEP_LEARNING",
+  "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+  "run_index": 2,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 2,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.78,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 127220
+}
