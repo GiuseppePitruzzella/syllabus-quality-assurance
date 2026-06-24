@@ -85,6 +85,13 @@ def test_snapshot_drops_unknown_fields():
     assert "random_attr" not in snap
 
 
+def test_snapshot_includes_english_title():
+    """Verify that course_name_en is included in the snapshot."""
+    row = {"course_name": "Visione", "course_name_en": "Computer Vision"}
+    snap = snapshot_syllabus(row)
+    assert snap.get("course_name_en") == "Computer Vision"
+
+
 def test_snapshot_coerces_non_primitives_to_str():
     """SQLAlchemy may return e.g. a Decimal in non-content fields; coerce to str."""
     from decimal import Decimal

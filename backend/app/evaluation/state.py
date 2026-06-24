@@ -90,6 +90,7 @@ _SNAPSHOT_FIELDS: tuple[str, ...] = (
     # Editorial metadata (used by A4)
     "course_code",
     "course_name",
+    "course_name_en",
     "module",
     "teacher",
     "academic_year",
