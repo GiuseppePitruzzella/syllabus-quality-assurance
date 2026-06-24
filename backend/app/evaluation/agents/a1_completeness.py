@@ -109,7 +109,13 @@ class CompletenessAgent(BaseAgent):
     #   prerequisites that are specific and operationally useful for
     #   student self-assessment. The distinction and utili/importanti/
     #   indispensabili gradation remain positive signals, not hard gates.
-    prompt_version = "a1_v6"
+    # - a1_v7: C2 stability. A deterministic ``english_coverage`` matrix +
+    #   ``suggested_c2`` are injected into the prompt; C2 becomes hybrid
+    #   (LLM adopts the suggestion unless clear textual evidence contradicts
+    #   it). Title (course_name_en) is diagnostic but non-blocking; presence
+    #   is separated from quality (style/typos -> C9/E4). Also fixes the
+    #   snapshot gap that hid course_name_en from A1. C1/C5 unchanged.
+    prompt_version = "a1_v7"
 
     # D030.bis: A1 needs more headroom than the global 8192 budget on
     # the longest LM-18 syllabi (e.g. Machine Learning triggered a

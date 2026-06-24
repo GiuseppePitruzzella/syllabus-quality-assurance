@@ -66,7 +66,7 @@ logger = structlog.get_logger(__name__)
 # ``prompt_versions`` snapshot does not have to carry five extra
 # keys on every run.
 DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
-    "A1": "a1_v6",
+    "A1": "a1_v7",
     "A2": "a2_v1",
     "A3": "a3_v1",
     "A4": "a4_v10",

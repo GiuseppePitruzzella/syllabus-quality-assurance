@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from app.evaluation.agents.english_coverage import english_coverage, suggest_c2
 from app.evaluation.agents.prompts.base import BASE_SYSTEM_PROMPT
 from app.evaluation.agents.schemas import AgentInput
 
@@ -19,7 +20,7 @@ Gli anchor di punteggio per ciascun criterio sono nel blocco "SPECIFICHE CRITERI
 
 Avvertenze specifiche per A1:
 - Le 9 sezioni obbligatorie da verificare per C1 sono: RA (risultati di apprendimento), PR (prerequisiti), CN (contenuti del corso), MV (modalità di verifica), ED (esempi domande), TD (testi/riferimenti), MS (modalità di svolgimento e metodi didattici), MF (modalità di frequenza), PRG (programmazione).
-- Per C2 il perimetro minimo bilingue è: titolo del corso, risultati di apprendimento, contenuti, modalità di verifica. Il flag "has_english" non basta: verifica i campi "_en" effettivi nel syllabus. Per il titolo inglese usa il campo dedicato "course_name_en": se è valorizzato, NON dedurre che il titolo inglese manchi solo perché "course_name" contiene il titolo italiano.
+- Per C2 (completezza bilingue) usa il blocco "PRE-CHECK DETERMINISTICO COPERTURA INGLESE": la matrice "english_coverage" indica, con calcolo deterministico, quali campi inglesi sono presenti, e "suggested_c2" è lo score suggerito. Adotta "suggested_c2" come punteggio C2, salvo evidenza testuale chiara nel syllabus che la matrice è errata; se ti discosti, indica nella justification quale campo e perché. Regola: C2=2 se le tre sezioni informative inglesi (risultati di apprendimento, contenuti, modalità di verifica) sono presenti; C2=1 se ne sono presenti 1 o 2; C2=0 se nessuna è presente o c'è solo il titolo. Il titolo inglese ("course_name_en") è diagnostico ma NON bloccante: la sua sola assenza non abbassa C2. NON penalizzare C2 per stile, refusi, formulazioni migliorabili o qualità dell'inglese: quegli aspetti appartengono a C9 (o a E4 per l'equivalenza semantica IT/EN). C2 valuta solo la presenza del perimetro minimo bilingue.
 - Per C5: l'assenza dei prerequisiti è punteggio 0, NON NA. Un elenco nudo di codici o nomi di insegnamenti, senza indicare le conoscenze richieste, resta 0. Il punteggio 1 copre prerequisiti presenti ma ancora poco operativi per lo studente: aree molto generiche, nomi di insegnamenti con scarso dettaglio, oppure conoscenze specifiche ma senza livello atteso / priorità / contesto d'uso. Il punteggio 2 richiede prerequisiti specifici, formulati come conoscenze o abilità effettivamente utili allo studente per autovalutarsi. La distinzione tra prerequisiti culturali/generali e disciplinari/specialistici, o la gradazione utili/importanti/indispensabili, sono segnali positivi ma NON sono condizioni obbligatorie per il punteggio massimo se la formulazione è già specifica e operativa.
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto (stringa vuota o null), considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
@@ -40,9 +41,9 @@ A1_CRITERIA_SPECS: list[dict[str, Any]] = [
         "name": "Completezza bilingue",
         "owned_by": "A1",
         "anchors": {
-            "0": "Versione inglese assente o limitata al solo titolo.",
-            "1": "Versione inglese parziale: copre alcune ma non tutte le sezioni minime.",
-            "2": "Versione inglese presente per titolo, risultati di apprendimento, contenuti e modalità di verifica.",
+            "0": "Nessuna delle 3 sezioni informative inglesi (risultati di apprendimento, contenuti, modalità di verifica) presente: versione inglese assente o limitata al solo titolo.",
+            "1": "1 o 2 delle 3 sezioni informative inglesi presenti (copertura parziale).",
+            "2": "Tutte e 3 le sezioni informative inglesi presenti. Il titolo inglese è diagnostico, non bloccante.",
         },
     },
     {
@@ -102,12 +103,15 @@ def build_a1_prompt(agent_input: AgentInput | dict[str, Any]) -> str:
     """
     data = _coerce_agent_input(agent_input)
     criteria_specs = data.criteria_specs or A1_CRITERIA_SPECS
+    coverage = english_coverage(data.syllabus_data)
+    precheck = {"english_coverage": coverage, "suggested_c2": suggest_c2(coverage)}
     return "\n\n".join(
         [
             BASE_SYSTEM_PROMPT.strip(),
             A1_SPECIFIC_INSTRUCTIONS.strip(),
             "SPECIFICHE CRITERI:\n" + _json_block(criteria_specs),
             "DATI DEL SYLLABUS DA VALUTARE:\n" + _json_block(data.syllabus_data),
+            "PRE-CHECK DETERMINISTICO COPERTURA INGLESE (per C2):\n" + _json_block(precheck),
             "CONTESTO NORMATIVO RECUPERATO VIA RAG:\n" + _json_block(data.normative_context),
             A1_OUTPUT_SCHEMA_INSTRUCTIONS.strip(),
             "Rispondi ora esclusivamente con il JSON valido richiesto.",
