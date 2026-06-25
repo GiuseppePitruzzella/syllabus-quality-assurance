@@ -10,11 +10,13 @@ import {
   ClipboardCheck,
   FileText,
   Download,
+  GraduationCap,
   MinusCircle,
   TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { CdlTypeBadge } from "@/components/CdlTypeBadge";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  selectFieldContent,
+  selectFieldItem,
+  selectFieldTrigger,
+} from "@/components/ui/select-field";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -75,6 +83,7 @@ export function ResultsPage() {
   const hasEvaluations = data.overview.latest_evaluations_count > 0;
   const cdlOptions = uniqueCdlOptions(data.evaluations);
   const effectiveCdlId = selectedCdlId ?? cdlOptions[0]?.id ?? null;
+  const selectedCdl = cdlOptions.find((option) => option.id === effectiveCdlId);
 
   async function handleCdlExport() {
     if (effectiveCdlId === null) return;
@@ -114,19 +123,31 @@ export function ResultsPage() {
               >
                 <SelectTrigger
                   aria-label="Corso di Studio da esportare"
-                  className="h-9 min-w-64 rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                  className={cn(selectFieldTrigger, "h-9 min-w-64 max-w-80")}
                 >
-                  <SelectValue placeholder="Seleziona un CdS" />
+                  <GraduationCap className="text-muted-foreground" aria-hidden />
+                  <SelectValue className="min-w-0" placeholder="Seleziona un CdS">
+                    {selectedCdl && (
+                      <span className="flex min-w-0 items-center gap-2">
+                        <CdlTypeBadge code={selectedCdl.code} />
+                        <span className="truncate" title={selectedCdl.name}>
+                          {selectedCdl.name}
+                        </span>
+                      </span>
+                    )}
+                  </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="rounded-none">
+                <SelectContent className={selectFieldContent}>
                   {cdlOptions.map((option) => (
                     <SelectItem
                       key={option.id}
                       value={String(option.id)}
-                      className="rounded-none"
+                      className={selectFieldItem}
                     >
-                      {option.code ? `${option.code} · ` : ""}
-                      {option.name}
+                      <span className="flex items-center gap-2">
+                        <CdlTypeBadge code={option.code} />
+                        {option.name}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -12,15 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  selectFieldContent,
+  selectFieldItem,
+  selectFieldTrigger,
+} from "@/components/ui/select-field";
+import { cn } from "@/lib/utils";
 
-const TRIGGER_CLASS =
-  "h-12 w-full justify-start rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 text-sm font-medium text-slate-950 shadow-none transition-colors hover:border-slate-500 hover:bg-transparent focus-visible:border-slate-950 focus-visible:ring-0 data-[popup-open]:border-slate-950 data-[popup-open]:ring-0 disabled:bg-transparent disabled:text-slate-400 data-placeholder:text-sm data-placeholder:font-normal [&_svg]:size-4";
-
-const CONTENT_CLASS =
-  "rounded-none shadow-lg ring-1 ring-slate-200";
-
-const ITEM_CLASS =
-  "rounded-none px-2 py-2 focus:bg-slate-100 focus:text-slate-950";
+const TRIGGER_CLASS = cn(selectFieldTrigger, "h-12 w-full");
+const CONTENT_CLASS = selectFieldContent;
+const ITEM_CLASS = selectFieldItem;
 
 interface DepartmentSelectorProps {
   value: number | null;
