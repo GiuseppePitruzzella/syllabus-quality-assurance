@@ -5,7 +5,7 @@ import { AlertTriangle, Info, MessageSquareText } from "lucide-react";
 import { CORE_CRITERIA } from "@/data/rubric";
 import { useTechnicalView } from "@/context/technicalView";
 import { getSyllabus } from "@/lib/api";
-import { cleanSyllabusDisplayText } from "@/lib/text";
+import { syllabusProseParagraphs } from "@/lib/text";
 import type {
   CriterionJudgmentDump,
   EvaluationDetail,
@@ -224,14 +224,22 @@ function SectionBody({
   if (section.paragraphs) {
     return (
       <div className="space-y-8">
-        {section.paragraphs.map((paragraph) => (
-          <p
-            key={paragraph.label}
-            className={`text-[1.05rem] leading-8 text-slate-800 ${highlight ? `underline decoration-skip-ink ${highlight}` : ""}`}
-          >
-            <em>{paragraph.label}:</em> {paragraph.text || "—"}
-          </p>
-        ))}
+        {section.paragraphs.map((paragraph) => {
+          const blocks = syllabusProseParagraphs(paragraph.text);
+          return (
+            <div key={paragraph.label} className="space-y-4">
+              {(blocks.length > 0 ? blocks : ["—"]).map((block, index) => (
+                <p
+                  key={`${paragraph.label}-${index}`}
+                  className={`text-[1.05rem] leading-8 text-slate-800 ${highlight ? `underline decoration-skip-ink ${highlight}` : ""}`}
+                >
+                  {index === 0 ? <><em>{paragraph.label}:</em>{" "}</> : null}
+                  {block}
+                </p>
+              ))}
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -240,12 +248,18 @@ function SectionBody({
     return <ScheduleTable items={section.schedule} />;
   }
 
+  const blocks = syllabusProseParagraphs(section.body);
   return (
-    <p
-      className={`whitespace-pre-line text-[1.05rem] leading-8 text-slate-800 ${highlight ? `underline decoration-skip-ink ${highlight}` : ""}`}
-    >
-      {section.body || "—"}
-    </p>
+    <div className="space-y-4">
+      {(blocks.length > 0 ? blocks : ["—"]).map((block, index) => (
+        <p
+          key={index}
+          className={`text-[1.05rem] leading-8 text-slate-800 ${highlight ? `underline decoration-skip-ink ${highlight}` : ""}`}
+        >
+          {block}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -392,24 +406,24 @@ function buildSyllabusSections(syllabus: SyllabusDetail): SyllabusSection[] {
       paragraphs: [
         {
           label: "Conoscenza e capacità di comprensione (knowledge and understanding)",
-          text: clean(getField(syllabus, "dublin_knowledge_it")) ||
-            clean(getField(syllabus, "learning_outcomes_it")),
+          text: getField(syllabus, "dublin_knowledge_it") ||
+            getField(syllabus, "learning_outcomes_it"),
         },
         {
           label: "Capacità di applicare conoscenza e comprensione (applying knowledge and understanding)",
-          text: clean(getField(syllabus, "dublin_applying_it")),
+          text: getField(syllabus, "dublin_applying_it"),
         },
         {
           label: "Autonomia di giudizio (making judgements)",
-          text: clean(getField(syllabus, "dublin_judgement_it")),
+          text: getField(syllabus, "dublin_judgement_it"),
         },
         {
           label: "Abilità comunicative (communication skills)",
-          text: clean(getField(syllabus, "dublin_communication_it")),
+          text: getField(syllabus, "dublin_communication_it"),
         },
         {
           label: "Capacità di apprendimento (learning skills)",
-          text: clean(getField(syllabus, "dublin_learning_it")),
+          text: getField(syllabus, "dublin_learning_it"),
         },
       ].filter((paragraph) => paragraph.text),
     },
@@ -417,31 +431,31 @@ function buildSyllabusSections(syllabus: SyllabusDetail): SyllabusSection[] {
       id: "teaching_methods",
       title: "Modalità di svolgimento dell'insegnamento",
       fields: ["teaching_methods_it", "teaching_methods_en"],
-      body: clean(getField(syllabus, "teaching_methods_it")),
+      body: getField(syllabus, "teaching_methods_it"),
     },
     {
       id: "prerequisites",
       title: "Prerequisiti richiesti",
       fields: ["prerequisites_it", "prerequisites_en"],
-      body: clean(getField(syllabus, "prerequisites_it")),
+      body: getField(syllabus, "prerequisites_it"),
     },
     {
       id: "attendance",
       title: "Frequenza lezioni",
       fields: ["attendance_it", "attendance_en"],
-      body: clean(getField(syllabus, "attendance_it")),
+      body: getField(syllabus, "attendance_it"),
     },
     {
       id: "content",
       title: "Contenuti del corso",
       fields: ["course_content_it", "course_content_en"],
-      body: clean(getField(syllabus, "course_content_it")),
+      body: getField(syllabus, "course_content_it"),
     },
     {
       id: "references",
       title: "Testi di riferimento",
       fields: ["references_it", "references_en"],
-      body: clean(getField(syllabus, "references_it")),
+      body: getField(syllabus, "references_it"),
     },
     {
       id: "schedule",
@@ -453,13 +467,13 @@ function buildSyllabusSections(syllabus: SyllabusDetail): SyllabusSection[] {
       id: "assessment",
       title: "Modalità di verifica dell'apprendimento",
       fields: ["assessment_methods_it", "assessment_methods_en"],
-      body: clean(getField(syllabus, "assessment_methods_it")),
+      body: getField(syllabus, "assessment_methods_it"),
     },
     {
       id: "sample_questions",
       title: "Esempi di domande e/o esercizi frequenti",
       fields: ["sample_questions_it", "sample_questions_en"],
-      body: clean(getField(syllabus, "sample_questions_it")),
+      body: getField(syllabus, "sample_questions_it"),
     },
   ].filter((section) => section.paragraphs?.length || section.body || section.schedule);
 }
@@ -525,8 +539,4 @@ function buildJudgmentIndex(
 function getField(syllabus: SyllabusDetail, field: keyof SyllabusDetail): string {
   const value = syllabus[field];
   return typeof value === "string" ? value : "";
-}
-
-function clean(value: string | null | undefined): string {
-  return cleanSyllabusDisplayText(value);
 }
