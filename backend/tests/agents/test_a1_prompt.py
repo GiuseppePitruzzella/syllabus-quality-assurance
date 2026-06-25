@@ -100,7 +100,10 @@ def test_prompt_uses_course_name_en_for_english_title_boundary():
     )
 
     assert "course_name_en" in prompt
-    assert "NON dedurre che il titolo inglese manchi" in prompt
+    # a1_v7: the deterministic english_coverage pre-check recognises the EN
+    # title from course_name_en (title_en=true), replacing the old free-text
+    # "NON dedurre che il titolo inglese manchi" instruction.
+    assert '"title_en": true' in prompt
     assert "OPTIMIZATION" in prompt
 
 
