@@ -33,4 +33,3 @@ CoreScore: stdev media 0.08, swing massimo 0.23.
 
 - Campione ridotto (N e numero di syllabi limitati): le metriche sono descrittive, non inferenziali.
 - La variabilità è misurata alla temperatura di produzione; un setting diverso (es. temperatura 0) darebbe stabilità diversa.
-

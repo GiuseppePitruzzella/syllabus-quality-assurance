@@ -42,4 +42,3 @@ Definizioni (per coppia syllabus×criterio, su N run):
 - **NA-flip** = criterio NA in alcune run e valutato in altre.
 
 Aggregati per criterio: tasso di unanimità, stdev media intra-item, flip rate = media di (1 − accordo modale), swing massimo, incidenza NA-flip. CoreScore: stdev e range per syllabus, più stdev media e swing massimo aggregati.
-
