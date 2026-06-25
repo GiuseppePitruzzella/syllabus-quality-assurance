@@ -9,8 +9,14 @@ import pytest
 from docx import Document
 
 from app.evaluation.docx_export import (
+    Annotation,
     EvaluationExportBundle,
     EvaluationExportNotFoundError,
+    _add_comment,
+    _evidence_text,
+    _humanize,
+    _humanize_na_reason,
+    _primary_annotations,
     build_evaluation_docx,
     export_filename,
     load_cdl_export_bundles,
@@ -26,12 +32,25 @@ def test_build_docx_contains_evaluation_sections_and_real_comment():
 
     doc = Document(BytesIO(payload))
     text = "\n".join(paragraph.text for paragraph in doc.paragraphs)
+    table_text = "\n".join(
+        cell.text
+        for table in doc.tables
+        for row in table.rows
+        for cell in row.cells
+    )
     assert "Valutazione della qualità del syllabus" in text
+    assert "Sintesi della valutazione" in text
     assert "Revisione dei criteri C1-C9" in text
     assert "Criteri estesi E1-E5" in text
     assert "Syllabus annotato" in text
-    assert "Report di valutazione" in text
+    assert "Note metodologiche" in text
+    # The legacy synthesizer report must no longer be duplicated into the DOCX.
+    assert "Report di valutazione" not in text
     assert "Dettagli tecnici" not in text
+    # Scorecard: a scannable C1-C9 overview table with score + outcome.
+    assert "Punteggio" in table_text
+    assert "Adeguato" in table_text
+    assert "Da migliorare" in table_text
     with ZipFile(BytesIO(payload)) as archive:
         assert "word/comments.xml" in archive.namelist()
         comments = archive.read("word/comments.xml").decode()
@@ -41,6 +60,128 @@ def test_build_docx_contains_evaluation_sections_and_real_comment():
     assert "commentRangeStart" in document
     assert "commentRangeEnd" in document
     assert "commentReference" in document
+
+
+def test_humanize_replaces_leaked_db_field_tokens():
+    out = _humanize(
+        "Il `course_name_en` è assente e dublin_communication_it è troncato."
+    )
+    assert "course_name_en" not in out
+    assert "dublin_communication_it" not in out
+    assert "titolo del corso in inglese" in out
+    assert "Abilità comunicative" in out
+
+
+def test_humanize_drops_redundant_field_parenthetical():
+    out = _humanize(
+        "il titolo del corso in inglese (`course_name_en`) risulta assente"
+    )
+    assert out == "il titolo del corso in inglese risulta assente"
+
+
+def test_humanize_drops_inline_campo_field_reference():
+    out = _humanize(
+        "il descrittore «Abilità comunicative» nel campo "
+        "`dublin_communication_it` risulta troncato"
+    )
+    assert "dublin_communication_it" not in out
+    assert "nel campo" not in out
+    assert out == "il descrittore «Abilità comunicative» risulta troncato"
+
+
+def test_humanize_na_reason_hides_internal_identifiers():
+    resolver = _humanize_na_reason("no indexed document enabled for E1 on cdl_id=3")
+    assert "cdl_id" not in resolver
+    assert "indexed" not in resolver.lower()
+
+    handler = _humanize_na_reason("no judgment produced")
+    assert "no judgment" not in handler.lower()
+
+    assert _humanize_na_reason(None) == "Motivazione non disponibile."
+
+
+def test_comment_humanizes_internal_field_names():
+    doc = Document()
+    run = doc.add_paragraph().add_run("Titolo")
+    _add_comment(
+        doc,
+        [run],
+        Annotation(
+            code="C2",
+            score=1,
+            justification="Il `course_name_en` risulta assente.",
+            evidence_text="Titolo",
+            source_field="course_name_it",
+        ),
+    )
+    buffer = BytesIO()
+    doc.save(buffer)
+    with ZipFile(BytesIO(buffer.getvalue())) as archive:
+        comments = archive.read("word/comments.xml").decode()
+    assert "course_name_en" not in comments
+    assert "titolo del corso in inglese" in comments
+
+
+def test_primary_annotations_falls_back_when_source_field_is_not_rendered():
+    syllabus = SimpleNamespace(
+        **{
+            field: None
+            for field in (
+                "learning_outcomes_it",
+                "learning_outcomes_en",
+                "dublin_knowledge_it",
+                "dublin_knowledge_en",
+                "dublin_applying_it",
+                "dublin_applying_en",
+                "dublin_judgement_it",
+                "dublin_judgement_en",
+                "dublin_communication_it",
+                "dublin_communication_en",
+                "dublin_learning_it",
+                "dublin_learning_en",
+                "teaching_methods_it",
+                "teaching_methods_en",
+                "prerequisites_it",
+                "prerequisites_en",
+                "attendance_it",
+                "attendance_en",
+                "course_content_it",
+                "course_content_en",
+                "references_it",
+                "references_en",
+                "schedule_it",
+                "schedule_en",
+                "assessment_methods_it",
+                "assessment_methods_en",
+                "sample_questions_it",
+                "sample_questions_en",
+            )
+        }
+    )
+    annotation = Annotation(
+        code="C9",
+        score=1,
+        justification="Motivazione leggibile.",
+        evidence_text="Testo",
+        source_field="syllabus.references_it",
+    )
+    selected = _primary_annotations(
+        {"syllabus.references_it": [annotation]},
+        syllabus,
+    )
+    assert selected["C9"].source_field is None
+    assert selected["C9"].evidence_text is None
+
+
+def test_evidence_text_unpacks_schedule_json_dump():
+    raw = (
+        '[{"numero": "1", "argomenti": "Intro", "riferimenti_testi": "Cap. 1"}, '
+        '{"numero": "2", "argomenti": "Avanzato", "riferimenti_testi": "Cap. 2"}]'
+    )
+    out = _evidence_text(raw)
+    assert "{" not in out
+    assert "argomenti" not in out
+    assert "Intro" in out and "Avanzato" in out
 
 
 def test_export_filename_is_stable_and_safe():

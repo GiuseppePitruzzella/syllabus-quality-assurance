@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime
 from io import BytesIO
+import json
 import re
 from typing import Any, Iterable
 import unicodedata
@@ -97,8 +98,8 @@ def build_evaluation_docx(bundle: EvaluationExportBundle) -> bytes:
     _add_core_results(doc, bundle)
     _add_extended_results(doc, bundle)
     _add_external_documents(doc, bundle.external_documents)
+    _add_method_note(doc)
     _add_annotated_syllabus(doc, bundle)
-    _add_final_report(doc, bundle.evaluation.final_report)
 
     buffer = BytesIO()
     doc.save(buffer)
@@ -322,7 +323,7 @@ def _add_summary(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
         ("Criteri valutati", _evaluated_count(evaluation.criterion_scores)),
     ]
     metrics = doc.add_paragraph()
-    metrics.paragraph_format.space_after = Pt(8)
+    metrics.paragraph_format.space_after = Pt(10)
     for index, (label, value) in enumerate(values):
         if index:
             separator = metrics.add_run("    ·    ")
@@ -331,6 +332,8 @@ def _add_summary(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
         _format_run(label_run, size=9, color=MUTED, bold=True)
         value_run = metrics.add_run(value)
         _format_run(value_run, size=16, color=UNICT_BLUE, bold=True)
+
+    _add_scorecard(doc, evaluation.criterion_scores)
 
     priorities = _priority_codes(evaluation.criterion_scores)
     p = doc.add_paragraph()
@@ -344,13 +347,61 @@ def _add_summary(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
     p.add_run(text)
 
 
+def _add_scorecard(doc: DocxDocument, criterion_scores: Any) -> None:
+    """One scannable C1-C9 row: code, name, score, colour-coded outcome."""
+    scores = criterion_scores or {}
+    table = doc.add_table(rows=1, cols=4)
+    table.autofit = False
+    for idx, label in enumerate(("", "Criterio", "Punteggio", "Esito")):
+        cell = table.rows[0].cells[idx]
+        cell.text = label
+        _shade_cell(cell, UNICT_LIGHT_BLUE)
+        for run in cell.paragraphs[0].runs:
+            _format_run(run, size=9, color=UNICT_BLUE, bold=True)
+    for code in CORE_ORDER:
+        score = _score_value(scores.get(code))
+        label, color = _outcome_tokens(score)
+        cells = table.add_row().cells
+        for cell in cells:
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+        code_run = cells[0].paragraphs[0].add_run(code)
+        _format_run(code_run, size=9.5, color=UNICT_BLUE, bold=True)
+        name_run = cells[1].paragraphs[0].add_run(CRITERION_NAMES.get(code, code))
+        _format_run(name_run, size=9.5, color=INK)
+        cells[2].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        score_run = cells[2].paragraphs[0].add_run(
+            f"{score}/2" if score is not None else "—"
+        )
+        _format_run(score_run, size=9.5, color=color, bold=True)
+        esito_run = cells[3].paragraphs[0].add_run(label)
+        _format_run(esito_run, size=9.5, color=color, bold=True)
+    _set_table_widths(table, (0.55, 4.0, 0.85, 1.2))
+
+
 def _add_core_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
     doc.add_heading("Revisione dei criteri C1-C9", level=1)
     judgments = _core_judgments(bundle.evaluation.agent_outputs)
     scores = bundle.evaluation.criterion_scores or {}
     na_reasons = _na_reason_map(bundle.evaluation.na_criteria)
+    seen_evidence: set[str] = set()
 
-    for code in CORE_ORDER:
+    # Full detail only for criteria that need attention (0/1) or are NA.
+    # Adequate criteria (score 2) are recapped in one line below, since the
+    # scorecard already certifies them — no need to restate the obvious.
+    needs_review = [
+        code for code in CORE_ORDER if _score_value(scores.get(code)) != 2
+    ]
+    if not needs_review:
+        p = doc.add_paragraph()
+        _format_run(
+            p.add_run(
+                "Tutti i criteri valutati risultano adeguati: "
+                "nessuna area di revisione segnalata."
+            ),
+            color=ADEQUATE,
+            bold=True,
+        )
+    for code in needs_review:
         score = _score_value(scores.get(code))
         judgment = judgments.get(code)
         heading = doc.add_paragraph(style="Heading 2")
@@ -360,27 +411,37 @@ def _add_core_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> None
         if score is None:
             p = doc.add_paragraph()
             p.add_run("Non valutabile. ").bold = True
-            p.add_run(na_reasons.get(code) or "Motivazione non disponibile.")
+            p.add_run(_humanize_na_reason(na_reasons.get(code)))
             continue
 
         if judgment and judgment.get("justification"):
-            doc.add_paragraph(str(judgment["justification"]))
+            doc.add_paragraph(_humanize(str(judgment["justification"])))
         evidences = judgment.get("evidences", []) if judgment else []
-        if evidences:
+        rendered = _select_evidences(evidences, seen_evidence)
+        if rendered:
             p = doc.add_paragraph()
             p.add_run("Evidenze dal syllabus").bold = True
-            for evidence in evidences:
+            for text in rendered:
                 quote = doc.add_paragraph(style="Quote")
-                quote.add_run(f"“{evidence.get('text', '')}”")
-        if score in (0, 1):
-            p = doc.add_paragraph()
-            lead = p.add_run("Indicazione per la revisione. ")
-            _format_run(
-                lead,
-                bold=True,
-                color=CRITICAL if score == 0 else IMPROVABLE,
-            )
-            p.add_run(CRITERION_RECOMMENDATIONS.get(code, "Rivedere il criterio."))
+                quote.add_run(f"“{text}”")
+        p = doc.add_paragraph()
+        lead = p.add_run("Indicazione per la revisione. ")
+        _format_run(lead, bold=True, color=CRITICAL if score == 0 else IMPROVABLE)
+        p.add_run(CRITERION_RECOMMENDATIONS.get(code, "Rivedere il criterio."))
+
+    adequate = [code for code in CORE_ORDER if _score_value(scores.get(code)) == 2]
+    if adequate:
+        doc.add_heading("Criteri adeguati", level=2)
+        for code in adequate:
+            judgment = judgments.get(code)
+            summary = _first_sentence(str(judgment.get("justification") or "")) \
+                if judgment else ""
+            p = doc.add_paragraph(style="List Bullet")
+            lead = p.add_run(f"{code} · {CRITERION_NAMES.get(code, code)}")
+            _format_run(lead, bold=True, color=UNICT_BLUE)
+            if summary:
+                p.add_run(" — ")
+                p.add_run(summary)
 
 
 def _add_extended_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
@@ -411,12 +472,14 @@ def _add_extended_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> 
         _add_outcome_run(heading, score)
         judgment = judgments.get(code)
         if score is None:
-            doc.add_paragraph(na_reasons.get(code) or "Non valutabile.")
+            p = doc.add_paragraph()
+            p.add_run("Non valutabile. ").bold = True
+            p.add_run(_humanize_na_reason(na_reasons.get(code)))
         elif judgment:
-            doc.add_paragraph(str(judgment.get("justification") or "—"))
+            doc.add_paragraph(_humanize(str(judgment.get("justification") or "—")))
             for evidence in judgment.get("evidences") or []:
                 quote = doc.add_paragraph(style="Quote")
-                quote.add_run(f"“{evidence.get('text', '')}”")
+                quote.add_run(f"“{_evidence_text(str(evidence.get('text', '')))}”")
 
 
 def _add_external_documents(
@@ -454,17 +517,23 @@ def _add_annotated_syllabus(
     doc: DocxDocument,
     bundle: EvaluationExportBundle,
 ) -> None:
+    annotations = _annotations_by_field(bundle.evaluation.agent_outputs)
+    if not _all_annotations(annotations):
+        return
+    # Collapse each criterion to a single best anchor so we render only the
+    # sections that actually carry a margin note.
+    annotations = _filtered_annotation_map(annotations, bundle.syllabus)
+
     doc.add_page_break()
     doc.add_heading("Syllabus annotato", level=1)
     p = doc.add_paragraph()
     run = p.add_run(
-        "Le annotazioni laterali collegano le criticità e le aree migliorabili "
-        "alle evidenze del syllabus. Quando la citazione non è rintracciabile "
-        "alla lettera, il commento è ancorato alla sezione pertinente."
+        "Sono riportate solo le sezioni del syllabus che presentano criticità o "
+        "aree migliorabili, con le relative annotazioni a margine. Le sezioni "
+        "ritenute adeguate sono omesse per sintesi."
     )
     _format_run(run, size=9, color=MUTED, italic=True)
 
-    annotations = _annotations_by_field(bundle.evaluation.agent_outputs)
     added: set[str] = set()
     _add_language_syllabus(doc, bundle.syllabus, "it", annotations, added)
     if bundle.syllabus.has_english:
@@ -478,20 +547,30 @@ def _add_language_syllabus(
     annotations: dict[str, list[Annotation]],
     added: set[str],
 ) -> None:
-    language_name = "Versione italiana" if language == "it" else "English version"
-    doc.add_heading(language_name, level=2)
     sections = _syllabus_sections(syllabus, language)
+    relevant = _relevant_section_keys(sections, annotations, language)
+    if not relevant:
+        return
+    heading_added = False
     for section_key, title, fields in sections:
+        if section_key not in relevant:
+            continue
         available = [(field, value) for field, value in fields if _has_text(value)]
         if not available:
             continue
+        if not heading_added:
+            language_name = (
+                "Versione italiana" if language == "it" else "English version"
+            )
+            doc.add_heading(language_name, level=2)
+            heading_added = True
         heading = doc.add_paragraph(style="Heading 3")
         heading_run = heading.add_run(title)
 
         section_annotations = [
             annotation
             for code in SECTION_FALLBACK_CRITERIA.get(section_key, ())
-            for annotation in _all_annotations(annotations)
+            for annotation in annotations.get("__unanchored__", [])
             if annotation.code == code and annotation.code not in added
         ]
         for field, text in available:
@@ -507,6 +586,103 @@ def _add_language_syllabus(
                     _add_comment(doc, [heading_run], annotation)
                     added.add(annotation.code)
                 section_annotations = []
+
+
+def _relevant_section_keys(
+    sections: list[tuple[str, str, list[tuple[str, Any]]]],
+    annotations: dict[str, list[Annotation]],
+    language: str,
+) -> set[str]:
+    """Section keys that will host at least one margin note."""
+    note_fields = {field for field in annotations if field != "__unanchored__"}
+    keys = {
+        section_key
+        for section_key, _title, fields in sections
+        if any(field in note_fields for field, _ in fields)
+    }
+    if language == "it":
+        unanchored = {a.code for a in annotations.get("__unanchored__", [])}
+        keys |= {
+            section_key
+            for section_key, codes in SECTION_FALLBACK_CRITERIA.items()
+            if any(code in unanchored for code in codes)
+        }
+    return keys
+
+
+def _filtered_annotation_map(
+    annotations: dict[str, list[Annotation]],
+    syllabus: Any,
+) -> dict[str, list[Annotation]]:
+    """Keep one anchor per criterion, grouped by its target field."""
+    out: dict[str, list[Annotation]] = {}
+    for annotation in _primary_annotations(annotations, syllabus).values():
+        key = annotation.source_field or "__unanchored__"
+        out.setdefault(key, []).append(annotation)
+    return out
+
+
+def _primary_annotations(
+    annotations: dict[str, list[Annotation]],
+    syllabus: Any,
+) -> dict[str, Annotation]:
+    """Pick the single best field anchor for each annotated criterion.
+
+    Prefers a field that is actually rendered, whose evidence text is found
+    in it, and (tie-break) the Italian version. Criteria with no usable field
+    anchor fall back to the section heading via ``__unanchored__``.
+    """
+    rendered = _rendered_fields(syllabus)
+    chosen: dict[str, Annotation] = {}
+    for field, items in annotations.items():
+        if field == "__unanchored__" or field not in rendered:
+            continue
+        for annotation in items:
+            if _better_anchor(annotation, chosen.get(annotation.code), syllabus):
+                chosen[annotation.code] = annotation
+    for annotation in annotations.get("__unanchored__", []):
+        chosen.setdefault(annotation.code, annotation)
+    for annotation in _all_annotations(annotations):
+        if annotation.code not in chosen:
+            chosen[annotation.code] = Annotation(
+                code=annotation.code,
+                score=annotation.score,
+                justification=annotation.justification,
+                evidence_text=None,
+                source_field=None,
+            )
+    return chosen
+
+
+def _better_anchor(new: Annotation, old: Annotation | None, syllabus: Any) -> bool:
+    if old is None:
+        return True
+    new_match = _evidence_in_field(new, syllabus)
+    old_match = _evidence_in_field(old, syllabus)
+    if new_match != old_match:
+        return new_match
+    new_it = (new.source_field or "").endswith("_it")
+    old_it = (old.source_field or "").endswith("_it")
+    if new_it != old_it:
+        return new_it
+    return False
+
+
+def _evidence_in_field(annotation: Annotation, syllabus: Any) -> bool:
+    if not annotation.evidence_text or not annotation.source_field:
+        return False
+    value = getattr(syllabus, annotation.source_field, None)
+    return _has_text(value) and annotation.evidence_text in str(value)
+
+
+def _rendered_fields(syllabus: Any) -> set[str]:
+    fields: set[str] = set()
+    for language in ("it", "en"):
+        for _key, _title, flds in _syllabus_sections(syllabus, language):
+            for field, value in flds:
+                if _has_text(value):
+                    fields.add(field)
+    return fields
 
 
 def _add_text_with_comments(
@@ -539,38 +715,32 @@ def _add_text_with_comments(
     if cursor < len(text):
         paragraph.add_run(text[cursor:])
     if not paragraph.runs:
-        target = paragraph.add_run(text)
-        for annotation in pending:
+        paragraph.add_run(text)
+    leftovers = [item for item in pending if item.code not in added]
+    if leftovers:
+        target = paragraph.runs[-1]
+        for annotation in leftovers:
             _add_comment(doc, [target], annotation)
             added.add(annotation.code)
-        return True
+        anchored = True
     return anchored
 
 
-def _add_final_report(doc: DocxDocument, source: str | None) -> None:
-    if not source:
-        return
-    doc.add_page_break()
-    doc.add_heading("Report di valutazione", level=1)
-    for raw_line in source.splitlines():
-        line = raw_line.strip()
-        if not line:
-            continue
-        if line.startswith("### "):
-            doc.add_heading(line[4:], level=3)
-        elif line.startswith("## "):
-            doc.add_heading(line[3:], level=2)
-        elif line.startswith("# "):
-            doc.add_heading(line[2:], level=1)
-        elif line.startswith(("- ", "* ")):
-            doc.add_paragraph(_strip_markdown(line[2:]), style="List Bullet")
-        elif re.match(r"^\d+\.\s", line):
-            doc.add_paragraph(
-                _strip_markdown(re.sub(r"^\d+\.\s+", "", line)),
-                style="List Number",
-            )
-        else:
-            doc.add_paragraph(_strip_markdown(line))
+def _add_method_note(doc: DocxDocument) -> None:
+    doc.add_heading("Note metodologiche", level=1)
+    notes = (
+        "Il sistema è uno strumento di supporto alla valutazione e "
+        "all'autovalutazione del syllabus, non un sostituto del giudizio del "
+        "docente o degli organi di Assicurazione della Qualità.",
+        "Le evidenze citate e i giudizi prodotti vanno verificati sul syllabus "
+        "originale: il sistema lavora su dati estratti tramite scraping e "
+        "parsing, e residui di estrazione (refusi apparenti, interruzioni di "
+        "parola anomale, marker di template) possono essere artefatti "
+        "dell'estrazione e non difetti del documento redatto dal docente.",
+    )
+    for text in notes:
+        p = doc.add_paragraph()
+        _format_run(p.add_run(text), size=9, color=MUTED)
 
 
 def _core_judgments(raw_outputs: Any) -> dict[str, dict[str, Any]]:
@@ -593,16 +763,7 @@ def _annotations_by_field(raw_outputs: Any) -> dict[str, list[Annotation]]:
         if score not in (0, 1):
             continue
         evidences = judgment.get("evidences") or []
-        if not evidences:
-            out.setdefault("__unanchored__", []).append(
-                Annotation(
-                    code=code,
-                    score=score,
-                    justification=str(judgment.get("justification") or ""),
-                    evidence_text=None,
-                    source_field=None,
-                )
-            )
+        anchored = False
         if evidences:
             for evidence in evidences:
                 if not isinstance(evidence, dict):
@@ -610,6 +771,7 @@ def _annotations_by_field(raw_outputs: Any) -> dict[str, list[Annotation]]:
                 field = evidence.get("source_field")
                 if not field:
                     continue
+                anchored = True
                 out.setdefault(str(field), []).append(
                     Annotation(
                         code=code,
@@ -619,6 +781,16 @@ def _annotations_by_field(raw_outputs: Any) -> dict[str, list[Annotation]]:
                         source_field=str(field),
                     )
                 )
+        if not anchored:
+            out.setdefault("__unanchored__", []).append(
+                Annotation(
+                    code=code,
+                    score=score,
+                    justification=str(judgment.get("justification") or ""),
+                    evidence_text=None,
+                    source_field=None,
+                )
+            )
     return out
 
 
@@ -636,7 +808,7 @@ def _add_comment(doc: DocxDocument, runs: list[Any], annotation: Annotation) -> 
     parts = [
         f"{annotation.code} · {CRITERION_NAMES.get(annotation.code, annotation.code)}",
         f"Esito: {label}",
-        annotation.justification,
+        _humanize(annotation.justification),
     ]
     if recommendation:
         parts.append(f"Indicazione: {recommendation}")
@@ -770,14 +942,22 @@ def _schedule_text(items: Any) -> str:
     return "\n".join(lines)
 
 
+_OUTCOME_TOKENS: dict[int | None, tuple[str, RGBColor]] = {
+    0: ("Criticità", CRITICAL),
+    1: ("Da migliorare", IMPROVABLE),
+    2: ("Adeguato", ADEQUATE),
+    None: ("Non valutabile", MUTED),
+}
+
+
+def _outcome_tokens(score: int | None) -> tuple[str, RGBColor]:
+    return _OUTCOME_TOKENS[score]
+
+
 def _add_outcome_run(paragraph: Any, score: int | None) -> None:
-    label, color = {
-        0: ("Criticità", CRITICAL),
-        1: ("Da migliorare", IMPROVABLE),
-        2: ("Adeguato", ADEQUATE),
-        None: ("Non valutabile", MUTED),
-    }[score]
-    run = paragraph.add_run(f"  ·  {label}")
+    label, color = _outcome_tokens(score)
+    text = f"  ·  {score}/2 · {label}" if score is not None else f"  ·  {label}"
+    run = paragraph.add_run(text)
     _format_run(run, size=9, color=color, bold=True)
 
 
@@ -855,8 +1035,134 @@ def _filename_part(value: str) -> str:
     return cleaned.strip("_") or "evaluation"
 
 
-def _strip_markdown(value: str) -> str:
-    return re.sub(r"[*_`]+", "", value).strip()
+# Database field names the LLM agents sometimes cite verbatim in their
+# justifications. They must never reach a human reader as raw identifiers.
+_FIELD_LABELS: dict[str, str] = {
+    "course_name_it": "il titolo del corso in italiano",
+    "course_name_en": "il titolo del corso in inglese",
+    "learning_outcomes_it": "i risultati di apprendimento (versione italiana)",
+    "learning_outcomes_en": "i risultati di apprendimento (versione inglese)",
+    "dublin_knowledge_it": "il descrittore «Conoscenza e comprensione» (IT)",
+    "dublin_knowledge_en": "il descrittore «Conoscenza e comprensione» (EN)",
+    "dublin_applying_it": "il descrittore «Capacità di applicare conoscenza» (IT)",
+    "dublin_applying_en": "il descrittore «Capacità di applicare conoscenza» (EN)",
+    "dublin_judgement_it": "il descrittore «Autonomia di giudizio» (IT)",
+    "dublin_judgement_en": "il descrittore «Autonomia di giudizio» (EN)",
+    "dublin_communication_it": "il descrittore «Abilità comunicative» (IT)",
+    "dublin_communication_en": "il descrittore «Abilità comunicative» (EN)",
+    "dublin_learning_it": "il descrittore «Capacità di apprendimento» (IT)",
+    "dublin_learning_en": "il descrittore «Capacità di apprendimento» (EN)",
+}
+
+
+_FIELD_TOKEN = r"`?[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+`?"
+
+
+def _humanize(text: str) -> str:
+    """Strip leaked DB field tokens from agent prose.
+
+    The agents already gloss the field in plain language next to the token
+    (``il titolo del corso in inglese (`course_name_en`)``), so the token is
+    redundant noise: drop the parenthetical or ``nel campo …`` reference, and
+    relabel only a bare token that has no human gloss.
+    """
+    if not text:
+        return text
+
+    # Parenthetical aside, e.g. "(`course_name_en`)".
+    text = re.sub(rf"\s*\(\s*{_FIELD_TOKEN}\s*\)", "", text)
+    # Inline reference, e.g. "nel campo `dublin_communication_it`".
+    text = re.sub(
+        rf"\s*(?:nel|nei|del|dei|sul|sui|al|ai|il|i)?\s*camp[oi]\s+"
+        rf"(?:dedicat[oi]\s+)?{_FIELD_TOKEN}",
+        "",
+        text,
+    )
+
+    def _sub(match: re.Match[str]) -> str:
+        key = match.group(1)
+        return _FIELD_LABELS.get(key, key.replace("_", " "))
+
+    # Any surviving token (no nearby gloss) becomes a readable label.
+    text = re.sub(r"`([A-Za-z_][A-Za-z0-9_]*)`", _sub, text)
+    for field, label in _FIELD_LABELS.items():
+        text = text.replace(field, label)
+
+    text = re.sub(r"\s+([,.;:])", r"\1", text)
+    return re.sub(r"\s{2,}", " ", text).strip()
+
+
+def _humanize_na_reason(reason: str | None) -> str:
+    """Turn an internal NA message into a teacher-facing sentence."""
+    text = (reason or "").strip()
+    low = text.lower()
+    if not text:
+        return "Motivazione non disponibile."
+    if "no indexed document" in low:
+        return (
+            "Per questo Corso di Studio non è disponibile il documento di "
+            "riferimento richiesto dal criterio."
+        )
+    if "no judgment produced" in low or "not applicable" in low:
+        return "Il sistema non ha prodotto un giudizio per questo criterio."
+    text = re.sub(r"\s*on cdl_id=\d+", "", text)
+    return _humanize(text)
+
+
+def _select_evidences(evidences: Any, seen: set[str]) -> list[str]:
+    """Up to three clean, de-duplicated evidence quotes for a criterion."""
+    rendered: list[str] = []
+    if not isinstance(evidences, list):
+        return rendered
+    for evidence in evidences:
+        if not isinstance(evidence, dict):
+            continue
+        text = _evidence_text(str(evidence.get("text", "")))
+        if not text:
+            continue
+        key = " ".join(text.lower().split())
+        if key in seen:
+            continue
+        seen.add(key)
+        rendered.append(_truncate(text, 360))
+        if len(rendered) >= 3:
+            break
+    return rendered
+
+
+def _evidence_text(raw: str) -> str:
+    """Render a raw evidence quote, unpacking schedule-JSON dumps."""
+    text = (raw or "").strip()
+    looks_like_schedule = text.startswith("[") and any(
+        token in text for token in ('"argomenti"', '"numero"', '"subjects"', '"subject"')
+    )
+    if looks_like_schedule:
+        try:
+            data = json.loads(text)
+        except (ValueError, TypeError):
+            data = None
+        if isinstance(data, list):
+            readable = _schedule_text(data)
+            if readable:
+                text = readable.replace("\n", " · ")
+    return text
+
+
+def _truncate(text: str, limit: int) -> str:
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    return text[:limit].rstrip() + "…"
+
+
+def _first_sentence(text: str, limit: int = 240) -> str:
+    """First sentence of a justification, for the adequate-criteria recap."""
+    text = _humanize(text or "").strip()
+    if not text:
+        return ""
+    match = re.search(r"[.!?]\s", text)
+    sentence = text[: match.start() + 1] if match else text
+    return _truncate(sentence, limit)
 
 
 def _has_text(value: Any) -> bool:
