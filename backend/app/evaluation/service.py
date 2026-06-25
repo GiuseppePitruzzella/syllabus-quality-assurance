@@ -638,6 +638,7 @@ class EvaluationService:
                     {
                         "evaluation_uuid": evaluation.evaluation_uuid,
                         "syllabus_seuid": evaluation.syllabus_seuid_snapshot,
+                        "cdl_id": cdl.id,
                         "course_name": evaluation.course_name_snapshot,
                         "cdl_name": cdl.name,
                         "cdl_code": cdl.code,

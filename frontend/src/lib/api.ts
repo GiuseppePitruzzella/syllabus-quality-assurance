@@ -275,6 +275,43 @@ export const listEvaluationsForSyllabus = (seuid: string, limit?: number) => {
 export const getResultsSummary = () =>
   fetchApi<ResultsSummary>("/results/summary");
 
+export const downloadEvaluationDocx = (evaluationUuid: string) =>
+  downloadApiFile(
+    `/exports/evaluations/${evaluationUuid}.docx`,
+    `evaluation-${evaluationUuid.slice(0, 8)}.docx`,
+  );
+
+export const downloadCdlEvaluationsZip = (cdlId: number) =>
+  downloadApiFile(
+    `/exports/cdl/${cdlId}.zip`,
+    `valutazioni-cdl-${cdlId}.zip`,
+  );
+
+async function downloadApiFile(path: string, fallbackFilename: string) {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new ApiError({
+      status: response.status,
+      statusText: response.statusText,
+      detail: await response.text(),
+    });
+  }
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition");
+  const match = disposition?.match(/filename="([^"]+)"/);
+  const filename = match?.[1] || fallbackFilename;
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
 // ---------------------------------------------------------------------------
 // Phase 8 — local-document registry
 // ---------------------------------------------------------------------------

@@ -3,6 +3,7 @@ import { GraduationCap } from "lucide-react";
 
 import { getCdl, scrapeCdl } from "@/lib/api";
 import { useScrapeJob } from "@/hooks/useScrapeJob";
+import { CdlTypeBadge } from "@/components/CdlTypeBadge";
 import { EmptyState } from "@/components/EmptyState";
 import { ScrapeProgress } from "@/components/ScrapeProgress";
 import {
@@ -12,35 +13,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  selectFieldContent,
+  selectFieldItem,
+  selectFieldTrigger,
+} from "@/components/ui/select-field";
+import { cn } from "@/lib/utils";
 
-const TRIGGER_CLASS =
-  "h-12 w-full justify-start rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 text-sm font-medium text-slate-950 shadow-none transition-colors hover:border-slate-500 hover:bg-transparent focus-visible:border-slate-950 focus-visible:ring-0 data-[popup-open]:border-slate-950 data-[popup-open]:ring-0 disabled:bg-transparent disabled:text-slate-400 data-placeholder:text-sm data-placeholder:font-normal [&_svg]:size-4";
-
-const CONTENT_CLASS =
-  "rounded-none shadow-lg ring-1 ring-slate-200";
-
-const ITEM_CLASS =
-  "rounded-none px-2 py-2 focus:bg-slate-100 focus:text-slate-950";
+const TRIGGER_CLASS = cn(selectFieldTrigger, "h-12 w-full");
+const CONTENT_CLASS = selectFieldContent;
+const ITEM_CLASS = selectFieldItem;
 
 interface CdlSelectorProps {
   departmentId: number | null;
   value: number | null;
   onChange: (id: number | null) => void;
-}
-
-function CdlTypeBadge({ type }: { type: string }) {
-  const isTriennale = type.toLowerCase().includes("triennale");
-  return (
-    <span
-      className={`inline-flex w-8 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-wide ${
-        isTriennale
-          ? "text-emerald-700"
-          : "text-sky-800"
-      }`}
-    >
-      {isTriennale ? "L" : "LM"}
-    </span>
-  );
 }
 
 export function CdlSelector({

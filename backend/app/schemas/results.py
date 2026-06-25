@@ -57,6 +57,7 @@ class ResultsEvaluationRow(BaseModel):
 
     evaluation_uuid: str
     syllabus_seuid: str
+    cdl_id: int
     course_name: str
     cdl_name: str | None = None
     cdl_code: str | None = None

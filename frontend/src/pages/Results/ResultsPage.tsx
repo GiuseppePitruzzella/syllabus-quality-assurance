@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -9,12 +9,30 @@ import {
   CircleDashed,
   ClipboardCheck,
   FileText,
+  Download,
+  GraduationCap,
   MinusCircle,
   TrendingUp,
 } from "lucide-react";
+import { toast } from "sonner";
 
+import { CdlTypeBadge } from "@/components/CdlTypeBadge";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  selectFieldContent,
+  selectFieldItem,
+  selectFieldTrigger,
+} from "@/components/ui/select-field";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -24,7 +42,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CORE_CRITERIA } from "@/data/rubric";
-import { getResultsSummary } from "@/lib/api";
+import { downloadCdlEvaluationsZip, getResultsSummary } from "@/lib/api";
 import type {
   CriterionDistribution,
   EvaluationStatus,
@@ -35,6 +53,8 @@ import type {
 const criterionMeta = new Map(CORE_CRITERIA.map((item) => [item.code, item]));
 
 export function ResultsPage() {
+  const [selectedCdlId, setSelectedCdlId] = useState<number | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["results-summary"],
     queryFn: getResultsSummary,
@@ -61,6 +81,24 @@ export function ResultsPage() {
   }
 
   const hasEvaluations = data.overview.latest_evaluations_count > 0;
+  const cdlOptions = uniqueCdlOptions(data.evaluations);
+  const effectiveCdlId = selectedCdlId ?? cdlOptions[0]?.id ?? null;
+  const selectedCdl = cdlOptions.find((option) => option.id === effectiveCdlId);
+
+  async function handleCdlExport() {
+    if (effectiveCdlId === null) return;
+    setIsExporting(true);
+    try {
+      await downloadCdlEvaluationsZip(effectiveCdlId);
+      toast.success("Archivio Word del CdS preparato.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Esportazione non riuscita.",
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-8">
@@ -73,6 +111,57 @@ export function ResultsPage() {
           <span className="text-xs text-slate-500">
             Ultimo aggiornamento: {formatDateTime(data.generated_at)}
           </span>
+        }
+        actions={
+          hasEvaluations ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <Select
+                value={effectiveCdlId === null ? null : String(effectiveCdlId)}
+                onValueChange={(value) => {
+                  setSelectedCdlId(value === null ? null : Number(value));
+                }}
+              >
+                <SelectTrigger
+                  aria-label="Corso di Studio da esportare"
+                  className={cn(selectFieldTrigger, "h-9 min-w-64 max-w-80")}
+                >
+                  <GraduationCap className="text-muted-foreground" aria-hidden />
+                  <SelectValue className="min-w-0" placeholder="Seleziona un CdS">
+                    {selectedCdl && (
+                      <span className="flex min-w-0 items-center gap-2">
+                        <CdlTypeBadge code={selectedCdl.code} />
+                        <span className="truncate" title={selectedCdl.name}>
+                          {selectedCdl.name}
+                        </span>
+                      </span>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className={selectFieldContent}>
+                  {cdlOptions.map((option) => (
+                    <SelectItem
+                      key={option.id}
+                      value={String(option.id)}
+                      className={selectFieldItem}
+                    >
+                      <span className="flex items-center gap-2">
+                        <CdlTypeBadge code={option.code} />
+                        {option.name}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                onClick={handleCdlExport}
+                disabled={effectiveCdlId === null || isExporting}
+              >
+                <Download className="h-4 w-4" aria-hidden />
+                {isExporting ? "Preparazione…" : "Esporta per CdS"}
+              </Button>
+            </div>
+          ) : null
         }
       />
 
@@ -87,6 +176,22 @@ export function ResultsPage() {
         </>
       )}
     </div>
+  );
+}
+
+function uniqueCdlOptions(rows: ResultsEvaluationRow[]) {
+  const options = new Map<number, { id: number; code: string | null; name: string }>();
+  for (const row of rows) {
+    if (!options.has(row.cdl_id)) {
+      options.set(row.cdl_id, {
+        id: row.cdl_id,
+        code: row.cdl_code,
+        name: row.cdl_name ?? "CdS non disponibile",
+      });
+    }
+  }
+  return Array.from(options.values()).sort((a, b) =>
+    `${a.code ?? ""} ${a.name}`.localeCompare(`${b.code ?? ""} ${b.name}`, "it"),
   );
 }
 

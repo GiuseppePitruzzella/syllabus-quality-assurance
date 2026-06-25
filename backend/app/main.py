@@ -14,6 +14,7 @@ from app.api import (
     evaluation,
     local_documents,
     results,
+    exports,
     scrape_departments,
     scrape_stream,
     stats,
@@ -144,6 +145,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
 _AUTHENTICATED_API = [Depends(auth.current_user)]
@@ -154,6 +156,7 @@ app.include_router(scrape_departments.router, dependencies=_AUTHENTICATED_API)
 app.include_router(scrape_stream.router, dependencies=_AUTHENTICATED_API)
 app.include_router(evaluation.router, dependencies=_AUTHENTICATED_API)
 app.include_router(results.router, dependencies=_AUTHENTICATED_API)
+app.include_router(exports.router, dependencies=_AUTHENTICATED_API)
 app.include_router(cdl.router, dependencies=_AUTHENTICATED_API)
 app.include_router(syllabi.router, dependencies=_AUTHENTICATED_API)
 app.include_router(stats.router, dependencies=_AUTHENTICATED_API)
