@@ -25,13 +25,18 @@ from app.evaluation.synthesizer import (
 )
 
 
-UNICT_BLUE = RGBColor(0x00, 0x45, 0x7C)
-UNICT_LIGHT_BLUE = "EAF2F8"
-INK = RGBColor(0x1F, 0x29, 0x37)
-MUTED = RGBColor(0x5B, 0x67, 0x75)
+# Neutral grayscale palette for a sober, academic look.
+INK = RGBColor(0x22, 0x22, 0x22)        # body text, near-black
+MUTED = RGBColor(0x6B, 0x6B, 0x6B)      # secondary text, neutral gray
+HEADING = RGBColor(0x11, 0x11, 0x11)    # headings and strong accents, black
+SHADE = "ECECEC"                        # light-gray cell fill
 CRITICAL = RGBColor(0xA6, 0x1B, 0x2B)
 IMPROVABLE = RGBColor(0x8A, 0x5A, 0x00)
 ADEQUATE = RGBColor(0x1D, 0x6B, 0x46)
+
+# Serif typography for a sober, academic look.
+SERIF_FONT = "Georgia"
+RULE_COLOR = "808080"
 
 CORE_ORDER = tuple(f"C{i}" for i in range(1, 10))
 EXTENDED_ORDER = tuple(f"E{i}" for i in range(1, 6))
@@ -97,7 +102,15 @@ def build_evaluation_docx(bundle: EvaluationExportBundle) -> bytes:
     _add_summary(doc, bundle)
     _add_core_results(doc, bundle)
     _add_extended_results(doc, bundle)
-    _add_external_documents(doc, bundle.external_documents)
+    shown_extended = _evaluated_extended_codes(bundle)
+    _add_external_documents(
+        doc,
+        tuple(
+            document
+            for document in bundle.external_documents
+            if document.criterion_code in shown_extended
+        ),
+    )
     _add_method_note(doc)
     _add_annotated_syllabus(doc, bundle)
 
@@ -226,26 +239,36 @@ def _configure_document(doc: DocxDocument) -> None:
 
     styles = doc.styles
     normal = styles["Normal"]
-    normal.font.name = "Arial"
+    normal.font.name = SERIF_FONT
     normal.font.size = Pt(10.5)
     normal.font.color.rgb = INK
     normal.paragraph_format.space_after = Pt(6)
-    normal.paragraph_format.line_spacing = 1.15
+    normal.paragraph_format.line_spacing = 1.25
 
     heading_tokens = {
-        "Title": (26, UNICT_BLUE, 0, 10),
-        "Heading 1": (17, UNICT_BLUE, 16, 7),
-        "Heading 2": (13, UNICT_BLUE, 12, 5),
+        "Title": (26, HEADING, 0, 10),
+        "Heading 1": (16, HEADING, 16, 6),
+        "Heading 2": (12, HEADING, 12, 4),
         "Heading 3": (11, INK, 8, 3),
     }
     for name, (size, color, before, after) in heading_tokens.items():
         style = styles[name]
-        style.font.name = "Arial"
+        style.font.name = SERIF_FONT
         style.font.size = Pt(size)
         style.font.color.rgb = color
         style.font.bold = True
         style.paragraph_format.space_before = Pt(before)
         style.paragraph_format.space_after = Pt(after)
+    # A thin rule under each top-level section heading — a scholarly touch.
+    _bottom_rule(styles["Heading 1"]._element.get_or_add_pPr())
+
+    quote = styles["Quote"]
+    quote.font.name = SERIF_FONT
+    quote.font.size = Pt(10)
+    quote.font.italic = True
+    quote.font.color.rgb = MUTED
+    quote.paragraph_format.left_indent = Inches(0.3)
+    quote.paragraph_format.space_after = Pt(4)
 
     header = section.header.paragraphs[0]
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -263,18 +286,22 @@ def _add_cover(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
     p.paragraph_format.space_before = Pt(26)
     p.paragraph_format.space_after = Pt(6)
     run = p.add_run("UNIVERSITÀ DEGLI STUDI DI CATANIA")
-    _format_run(run, size=11, color=UNICT_BLUE, bold=True)
+    _format_run(run, size=11, color=HEADING, bold=True)
 
     title = doc.add_paragraph()
     title.paragraph_format.space_before = Pt(0)
     title.paragraph_format.space_after = Pt(10)
     run = title.add_run("Valutazione della qualità del syllabus")
-    _format_run(run, size=26, color=UNICT_BLUE, bold=True)
+    _format_run(run, size=26, color=HEADING, bold=True)
 
     subtitle = doc.add_paragraph()
-    subtitle.paragraph_format.space_after = Pt(18)
+    subtitle.paragraph_format.space_after = Pt(8)
     run = subtitle.add_run(bundle.evaluation.course_name_snapshot)
     _format_run(run, size=17, color=INK, bold=True)
+
+    rule = doc.add_paragraph()
+    rule.paragraph_format.space_after = Pt(14)
+    _bottom_rule(rule._p.get_or_add_pPr(), size="12")
 
     metadata = [
         ("Corso di Studio", f"{str(bundle.cdl.code).upper()} · {bundle.cdl.name}"),
@@ -301,7 +328,7 @@ def _add_cover(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
         _format_run(label_run, size=9, color=MUTED, bold=True)
         value_run = cells[1].paragraphs[0].add_run(str(value))
         _format_run(value_run, size=10, color=INK)
-        _shade_cell(cells[0], UNICT_LIGHT_BLUE)
+        _shade_cell(cells[0], SHADE)
     _set_table_widths(table, (1.65, 4.95))
 
     note = doc.add_paragraph()
@@ -331,7 +358,7 @@ def _add_summary(doc: DocxDocument, bundle: EvaluationExportBundle) -> None:
         label_run = metrics.add_run(f"{label} ")
         _format_run(label_run, size=9, color=MUTED, bold=True)
         value_run = metrics.add_run(value)
-        _format_run(value_run, size=16, color=UNICT_BLUE, bold=True)
+        _format_run(value_run, size=16, color=HEADING, bold=True)
 
     _add_scorecard(doc, evaluation.criterion_scores)
 
@@ -355,9 +382,9 @@ def _add_scorecard(doc: DocxDocument, criterion_scores: Any) -> None:
     for idx, label in enumerate(("", "Criterio", "Punteggio", "Esito")):
         cell = table.rows[0].cells[idx]
         cell.text = label
-        _shade_cell(cell, UNICT_LIGHT_BLUE)
+        _shade_cell(cell, SHADE)
         for run in cell.paragraphs[0].runs:
-            _format_run(run, size=9, color=UNICT_BLUE, bold=True)
+            _format_run(run, size=9, color=HEADING, bold=True)
     for code in CORE_ORDER:
         score = _score_value(scores.get(code))
         label, color = _outcome_tokens(score)
@@ -365,7 +392,7 @@ def _add_scorecard(doc: DocxDocument, criterion_scores: Any) -> None:
         for cell in cells:
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
         code_run = cells[0].paragraphs[0].add_run(code)
-        _format_run(code_run, size=9.5, color=UNICT_BLUE, bold=True)
+        _format_run(code_run, size=9.5, color=HEADING, bold=True)
         name_run = cells[1].paragraphs[0].add_run(CRITERION_NAMES.get(code, code))
         _format_run(name_run, size=9.5, color=INK)
         cells[2].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -415,7 +442,8 @@ def _add_core_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> None
             continue
 
         if judgment and judgment.get("justification"):
-            doc.add_paragraph(_humanize(str(judgment["justification"])))
+            body = doc.add_paragraph(_humanize(str(judgment["justification"])))
+            body.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         evidences = judgment.get("evidences", []) if judgment else []
         rendered = _select_evidences(evidences, seen_evidence)
         if rendered:
@@ -438,7 +466,7 @@ def _add_core_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> None
                 if judgment else ""
             p = doc.add_paragraph(style="List Bullet")
             lead = p.add_run(f"{code} · {CRITERION_NAMES.get(code, code)}")
-            _format_run(lead, bold=True, color=UNICT_BLUE)
+            _format_run(lead, bold=True, color=HEADING)
             if summary:
                 p.add_run(" — ")
                 p.add_run(summary)
@@ -448,10 +476,14 @@ def _add_extended_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> 
     raw = bundle.evaluation.extended_criteria_result or {}
     if not raw:
         return
-    doc.add_heading("Criteri estesi E1-E5", level=1)
-    p = doc.add_paragraph()
-    run = p.add_run("Questi criteri non concorrono al CoreScore.")
-    _format_run(run, size=9, color=MUTED, italic=True)
+    scores = raw.get("criterion_scores") or {}
+    evaluated = [
+        code for code in EXTENDED_ORDER if _score_value(scores.get(code)) is not None
+    ]
+    # Only report extended criteria we actually evaluated; if none, omit the
+    # whole section rather than listing five "non valutabile" rows.
+    if not evaluated:
+        return
 
     agent_output = raw.get("agent_output") or {}
     judgments = {
@@ -459,27 +491,31 @@ def _add_extended_results(doc: DocxDocument, bundle: EvaluationExportBundle) -> 
         for item in agent_output.get("judgments", [])
         if isinstance(item, dict)
     }
-    scores = raw.get("criterion_scores") or {}
-    na_reasons = {
-        item.get("criterion_code"): item.get("reason")
-        for item in raw.get("na_criteria", [])
-        if isinstance(item, dict)
-    }
-    for code in EXTENDED_ORDER:
+    doc.add_heading("Criteri estesi", level=1)
+    p = doc.add_paragraph()
+    run = p.add_run(
+        "Criteri opzionali, non concorrono al CoreScore. Sono riportati solo "
+        "quelli effettivamente valutati."
+    )
+    _format_run(run, size=9, color=MUTED, italic=True)
+
+    for code in evaluated:
+        score = _score_value(scores.get(code))
         heading = doc.add_paragraph(style="Heading 2")
         heading.add_run(f"{code} · {EXTENDED_NAMES[code]}")
-        score = _score_value(scores.get(code))
         _add_outcome_run(heading, score)
         judgment = judgments.get(code)
-        if score is None:
-            p = doc.add_paragraph()
-            p.add_run("Non valutabile. ").bold = True
-            p.add_run(_humanize_na_reason(na_reasons.get(code)))
-        elif judgment:
-            doc.add_paragraph(_humanize(str(judgment.get("justification") or "—")))
-            for evidence in judgment.get("evidences") or []:
-                quote = doc.add_paragraph(style="Quote")
-                quote.add_run(f"“{_evidence_text(str(evidence.get('text', '')))}”")
+        if judgment and judgment.get("justification"):
+            body = doc.add_paragraph(_humanize(str(judgment["justification"])))
+            body.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+
+def _evaluated_extended_codes(bundle: EvaluationExportBundle) -> set[str]:
+    raw = bundle.evaluation.extended_criteria_result or {}
+    scores = raw.get("criterion_scores") or {}
+    return {
+        code for code in EXTENDED_ORDER if _score_value(scores.get(code)) is not None
+    }
 
 
 def _add_external_documents(
@@ -496,9 +532,9 @@ def _add_external_documents(
     for idx, label in enumerate(headers):
         cell = table.rows[0].cells[idx]
         cell.text = label
-        _shade_cell(cell, UNICT_LIGHT_BLUE)
+        _shade_cell(cell, SHADE)
         for run in cell.paragraphs[0].runs:
-            _format_run(run, size=9, color=UNICT_BLUE, bold=True)
+            _format_run(run, size=9, color=HEADING, bold=True)
     for item in items:
         cells = table.add_row().cells
         values = (
@@ -685,6 +721,22 @@ def _rendered_fields(syllabus: Any) -> set[str]:
     return fields
 
 
+def _add_run(paragraph: Any, text: str) -> Any:
+    """Add a run, turning embedded newlines into real Word line breaks.
+
+    A literal ``\\n`` inside a run is not a line break in Word, so multi-line
+    fields (course schedule, sample questions, …) would otherwise render as a
+    single run-on line. We split on newlines and emit ``<w:br/>`` between them.
+    """
+    run = paragraph.add_run()
+    for index, line in enumerate(text.split("\n")):
+        if index:
+            run.add_break()
+        if line:
+            run.add_text(line)
+    return run
+
+
 def _add_text_with_comments(
     doc: DocxDocument,
     paragraph: Any,
@@ -694,7 +746,7 @@ def _add_text_with_comments(
 ) -> bool:
     pending = [item for item in annotations if item.code not in added]
     if not pending:
-        paragraph.add_run(text)
+        _add_run(paragraph, text)
         return False
 
     cursor = 0
@@ -705,17 +757,17 @@ def _add_text_with_comments(
         if index < 0:
             continue
         if index > cursor:
-            paragraph.add_run(text[cursor:index])
-        target = paragraph.add_run(text[index:index + len(evidence)])
+            _add_run(paragraph, text[cursor:index])
+        target = _add_run(paragraph, text[index:index + len(evidence)])
         _highlight_annotation_run(target, annotation.score)
         _add_comment(doc, [target], annotation)
         added.add(annotation.code)
         anchored = True
         cursor = index + len(evidence)
     if cursor < len(text):
-        paragraph.add_run(text[cursor:])
+        _add_run(paragraph, text[cursor:])
     if not paragraph.runs:
-        paragraph.add_run(text)
+        _add_run(paragraph, text)
     leftovers = [item for item in pending if item.code not in added]
     if leftovers:
         target = paragraph.runs[-1]
@@ -740,6 +792,7 @@ def _add_method_note(doc: DocxDocument) -> None:
     )
     for text in notes:
         p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         _format_run(p.add_run(text), size=9, color=MUTED)
 
 
@@ -1088,6 +1141,10 @@ def _humanize(text: str) -> str:
     for field, label in _FIELD_LABELS.items():
         text = text.replace(field, label)
 
+    # Technical null placeholders that occasionally slip into prose.
+    text = re.sub(r"\bnull\b", "non disponibile", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bNone\b", "non disponibile", text)
+
     text = re.sub(r"\s+([,.;:])", r"\1", text)
     return re.sub(r"\s{2,}", " ", text).strip()
 
@@ -1118,7 +1175,7 @@ def _select_evidences(evidences: Any, seen: set[str]) -> list[str]:
         if not isinstance(evidence, dict):
             continue
         text = _evidence_text(str(evidence.get("text", "")))
-        if not text:
+        if _is_nullish(text):
             continue
         key = " ".join(text.lower().split())
         if key in seen:
@@ -1128,6 +1185,15 @@ def _select_evidences(evidences: Any, seen: set[str]) -> list[str]:
         if len(rendered) >= 3:
             break
     return rendered
+
+
+# Placeholder tokens an agent may emit for an empty/missing field. They are
+# technical noise and must never surface as an evidence quote to a reader.
+_NULLISH = {"", "null", "none", "nan", "n/a", "na", "nd", "n.d.", "-", "—", "–"}
+
+
+def _is_nullish(text: str) -> bool:
+    return text.strip().lower() in _NULLISH
 
 
 def _evidence_text(raw: str) -> str:
@@ -1177,9 +1243,9 @@ def _format_run(
     bold: bool | None = None,
     italic: bool | None = None,
 ) -> None:
-    run.font.name = "Arial"
-    run._element.get_or_add_rPr().rFonts.set(qn("w:ascii"), "Arial")
-    run._element.get_or_add_rPr().rFonts.set(qn("w:hAnsi"), "Arial")
+    run.font.name = SERIF_FONT
+    run._element.get_or_add_rPr().rFonts.set(qn("w:ascii"), SERIF_FONT)
+    run._element.get_or_add_rPr().rFonts.set(qn("w:hAnsi"), SERIF_FONT)
     if size is not None:
         run.font.size = Pt(size)
     if color is not None:
@@ -1188,6 +1254,28 @@ def _format_run(
         run.bold = bold
     if italic is not None:
         run.italic = italic
+
+
+def _bottom_rule(
+    p_pr: Any,
+    *,
+    color: str = RULE_COLOR,
+    size: str = "6",
+    space: str = "4",
+) -> None:
+    """Add a single bottom border to a paragraph/style properties element."""
+    pbdr = OxmlElement("w:pBdr")
+    bottom = OxmlElement("w:bottom")
+    bottom.set(qn("w:val"), "single")
+    bottom.set(qn("w:sz"), size)
+    bottom.set(qn("w:space"), space)
+    bottom.set(qn("w:color"), color)
+    pbdr.append(bottom)
+    p_pr.insert_element_before(
+        pbdr,
+        "w:shd", "w:tabs", "w:spacing", "w:ind", "w:jc",
+        "w:rPr", "w:sectPr", "w:pPrChange",
+    )
 
 
 def _shade_cell(cell: Any, fill: str) -> None:

@@ -13,10 +13,12 @@ from app.evaluation.docx_export import (
     EvaluationExportBundle,
     EvaluationExportNotFoundError,
     _add_comment,
+    _add_run,
     _evidence_text,
     _humanize,
     _humanize_na_reason,
     _primary_annotations,
+    _select_evidences,
     build_evaluation_docx,
     export_filename,
     load_cdl_export_bundles,
@@ -41,7 +43,7 @@ def test_build_docx_contains_evaluation_sections_and_real_comment():
     assert "Valutazione della qualità del syllabus" in text
     assert "Sintesi della valutazione" in text
     assert "Revisione dei criteri C1-C9" in text
-    assert "Criteri estesi E1-E5" in text
+    assert "Criteri estesi" in text
     assert "Syllabus annotato" in text
     assert "Note metodologiche" in text
     # The legacy synthesizer report must no longer be duplicated into the DOCX.
@@ -171,6 +173,44 @@ def test_primary_annotations_falls_back_when_source_field_is_not_rendered():
     )
     assert selected["C9"].source_field is None
     assert selected["C9"].evidence_text is None
+
+
+def test_add_run_converts_newlines_to_line_breaks():
+    doc = Document()
+    run = _add_run(doc.add_paragraph(), "1. Primo\n2. Secondo\n3. Terzo")
+    xml = run._element.xml
+    assert xml.count("<w:br/>") == 2
+    assert "Primo" in xml and "Terzo" in xml
+
+
+def test_select_evidences_drops_null_placeholders():
+    out = _select_evidences(
+        [
+            {"text": "null"},
+            {"text": "None"},
+            {"text": ""},
+            {"text": "  N/A "},
+            {"text": "Contenuto reale del syllabus"},
+        ],
+        set(),
+    )
+    assert out == ["Contenuto reale del syllabus"]
+
+
+def test_extended_section_hidden_when_no_criterion_evaluated():
+    bundle = _synthetic_bundle()
+    bundle.evaluation.extended_criteria_result = {
+        "criterion_scores": {code: None for code in ("E1", "E2", "E3", "E4", "E5")},
+        "na_criteria": [
+            {"criterion_code": "E1", "reason": "no indexed document enabled for E1"},
+        ],
+        "agent_output": {"judgments": []},
+    }
+
+    doc = Document(BytesIO(build_evaluation_docx(bundle)))
+    text = "\n".join(p.text for p in doc.paragraphs)
+    assert "Criteri estesi" not in text
+    assert "Non valutabile" not in text
 
 
 def test_evidence_text_unpacks_schedule_json_dump():
