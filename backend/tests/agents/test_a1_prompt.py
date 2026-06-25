@@ -38,7 +38,7 @@ def _agent_input(syllabus_data: dict | None = None) -> AgentInput:
 
 
 def test_prompt_block_order():
-    """Blocks appear in the order: BASE -> A1_SPEC -> SPECS -> SYLLABUS -> RAG -> SCHEMA -> closing."""
+    """Blocks: BASE -> A1_SPEC -> SPECS -> SYLLABUS -> PRECHECK -> RAG -> SCHEMA -> closing."""
     prompt = build_a1_prompt(_agent_input())
 
     markers_in_order = [
@@ -46,6 +46,7 @@ def test_prompt_block_order():
         "AGENTE DI COMPLETEZZA DOCUMENTALE (A1)",          # A1_SPEC
         "SPECIFICHE CRITERI:",                             # SPECS (structured)
         "DATI DEL SYLLABUS DA VALUTARE:",                  # SYLLABUS
+        "PRE-CHECK DETERMINISTICO COPERTURA INGLESE (per C2):",  # PRECHECK (a1_v7)
         "CONTESTO NORMATIVO RECUPERATO VIA RAG:",          # RAG
         "SCHEMA OUTPUT JSON",                              # SCHEMA
         "Rispondi ora esclusivamente con il JSON valido",  # closing
@@ -100,7 +101,10 @@ def test_prompt_uses_course_name_en_for_english_title_boundary():
     )
 
     assert "course_name_en" in prompt
-    assert "NON dedurre che il titolo inglese manchi" in prompt
+    # a1_v7: the deterministic english_coverage pre-check recognises the EN
+    # title from course_name_en (title_en=true), replacing the old free-text
+    # "NON dedurre che il titolo inglese manchi" instruction.
+    assert '"title_en": true' in prompt
     assert "OPTIMIZATION" in prompt
 
 
