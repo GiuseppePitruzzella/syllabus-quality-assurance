@@ -60,6 +60,8 @@ const STANDALONE_NUMBER_MARKER = /^\d+[.)]$/;
 const STANDALONE_BULLET_MARKER = /^[·•]$/;
 const SENTENCE_BOUNDARY = /[.!?;:…]["'»”’)]?$/;
 const OPENING_PUNCTUATION = new Set(["(", "[", "{", '"', "'", "«", "“", "‘"]);
+const ITALIAN_ONE_LETTER_WORDS = new Set(["a", "e", "i", "o"]);
+const SPLIT_A_WORD_CONTINUATION = /^nalis/i;
 
 /**
  * Reconstruct readable syllabus paragraphs from scraper text.
@@ -122,7 +124,9 @@ export function syllabusProseParagraphs(
     }
   }
 
-  if (pendingMarker) current = pendingMarker;
+  // A terminal marker such as "2." commonly leaks from the next Dublin
+  // descriptor during parsing. Without following content it is not a list
+  // item and must not be rendered.
   flush();
   return paragraphs;
 }
@@ -139,7 +143,12 @@ function joinSyllabusLines(previous: string, next: string): string {
   const touchesParenthesis =
     OPENING_PUNCTUATION.has(previous.charAt(previous.length - 1)) ||
     /^[)\]}.,;:!?»”’]/.test(next);
+  const isWordFragment =
+    lastToken.length === 1 &&
+    firstCharacter !== "" &&
+    (!ITALIAN_ONE_LETTER_WORDS.has(lastToken.toLowerCase()) ||
+      (lastToken.toLowerCase() === "a" && SPLIT_A_WORD_CONTINUATION.test(next)));
   const separator =
-    touchesParenthesis || (lastToken.length === 1 && firstCharacter) ? "" : " ";
+    touchesParenthesis || isWordFragment ? "" : " ";
   return `${previous}${separator}${next}`;
 }

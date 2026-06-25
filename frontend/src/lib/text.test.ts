@@ -103,6 +103,26 @@ describe("syllabusProseParagraphs", () => {
     ]);
   });
 
+  it("drops a dangling next-item marker left by Dublin parsing", () => {
+    expect(
+      syllabusProseParagraphs(
+        "Lo studente conoscerà i principali design pattern: 2PL, Saga.\n2.",
+      ),
+    ).toEqual([
+      "Lo studente conoscerà i principali design pattern: 2PL, Saga.",
+    ]);
+  });
+
+  it("keeps Italian one-letter words separated across soft line breaks", () => {
+    expect(
+      syllabusProseParagraphs(
+        "sistemi distribuiti adottando i\npattern studiati e\nutilizzando RabbitMQ.",
+      ),
+    ).toEqual([
+      "sistemi distribuiti adottando i pattern studiati e utilizzando RabbitMQ.",
+    ]);
+  });
+
   it("joins split URLs and removes standalone punctuation artefacts", () => {
     expect(
       syllabusProseParagraphs(
