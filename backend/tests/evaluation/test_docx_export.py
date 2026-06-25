@@ -213,6 +213,14 @@ def test_extended_section_hidden_when_no_criterion_evaluated():
     assert "Non valutabile" not in text
 
 
+def test_evidence_text_collapses_embedded_newlines():
+    out = _evidence_text(
+        "Knowledge and understanding\n: the aim\nof the course."
+    )
+    assert "\n" not in out
+    assert out == "Knowledge and understanding : the aim of the course."
+
+
 def test_evidence_text_unpacks_schedule_json_dump():
     raw = (
         '[{"numero": "1", "argomenti": "Intro", "riferimenti_testi": "Cap. 1"}, '

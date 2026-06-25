@@ -1197,7 +1197,13 @@ def _is_nullish(text: str) -> bool:
 
 
 def _evidence_text(raw: str) -> str:
-    """Render a raw evidence quote, unpacking schedule-JSON dumps."""
+    """Render a raw evidence quote, unpacking schedule-JSON dumps.
+
+    Whitespace is collapsed to single spaces so the quote flows as one inline
+    sentence: scraped syllabi embed ``\\n`` (e.g. between Dublin descriptor
+    labels), and python-docx turns each one into a hard ``<w:br/>``, which made
+    quotes break mid-sentence.
+    """
     text = (raw or "").strip()
     looks_like_schedule = text.startswith("[") and any(
         token in text for token in ('"argomenti"', '"numero"', '"subjects"', '"subject"')
@@ -1211,7 +1217,7 @@ def _evidence_text(raw: str) -> str:
             readable = _schedule_text(data)
             if readable:
                 text = readable.replace("\n", " · ")
-    return text
+    return " ".join(text.split())
 
 
 def _truncate(text: str, limit: int) -> str:
