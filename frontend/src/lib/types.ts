@@ -232,6 +232,7 @@ export interface CriterionDistribution {
 export interface ResultsEvaluationRow {
   evaluation_uuid: string;
   syllabus_seuid: string;
+  cdl_id: number;
   course_name: string;
   cdl_name: string | null;
   cdl_code: string | null;

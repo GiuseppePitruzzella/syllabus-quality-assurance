@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -9,12 +9,22 @@ import {
   CircleDashed,
   ClipboardCheck,
   FileText,
+  Download,
   MinusCircle,
   TrendingUp,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/layout/Section";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -24,7 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CORE_CRITERIA } from "@/data/rubric";
-import { getResultsSummary } from "@/lib/api";
+import { downloadCdlEvaluationsZip, getResultsSummary } from "@/lib/api";
 import type {
   CriterionDistribution,
   EvaluationStatus,
@@ -35,6 +45,8 @@ import type {
 const criterionMeta = new Map(CORE_CRITERIA.map((item) => [item.code, item]));
 
 export function ResultsPage() {
+  const [selectedCdlId, setSelectedCdlId] = useState<number | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["results-summary"],
     queryFn: getResultsSummary,
@@ -61,6 +73,23 @@ export function ResultsPage() {
   }
 
   const hasEvaluations = data.overview.latest_evaluations_count > 0;
+  const cdlOptions = uniqueCdlOptions(data.evaluations);
+  const effectiveCdlId = selectedCdlId ?? cdlOptions[0]?.id ?? null;
+
+  async function handleCdlExport() {
+    if (effectiveCdlId === null) return;
+    setIsExporting(true);
+    try {
+      await downloadCdlEvaluationsZip(effectiveCdlId);
+      toast.success("Archivio Word del CdS preparato.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Esportazione non riuscita.",
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-[1600px] space-y-8">
@@ -73,6 +102,45 @@ export function ResultsPage() {
           <span className="text-xs text-slate-500">
             Ultimo aggiornamento: {formatDateTime(data.generated_at)}
           </span>
+        }
+        actions={
+          hasEvaluations ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <Select
+                value={effectiveCdlId === null ? null : String(effectiveCdlId)}
+                onValueChange={(value) => {
+                  setSelectedCdlId(value === null ? null : Number(value));
+                }}
+              >
+                <SelectTrigger
+                  aria-label="Corso di Studio da esportare"
+                  className="h-9 min-w-64 rounded-none border-x-0 border-t-0 border-b border-slate-300 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                >
+                  <SelectValue placeholder="Seleziona un CdS" />
+                </SelectTrigger>
+                <SelectContent className="rounded-none">
+                  {cdlOptions.map((option) => (
+                    <SelectItem
+                      key={option.id}
+                      value={String(option.id)}
+                      className="rounded-none"
+                    >
+                      {option.code ? `${option.code} · ` : ""}
+                      {option.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                onClick={handleCdlExport}
+                disabled={effectiveCdlId === null || isExporting}
+              >
+                <Download className="h-4 w-4" aria-hidden />
+                {isExporting ? "Preparazione…" : "Esporta per CdS"}
+              </Button>
+            </div>
+          ) : null
         }
       />
 
@@ -87,6 +155,22 @@ export function ResultsPage() {
         </>
       )}
     </div>
+  );
+}
+
+function uniqueCdlOptions(rows: ResultsEvaluationRow[]) {
+  const options = new Map<number, { id: number; code: string | null; name: string }>();
+  for (const row of rows) {
+    if (!options.has(row.cdl_id)) {
+      options.set(row.cdl_id, {
+        id: row.cdl_id,
+        code: row.cdl_code,
+        name: row.cdl_name ?? "CdS non disponibile",
+      });
+    }
+  }
+  return Array.from(options.values()).sort((a, b) =>
+    `${a.code ?? ""} ${a.name}`.localeCompare(`${b.code ?? ""} ${b.name}`, "it"),
   );
 }
 

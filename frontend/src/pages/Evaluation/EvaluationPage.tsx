@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Circle } from "lucide-react";
+import { ArrowLeft, Circle, Download } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useEvaluationStream } from "@/hooks/useEvaluationStream";
-import { getEvaluation } from "@/lib/api";
+import { downloadEvaluationDocx, getEvaluation } from "@/lib/api";
 import type { EvaluationDetail, EvaluationStatus } from "@/lib/types";
 
 import { AnnotatedSyllabus } from "./AnnotatedSyllabus";
@@ -144,6 +145,22 @@ function Header({
   const durationSec =
     typeof data.duration_ms === "number" ? data.duration_ms / 1000 : null;
   const { technical } = useTechnicalView();
+  const [isExporting, setIsExporting] = useState(false);
+  const canExport = data.status === "completed" || data.status === "partial";
+
+  async function handleExport() {
+    setIsExporting(true);
+    try {
+      await downloadEvaluationDocx(data.evaluation_uuid);
+      toast.success("Documento Word preparato.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Esportazione non riuscita.",
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  }
 
   return (
     <header className="space-y-7 pb-2">
@@ -170,15 +187,26 @@ function Header({
         ) : null}
       </div>
 
-      <div className="max-w-5xl">
-        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
-          <StatusText status={data.status} isLive={isLive} />
-          {startedAt ? <span>Avviata il {formatDateTime(startedAt)}</span> : null}
-          {durationSec != null ? <span>{durationSec.toFixed(1)} s</span> : null}
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div className="max-w-5xl">
+          <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
+            <StatusText status={data.status} isLive={isLive} />
+            {startedAt ? <span>Avviata il {formatDateTime(startedAt)}</span> : null}
+            {durationSec != null ? <span>{durationSec.toFixed(1)} s</span> : null}
+          </div>
+          <h1 className="text-3xl font-semibold leading-tight text-slate-950 md:text-5xl">
+            {data.course_name_snapshot}
+          </h1>
         </div>
-        <h1 className="text-3xl font-semibold leading-tight text-slate-950 md:text-5xl">
-          {data.course_name_snapshot}
-        </h1>
+        <Button
+          variant="outline"
+          onClick={handleExport}
+          disabled={!canExport || isExporting}
+          title={!canExport ? "Disponibile per valutazioni completate o parziali" : undefined}
+        >
+          <Download className="h-4 w-4" aria-hidden />
+          {isExporting ? "Preparazione…" : "Esporta DOCX"}
+        </Button>
       </div>
 
       {data.status === "failed" && data.error_message ? (
