@@ -1,0 +1,90 @@
+[
+  {
+    "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+    "slug": "01_COMPUTER_VISION_LAB",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": true
+    },
+    "suggested_c2": 2
+  },
+  {
+    "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+    "slug": "02_INTERNET_OF_THINGS",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": false,
+      "course_content_en": false,
+      "assessment_methods_en": false
+    },
+    "suggested_c2": 0
+  },
+  {
+    "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+    "slug": "03_PEER_TO_PEER_LAB",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": false
+    },
+    "suggested_c2": 1
+  },
+  {
+    "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+    "slug": "04_MULTIMEDIA_LAB",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": true
+    },
+    "suggested_c2": 2
+  },
+  {
+    "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+    "slug": "05_COMPUTER_VISION",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": false
+    },
+    "suggested_c2": 1
+  },
+  {
+    "seuid": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+    "slug": "06_OTTIMIZZAZIONE",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": true
+    },
+    "suggested_c2": 2
+  },
+  {
+    "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+    "slug": "07_DEEP_LEARNING",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": true
+    },
+    "suggested_c2": 2
+  },
+  {
+    "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+    "slug": "08_VULN_ASSESSMENT_PT",
+    "coverage": {
+      "title_en": true,
+      "learning_outcomes_en": true,
+      "course_content_en": true,
+      "assessment_methods_en": true
+    },
+    "suggested_c2": 2
+  }
+]

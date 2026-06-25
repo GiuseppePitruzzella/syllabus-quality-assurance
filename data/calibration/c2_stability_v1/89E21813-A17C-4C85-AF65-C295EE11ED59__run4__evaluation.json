@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "05_COMPUTER_VISION",
+  "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+  "run_index": 4,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 1,
+    "C5": 1,
+    "C3": 2,
+    "C4": 2,
+    "C6": 1,
+    "C7": 2,
+    "C8": 1,
+    "C9": 1
+  },
+  "core_score": 1.44,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 70118
+}

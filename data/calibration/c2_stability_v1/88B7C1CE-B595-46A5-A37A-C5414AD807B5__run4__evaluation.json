@@ -1,0 +1,23 @@
+{
+  "phase": "self_consistency",
+  "slug": "01_COMPUTER_VISION_LAB",
+  "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+  "run_index": 4,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 2,
+    "C5": 1,
+    "C3": 1,
+    "C4": 1,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 1
+  },
+  "core_score": 1.56,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 94666
+}
