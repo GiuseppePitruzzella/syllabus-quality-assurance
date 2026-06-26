@@ -256,8 +256,8 @@ def test_document_metadata_unknown_doc_returns_safe_defaults():
 # ---------------------------------------------------------------------------
 
 
-def test_real_rules_yaml_loads_and_covers_8_documents():
-    """The committed tagging_rules.yaml is well-formed and covers all docs."""
+def test_real_rules_yaml_loads_and_covers_7_active_documents():
+    """The committed tagging_rules.yaml is well-formed and covers active docs."""
     project_root = Path(__file__).resolve().parents[3]
     rules_path = project_root / "data" / "tagging_rules.yaml"
     if not rules_path.exists():
@@ -271,7 +271,6 @@ def test_real_rules_yaml_loads_and_covers_8_documents():
         "dm1154",
         "lgsua_cds",
         "matrice_tuning",
-        "lg_cpds_unict",
         "cpds_unict",
     }
     assert set(rules.documents()) == expected_docs

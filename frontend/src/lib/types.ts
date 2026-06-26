@@ -263,6 +263,28 @@ export interface ResultsSummary {
 }
 
 // ---------------------------------------------------------------------------
+// Normative corpus — fixed CoreScore sources
+// ---------------------------------------------------------------------------
+
+export type CoreAgentCode = "A1" | "A2" | "A3" | "A4";
+
+export interface NormativeCorpusDocument {
+  document_id: string;
+  title: string;
+  version: string;
+  source_type: string;
+  priority: number;
+  filename: string;
+  file_hash: string;
+  file_size: number;
+  chunk_count: number;
+  core_chunk_count: number;
+  core_criteria: CoreCriterionCode[];
+  agents: CoreAgentCode[];
+  is_core_source: boolean;
+}
+
+// ---------------------------------------------------------------------------
 // Phase 9.D.1 — Extended-criteria (E1-E5) payloads (mirror of
 // app/schemas/evaluation.py)
 // ---------------------------------------------------------------------------

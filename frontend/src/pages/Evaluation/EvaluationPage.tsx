@@ -14,6 +14,7 @@ import { EvaluationProgressTimeline } from "./EvaluationProgressTimeline";
 import { EvaluationScorePanel } from "./EvaluationScorePanel";
 import { ExtendedCriteriaResults } from "./ExtendedCriteriaResults";
 import { ExternalDocumentsUsed } from "./ExternalDocumentsUsed";
+import { NormativeCorpusUsed } from "./NormativeCorpusUsed";
 import { PriorityStrip } from "./PriorityStrip";
 import { TechnicalBlock } from "./TechnicalBlock";
 import { SyntheticVerdict } from "@/components/SyntheticVerdict";
@@ -100,6 +101,7 @@ export function EvaluationPage() {
           <AnnotatedSyllabus data={data} />
           <EvaluationScorePanel data={data} />
           <ExtendedCriteriaResults data={data} />
+          <NormativeCorpusUsed />
           <ExternalDocumentsUsed data={data} />
         </div>
       ) : (
@@ -110,6 +112,7 @@ export function EvaluationPage() {
             <AnnotatedSyllabus data={data} />
             <EvaluationScorePanel data={data} />
             <ExtendedCriteriaResults data={data} />
+            <NormativeCorpusUsed />
             <ExternalDocumentsUsed data={data} />
           </div>
 
