@@ -1,0 +1,118 @@
+{
+  "experiment": "perturbation_sensitivity_v1",
+  "datetime": "2026-06-26T21:17:10.678965+00:00",
+  "git": {
+    "commit": "46ef8f1078c88961fd4b704c7406f3df5fab73b7",
+    "branch": "feature/perturbation-sensitivity-test",
+    "dirty": true
+  },
+  "base_seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+  "n_runs": 3,
+  "variants": [
+    {
+      "id": "C1_remove_sections",
+      "target_criteria": [
+        "C1"
+      ],
+      "primary_target": "C1",
+      "expected_direction": "decrease",
+      "description": "Svuota 3 sezioni obbligatorie (metodi didattici, frequenza, riferimenti).",
+      "plausible_coupling": [
+        "C7",
+        "C8",
+        "C9"
+      ]
+    },
+    {
+      "id": "C2_strip_english",
+      "target_criteria": [
+        "C2"
+      ],
+      "primary_target": "C2",
+      "expected_direction": "decrease",
+      "description": "Svuota i campi EN rilevanti (titolo, risultati, descrittori, contenuti, verifica).",
+      "plausible_coupling": [
+        "C1"
+      ]
+    },
+    {
+      "id": "C3C4_generic_outcomes",
+      "target_criteria": [
+        "C3",
+        "C4"
+      ],
+      "primary_target": "C3",
+      "expected_direction": "decrease",
+      "description": "Rende i risultati di apprendimento generici, corso-centrici e ripetitivi.",
+      "plausible_coupling": [
+        "C8"
+      ]
+    },
+    {
+      "id": "C5_blank_prerequisites",
+      "target_criteria": [
+        "C5"
+      ],
+      "primary_target": "C5",
+      "expected_direction": "decrease",
+      "description": "Sostituisce i prerequisiti con 'Prerequisiti non indicati'.",
+      "plausible_coupling": [
+        "C1"
+      ]
+    },
+    {
+      "id": "C6_strip_assessment",
+      "target_criteria": [
+        "C6"
+      ],
+      "primary_target": "C6",
+      "expected_direction": "decrease",
+      "description": "Rimuove griglia/fasce/criteri/pesi/esempi dalla verifica.",
+      "plausible_coupling": [
+        "C1",
+        "C8"
+      ]
+    },
+    {
+      "id": "C7_remove_schedule",
+      "target_criteria": [
+        "C7"
+      ],
+      "primary_target": "C7",
+      "expected_direction": "decrease",
+      "description": "Rimuove la programmazione del corso (schedule); appiattisce eventuali contenuti strutturati.",
+      "plausible_coupling": [
+        "C1",
+        "C8"
+      ]
+    },
+    {
+      "id": "C9_editorial_noise",
+      "target_criteria": [
+        "C9"
+      ],
+      "primary_target": "C9",
+      "expected_direction": "decrease",
+      "description": "Inietta refusi, marker tecnici e formattazione sporca nei campi IT.",
+      "plausible_coupling": []
+    }
+  ],
+  "scientific_config": {
+    "llm_model": "gemini-2.5-flash",
+    "llm_temperature": 0.1,
+    "llm_max_output_tokens": 8192,
+    "embedding_model": "gemini-embedding-001",
+    "embedding_output_dimensionality": 3072,
+    "rag_top_k": 5,
+    "rag_final_k": 3,
+    "rag_similarity_threshold": 0.6
+  },
+  "prompt_versions": {
+    "A1": "a1_v7",
+    "A2": "a2_v1",
+    "A3": "a3_v1",
+    "A4": "a4_v10",
+    "A5": "a5_v1"
+  },
+  "output_dir": "/Users/giuseppepitruzzella/syllabus-quality-assurance/data/calibration/perturbation_sensitivity_v1"
+}
