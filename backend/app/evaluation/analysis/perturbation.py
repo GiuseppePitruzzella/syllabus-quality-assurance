@@ -10,9 +10,12 @@ Spec: docs/superpowers/specs/2026-06-26-perturbation-sensitivity-test-design.md
 from __future__ import annotations
 
 import copy
+import statistics
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
+
+from pydantic import BaseModel
 
 Snapshot = dict[str, Any]
 PerturbFn = Callable[[Snapshot], Snapshot]
@@ -184,3 +187,67 @@ def generate_variants(
 ) -> dict[str, Snapshot]:
     """Return {variant_id: perturbed snapshot}. The base is left untouched."""
     return {p.id: p.apply(base_snapshot) for p in perturbations}
+
+
+class TargetVerdict(BaseModel):
+    criterion: str
+    base_mean: float | None
+    base_range: float | None
+    pert_mean: float | None
+    pert_range: float | None
+    delta: float | None
+    expected_direction: str
+    noise_floor: float | None
+    verdict: str   # PASS | WEAK | FAIL | TARGET_BECAME_NA | insufficient_base_data
+    passed: bool
+
+
+def _mean_range(scores: list[int | None]) -> tuple[float | None, float | None, int]:
+    numeric = [s for s in scores if s is not None]
+    if not numeric:
+        return None, None, 0
+    rng = float(max(numeric) - min(numeric))
+    return round(statistics.mean(numeric), 4), rng, len(numeric)
+
+
+def classify_verdict(
+    criterion: str,
+    base_scores: list[int | None],
+    pert_scores: list[int | None],
+    expected_direction: str = "decrease",
+    min_delta: float = 0.5,
+) -> TargetVerdict:
+    """Three-way verdict for one target criterion using the base run-to-run
+    range as an empirical noise floor.
+
+    PASS  : correct direction AND |delta| >= min_delta AND |delta| > base_range.
+    WEAK  : correct direction AND |delta| >= min_delta but within base noise.
+    FAIL  : wrong direction OR |delta| < min_delta.
+    Special: TARGET_BECAME_NA (>=2 of 3 variant runs NA),
+             insufficient_base_data (<2 valid base runs).
+    """
+    base_mean, base_range, n_base = _mean_range(base_scores)
+    pert_mean, pert_range, n_pert = _mean_range(pert_scores)
+    n_pert_na = len(pert_scores) - n_pert
+
+    delta: float | None = None
+    if n_base < 2 or base_mean is None:
+        verdict, passed = "insufficient_base_data", False
+    elif n_pert_na >= 2:
+        verdict, passed = "TARGET_BECAME_NA", False
+    else:
+        delta = round(pert_mean - base_mean, 4)
+        correct = delta < 0 if expected_direction == "decrease" else delta > 0
+        if not correct or abs(delta) < min_delta:
+            verdict, passed = "FAIL", False
+        elif abs(delta) > base_range:
+            verdict, passed = "PASS", True
+        else:
+            verdict, passed = "WEAK", False
+
+    return TargetVerdict(
+        criterion=criterion, base_mean=base_mean, base_range=base_range,
+        pert_mean=pert_mean, pert_range=pert_range, delta=delta,
+        expected_direction=expected_direction, noise_floor=base_range,
+        verdict=verdict, passed=passed,
+    )
