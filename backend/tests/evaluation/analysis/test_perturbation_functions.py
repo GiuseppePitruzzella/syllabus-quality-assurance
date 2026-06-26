@@ -44,7 +44,7 @@ def test_registry_has_seven_perturbations_with_unique_ids():
     assert ids == [
         "C1_remove_sections", "C2_strip_english", "C3C4_generic_outcomes",
         "C5_blank_prerequisites", "C6_strip_assessment",
-        "C7_destructure_content", "C9_editorial_noise",
+        "C7_remove_schedule", "C9_editorial_noise",
     ]
     assert len(set(ids)) == 7
     assert all(p.expected_direction == "decrease" for p in PERTURBATIONS)
@@ -99,7 +99,7 @@ def test_c6_strips_grid_and_blanks_sample_questions():
 
 
 def test_c7_empties_schedule_and_flattens_content():
-    out = perturbation_by_id("C7_destructure_content").apply(_base())
+    out = perturbation_by_id("C7_remove_schedule").apply(_base())
     assert out["schedule_it"] == []
     assert out["schedule_en"] == []
     assert "\n" not in out["course_content_it"]  # flattened blob

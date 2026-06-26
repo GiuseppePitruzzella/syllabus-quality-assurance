@@ -119,7 +119,7 @@ def perturb_c6_strip_assessment(snap: Snapshot) -> Snapshot:
     )
 
 
-def perturb_c7_destructure_content(snap: Snapshot) -> Snapshot:
+def perturb_c7_remove_schedule(snap: Snapshot) -> Snapshot:
     out = copy.deepcopy(snap)
     out["schedule_it"] = []
     out["schedule_en"] = []
@@ -165,9 +165,10 @@ PERTURBATIONS: tuple[Perturbation, ...] = (
         (), perturb_c6_strip_assessment,
     ),
     Perturbation(
-        "C7_destructure_content", ("C7",), "decrease",
-        "Svuota la programmazione (schedule) e appiattisce i contenuti.",
-        ("C8",), perturb_c7_destructure_content,
+        "C7_remove_schedule", ("C7",), "decrease",
+        "Rimuove la programmazione del corso (schedule); "
+        "appiattisce eventuali contenuti strutturati.",
+        ("C8",), perturb_c7_remove_schedule,
     ),
     Perturbation(
         "C9_editorial_noise", ("C9",), "decrease",
