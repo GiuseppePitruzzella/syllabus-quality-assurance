@@ -17,6 +17,7 @@ import type {
   AuthUser,
   RegisterableUserRole,
   ResultsSummary,
+  NormativeCorpusDocument,
   UserRole,
 } from "./types";
 
@@ -274,6 +275,9 @@ export const listEvaluationsForSyllabus = (seuid: string, limit?: number) => {
  */
 export const getResultsSummary = () =>
   fetchApi<ResultsSummary>("/results/summary");
+
+export const listNormativeCorpusDocuments = () =>
+  fetchApi<NormativeCorpusDocument[]>("/normative-corpus/documents");
 
 export const downloadEvaluationDocx = (evaluationUuid: string) =>
   downloadApiFile(

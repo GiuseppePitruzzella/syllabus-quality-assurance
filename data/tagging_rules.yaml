@@ -331,34 +331,6 @@ documents:
         agent_tags: ["A2"]
         note: "Appendice Dublin: soft skill (Quadro A4.c), competenze trasversali e RA."
 
-  # === lg_cpds_unict ====================================================
-  # Linee guida UniCT per la compilazione della Relazione annuale CPDS.
-  # Procedurali per le CPDS, di scarso utilizzo nella valutazione del
-  # syllabus singolo. Tutto escluso salvo eventuale riferimento
-  # operativo per chunks rari.
-  lg_cpds_unict:
-    document_title: "Linee Guida CPDS UniCT"
-    document_version: "3.0_novembre_2025"
-    source_type: "documento_cpds"
-    document_priority: 3
-    excluded_sections:
-      - "indice"
-      - "lista_degli_acronimi"
-      - "1"
-      - "2"
-      - "3"
-      - "4"
-      - "5"
-      - "componenti_cpds"
-      - "sezione_i__parte"
-      - "sezione_iii__valutazioni"
-      - "sezione_iv__appendice"
-    section_tags:
-      "sezione_ii__analisi":
-        criterion_tags: []
-        agent_tags: []
-        note: "Analisi dei CdS: livello CdS, non syllabus."
-
   # === cpds_unict =======================================================
   # Istruzioni operative CPDS: descrive i Quadri A-F della relazione
   # annuale. Quadro B (materiali didattici) e Quadro C (metodi
