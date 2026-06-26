@@ -1,0 +1,878 @@
+{
+  "phase": "5.8_expert_feedback_analysis_v1",
+  "evaluator_id": "expert_01",
+  "human_data": {
+    "syllabi_received": 8,
+    "complete_syllabi": 7,
+    "missing_syllabi": [
+      "08_VULN_ASSESSMENT_PT"
+    ]
+  },
+  "c3_c4_overlap": {
+    "validation_lm18": {
+      "n_pairs": 30,
+      "exact_agreement_count": 23,
+      "exact_agreement_rate": 0.767,
+      "kappa_linear_weighted": 0.234,
+      "mae": 0.233,
+      "both_score_2": 21,
+      "c3_distribution": {
+        "1": 7,
+        "2": 23
+      },
+      "c4_distribution": {
+        "1": 4,
+        "2": 26
+      },
+      "divergent_cases": [
+        {
+          "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+          "course_name": "MULTIMEDIA E LABORATORIO",
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+          "course_name": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+          "c3": 2,
+          "c4": 1
+        },
+        {
+          "seuid": "414654A5-811B-4AAB-9031-836CC788F119",
+          "course_name": "Deep Learning",
+          "c3": 2,
+          "c4": 1
+        },
+        {
+          "seuid": "D5CD7C87-9BF4-4E65-9101-A58FB1522C97",
+          "course_name": "MULTIMEDIA E LABORATORIO",
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+          "course_name": "COMPUTER VISION",
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+          "course_name": "COMPUTER VISION E LABORATORIO",
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+          "course_name": "COMPUTER VISION E LABORATORIO",
+          "c3": 1,
+          "c4": 2
+        }
+      ]
+    },
+    "self_consistency": {
+      "n_pairs": 40,
+      "exact_agreement_count": 30,
+      "exact_agreement_rate": 0.75,
+      "kappa_linear_weighted": 0.32,
+      "mae": 0.25,
+      "both_score_2": 27,
+      "c3_distribution": {
+        "0": 1,
+        "1": 10,
+        "2": 29
+      },
+      "c4_distribution": {
+        "1": 6,
+        "2": 34
+      },
+      "divergent_cases": [
+        {
+          "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+          "course_name": "05_COMPUTER_VISION",
+          "run_index": 4,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "course_name": "02_INTERNET_OF_THINGS",
+          "run_index": 5,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+          "course_name": "04_MULTIMEDIA_LAB",
+          "run_index": 2,
+          "c3": 2,
+          "c4": 1
+        },
+        {
+          "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "course_name": "02_INTERNET_OF_THINGS",
+          "run_index": 1,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "course_name": "02_INTERNET_OF_THINGS",
+          "run_index": 4,
+          "c3": 0,
+          "c4": 1
+        },
+        {
+          "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+          "course_name": "01_COMPUTER_VISION_LAB",
+          "run_index": 1,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+          "course_name": "04_MULTIMEDIA_LAB",
+          "run_index": 3,
+          "c3": 2,
+          "c4": 1
+        },
+        {
+          "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "course_name": "02_INTERNET_OF_THINGS",
+          "run_index": 3,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+          "course_name": "01_COMPUTER_VISION_LAB",
+          "run_index": 2,
+          "c3": 1,
+          "c4": 2
+        },
+        {
+          "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "course_name": "02_INTERNET_OF_THINGS",
+          "run_index": 2,
+          "c3": 1,
+          "c4": 2
+        }
+      ]
+    },
+    "interpretation": "High raw agreement is dominated by ceiling scores and does not establish construct equivalence. Divergent cases support keeping C3 and C4 as separate subdimensions of learning outcomes."
+  },
+  "c5_sensitivity": {
+    "historical_a1_v5": {
+      "n_observations": 7,
+      "n_primary_pairs": 7,
+      "n_excluded_na": 0,
+      "n_excluded_missing": 0,
+      "kappa_linear_weighted": 0.0,
+      "accuracy": 0.571,
+      "mae": 0.429
+    },
+    "relaxed_a1_v6_modal": {
+      "n_observations": 7,
+      "n_primary_pairs": 7,
+      "n_excluded_na": 0,
+      "n_excluded_missing": 0,
+      "kappa_linear_weighted": 0.276,
+      "accuracy": 0.571,
+      "mae": 0.429
+    },
+    "interpretation": "The historical comparison remains valid. The relaxed rule is a counterfactual sensitivity analysis, not a replacement of the blind human scores."
+  },
+  "c6_machine_vs_human": {
+    "invalid_numeric_comparison": {
+      "n_observations": 7,
+      "n_primary_pairs": 7,
+      "n_excluded_na": 0,
+      "n_excluded_missing": 0,
+      "kappa_linear_weighted": -0.312,
+      "accuracy": 0.143,
+      "mae": 0.857
+    },
+    "self_consistency": {
+      "criterion": "C6",
+      "n_items": 8,
+      "unanimity_rate": 1.0,
+      "mean_stdev": 0.0,
+      "flip_rate": 0.0,
+      "max_swing": 0,
+      "na_flip_count": 0
+    },
+    "interpretation": "C6 is perfectly stable intra-system, but the human instrument measured RA-content mapping while the system measured assessment transparency. Stability cannot establish validity."
+  },
+  "c7_sensitivity": {
+    "observed": {
+      "n_observations": 7,
+      "n_primary_pairs": 7,
+      "n_excluded_na": 0,
+      "n_excluded_missing": 0,
+      "kappa_linear_weighted": 0.054,
+      "accuracy": 0.286,
+      "mae": 0.714
+    },
+    "narrow_counterfactual": {
+      "n_observations": 7,
+      "n_primary_pairs": 7,
+      "n_excluded_na": 0,
+      "n_excluded_missing": 0,
+      "kappa_linear_weighted": 0.125,
+      "accuracy": 0.429,
+      "mae": 0.571
+    },
+    "reason_categories": {
+      "block_or_module_structure": 1,
+      "insufficient_detail": 1,
+      "narrative_form": 3,
+      "no_written_reason": 1,
+      "other": 1
+    },
+    "interpretation": "Only the score explicitly tied to the block-vs-discursive instruction conflict is changed in the narrow sensitivity. Original expert scores remain untouched."
+  },
+  "local_requirements_scan": {
+    "n_syllabi": 30,
+    "counts": {
+      "mixed_distance_clause": 28,
+      "cinap_dsa_clause": 26,
+      "telematic_assessment_clause": 23,
+      "grading_grid_complete": 16,
+      "schedule_present": 29,
+      "schedule_topics_complete": 29,
+      "schedule_references_any": 28,
+      "schedule_references_complete": 27
+    },
+    "per_syllabus": [
+      {
+        "seuid": "C4EC1456-0EAA-4027-8124-DE01362473AB",
+        "course_name": "ALGORITMI E COMPLESSITA'",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 10,
+        "schedule_topic_count": 10,
+        "schedule_reference_count": 10,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "3ED4B3BB-D25C-4EA3-BC50-14A310BEF4FF",
+        "course_name": "Advanced Computer Graphics",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": false,
+        "schedule_entries": 0,
+        "schedule_topic_count": 0,
+        "schedule_reference_count": 0,
+        "schedule_topics_complete": false,
+        "schedule_references_any": false,
+        "schedule_references_complete": false
+      },
+      {
+        "seuid": "AC75068C-71BE-4278-9CFE-02EBC624B287",
+        "course_name": "BLOCKCHAIN E CRYPTOCURRENCIES",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 9,
+        "schedule_topic_count": 9,
+        "schedule_reference_count": 9,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "F8F95848-EC28-4612-BFAC-04AA3C2BE963",
+        "course_name": "BLOCKCHAIN E CRYPTOCURRENCIES",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 9,
+        "schedule_topic_count": 9,
+        "schedule_reference_count": 9,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "5CCCDB2A-58B8-45A9-8AE9-EA9CE73AA8A3",
+        "course_name": "COMPUTER SECURITY E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 15,
+        "schedule_topic_count": 15,
+        "schedule_reference_count": 15,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "FA050289-238A-4FF5-9DB4-7588D977E793",
+        "course_name": "COMPUTER SECURITY E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 10,
+        "schedule_topic_count": 10,
+        "schedule_reference_count": 10,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "89E21813-A17C-4C85-AF65-C295EE11ED59",
+        "course_name": "COMPUTER VISION",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": false,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": false,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": false
+        },
+        "schedule_present": true,
+        "schedule_entries": 5,
+        "schedule_topic_count": 5,
+        "schedule_reference_count": 5,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
+        "course_name": "COMPUTER VISION E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 6,
+        "schedule_topic_count": 6,
+        "schedule_reference_count": 6,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "B99A46CC-D23B-4987-91AF-A2ECCFBAC778",
+        "course_name": "COMPUTER VISION E LABORATORIO",
+        "mixed_distance_clause": false,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 7,
+        "schedule_topic_count": 7,
+        "schedule_reference_count": 7,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "DADC30FD-2222-4C43-BAB8-A57D08667196",
+        "course_name": "CRITTOGRAFIA",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 12,
+        "schedule_topic_count": 12,
+        "schedule_reference_count": 12,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "AE4C5A2B-9189-423F-83A0-280C8B1BCEB6",
+        "course_name": "CRYPTOGRAPHIC ENGINEERING",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 22,
+        "schedule_topic_count": 22,
+        "schedule_reference_count": 22,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "F8FEDEFE-56FC-4031-9E0E-8726B202B9C1",
+        "course_name": "Computer Security",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 10,
+        "schedule_topic_count": 10,
+        "schedule_reference_count": 10,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "E6CA35FC-6E63-4B25-BCB8-B73F6461DD31",
+        "course_name": "DEEP LEARNING",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 16,
+        "schedule_topic_count": 16,
+        "schedule_reference_count": 16,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "1408B85C-60A2-4799-8D51-24AEBC1023D2",
+        "course_name": "Deep Learning",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": false,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 10,
+        "schedule_topic_count": 10,
+        "schedule_reference_count": 10,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+        "course_name": "Deep Learning",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 16,
+        "schedule_topic_count": 16,
+        "schedule_reference_count": 16,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "414654A5-811B-4AAB-9031-836CC788F119",
+        "course_name": "Deep Learning",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 10,
+        "schedule_topic_count": 10,
+        "schedule_reference_count": 10,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "9A85B8E4-05CD-4707-897F-51023B5BB46A",
+        "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": false,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 6,
+        "schedule_topic_count": 6,
+        "schedule_reference_count": 6,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "CE3B947A-B024-46B9-B8ED-A8C59DC0C4F7",
+        "course_name": "INGEGNERIA DEI SISTEMI DISTRIBUITI E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": false,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 16,
+        "schedule_topic_count": 16,
+        "schedule_reference_count": 16,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+        "course_name": "INTERNET OF THINGS",
+        "mixed_distance_clause": false,
+        "cinap_dsa_clause": false,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": false
+        },
+        "schedule_present": true,
+        "schedule_entries": 6,
+        "schedule_topic_count": 6,
+        "schedule_reference_count": 0,
+        "schedule_topics_complete": true,
+        "schedule_references_any": false,
+        "schedule_references_complete": false
+      },
+      {
+        "seuid": "FE97232C-4F07-41F8-A82F-FF73592265EC",
+        "course_name": "MACHINE LEARNING",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": false,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": false
+        },
+        "schedule_present": true,
+        "schedule_entries": 9,
+        "schedule_topic_count": 9,
+        "schedule_reference_count": 9,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791",
+        "course_name": "MULTIMEDIA E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 9,
+        "schedule_topic_count": 9,
+        "schedule_reference_count": 9,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "A9E33FF0-2CFD-4A51-BE84-E11130C98BFB",
+        "course_name": "MULTIMEDIA E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 4,
+        "schedule_topic_count": 4,
+        "schedule_reference_count": 4,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "D5CD7C87-9BF4-4E65-9101-A58FB1522C97",
+        "course_name": "MULTIMEDIA E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": false,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": false,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": false
+        },
+        "schedule_present": true,
+        "schedule_entries": 2,
+        "schedule_topic_count": 2,
+        "schedule_reference_count": 2,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "E2446DF6-59A1-46FD-B8D8-635EB937C1B3",
+        "course_name": "OTTIMIZZAZIONE",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 16,
+        "schedule_topic_count": 16,
+        "schedule_reference_count": 16,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "C6F1C332-B4AC-407B-B9BC-0066EBA4E790",
+        "course_name": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 3,
+        "schedule_topic_count": 3,
+        "schedule_reference_count": 3,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "F4AF1512-9D7A-4256-B57D-E103E05B009B",
+        "course_name": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 2,
+        "schedule_topic_count": 2,
+        "schedule_reference_count": 2,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "71D7A8F2-8C72-4689-8522-A1B79F21A9C8",
+        "course_name": "QUANTUM COMPUTER PROGRAMMING",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": false,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 17,
+        "schedule_topic_count": 17,
+        "schedule_reference_count": 17,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "EEA0EC5A-8D82-4B7B-A85C-94DEC5070EEB",
+        "course_name": "SISTEMI CLOUD E LABORATORIO",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 15,
+        "schedule_topic_count": 15,
+        "schedule_reference_count": 15,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      },
+      {
+        "seuid": "27066AED-24A0-4A9C-8AC4-E5C8006ACCF3",
+        "course_name": "Sistemi Cloud",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": false,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": false,
+          "band_24_27": false,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 15,
+        "schedule_topic_count": 15,
+        "schedule_reference_count": 14,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": false
+      },
+      {
+        "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+        "course_name": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+        "mixed_distance_clause": true,
+        "cinap_dsa_clause": true,
+        "telematic_assessment_clause": true,
+        "grading_grid_complete": true,
+        "grading_grid_signals": {
+          "not_approved": true,
+          "band_18_23": true,
+          "band_24_27": true,
+          "band_28_30": true
+        },
+        "schedule_present": true,
+        "schedule_entries": 15,
+        "schedule_topic_count": 15,
+        "schedule_reference_count": 15,
+        "schedule_topics_complete": true,
+        "schedule_references_any": true,
+        "schedule_references_complete": true
+      }
+    ]
+  }
+}
