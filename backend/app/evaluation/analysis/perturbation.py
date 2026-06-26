@@ -1,0 +1,186 @@
+"""Controlled single-aspect perturbations + directional sensitivity metrics.
+
+Pure functions. No Vertex AI, no DB, no LangGraph. Perturbations operate on
+the syllabus *snapshot dict* (``snapshot_syllabus`` output), so variant
+generation is deterministic and unit-testable offline. Metrics consume only
+structured per-run fields (scores / NA), never the report text.
+
+Spec: docs/superpowers/specs/2026-06-26-perturbation-sensitivity-test-design.md
+"""
+from __future__ import annotations
+
+import copy
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
+
+Snapshot = dict[str, Any]
+PerturbFn = Callable[[Snapshot], Snapshot]
+
+_GENERIC_IT = (
+    "Il corso fornisce conoscenze e competenze sugli argomenti trattati a lezione."
+)
+_GENERIC_EN = (
+    "The course provides knowledge and skills on the topics covered in class."
+)
+
+
+@dataclass(frozen=True)
+class Perturbation:
+    """One controlled, single-aspect degradation of a base snapshot."""
+
+    id: str
+    target_criteria: tuple[str, ...]      # primary target = first element
+    expected_direction: str               # always "decrease" here
+    description: str
+    plausible_coupling: tuple[str, ...]   # non-target criteria allowed to move
+    apply: PerturbFn
+
+    def meta(self) -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "target_criteria": list(self.target_criteria),
+            "primary_target": self.target_criteria[0],
+            "expected_direction": self.expected_direction,
+            "description": self.description,
+            "plausible_coupling": list(self.plausible_coupling),
+        }
+
+
+def _blank(snap: Snapshot, *fields: str) -> Snapshot:
+    out = copy.deepcopy(snap)
+    for f in fields:
+        out[f] = [] if isinstance(out.get(f), list) else ""
+    return out
+
+
+def _set(snap: Snapshot, **values: Any) -> Snapshot:
+    out = copy.deepcopy(snap)
+    out.update(values)
+    return out
+
+
+def _flatten(text: str | None) -> str:
+    return " ".join((text or "").split())
+
+
+def _inject_noise(text: str) -> str:
+    typo = (text or "").replace(" e ", " ee ").replace(" di ", " dii ")
+    return "[TODO]\n\n### " + typo + " �\n\n\t  "
+
+
+def perturb_c1_remove_sections(snap: Snapshot) -> Snapshot:
+    return _blank(
+        snap, "teaching_methods_it", "teaching_methods_en",
+        "attendance_it", "attendance_en", "references_it", "references_en",
+    )
+
+
+def perturb_c2_strip_english(snap: Snapshot) -> Snapshot:
+    return _blank(
+        snap, "course_name_en", "learning_outcomes_en",
+        "dublin_knowledge_en", "dublin_applying_en", "dublin_judgement_en",
+        "dublin_communication_en", "dublin_learning_en",
+        "course_content_en", "assessment_methods_en",
+    )
+
+
+def perturb_c3c4_generic_outcomes(snap: Snapshot) -> Snapshot:
+    out = copy.deepcopy(snap)
+    for f in ("learning_outcomes_it", "dublin_knowledge_it", "dublin_applying_it",
+              "dublin_judgement_it", "dublin_communication_it", "dublin_learning_it"):
+        out[f] = _GENERIC_IT
+    for f in ("learning_outcomes_en", "dublin_knowledge_en", "dublin_applying_en",
+              "dublin_judgement_en", "dublin_communication_en", "dublin_learning_en"):
+        out[f] = _GENERIC_EN
+    return out
+
+
+def perturb_c5_blank_prerequisites(snap: Snapshot) -> Snapshot:
+    return _set(
+        snap,
+        prerequisites_it="Prerequisiti non indicati.",
+        prerequisites_en="Prerequisites not specified.",
+    )
+
+
+def perturb_c6_strip_assessment(snap: Snapshot) -> Snapshot:
+    return _set(
+        snap,
+        assessment_methods_it="L'esame consiste in una prova.",
+        assessment_methods_en="The exam consists of a test.",
+        sample_questions_it="",
+        sample_questions_en="",
+    )
+
+
+def perturb_c7_destructure_content(snap: Snapshot) -> Snapshot:
+    out = copy.deepcopy(snap)
+    out["schedule_it"] = []
+    out["schedule_en"] = []
+    out["course_content_it"] = _flatten(out.get("course_content_it"))
+    out["course_content_en"] = _flatten(out.get("course_content_en"))
+    return out
+
+
+def perturb_c9_editorial_noise(snap: Snapshot) -> Snapshot:
+    out = copy.deepcopy(snap)
+    for f in ("learning_outcomes_it", "course_content_it",
+              "assessment_methods_it", "teaching_methods_it"):
+        v = out.get(f)
+        if isinstance(v, str) and v:
+            out[f] = _inject_noise(v)
+    return out
+
+
+PERTURBATIONS: tuple[Perturbation, ...] = (
+    Perturbation(
+        "C1_remove_sections", ("C1",), "decrease",
+        "Svuota 3 sezioni obbligatorie (metodi didattici, frequenza, riferimenti).",
+        ("C7", "C8", "C9"), perturb_c1_remove_sections,
+    ),
+    Perturbation(
+        "C2_strip_english", ("C2",), "decrease",
+        "Svuota i campi EN rilevanti (titolo, risultati, descrittori, contenuti, verifica).",
+        ("C1",), perturb_c2_strip_english,
+    ),
+    Perturbation(
+        "C3C4_generic_outcomes", ("C3", "C4"), "decrease",
+        "Rende i risultati di apprendimento generici, corso-centrici e ripetitivi.",
+        (), perturb_c3c4_generic_outcomes,
+    ),
+    Perturbation(
+        "C5_blank_prerequisites", ("C5",), "decrease",
+        "Sostituisce i prerequisiti con 'Prerequisiti non indicati'.",
+        ("C1",), perturb_c5_blank_prerequisites,
+    ),
+    Perturbation(
+        "C6_strip_assessment", ("C6",), "decrease",
+        "Rimuove griglia/fasce/criteri/pesi/esempi dalla verifica.",
+        (), perturb_c6_strip_assessment,
+    ),
+    Perturbation(
+        "C7_destructure_content", ("C7",), "decrease",
+        "Svuota la programmazione (schedule) e appiattisce i contenuti.",
+        ("C8",), perturb_c7_destructure_content,
+    ),
+    Perturbation(
+        "C9_editorial_noise", ("C9",), "decrease",
+        "Inietta refusi, marker tecnici e formattazione sporca nei campi IT.",
+        (), perturb_c9_editorial_noise,
+    ),
+)
+
+_BY_ID = {p.id: p for p in PERTURBATIONS}
+
+
+def perturbation_by_id(variant_id: str) -> Perturbation:
+    return _BY_ID[variant_id]
+
+
+def generate_variants(
+    base_snapshot: Snapshot,
+    perturbations: tuple[Perturbation, ...] = PERTURBATIONS,
+) -> dict[str, Snapshot]:
+    """Return {variant_id: perturbed snapshot}. The base is left untouched."""
+    return {p.id: p.apply(base_snapshot) for p in perturbations}
