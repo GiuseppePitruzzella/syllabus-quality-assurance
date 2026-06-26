@@ -12,4 +12,3 @@ chunking e tagging, producono 27 chunk ma nessun tag `C1`-`C9` e nessun
 tag `A1`-`A4`; quindi non vengono recuperate dal RAG normativo e non
 influenzano il CoreScore. Il documento è archiviato per tracciabilità
 storica, non come fonte attiva.
-

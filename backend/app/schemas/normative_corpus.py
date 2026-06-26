@@ -32,4 +32,3 @@ class NormativeCorpusDocument(BaseModel):
     core_criteria: list[CoreCriterionCode]
     agents: list[CoreAgentCode]
     is_core_source: bool
-

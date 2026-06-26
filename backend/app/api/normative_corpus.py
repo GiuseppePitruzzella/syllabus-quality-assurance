@@ -24,4 +24,3 @@ async def list_documents() -> list[NormativeCorpusDocument]:
         corpus_dir=Path(settings.normative_corpus_dir),
         tagging_rules_file=Path(settings.tagging_rules_file),
     )
-
