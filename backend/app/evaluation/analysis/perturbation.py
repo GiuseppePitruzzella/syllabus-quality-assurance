@@ -17,6 +17,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from app.evaluation.analysis.self_consistency import CRITERIA_ORDER, RunRecord
+
 Snapshot = dict[str, Any]
 PerturbFn = Callable[[Snapshot], Snapshot]
 
@@ -250,4 +252,99 @@ def classify_verdict(
         pert_mean=pert_mean, pert_range=pert_range, delta=delta,
         expected_direction=expected_direction, noise_floor=base_range,
         verdict=verdict, passed=passed,
+    )
+
+
+class SideEffect(BaseModel):
+    criterion: str
+    delta: float
+    classification: str   # expected_coupling | spurious
+
+
+class VariantResult(BaseModel):
+    variant_id: str
+    target_criteria: list[str]
+    primary_target: str
+    target_verdicts: list[TargetVerdict]
+    passed: bool
+    side_effects: list[SideEffect]
+    all_deltas: dict[str, float | None]
+    note: str
+
+
+class PerturbationMetrics(BaseModel):
+    base_seuid: str
+    n_runs: int
+    variants: list[VariantResult]
+
+
+def _score_matrix(records: list[RunRecord]) -> dict[str, list[int | None]]:
+    runs = sorted(records, key=lambda r: r.run_index)
+    return {c: [r.criterion_scores.get(c) for r in runs] for c in CRITERIA_ORDER}
+
+
+def compute_side_effects(
+    base_matrix: dict[str, list[int | None]],
+    pert_matrix: dict[str, list[int | None]],
+    target_criteria: tuple[str, ...],
+    coupling: tuple[str, ...],
+    min_delta: float = 0.5,
+) -> tuple[list[SideEffect], dict[str, float | None]]:
+    effects: list[SideEffect] = []
+    all_deltas: dict[str, float | None] = {}
+    for c in CRITERIA_ORDER:
+        b_mean, _, _ = _mean_range(base_matrix[c])
+        p_mean, _, _ = _mean_range(pert_matrix[c])
+        d = (
+            round(p_mean - b_mean, 4)
+            if (b_mean is not None and p_mean is not None)
+            else None
+        )
+        all_deltas[c] = d
+        if c in target_criteria or d is None or abs(d) < min_delta:
+            continue
+        cls = "expected_coupling" if c in coupling else "spurious"
+        effects.append(SideEffect(criterion=c, delta=d, classification=cls))
+    return effects, all_deltas
+
+
+def _variant_note(verdicts: list[TargetVerdict], effects: list[SideEffect]) -> str:
+    primary = verdicts[0]
+    spurious = [e.criterion for e in effects if e.classification == "spurious"]
+    note = f"{primary.criterion} {primary.verdict}"
+    if primary.delta is not None:
+        note += f" (delta {primary.delta:+.2f}, noise floor {primary.noise_floor:.2f})"
+    if spurious:
+        note += f"; side effect spuri: {', '.join(spurious)}"
+    return note
+
+
+def compute_perturbation_metrics(
+    base_records: list[RunRecord],
+    variant_records: dict[str, list[RunRecord]],
+    perturbations: tuple[Perturbation, ...] = PERTURBATIONS,
+    base_seuid: str = "",
+    n_runs: int = 3,
+) -> PerturbationMetrics:
+    base_matrix = _score_matrix(base_records)
+    results: list[VariantResult] = []
+    for p in perturbations:
+        pert_matrix = _score_matrix(variant_records[p.id])
+        verdicts = [
+            classify_verdict(c, base_matrix[c], pert_matrix[c], p.expected_direction)
+            for c in p.target_criteria
+        ]
+        primary = p.target_criteria[0]
+        passed = next(v.passed for v in verdicts if v.criterion == primary)
+        effects, all_deltas = compute_side_effects(
+            base_matrix, pert_matrix, p.target_criteria, p.plausible_coupling
+        )
+        results.append(VariantResult(
+            variant_id=p.id, target_criteria=list(p.target_criteria),
+            primary_target=primary, target_verdicts=verdicts, passed=passed,
+            side_effects=effects, all_deltas=all_deltas,
+            note=_variant_note(verdicts, effects),
+        ))
+    return PerturbationMetrics(
+        base_seuid=base_seuid, n_runs=n_runs, variants=results
     )
