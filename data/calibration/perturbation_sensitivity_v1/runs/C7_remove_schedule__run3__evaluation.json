@@ -1,0 +1,22 @@
+{
+  "phase": "perturbation_sensitivity",
+  "condition": "C7_remove_schedule",
+  "run_index": 3,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 1,
+    "C2": 2,
+    "C5": 2,
+    "C3": 2,
+    "C4": 2,
+    "C6": 2,
+    "C7": 2,
+    "C8": 2,
+    "C9": 2
+  },
+  "core_score": 1.89,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 76849
+}

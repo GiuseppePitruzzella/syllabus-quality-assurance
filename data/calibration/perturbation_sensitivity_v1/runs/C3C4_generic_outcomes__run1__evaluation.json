@@ -1,0 +1,22 @@
+{
+  "phase": "perturbation_sensitivity",
+  "condition": "C3C4_generic_outcomes",
+  "run_index": 1,
+  "status": "completed",
+  "criterion_scores": {
+    "C1": 2,
+    "C2": 2,
+    "C5": 2,
+    "C3": 1,
+    "C4": 0,
+    "C6": 2,
+    "C7": 1,
+    "C8": 1,
+    "C9": 1
+  },
+  "core_score": 1.33,
+  "coverage": 1.0,
+  "na_criteria": [],
+  "agent_errors": {},
+  "duration_ms": 78847
+}

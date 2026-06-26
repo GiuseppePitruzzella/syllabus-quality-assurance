@@ -1,0 +1,304 @@
+{
+  "base_seuid": "3540D939-DA16-4C1D-983C-E6B85C403F2F",
+  "n_runs": 3,
+  "variants": [
+    {
+      "variant_id": "C1_remove_sections",
+      "target_criteria": [
+        "C1"
+      ],
+      "primary_target": "C1",
+      "target_verdicts": [
+        {
+          "criterion": "C1",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 1.0,
+          "pert_range": 0.0,
+          "delta": -1.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "side_effects": [
+        {
+          "criterion": "C8",
+          "delta": -1.0,
+          "classification": "expected_coupling"
+        }
+      ],
+      "all_deltas": {
+        "C1": -1.0,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "C7": 0.0,
+        "C8": -1.0,
+        "C9": -0.3333
+      },
+      "note": "C1 PASS (delta -1.00, noise floor 0.00)"
+    },
+    {
+      "variant_id": "C2_strip_english",
+      "target_criteria": [
+        "C2"
+      ],
+      "primary_target": "C2",
+      "target_verdicts": [
+        {
+          "criterion": "C2",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 0.0,
+          "pert_range": 0.0,
+          "delta": -2.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "side_effects": [],
+      "all_deltas": {
+        "C1": 0.0,
+        "C2": -2.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "C7": 0.0,
+        "C8": 0.0,
+        "C9": 0.3333
+      },
+      "note": "C2 PASS (delta -2.00, noise floor 0.00)"
+    },
+    {
+      "variant_id": "C3C4_generic_outcomes",
+      "target_criteria": [
+        "C3",
+        "C4"
+      ],
+      "primary_target": "C3",
+      "target_verdicts": [
+        {
+          "criterion": "C3",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 0.6667,
+          "pert_range": 1.0,
+          "delta": -1.3333,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        },
+        {
+          "criterion": "C4",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 0.0,
+          "pert_range": 0.0,
+          "delta": -2.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "side_effects": [
+        {
+          "criterion": "C8",
+          "delta": -1.0,
+          "classification": "expected_coupling"
+        }
+      ],
+      "all_deltas": {
+        "C1": -0.3333,
+        "C2": 0.0,
+        "C3": -1.3333,
+        "C4": -2.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "C7": -0.3333,
+        "C8": -1.0,
+        "C9": 0.0
+      },
+      "note": "C3 PASS (delta -1.33, noise floor 0.00)"
+    },
+    {
+      "variant_id": "C5_blank_prerequisites",
+      "target_criteria": [
+        "C5"
+      ],
+      "primary_target": "C5",
+      "target_verdicts": [
+        {
+          "criterion": "C5",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 0.0,
+          "pert_range": 0.0,
+          "delta": -2.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "side_effects": [
+        {
+          "criterion": "C1",
+          "delta": -0.6667,
+          "classification": "expected_coupling"
+        }
+      ],
+      "all_deltas": {
+        "C1": -0.6667,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": -0.3333,
+        "C5": -2.0,
+        "C6": 0.0,
+        "C7": 0.0,
+        "C8": 0.0,
+        "C9": 0.3333
+      },
+      "note": "C5 PASS (delta -2.00, noise floor 0.00)"
+    },
+    {
+      "variant_id": "C6_strip_assessment",
+      "target_criteria": [
+        "C6"
+      ],
+      "primary_target": "C6",
+      "target_verdicts": [
+        {
+          "criterion": "C6",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 0.0,
+          "pert_range": 0.0,
+          "delta": -2.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "PASS",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "side_effects": [
+        {
+          "criterion": "C1",
+          "delta": -1.0,
+          "classification": "expected_coupling"
+        },
+        {
+          "criterion": "C8",
+          "delta": -1.0,
+          "classification": "expected_coupling"
+        },
+        {
+          "criterion": "C9",
+          "delta": 0.6667,
+          "classification": "spurious"
+        }
+      ],
+      "all_deltas": {
+        "C1": -1.0,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": -2.0,
+        "C7": 0.0,
+        "C8": -1.0,
+        "C9": 0.6667
+      },
+      "note": "C6 PASS (delta -2.00, noise floor 0.00); side effect spuri: C9"
+    },
+    {
+      "variant_id": "C7_remove_schedule",
+      "target_criteria": [
+        "C7"
+      ],
+      "primary_target": "C7",
+      "target_verdicts": [
+        {
+          "criterion": "C7",
+          "base_mean": 2.0,
+          "base_range": 0.0,
+          "pert_mean": 2.0,
+          "pert_range": 0.0,
+          "delta": 0.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "FAIL",
+          "passed": false
+        }
+      ],
+      "passed": false,
+      "side_effects": [
+        {
+          "criterion": "C1",
+          "delta": -1.0,
+          "classification": "expected_coupling"
+        }
+      ],
+      "all_deltas": {
+        "C1": -1.0,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "C7": 0.0,
+        "C8": 0.0,
+        "C9": 0.3333
+      },
+      "note": "C7 FAIL (delta +0.00, noise floor 0.00)"
+    },
+    {
+      "variant_id": "C9_editorial_noise",
+      "target_criteria": [
+        "C9"
+      ],
+      "primary_target": "C9",
+      "target_verdicts": [
+        {
+          "criterion": "C9",
+          "base_mean": 1.0,
+          "base_range": 0.0,
+          "pert_mean": 1.0,
+          "pert_range": 0.0,
+          "delta": 0.0,
+          "expected_direction": "decrease",
+          "noise_floor": 0.0,
+          "verdict": "FAIL",
+          "passed": false
+        }
+      ],
+      "passed": false,
+      "side_effects": [],
+      "all_deltas": {
+        "C1": 0.0,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "C7": 0.0,
+        "C8": 0.0,
+        "C9": 0.0
+      },
+      "note": "C9 FAIL (delta +0.00, noise floor 0.00)"
+    }
+  ]
+}

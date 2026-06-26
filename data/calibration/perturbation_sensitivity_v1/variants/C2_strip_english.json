@@ -1,0 +1,200 @@
+{
+  "course_code": "9799560",
+  "course_name": "Deep Learning",
+  "course_name_en": "",
+  "module": "Advanced Models and Methods",
+  "teacher": "FURNARI ANTONINO",
+  "academic_year": "",
+  "year_of_study": "1",
+  "has_english": true,
+  "learning_outcomes_it": "Conoscenza e capacità di comprensione (knowledge and understanding):\nAl termine del corso, lo studente avrà una conoscenza approfondita dei modelli e metodi avanzati di Deep Learning, esplorando le frontiere di ricerca e applicazioni complesse. Comprenderà tecniche come Metric Learning, Domain Adaptation, Knowledge Distillation, Deep Unsupervised e Self-Supervised Representation Learning, Multimodal Learning, e Reinforcement Learning, sviluppando una comprensione critica delle loro basi teoriche e delle sfide attuali.\nCapacità di applicare conoscenza e comprensione (applying knowledge and understanding):\nLo studente sarà in grado di applicare metodologie avanzate di Deep Learning per problemi complessi (apprendimento di rappresentazioni da dati non etichettati, trasferimento di conoscenze tra domini, comprensione di contenuti multimodali e integrazione delle modalità). Avrà le competenze per implementare e ottimizzare modelli per il Multimodal Learning, lavorare con architetture di grandi dimensioni e applicare tecniche di ottimizzazione come la Knowledge Distillation. Sarà inoltre in grado di comprendere e applicare i principi del Reinforcement Learning.\nAutonomia di giudizio (making judgements):\nLo studente svilupperà una spiccata autonomia di giudizio nella valutazione e selezione di modelli e metodi avanzati di Deep Learning. Saprà analizzare criticamente la letteratura scientifica, identificando punti di forza e debolezza delle soluzioni e proponendo approcci innovativi. Acquisirà la capacità di prendere decisioni informate sull'applicabilità ed efficacia delle tecniche all'avanguardia in contesti reali, considerando implicazioni pratiche.\nAbilità comunicative (communication skills):\nLo studente sarà in grado di comunicare in modo esperto e appropriato concetti complessi legati ai modelli avanzati di Deep Learning. Saprà presentare in modo chiaro risultati progetti e analisi, usando un linguaggio tecnico accurato. Le abilità comunicative includeranno la capacità di discutere criticamente, collaborare in gruppi multidisciplinari e redigere documentazione tecnica e rapporti scientifici di alta qualità.\nCapacità di apprendimento (learning skills):\nLo studente svilupperà un'elevata capacità di apprendimento autonomo, essenziale per rimanere all'avanguardia nel Deep Learning avanzato. Sarà proattivo nell'identificare e assimilare nuove teorie, algoritmi e tecnologie, sfruttando autonomamente risorse complesse come articoli di ricerca e tutorial. Questa competenza lo preparerà a intraprendere percorsi di ricerca e sviluppo avanzati, affrontando le sfide future dell'intelligenza artificiale.",
+  "dublin_knowledge_it": "Al termine del corso, lo studente avrà una conoscenza approfondita dei modelli e metodi avanzati di Deep Learning, esplorando le frontiere di ricerca e applicazioni complesse. Comprenderà tecniche come Metric Learning, Domain Adaptation, Knowledge Distillation, Deep Unsupervised e Self-Supervised Representation Learning, Multimodal Learning, e Reinforcement Learning, sviluppando una comprensione critica delle loro basi teoriche e delle sfide attuali.",
+  "dublin_applying_it": "Lo studente sarà in grado di applicare metodologie avanzate di Deep Learning per problemi complessi (apprendimento di rappresentazioni da dati non etichettati, trasferimento di conoscenze tra domini, comprensione di contenuti multimodali e integrazione delle modalità). Avrà le competenze per implementare e ottimizzare modelli per il Multimodal Learning, lavorare con architetture di grandi dimensioni e applicare tecniche di ottimizzazione come la Knowledge Distillation. Sarà inoltre in grado di comprendere e applicare i principi del Reinforcement Learning.",
+  "dublin_judgement_it": "nella valutazione e selezione di modelli e metodi avanzati di Deep Learning. Saprà analizzare criticamente la letteratura scientifica, identificando punti di forza e debolezza delle soluzioni e proponendo approcci innovativi. Acquisirà la capacità di prendere decisioni informate sull'applicabilità ed efficacia delle tecniche all'avanguardia in contesti reali, considerando implicazioni pratiche.",
+  "dublin_communication_it": "includeranno la capacità di discutere criticamente, collaborare in gruppi multidisciplinari e redigere documentazione tecnica e rapporti scientifici di alta qualità.",
+  "dublin_learning_it": "autonomo, essenziale per rimanere all'avanguardia nel Deep Learning avanzato. Sarà proattivo nell'identificare e assimilare nuove teorie, algoritmi e tecnologie, sfruttando autonomamente risorse complesse come articoli di ricerca e tutorial. Questa competenza lo preparerà a intraprendere percorsi di ricerca e sviluppo avanzati, affrontando le sfide future dell'intelligenza artificiale.",
+  "teaching_methods_it": "L’insegnamento si svolge tramite lezioni frontali e attività di laboratorio, che permetteranno l'applicazione pratica dei concetti teorici con esercitazioni e casi studio.\nQualora l'insegnamento venisse impartito in modalità mista o a distanza potranno essere introdotte le necessarie variazioni rispetto a quanto dichiarato in precedenza, al fine di rispettare il programma previsto e riportato nel syllabus.",
+  "prerequisites_it": "Solide basi di Deep Learning (reti neurali convoluzionali e ricorrenti, backpropagation, regolarizzazione) e familiarità con la programmazione scientifica in Python.",
+  "attendance_it": "La regolare partecipazione alle lezioni non è obbligatoria ma vivamente raccomandata per una comprensione approfondita degli argomenti e delle metodologie.",
+  "course_content_it": "Il corso \"Deep Learning: Advanced Models and Methods\" esplora le attuali frontiere del Deep Learning. Si inizia con tecniche avanzate per migliorare la generalizzazione e l'efficienza dei modelli: Metric Learning (apprendimento di spazi di rappresentazione semantica) e Domain Adaptation (adattamento a dati provenienti da distribuzioni diverse). Verrà introdotta la Knowledge Distillation per trasferire conoscenze da modelli complessi a modelli più efficienti. Seguirà il modulo Unsupervised e Self-Supervised Representation Learning, cruciale per sfruttare grandi quantità di dati non etichettati per apprendere rappresentazioni significative. Ampio spazio sarà dedicato al Multimodal Learning, includendo metodi capaci di gestire dati che includono diverse modalità, quali immagini, video, audio, e testo. Verranno dunque trattati metodi avanzati di modellamento di dati sequenziali, quali gli state space models. Infine, si concluderà con un'introduzione ai principi e agli algoritmi fondamentali del Reinforcement Learning, con esempi di applicazione in contesti decisionali.",
+  "references_it": "1.\nMateriale fornito dal docente e distribuito tramite il sito del docente (\nhttp://antoninofurnari.github.io/\n) e il team con codice “cq90ptp”.\n2.\nBellet, A., Habrard, A., & Sebban, M. (2015). Metric learning. Morgan & Claypool Publishers.\n3.\nCsurka, Gabriela. \"Domain adaptation for visual applications: A comprehensive survey.\" arXiv preprint arXiv:1702.05374 (2017).\n4.\nWang, M., & Deng, W. (2018). Deep visual domain adaptation: A survey. Neurocomputing, 312, 135-153.\n5.\nGou, Jianping, et al. \"Knowledge distillation: A survey.\" International Journal of Computer Vision 129.6 (2021): 1789-1819.\n6.\nChen, Y., Mancini, M., Zhu, X., & Akata, Z. (2022). Semi-supervised and unsupervised deep visual learning: A survey. IEEE transactions on pattern analysis and machine intelligence, 46(3), 1327-1347.\n7.\nGui, J., Chen, T., Zhang, J., Cao, Q., Sun, Z., Luo, H., & Tao, D. (2024). A survey on self-supervised learning: Algorithms, applications, and future trends. IEEE Transactions on Pattern Analysis and Machine Intelligence.\n8.\nJabeen, Summaira, et al. \"A review on methods and applications in multimodal deep learning.\" ACM Transactions on Multimedia Computing, Communications and Applications 19.2s (2023): 1-41.\n9.\nGao, J., Li, P., Chen, Z., & Zhang, J. (2020). A survey on deep learning for multimodal data fusion. Neural Computation, 32(5), 829-864.\n10.\nZhang, D., Yu, Y., Dong, J., Li, C., Su, D., Chu, C., & Yu, D. (2024). Mm-llms: Recent advances in multimodal large language models. arXiv preprint arXiv:2401.13601.\n11.\nPatro, Badri Narayana, and Vijay Srinivas Agneeswaran. \"Mamba-360: Survey of state space models as transformer alternative for long sequence modelling: Methods, applications, and challenges.\" arXiv preprint arXiv:2404.16112 (2024).\n12.\nBarto, A. G. (2021). Reinforcement learning: An introduction. by richard’s sutton. SIAM Rev, 6(2), 423.",
+  "schedule_it": [
+    {
+      "numero": "1",
+      "argomenti": "Metric Learning: introduzione e definizione del problema",
+      "riferimenti_testi": "[1] [2] (Capitoli 1,2,9)"
+    },
+    {
+      "numero": "2",
+      "argomenti": "Principali approcci di Deep Metric Learning",
+      "riferimenti_testi": "[1]"
+    },
+    {
+      "numero": "3",
+      "argomenti": "Introduzione al problema della Domain Adaptation",
+      "riferimenti_testi": "[1]"
+    },
+    {
+      "numero": "4",
+      "argomenti": "Principali metodi di Deep Domain Adaptation",
+      "riferimenti_testi": "[1,3,4]"
+    },
+    {
+      "numero": "5",
+      "argomenti": "Knowledge Distillation: principi e applicazioni",
+      "riferimenti_testi": "[1,5]"
+    },
+    {
+      "numero": "6",
+      "argomenti": "Principali metodi di Knowledge Distillation",
+      "riferimenti_testi": "[1,5]"
+    },
+    {
+      "numero": "7",
+      "argomenti": "Apprendimento di rappresentazioni non supervisionato",
+      "riferimenti_testi": "[1,6]"
+    },
+    {
+      "numero": "8",
+      "argomenti": "Principali metodi di deep unsupervised learning",
+      "riferimenti_testi": "[1,6]"
+    },
+    {
+      "numero": "9",
+      "argomenti": "Principali metodi di deep self-supervised learning",
+      "riferimenti_testi": "[1,7]"
+    },
+    {
+      "numero": "10",
+      "argomenti": "Learning multimodale: sfide e applicazioni",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "11",
+      "argomenti": "Modelli multimodali basati su video: principali task, benchmarks e tecniche",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "12",
+      "argomenti": "Modelli multimodali basate su visione e lingua: principali task, benchmarks e tecniche",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "13",
+      "argomenti": "Modelli efficienti per il deep sequential modeling avanzato",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "14",
+      "argomenti": "Deep sequential modeling online ed efficiente: task, applicazioni e sfide",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "15",
+      "argomenti": "Online transformers and state space models per deep sequential modeling",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "16",
+      "argomenti": "Deep Reinforcement learning",
+      "riferimenti_testi": "[1,11]"
+    }
+  ],
+  "assessment_methods_it": "L’esame del corso “Deep Learning” si compone di due esami individuali, associati ai due moduli. A ciascun esame viene assegnato un voto individuale. Il voto dell’esame complessivo è ottenuto come media dei voti associati ai due moduli “Core models and methods” e “Advanced models and methods”.\nL’esame del modulo “Core models and methods” consiste in una prova scritta e in un progetto individuale o di gruppo, generalmente consistente nell’implementazione e analisi di un modello avanzato di Deep Learning su un dataset reale. La prova scritta è volta a verificare la conoscenza teorica degli argomenti del corso, nonché le capacità espressive e la proprietà di linguaggio degli studenti. La prova scritta consiste generalmente in tre domande a risposta aperta. Il progetto valuterà l'applicazione delle conoscenze avanzate, l'autonomia, la qualità dell'implementazione e dell'analisi. Il progetto va svolto successivamente alla prova scritta. A ciascuna delle due prove è assegnato un punteggio in trentesimi e il voto finale assegnato al modulo è ottenuto mediante la media aritmetica dei due voti.\nL’esame del modulo “Advanced models and methods” consiste in una prova scritta e in un progetto individuale o di gruppo, generalmente consistente nell’implementazione e analisi di un modello avanzato di Deep Learning su un dataset reale. La prova scritta è volta a verificare la conoscenza teorica degli argomenti del corso, nonché le capacità espressive e la proprietà di linguaggio degli studenti. La prova scritta consiste generalmente in un insieme di domande a risposta multipla e aperta. Il progetto valuterà l'applicazione delle conoscenze avanzate, l'autonomia, la qualità dell'implementazione e dell'analisi. Il progetto va svolto successivamente alla prova scritta. A ciascuna delle due prove è assegnato un punteggio in trentesimi e il voto finale assegnato al modulo è ottenuto mediante la media aritmetica dei due voti.\nLe prove del modulo “Core models and methods” vanno sostenute prima delle prove del modulo “Advanced models and methods”.\nPer l'attribuzione del voto finale si seguiranno di norma i seguenti criteri:\n·\nNon approvato: lo studente non ha acquisito i concetti di base e non è in grado di svolgere il progetto.\n·\n18-23: lo studente dimostra padronanza minima dei concetti avanzati; progetto con carenze significative.\n·\n24-27: lo studente dimostra buona padronanza dei contenuti avanzati; progetto ben strutturato e analisi adeguata.\n·\n28-30 e lode: lo studente ha acquisito tutti i contenuti avanzati; progetto eccellente e innovativo, analisi completa, critica e senza errori, dimostrando piena autonomia.\nGli studenti con disabilità e/o DSA dovranno contattare con sufficiente anticipo il docente, il referente CInAP del DMI (prof.ssa Daniele) e il CInAP per fruire delle opportune misure compensative.\nLa verifica dell’apprendimento potrà essere effettuata anche per via telematica, qualora le condizioni lo dovessero richiedere.",
+  "sample_questions_it": "·\nIllustrare il concetto di Metric Learning e il suo uso per migliorare sistemi di localizzazione basati su immagini.\n·\nSpiegare la differenza tra Domain Adaptation e Transfer Learning tradizionale, descrivendo un algoritmo di Domain Adaptation basato su reti avversarie.\n·\nDescrivere il concetto di Knowledge Distillation e come può essere utilizzata per migliorare l'efficienza di un modello.\n·\nSpiegare i principi del Deep Unsupervised e Self-Supervised Representation Learning, evidenziandone le differenze e i benefici per i dati non etichettati.\n·\nSpiegare l'importanza dell'allineamento tra modalità nei modelli multimodali.\n·\nIllustrare i principali vantaggi dei modelli sequenziali ricorrenti basati su state space models.\n·\nIllustrare i principi di base del Reinforcement Learning.\nSi precisa che tali domande hanno carattere puramente indicativo: le domande proposte all'esame potranno divergere, anche in modo significativo.",
+  "learning_outcomes_en": "",
+  "dublin_knowledge_en": "",
+  "dublin_applying_en": "",
+  "dublin_judgement_en": "",
+  "dublin_communication_en": "",
+  "dublin_learning_en": "",
+  "teaching_methods_en": "The course takes place through lectures and laboratory activities, which will allow the practical application of theoretical concepts with exercises and case studies.\nIf the course is taught in mixed or distance mode, the necessary changes may be introduced with respect to what was previously stated, in order to comply with the program provided and reported in the syllabus.",
+  "prerequisites_en": "Solid foundation of Deep Learning (convolutional and recurrent neural networks, backpropagation, regularization) and familiarity with scientific programming in Python.",
+  "attendance_en": "Regular participation in the lessons is not mandatory but strongly recommended for an in-depth understanding of the topics and methodologies.",
+  "course_content_en": "",
+  "references_en": "1.\nMaterial provided by the teacher and distributed through the teacher's website (\nhttp://antoninofurnari.github.io/\n) and the team with code \"cq90ptp\".\n2.\nBellet, A., Habrard, A., & Sebban, M. (2015). Metric learning. Morgan & Claypool Publishers.\n3.\nCsurka, Gabriela. \"Domain adaptation for visual applications: A comprehensive survey.\" arXiv preprint arXiv:1702.05374 (2017).\n4.\nWang, M., & Deng, W. (2018). Deep visual domain adaptation: A survey. Neurocomputing, 312, 135-153.\n5.\nGou, Jianping, et al. \"Knowledge distillation: A survey.\" International Journal of Computer Vision 129.6 (2021): 1789-1819.\n6.\nChen, Y., Mancini, M., Zhu, X., & Akata, Z. (2022). Semi-supervised and unsupervised deep visual learning: A survey. IEEE transactions on pattern analysis and machine intelligence, 46(3), 1327-1347.\n7.\nGui, J., Chen, T., Zhang, J., Cao, Q., Sun, Z., Luo, H., & Tao, D. (2024). A survey on self-supervised learning: Algorithms, applications, and future trends. IEEE Transactions on Pattern Analysis and Machine Intelligence.\n8.\nJabeen, Summaira, et al. \"A review on methods and applications in multimodal deep learning.\" ACM Transactions on Multimedia Computing, Communications and Applications 19.2s (2023): 1-41.\n9.\nGao, J., Li, P., Chen, Z., & Zhang, J. (2020). A survey on deep learning for multimodal data fusion. Neural Computation, 32(5), 829-864.\n10.\nZhang, D., Yu, Y., Dong, J., Li, C., Su, D., Chu, C., & Yu, D. (2024). Mm-llms: Recent advances in multimodal large language models. arXiv preprint arXiv:2401.13601.\n11.\nPatro, Badri Narayana, and Vijay Srinivas Agneeswaran. \"Mamba-360: Survey of state space models as transformer alternative for long sequence modelling: Methods, applications, and challenges.\" arXiv preprint arXiv:2404.16112 (2024).\n12.\nBarto, A. G. (2021). Reinforcement learning: An introduction. by Richard's Sutton. SIAM Rev, 6(2), 423.",
+  "schedule_en": [
+    {
+      "numero": "1",
+      "argomenti": "Metric Learning: introduction and definition of the problem",
+      "riferimenti_testi": "[1] [2] (Chapters 1,2,9)"
+    },
+    {
+      "numero": "2",
+      "argomenti": "Main Deep Metric Learning Approaches",
+      "riferimenti_testi": "[1]"
+    },
+    {
+      "numero": "3",
+      "argomenti": "Introduction to the Domain Adaptation Problem",
+      "riferimenti_testi": "[1]"
+    },
+    {
+      "numero": "4",
+      "argomenti": "Main methods of Deep Domain Adaptation",
+      "riferimenti_testi": "[1,3,4]"
+    },
+    {
+      "numero": "5",
+      "argomenti": "Knowledge Distillation: principles and applications",
+      "riferimenti_testi": "[1,5]"
+    },
+    {
+      "numero": "6",
+      "argomenti": "Main methods of Knowledge Distillation",
+      "riferimenti_testi": "[1,5]"
+    },
+    {
+      "numero": "7",
+      "argomenti": "Unsupervised Representation Learning",
+      "riferimenti_testi": "[1,6]"
+    },
+    {
+      "numero": "8",
+      "argomenti": "Main methods of deep unsupervised learning",
+      "riferimenti_testi": "[1,6]"
+    },
+    {
+      "numero": "9",
+      "argomenti": "Main methods of deep self-supervised learning",
+      "riferimenti_testi": "[1,7]"
+    },
+    {
+      "numero": "10",
+      "argomenti": "Multimodal learning: challenges and applications",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "11",
+      "argomenti": "Video-based multimodal models: main tasks, benchmarks and techniques",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "12",
+      "argomenti": "Multimodal models based on vision and language: main tasks, benchmarks and techniques",
+      "riferimenti_testi": "[1,8,9]"
+    },
+    {
+      "numero": "13",
+      "argomenti": "Efficient models for advanced deep sequential modeling",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "14",
+      "argomenti": "Online and efficient deep sequential modeling: tasks, applications and challenges",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "15",
+      "argomenti": "Online transformers and state space models for deep sequential modeling",
+      "riferimenti_testi": "[1,10]"
+    },
+    {
+      "numero": "16",
+      "argomenti": "Deep reinforcement learning",
+      "riferimenti_testi": "[1,11]"
+    }
+  ],
+  "assessment_methods_en": "",
+  "sample_questions_en": "·\nIllustrate the concept of Metric Learning and its use to improve image-based localization systems.\n·\nExplain the difference between Domain Adaptation and traditional Transfer Learning, describing a Domain Adaptation algorithm based on adversarial networks.\n·\nDescribe the concept of Knowledge Distillation and how it can be used to improve the efficiency of a model.\n·\nExplain the principles of Deep Unsupervised and Self-Supervised Representation Learning, highlighting their differences and benefits for unlabeled data.\n·\nExplain the importance of mode alignment in multimodal models.\n·\nIllustrate the main advantages of recurrent sequential models based on state space models.\n·\nExplain the basic principles of Reinforcement Learning.\nIt should be noted that these questions are purely indicative: the questions proposed for the examination may diverge, even significantly."
+}
