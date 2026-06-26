@@ -47,6 +47,11 @@ import typer  # noqa: E402
 from rich.console import Console  # noqa: E402
 from rich.table import Table  # noqa: E402
 
+from app.evaluation.analysis.human_comparability import (  # noqa: E402
+    audit_payload,
+    criteria_for_tier,
+)
+
 VALIDATION = _PROJECT_ROOT / "data" / "calibration" / "validation_lm18"
 HJ_DIR = _PROJECT_ROOT / "data" / "human_judgment"
 
@@ -274,6 +279,7 @@ def _evaluator_analysis(
     # Pairs aggregated per criterion
     per_criterion_pairs: dict[str, list[tuple[Any, Any, str]]] = defaultdict(list)
     syllabus_core_scores: dict[str, dict[str, float | None]] = {}
+    primary_criteria = set(criteria_for_tier("primary"))
 
     for seuid, hum in judgments_by_seuid.items():
         sys_j = _read_system_judgments(seuid)
@@ -291,6 +297,18 @@ def _evaluator_analysis(
             for c in CRITERIA
             if c in hum and isinstance(hum[c]["score"], int) and not hum[c]["is_na"]
         ]
+        sys_primary_scores = [
+            sys_j[c]["score"]
+            for c in primary_criteria
+            if c in sys_j
+            and isinstance(sys_j[c]["score"], int)
+            and not sys_j[c].get("is_na")
+        ]
+        hum_primary_scores = [
+            hum[c]["score"]
+            for c in primary_criteria
+            if c in hum and isinstance(hum[c]["score"], int) and not hum[c]["is_na"]
+        ]
         syllabus_core_scores[seuid] = {
             "course_name": course,
             "system_core": (
@@ -300,6 +318,17 @@ def _evaluator_analysis(
                 round(statistics.mean(hum_scores), 2) if hum_scores else None
             ),
             "n_human_evaluated": len(hum_scores),
+            "system_primary_mean": (
+                round(statistics.mean(sys_primary_scores), 2)
+                if sys_primary_scores
+                else None
+            ),
+            "human_primary_mean": (
+                round(statistics.mean(hum_primary_scores), 2)
+                if hum_primary_scores
+                else None
+            ),
+            "n_human_primary_evaluated": len(hum_primary_scores),
         }
         for c in CRITERIA:
             s = sys_j.get(c, {})
@@ -340,6 +369,17 @@ def _evaluator_analysis(
     macro = {
         **_metric_summary(all_pairs),
     }
+    tier_metrics = {}
+    for tier in ("primary", "secondary", "excluded"):
+        tier_pairs = [
+            (a, b)
+            for criterion in criteria_for_tier(tier)
+            for a, b, _ in per_criterion_pairs[criterion]
+        ]
+        tier_metrics[tier] = {
+            "criteria": criteria_for_tier(tier),
+            **_metric_summary(tier_pairs),
+        }
 
     # CoreScore correlation (system vs human)
     sys_h = [
@@ -350,16 +390,34 @@ def _evaluator_analysis(
     core_mae = (
         round(sum(abs(a - b) for a, b in sys_h) / len(sys_h), 3) if sys_h else None
     )
+    primary_sys_h = [
+        (v["system_primary_mean"], v["human_primary_mean"])
+        for v in syllabus_core_scores.values()
+        if v["system_primary_mean"] is not None
+        and v["human_primary_mean"] is not None
+        and v["n_human_primary_evaluated"] == len(primary_criteria)
+    ]
+    primary_core_mae = (
+        round(
+            sum(abs(a - b) for a, b in primary_sys_h) / len(primary_sys_h),
+            3,
+        )
+        if primary_sys_h
+        else None
+    )
 
     return {
         "evaluator_id": evaluator_id,
         "files_read": files_read,
         "n_syllabi": len(judgments_by_seuid),
         "macro": macro,
+        "tier_metrics": tier_metrics,
         "per_criterion": per_criterion,
         "core_score_comparison": {
             "n_pairs": len(sys_h),
             "mean_absolute_error": core_mae,
+            "primary_n_pairs": len(primary_sys_h),
+            "primary_mean_absolute_error": primary_core_mae,
             "per_syllabus": syllabus_core_scores,
         },
         "top_disagreements": disagreements[:15],
@@ -433,6 +491,9 @@ def _render_markdown(report: dict[str, Any]) -> str:
         f"- Evaluators: **{len(report['evaluators'])}**",
         "- Primary metrics exclude `NA` and missing cells; those observations "
         "are reported separately as process counts.",
+        "- The strict system-vs-expert comparison also follows the "
+        "comparability audit: C1/C3/C4/C5 primary; C2/C7/C8/C9 secondary; "
+        "C6 excluded.",
         "- No automatic majority/consensus score is computed.",
         "",
     ]
@@ -469,21 +530,45 @@ def _render_markdown(report: dict[str, Any]) -> str:
         L.append("")
 
     for ev in report["evaluators"]:
+        primary = ev.get("tier_metrics", {}).get("primary", ev["macro"])
+        secondary = ev.get("tier_metrics", {}).get("secondary")
+        excluded = ev.get("tier_metrics", {}).get("excluded")
         L += [
             f"## System vs evaluator `{ev['evaluator_id']}`",
             "",
             f"- N syllabi: **{ev['n_syllabi']}**",
-            f"- Total observations: **{ev['macro']['n_observations']}**",
-            f"- Primary numeric pairs: **{ev['macro']['n_primary_pairs']}**",
-            f"- Excluded NA: **{ev['macro']['n_excluded_na']}**",
-            f"- Excluded missing: **{ev['macro']['n_excluded_missing']}**",
-            f"- Macro kappa = **{ev['macro']['kappa_linear_weighted']}**",
-            f"- Macro accuracy = **{ev['macro']['accuracy']}**",
-            f"- Macro MAE = **{ev['macro']['mae']}**",
+            f"- Strict-primary criteria: **"
+            f"{', '.join(primary.get('criteria', criteria_for_tier('primary')))}**",
+            f"- Strict-primary numeric pairs: **{primary['n_primary_pairs']}**",
+            f"- Strict-primary kappa = **{primary['kappa_linear_weighted']}**",
+            f"- Strict-primary accuracy = **{primary['accuracy']}**",
+            f"- Strict-primary MAE = **{primary['mae']}**",
             "",
-            f"- CoreScore MAE (system vs human, per syllabus): "
+            f"- Mean-score MAE on strict-primary criteria: "
+            f"**{ev['core_score_comparison'].get('primary_mean_absolute_error')}**",
+            f"- Legacy all-C1-C9 CoreScore MAE (descriptive only): "
             f"**{ev['core_score_comparison']['mean_absolute_error']}**",
             "",
+        ]
+        if secondary and excluded:
+            L += [
+                "### Comparability tiers",
+                "",
+                "| Tier | Criteria | numeric pairs | κ weighted | acc | MAE |",
+                "| --- | --- | ---: | ---: | ---: | ---: |",
+                f"| Primary | {', '.join(primary['criteria'])} | "
+                f"{primary['n_primary_pairs']} | "
+                f"{primary['kappa_linear_weighted']} | "
+                f"{primary['accuracy']} | {primary['mae']} |",
+                f"| Secondary | {', '.join(secondary['criteria'])} | "
+                f"{secondary['n_primary_pairs']} | "
+                f"{secondary['kappa_linear_weighted']} | "
+                f"{secondary['accuracy']} | {secondary['mae']} |",
+                f"| Excluded | {', '.join(excluded['criteria'])} | "
+                f"{excluded['n_primary_pairs']} | — | — | — |",
+                "",
+            ]
+        L += [
             "### Per-criterion (system vs this evaluator)",
             "",
             "| Crit | obs | primary | NA excl. | missing excl. | κ weighted | acc | MAE |",
@@ -538,16 +623,17 @@ def _print_summary_table(report: dict[str, Any]) -> None:
     table.add_column("MAE", justify="right")
     table.add_column("CoreScore MAE", justify="right")
     for ev in report["evaluators"]:
+        summary = ev.get("tier_metrics", {}).get("primary", ev["macro"])
         table.add_row(
             ev["evaluator_id"],
             str(ev["n_syllabi"]),
-            str(ev["macro"]["n_primary_pairs"]),
-            str(ev["macro"]["n_excluded_na"]),
-            str(ev["macro"]["n_excluded_missing"]),
-            str(ev["macro"]["kappa_linear_weighted"]),
-            str(ev["macro"]["accuracy"]),
-            str(ev["macro"]["mae"]),
-            str(ev["core_score_comparison"]["mean_absolute_error"]),
+            str(summary["n_primary_pairs"]),
+            str(summary["n_excluded_na"]),
+            str(summary["n_excluded_missing"]),
+            str(summary["kappa_linear_weighted"]),
+            str(summary["accuracy"]),
+            str(summary["mae"]),
+            str(ev["core_score_comparison"].get("primary_mean_absolute_error")),
         )
     console.print(table)
 
@@ -597,6 +683,7 @@ def main(
     report = {
         "phase": "5.8",
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "comparability_audit": audit_payload(),
         "n_evaluators": len(evaluators),
         "evaluators": evaluators,
         "human_human": human_human,

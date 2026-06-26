@@ -72,6 +72,10 @@ def test_evaluator_analysis_reports_na_and_missing_separately(
     assert report["macro"]["n_excluded_missing"] == 1
     assert report["per_criterion"]["C3"]["n_excluded_missing"] == 1
     assert report["per_criterion"]["C4"]["n_excluded_na"] == 1
+    assert report["tier_metrics"]["primary"]["criteria"] == ["C1", "C3", "C4", "C5"]
+    assert report["tier_metrics"]["primary"]["n_primary_pairs"] == 2
+    assert report["tier_metrics"]["secondary"]["n_primary_pairs"] == 4
+    assert report["tier_metrics"]["excluded"]["criteria"] == ["C6"]
     assert report["top_disagreements"][0]["criterion"] == "C4"
     assert {d["criterion"] for d in report["top_disagreements"]} == {"C2", "C4"}
 
