@@ -1,15 +1,17 @@
 {
   "evaluator_id": "expert_01",
   "phase": "blind",
-  "received_at": "2026-06-25T23:03:37+02:00",
-  "source_filename": "Copia di Valutazione_syllabus_blind.xlsx",
+  "received_at": "2026-06-26T10:59:00+02:00",
+  "source_filename": "Copia di Copia di Valutazione_syllabus_blind.xlsx",
   "archived_filename": "expert_01_blind_raw.xlsx",
-  "sha256": "b5dc86c5c0bf0343f906befdd560db234f5abd58c24939c51374728c71a67e8f",
-  "size_bytes": 30662,
+  "sha256": "60d01b8d8dd531bca55ab3eb35d4236e2c529b287fba3247b6d95bb02fe44dfe",
+  "size_bytes": 30597,
   "handling": {
     "original_preserved_byte_for_byte": true,
     "scores_collected_blind": true,
     "system_results_visible_to_evaluator": false,
-    "raw_workbook_must_not_be_modified": true
+    "raw_workbook_must_not_be_modified": true,
+    "updated_after_followup_request": true,
+    "followup_scope": "VAPT completed and C6 reviewed for all syllabi"
   }
 }

@@ -22,7 +22,7 @@ RAW_WORKBOOK = (
     / "expert_01_blind_raw.xlsx"
 )
 EXPECTED_SHA256 = (
-    "b5dc86c5c0bf0343f906befdd560db234f5abd58c24939c51374728c71a67e8f"
+    "60d01b8d8dd531bca55ab3eb35d4236e2c529b287fba3247b6d95bb02fe44dfe"
 )
 
 
@@ -46,9 +46,7 @@ def test_extracts_eight_complete_syllabus_sheets():
         for record in records
         if record["human_score"] == "" and record["is_na"] == "false"
     ]
-    assert missing == [
-        ("08_VULN_ASSESSMENT_PT", f"C{i}") for i in range(1, 10)
-    ]
+    assert missing == []
     first = extracted["01_COMPUTER_VISION_LAB"][0]
     assert first["criterion"] == "C1"
     assert first["human_score"] == 1
@@ -68,7 +66,13 @@ def test_import_writes_canonical_csvs_without_modifying_source(tmp_path):
     assert manifest["sheet_count"] == 8
     assert manifest["judgment_count"] == 72
     assert sum(manifest["scores"].values()) == 72
-    assert manifest["scores"]["MISSING"] == 9
+    assert manifest["scores"] == {
+        "0": 3,
+        "1": 19,
+        "2": 50,
+        "NA": 0,
+        "MISSING": 0,
+    }
     assert sha256_file(RAW_WORKBOOK) == before
 
     files = sorted(tmp_path.glob("*_blind.csv"))

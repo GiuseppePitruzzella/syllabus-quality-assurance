@@ -88,7 +88,7 @@ def build_analysis(evaluator_id: str = "expert_01") -> dict[str, Any]:
 
     local_scan = _scan_lm18()
     return {
-        "phase": "5.8_expert_feedback_analysis_v1",
+        "phase": "5.8_expert_feedback_analysis_v2",
         "evaluator_id": evaluator_id,
         "human_data": {
             "syllabi_received": len(human),
@@ -113,12 +113,13 @@ def build_analysis(evaluator_id: str = "expert_01") -> dict[str, Any]:
             ),
         },
         "c6_machine_vs_human": {
-            "invalid_numeric_comparison": _metric_summary(c6_pairs),
+            "followup_comparison": _metric_summary(c6_pairs),
             "self_consistency": c6_stability,
             "interpretation": (
-                "C6 is perfectly stable intra-system, but the human instrument "
-                "measured RA-content mapping while the system measured "
-                "assessment transparency. Stability cannot establish validity."
+                "After the follow-up, C6 uses the same assessment-transparency "
+                "construct on both sides. The perfect agreement should still "
+                "be reported as single-expert diagnostic evidence, not as "
+                "inter-rater reliability."
             ),
         },
         "c7_sensitivity": {
@@ -182,16 +183,19 @@ def render_markdown(analysis: dict[str, Any]) -> str:
         "## C6 — Difficile per l'uomo, facile per la macchina?",
         "",
         _metric_line(
-            "Accordo numerico non interpretabile",
-            c6["invalid_numeric_comparison"],
+            "Accordo dopo micro-rivalutazione C6",
+            c6["followup_comparison"],
         ),
         f"- Self-consistency C6: unanimità "
         f"{c6['self_consistency']['unanimity_rate']:.2f}, stdev media "
         f"{c6['self_consistency']['mean_stdev']:.2f}.",
         "",
-        "C6 è stabile per la macchina, ma il questionario umano misurava un "
-        "altro costrutto. Non è possibile concludere che la macchina sia più "
-        "brava finché l'esperto non valuta la trasparenza della verifica.",
+        "Dopo il follow-up, C6 è confrontabile: il valutatore ha rivisto il "
+        "criterio usando la definizione di trasparenza delle modalità di "
+        "verifica. L'accordo perfetto indica che, in questo campione, il "
+        "criterio è sia stabile per il sistema sia allineato al giudizio "
+        "esperto; resta comunque un'evidenza diagnostica a singolo valutatore, "
+        "non una misura di affidabilità inter-rater.",
         "",
         "## C7 — Forma discorsiva vs struttura a blocchi",
         "",

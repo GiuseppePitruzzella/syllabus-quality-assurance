@@ -1,12 +1,10 @@
 {
-  "phase": "5.8_expert_feedback_analysis_v1",
+  "phase": "5.8_expert_feedback_analysis_v2",
   "evaluator_id": "expert_01",
   "human_data": {
     "syllabi_received": 8,
-    "complete_syllabi": 7,
-    "missing_syllabi": [
-      "08_VULN_ASSESSMENT_PT"
-    ]
+    "complete_syllabi": 8,
+    "missing_syllabi": []
   },
   "c3_c4_overlap": {
     "validation_lm18": {
@@ -162,34 +160,34 @@
   },
   "c5_sensitivity": {
     "historical_a1_v5": {
-      "n_observations": 7,
-      "n_primary_pairs": 7,
+      "n_observations": 8,
+      "n_primary_pairs": 8,
       "n_excluded_na": 0,
       "n_excluded_missing": 0,
       "kappa_linear_weighted": 0.0,
-      "accuracy": 0.571,
-      "mae": 0.429
+      "accuracy": 0.5,
+      "mae": 0.5
     },
     "relaxed_a1_v6_modal": {
-      "n_observations": 7,
-      "n_primary_pairs": 7,
+      "n_observations": 8,
+      "n_primary_pairs": 8,
       "n_excluded_na": 0,
       "n_excluded_missing": 0,
-      "kappa_linear_weighted": 0.276,
-      "accuracy": 0.571,
-      "mae": 0.429
+      "kappa_linear_weighted": 0.429,
+      "accuracy": 0.625,
+      "mae": 0.375
     },
     "interpretation": "The historical comparison remains valid. The relaxed rule is a counterfactual sensitivity analysis, not a replacement of the blind human scores."
   },
   "c6_machine_vs_human": {
-    "invalid_numeric_comparison": {
-      "n_observations": 7,
-      "n_primary_pairs": 7,
+    "followup_comparison": {
+      "n_observations": 8,
+      "n_primary_pairs": 8,
       "n_excluded_na": 0,
       "n_excluded_missing": 0,
-      "kappa_linear_weighted": -0.312,
-      "accuracy": 0.143,
-      "mae": 0.857
+      "kappa_linear_weighted": 1.0,
+      "accuracy": 1.0,
+      "mae": 0.0
     },
     "self_consistency": {
       "criterion": "C6",
@@ -200,32 +198,32 @@
       "max_swing": 0,
       "na_flip_count": 0
     },
-    "interpretation": "C6 is perfectly stable intra-system, but the human instrument measured RA-content mapping while the system measured assessment transparency. Stability cannot establish validity."
+    "interpretation": "After the follow-up, C6 uses the same assessment-transparency construct on both sides. The perfect agreement should still be reported as single-expert diagnostic evidence, not as inter-rater reliability."
   },
   "c7_sensitivity": {
     "observed": {
-      "n_observations": 7,
-      "n_primary_pairs": 7,
+      "n_observations": 8,
+      "n_primary_pairs": 8,
       "n_excluded_na": 0,
       "n_excluded_missing": 0,
-      "kappa_linear_weighted": 0.054,
-      "accuracy": 0.286,
-      "mae": 0.714
+      "kappa_linear_weighted": 0.091,
+      "accuracy": 0.375,
+      "mae": 0.625
     },
     "narrow_counterfactual": {
-      "n_observations": 7,
-      "n_primary_pairs": 7,
+      "n_observations": 8,
+      "n_primary_pairs": 8,
       "n_excluded_na": 0,
       "n_excluded_missing": 0,
-      "kappa_linear_weighted": 0.125,
-      "accuracy": 0.429,
-      "mae": 0.571
+      "kappa_linear_weighted": 0.158,
+      "accuracy": 0.5,
+      "mae": 0.5
     },
     "reason_categories": {
       "block_or_module_structure": 1,
       "insufficient_detail": 1,
       "narrative_form": 3,
-      "no_written_reason": 1,
+      "no_written_reason": 2,
       "other": 1
     },
     "interpretation": "Only the score explicitly tied to the block-vs-discursive instruction conflict is changed in the narrow sensitivity. Original expert scores remain untouched."

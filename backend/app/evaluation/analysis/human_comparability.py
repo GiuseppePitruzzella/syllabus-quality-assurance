@@ -105,21 +105,26 @@ AUDIT: tuple[CriterionComparability, ...] = (
     CriterionComparability(
         criterion="C6",
         human_construct=(
-            "Coerenza o mapping tra risultati di apprendimento e contenuti."
+            "Trasparenza delle modalità di verifica rivalutata dopo follow-up: "
+            "tipologia delle prove, contributo al voto, criteri o fasce di "
+            "valutazione, rubriche o esempi."
         ),
         system_construct=(
             "Trasparenza delle modalità di verifica: tipologia, criteri di "
             "voto, rubriche o esempi."
         ),
-        status="not_comparable",
-        analysis_tier="excluded",
+        status="comparable",
+        analysis_tier="primary",
         rationale=(
-            "I due lati misurano costrutti differenti. Un accordo numerico "
-            "sarebbe accidentale e non interpretabile."
+            "La prima consegna usava un testo di template non allineato al "
+            "sistema; dopo il follow-up il valutatore ha rivisto C6 per tutti "
+            "i syllabus secondo la definizione corretta. Il testo legacy nel "
+            "workbook resta un limite documentale, ma i punteggi aggiornati "
+            "sono confrontabili."
         ),
         follow_up=(
-            "Escludere C6 dalle metriche primarie; analizzarlo qualitativamente "
-            "e, se utile, chiedere una micro-rivalutazione col criterio corretto."
+            "Usare i punteggi C6 aggiornati nella metrica primaria e dichiarare "
+            "che derivano da una micro-rivalutazione post-follow-up."
         ),
     ),
     CriterionComparability(
@@ -181,8 +186,9 @@ AUDIT: tuple[CriterionComparability, ...] = (
 
 def audit_payload() -> dict[str, object]:
     return {
-        "protocol": "phase_5_8_comparability_v1",
+        "protocol": "phase_5_8_comparability_v2",
         "human_instrument": "expert_01_blind_raw.xlsx",
+        "followup_scope": "VAPT completed; C6 revised for all syllabi after clarification",
         "system_artifacts": "data/calibration/validation_lm18/",
         "system_code_commit": "f5b57c9e1154c109ca32e5ee3659b0263cebe3b3",
         "system_prompt_versions": {
@@ -232,14 +238,15 @@ def render_audit_markdown() -> str:
             f"- **Secondario/esplorativo:** "
             f"{', '.join(criteria_for_tier('secondary'))}.",
             f"- **Escluso dalle metriche di accordo:** "
-            f"{', '.join(criteria_for_tier('excluded'))}.",
+            f"{', '.join(criteria_for_tier('excluded')) or 'nessuno'}.",
             "",
-            "C6 è escluso perché il questionario umano misura il mapping "
-            "RA-contenuti, mentre il sistema misura la trasparenza della "
-            "valutazione. C5 resta comparabile nel confronto storico perché "
-            "sia il questionario sia A1 `a1_v5` usavano la tassonomia "
-            "culturali/disciplinari; la successiva ridefinizione `a1_v7` "
-            "sarà trattata soltanto come analisi controfattuale.",
+            "C6 rientra nel perimetro primario soltanto nella versione "
+            "aggiornata del workbook: il valutatore ha completato VAPT e "
+            "rivalutato C6 dopo il chiarimento metodologico. C5 resta "
+            "comparabile nel confronto storico perché sia il questionario sia "
+            "A1 `a1_v5` usavano la tassonomia culturali/disciplinari; la "
+            "successiva ridefinizione `a1_v7` sarà trattata soltanto come "
+            "analisi controfattuale.",
             "",
         ]
     )

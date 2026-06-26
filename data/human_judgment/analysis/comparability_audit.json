@@ -1,6 +1,7 @@
 {
-  "protocol": "phase_5_8_comparability_v1",
+  "protocol": "phase_5_8_comparability_v2",
   "human_instrument": "expert_01_blind_raw.xlsx",
+  "followup_scope": "VAPT completed; C6 revised for all syllabi after clarification",
   "system_artifacts": "data/calibration/validation_lm18/",
   "system_code_commit": "f5b57c9e1154c109ca32e5ee3659b0263cebe3b3",
   "system_prompt_versions": {
@@ -57,12 +58,12 @@
     },
     {
       "criterion": "C6",
-      "human_construct": "Coerenza o mapping tra risultati di apprendimento e contenuti.",
+      "human_construct": "Trasparenza delle modalità di verifica rivalutata dopo follow-up: tipologia delle prove, contributo al voto, criteri o fasce di valutazione, rubriche o esempi.",
       "system_construct": "Trasparenza delle modalità di verifica: tipologia, criteri di voto, rubriche o esempi.",
-      "status": "not_comparable",
-      "analysis_tier": "excluded",
-      "rationale": "I due lati misurano costrutti differenti. Un accordo numerico sarebbe accidentale e non interpretabile.",
-      "follow_up": "Escludere C6 dalle metriche primarie; analizzarlo qualitativamente e, se utile, chiedere una micro-rivalutazione col criterio corretto."
+      "status": "comparable",
+      "analysis_tier": "primary",
+      "rationale": "La prima consegna usava un testo di template non allineato al sistema; dopo il follow-up il valutatore ha rivisto C6 per tutti i syllabus secondo la definizione corretta. Il testo legacy nel workbook resta un limite documentale, ma i punteggi aggiornati sono confrontabili.",
+      "follow_up": "Usare i punteggi C6 aggiornati nella metrica primaria e dichiarare che derivano da una micro-rivalutazione post-follow-up."
     },
     {
       "criterion": "C7",
@@ -96,7 +97,8 @@
     "C1",
     "C3",
     "C4",
-    "C5"
+    "C5",
+    "C6"
   ],
   "secondary_criteria": [
     "C2",
@@ -104,7 +106,5 @@
     "C8",
     "C9"
   ],
-  "excluded_criteria": [
-    "C6"
-  ]
+  "excluded_criteria": []
 }

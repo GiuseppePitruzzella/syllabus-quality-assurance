@@ -2,14 +2,14 @@
   "evaluator_id": "expert_01",
   "phase": "blind",
   "source_workbook": "expert_01_blind_raw.xlsx",
-  "source_sha256": "b5dc86c5c0bf0343f906befdd560db234f5abd58c24939c51374728c71a67e8f",
+  "source_sha256": "60d01b8d8dd531bca55ab3eb35d4236e2c529b287fba3247b6d95bb02fe44dfe",
   "sheet_count": 8,
   "judgment_count": 72,
   "scores": {
     "0": 3,
-    "1": 23,
-    "2": 37,
+    "1": 19,
+    "2": 50,
     "NA": 0,
-    "MISSING": 9
+    "MISSING": 0
   }
 }
