@@ -58,6 +58,7 @@ def test_summary_md_has_verdict_table():
     assert "-2.00" in md
     assert "PASS robusti" in md
     assert "**FAIL:** nessuno" in md
+    assert not md.endswith("\n\n")
 
 
 def test_protocol_md_lists_perturbations_and_caveats():
@@ -67,6 +68,7 @@ def test_protocol_md_lists_perturbations_and_caveats():
     assert "C1" in md and "C7" in md  # coupling declaration
     assert "C5 e C9 partono da baseline 1" not in md
     assert "Tutti i bersagli partono dal massimo" in md
+    assert not md.endswith("\n\n")
 
 
 def test_protocol_md_reports_limited_headroom_from_metrics():
@@ -82,6 +84,7 @@ def test_analysis_md_distinguishes_construct_result_and_limit():
     assert "C7_remove_schedule" in md
     assert "C9_editorial_noise" in md
     assert "limite di sensibilità" in md
+    assert not md.endswith("\n\n")
 
 
 def test_deltas_tex_is_tabularx():

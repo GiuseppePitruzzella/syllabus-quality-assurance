@@ -76,7 +76,6 @@ def render_protocol_md(
         "- N piccolo (3/condizione); perturbazioni sintetiche; singola base "
         "(LM-18 Deep Learning) → generalizzabilità limitata.",
         *_headroom_notes(metrics),
-        "",
     ]
     return "\n".join(lines) + "\n"
 
@@ -115,7 +114,6 @@ def render_summary_md(metrics: PerturbationMetrics) -> str:
         "## Esiti per classe",
         "",
         *_verdict_groups(metrics),
-        "",
     ]
     return "\n".join(lines) + "\n"
 
@@ -184,7 +182,6 @@ def render_analysis_md(metrics: PerturbationMetrics) -> str:
         "nessun report testuale è stato usato per calcolare i verdetti.",
         "- I risultati descrivono sensibilità direzionale sul caso Deep Learning e "
         "non sono automaticamente generalizzabili a tutti i syllabus LM-18.",
-        "",
     ]
     return "\n".join(lines) + "\n"
 
