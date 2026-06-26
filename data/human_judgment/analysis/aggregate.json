@@ -1,9 +1,10 @@
 {
   "phase": "5.8",
-  "generated_at": "2026-06-25T21:23:04.928970+00:00",
+  "generated_at": "2026-06-26T09:30:52.747202+00:00",
   "comparability_audit": {
-    "protocol": "phase_5_8_comparability_v1",
+    "protocol": "phase_5_8_comparability_v2",
     "human_instrument": "expert_01_blind_raw.xlsx",
+    "followup_scope": "VAPT completed; C6 revised for all syllabi after clarification",
     "system_artifacts": "data/calibration/validation_lm18/",
     "system_code_commit": "f5b57c9e1154c109ca32e5ee3659b0263cebe3b3",
     "system_prompt_versions": {
@@ -60,12 +61,12 @@
       },
       {
         "criterion": "C6",
-        "human_construct": "Coerenza o mapping tra risultati di apprendimento e contenuti.",
+        "human_construct": "Trasparenza delle modalità di verifica rivalutata dopo follow-up: tipologia delle prove, contributo al voto, criteri o fasce di valutazione, rubriche o esempi.",
         "system_construct": "Trasparenza delle modalità di verifica: tipologia, criteri di voto, rubriche o esempi.",
-        "status": "not_comparable",
-        "analysis_tier": "excluded",
-        "rationale": "I due lati misurano costrutti differenti. Un accordo numerico sarebbe accidentale e non interpretabile.",
-        "follow_up": "Escludere C6 dalle metriche primarie; analizzarlo qualitativamente e, se utile, chiedere una micro-rivalutazione col criterio corretto."
+        "status": "comparable",
+        "analysis_tier": "primary",
+        "rationale": "La prima consegna usava un testo di template non allineato al sistema; dopo il follow-up il valutatore ha rivisto C6 per tutti i syllabus secondo la definizione corretta. Il testo legacy nel workbook resta un limite documentale, ma i punteggi aggiornati sono confrontabili.",
+        "follow_up": "Usare i punteggi C6 aggiornati nella metrica primaria e dichiarare che derivano da una micro-rivalutazione post-follow-up."
       },
       {
         "criterion": "C7",
@@ -99,7 +100,8 @@
       "C1",
       "C3",
       "C4",
-      "C5"
+      "C5",
+      "C6"
     ],
     "secondary_criteria": [
       "C2",
@@ -107,9 +109,7 @@
       "C8",
       "C9"
     ],
-    "excluded_criteria": [
-      "C6"
-    ]
+    "excluded_criteria": []
   },
   "n_evaluators": 1,
   "evaluators": [
@@ -128,12 +128,12 @@
       "n_syllabi": 8,
       "macro": {
         "n_observations": 72,
-        "n_primary_pairs": 63,
+        "n_primary_pairs": 72,
         "n_excluded_na": 0,
-        "n_excluded_missing": 9,
-        "kappa_linear_weighted": 0.173,
-        "accuracy": 0.556,
-        "mae": 0.476
+        "n_excluded_missing": 0,
+        "kappa_linear_weighted": 0.308,
+        "accuracy": 0.653,
+        "mae": 0.375
       },
       "tier_metrics": {
         "primary": {
@@ -141,15 +141,16 @@
             "C1",
             "C3",
             "C4",
-            "C5"
+            "C5",
+            "C6"
           ],
-          "n_observations": 32,
-          "n_primary_pairs": 28,
+          "n_observations": 40,
+          "n_primary_pairs": 40,
           "n_excluded_na": 0,
-          "n_excluded_missing": 4,
-          "kappa_linear_weighted": 0.333,
-          "accuracy": 0.679,
-          "mae": 0.321
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": 0.368,
+          "accuracy": 0.725,
+          "mae": 0.275
         },
         "secondary": {
           "criteria": [
@@ -159,35 +160,33 @@
             "C9"
           ],
           "n_observations": 32,
-          "n_primary_pairs": 28,
+          "n_primary_pairs": 32,
           "n_excluded_na": 0,
-          "n_excluded_missing": 4,
-          "kappa_linear_weighted": 0.192,
-          "accuracy": 0.536,
-          "mae": 0.536
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": 0.22,
+          "accuracy": 0.562,
+          "mae": 0.5
         },
         "excluded": {
-          "criteria": [
-            "C6"
-          ],
-          "n_observations": 8,
-          "n_primary_pairs": 7,
+          "criteria": [],
+          "n_observations": 0,
+          "n_primary_pairs": 0,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
-          "kappa_linear_weighted": -0.312,
-          "accuracy": 0.143,
-          "mae": 0.857
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": null,
+          "accuracy": null,
+          "mae": null
         }
       },
       "per_criterion": {
         "C1": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.714,
-          "mae": 0.286,
+          "accuracy": 0.75,
+          "mae": 0.25,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -206,9 +205,9 @@
             "2": {
               "0": 0,
               "1": 2,
-              "2": 5,
+              "2": 6,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -228,12 +227,12 @@
         },
         "C2": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
-          "kappa_linear_weighted": 0.255,
-          "accuracy": 0.429,
-          "mae": 0.714,
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": 0.333,
+          "accuracy": 0.5,
+          "mae": 0.625,
           "confusion_matrix": {
             "0": {
               "0": 1,
@@ -252,9 +251,9 @@
             "2": {
               "0": 0,
               "1": 0,
-              "2": 1,
+              "2": 2,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -274,12 +273,12 @@
         },
         "C3": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.571,
-          "mae": 0.429,
+          "accuracy": 0.625,
+          "mae": 0.375,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -298,9 +297,9 @@
             "2": {
               "0": 0,
               "1": 0,
-              "2": 4,
+              "2": 5,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -320,12 +319,12 @@
         },
         "C4": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.857,
-          "mae": 0.143,
+          "accuracy": 0.75,
+          "mae": 0.25,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -337,9 +336,9 @@
             "1": {
               "0": 0,
               "1": 0,
-              "2": 1,
+              "2": 2,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "2": {
               "0": 0,
@@ -366,12 +365,12 @@
         },
         "C5": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.571,
-          "mae": 0.429,
+          "accuracy": 0.5,
+          "mae": 0.5,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -383,9 +382,9 @@
             "1": {
               "0": 1,
               "1": 4,
-              "2": 2,
+              "2": 3,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "2": {
               "0": 0,
@@ -412,12 +411,12 @@
         },
         "C6": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
-          "kappa_linear_weighted": -0.312,
-          "accuracy": 0.143,
-          "mae": 0.857,
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": 1.0,
+          "accuracy": 1.0,
+          "mae": 0.0,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -428,17 +427,17 @@
             },
             "1": {
               "0": 0,
-              "1": 0,
-              "2": 1,
+              "1": 1,
+              "2": 0,
               "NA": 0,
               "MISSING": 0
             },
             "2": {
               "0": 0,
-              "1": 5,
-              "2": 1,
+              "1": 0,
+              "2": 7,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -458,12 +457,12 @@
         },
         "C7": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
-          "kappa_linear_weighted": 0.054,
-          "accuracy": 0.286,
-          "mae": 0.714,
+          "n_excluded_missing": 0,
+          "kappa_linear_weighted": 0.091,
+          "accuracy": 0.375,
+          "mae": 0.625,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -482,9 +481,9 @@
             "2": {
               "0": 0,
               "1": 5,
-              "2": 1,
+              "2": 2,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -504,12 +503,12 @@
         },
         "C8": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.857,
-          "mae": 0.143,
+          "accuracy": 0.875,
+          "mae": 0.125,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -528,9 +527,9 @@
             "2": {
               "0": 0,
               "1": 1,
-              "2": 6,
+              "2": 7,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "NA": {
               "0": 0,
@@ -550,12 +549,12 @@
         },
         "C9": {
           "n_observations": 8,
-          "n_primary_pairs": 7,
+          "n_primary_pairs": 8,
           "n_excluded_na": 0,
-          "n_excluded_missing": 1,
+          "n_excluded_missing": 0,
           "kappa_linear_weighted": 0.0,
-          "accuracy": 0.571,
-          "mae": 0.571,
+          "accuracy": 0.5,
+          "mae": 0.625,
           "confusion_matrix": {
             "0": {
               "0": 0,
@@ -567,9 +566,9 @@
             "1": {
               "0": 0,
               "1": 4,
-              "2": 2,
+              "2": 3,
               "NA": 0,
-              "MISSING": 1
+              "MISSING": 0
             },
             "2": {
               "0": 0,
@@ -596,82 +595,82 @@
         }
       },
       "core_score_comparison": {
-        "n_pairs": 7,
-        "mean_absolute_error": 0.161,
-        "primary_n_pairs": 7,
-        "primary_mean_absolute_error": 0.25,
+        "n_pairs": 8,
+        "mean_absolute_error": 0.239,
+        "primary_n_pairs": 8,
+        "primary_mean_absolute_error": 0.225,
         "per_syllabus": {
           "88B7C1CE-B595-46A5-A37A-C5414AD807B5": {
             "course_name": "COMPUTER VISION E LABORATORIO",
             "system_core": 1.44,
-            "human_core": 1.44,
+            "human_core": 1.56,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.5,
-            "human_primary_mean": 1.5,
-            "n_human_primary_evaluated": 4
+            "system_primary_mean": 1.6,
+            "human_primary_mean": 1.6,
+            "n_human_primary_evaluated": 5
           },
           "0B53E8E2-4B90-426F-A25C-3AA31FA4B649": {
             "course_name": "INTERNET OF THINGS",
             "system_core": 1.56,
-            "human_core": 1.11,
+            "human_core": 1.22,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.75,
-            "human_primary_mean": 1.25,
-            "n_human_primary_evaluated": 4
+            "system_primary_mean": 1.8,
+            "human_primary_mean": 1.4,
+            "n_human_primary_evaluated": 5
           },
           "F4AF1512-9D7A-4256-B57D-E103E05B009B": {
             "course_name": "PEER TO PEER AND WIRELESS NETWORKS E LABORATORIO",
             "system_core": 1.44,
-            "human_core": 1.67,
+            "human_core": 1.78,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.75,
+            "system_primary_mean": 1.8,
             "human_primary_mean": 2,
-            "n_human_primary_evaluated": 4
+            "n_human_primary_evaluated": 5
           },
           "9A90BBCE-99E3-4FB0-BF91-CCAAA5C51791": {
             "course_name": "MULTIMEDIA E LABORATORIO",
             "system_core": 1.44,
-            "human_core": 1.67,
+            "human_core": 1.78,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.25,
-            "human_primary_mean": 1.75,
-            "n_human_primary_evaluated": 4
+            "system_primary_mean": 1.4,
+            "human_primary_mean": 1.8,
+            "n_human_primary_evaluated": 5
           },
           "89E21813-A17C-4C85-AF65-C295EE11ED59": {
             "course_name": "COMPUTER VISION",
             "system_core": 1.44,
-            "human_core": 1.33,
+            "human_core": 1.22,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.5,
-            "human_primary_mean": 1.75,
-            "n_human_primary_evaluated": 4
+            "system_primary_mean": 1.4,
+            "human_primary_mean": 1.6,
+            "n_human_primary_evaluated": 5
           },
           "E2446DF6-59A1-46FD-B8D8-635EB937C1B3": {
             "course_name": "OTTIMIZZAZIONE",
             "system_core": 1.67,
-            "human_core": 1.78,
+            "human_core": 1.89,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.75,
+            "system_primary_mean": 1.8,
             "human_primary_mean": 2,
-            "n_human_primary_evaluated": 4
+            "n_human_primary_evaluated": 5
           },
           "3540D939-DA16-4C1D-983C-E6B85C403F2F": {
             "course_name": "Deep Learning",
             "system_core": 1.78,
             "human_core": 1.78,
             "n_human_evaluated": 9,
-            "system_primary_mean": 1.75,
-            "human_primary_mean": 1.75,
-            "n_human_primary_evaluated": 4
+            "system_primary_mean": 1.8,
+            "human_primary_mean": 1.8,
+            "n_human_primary_evaluated": 5
           },
           "46D62804-0FCD-4478-A51D-A752B64A7DCB": {
             "course_name": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
             "system_core": 1.67,
-            "human_core": null,
-            "n_human_evaluated": 0,
-            "system_primary_mean": 1.5,
-            "human_primary_mean": null,
-            "n_human_primary_evaluated": 0
+            "human_core": 2,
+            "n_human_evaluated": 9,
+            "system_primary_mean": 1.6,
+            "human_primary_mean": 2,
+            "n_human_primary_evaluated": 5
           }
         }
       },
@@ -798,6 +797,17 @@
           "evidence_quote": ""
         },
         {
+          "criterion": "C4",
+          "seuid": "46D62804-0FCD-4478-A51D-A752B64A7DCB",
+          "course_name": "VULNERABILITY ASSESSMENT E PENETRATION TESTING (VAPT)",
+          "system_score": 1,
+          "human_score": 2,
+          "delta": 1,
+          "system_justification": "Il campo narrativo generale dei risultati di apprendimento (\"learning_outcomes_it\") articola in modo completo e specifico tutti e cinque i Descrittori di Dublino. Tuttavia, i campi individuali dedicati a \"dublin_knowledge_it\" e \"dublin_appl",
+          "human_justification": "",
+          "evidence_quote": ""
+        },
+        {
           "criterion": "C5",
           "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
           "course_name": "INTERNET OF THINGS",
@@ -828,17 +838,6 @@
           "delta": 1,
           "system_justification": "I prerequisiti sono presenti e specifici, indicando aree tematiche chiare come 'analisi matematica, geometria piana e algebra lineare', il che è utile allo studente. Tuttavia, non viene fatta una distinzione esplicita tra prerequisiti cultu",
           "human_justification": "",
-          "evidence_quote": ""
-        },
-        {
-          "criterion": "C6",
-          "seuid": "88B7C1CE-B595-46A5-A37A-C5414AD807B5",
-          "course_name": "COMPUTER VISION E LABORATORIO",
-          "system_score": 2,
-          "human_score": 1,
-          "delta": 1,
-          "system_justification": "Le modalità di verifica dell'apprendimento sono descritte in modo chiaro e specifico. Viene fornito un dettagliato schema di attribuzione del voto per la prova orale, che include descrizioni per ogni fascia di valutazione. Inoltre, sono pre",
-          "human_justification": "il mapping c'è, ma forse potrebbe essere un po' più dettagliato (es. sulle parti pratiche)",
           "evidence_quote": ""
         }
       ]

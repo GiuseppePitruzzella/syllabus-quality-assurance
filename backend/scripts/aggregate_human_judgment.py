@@ -485,6 +485,11 @@ def _human_human_analysis(
 
 
 def _render_markdown(report: dict[str, Any]) -> str:
+    audit = report.get("comparability_audit") or audit_payload()
+    primary_criteria = audit.get("primary_criteria") or criteria_for_tier("primary")
+    secondary_criteria = audit.get("secondary_criteria") or criteria_for_tier("secondary")
+    excluded_criteria = audit.get("excluded_criteria") or criteria_for_tier("excluded")
+    excluded_label = ", ".join(excluded_criteria) if excluded_criteria else "none"
     L = ["# Phase 5.8 — Human-judgment aggregate report", ""]
     L += [
         f"- Generated at: `{report['generated_at']}`",
@@ -492,8 +497,8 @@ def _render_markdown(report: dict[str, Any]) -> str:
         "- Primary metrics exclude `NA` and missing cells; those observations "
         "are reported separately as process counts.",
         "- The strict system-vs-expert comparison also follows the "
-        "comparability audit: C1/C3/C4/C5 primary; C2/C7/C8/C9 secondary; "
-        "C6 excluded.",
+        f"comparability audit: {'/'.join(primary_criteria)} primary; "
+        f"{'/'.join(secondary_criteria)} secondary; {excluded_label} excluded.",
         "- No automatic majority/consensus score is computed.",
         "",
     ]
@@ -564,7 +569,7 @@ def _render_markdown(report: dict[str, Any]) -> str:
                 f"{secondary['n_primary_pairs']} | "
                 f"{secondary['kappa_linear_weighted']} | "
                 f"{secondary['accuracy']} | {secondary['mae']} |",
-                f"| Excluded | {', '.join(excluded['criteria'])} | "
+                f"| Excluded | {', '.join(excluded['criteria']) or 'none'} | "
                 f"{excluded['n_primary_pairs']} | — | — | — |",
                 "",
             ]

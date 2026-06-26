@@ -5,8 +5,8 @@ Analisi interamente offline: nessuna chiamata Vertex e nessuna nuova valutazione
 ## Completezza del dato umano
 
 - Syllabus nel workbook: 8.
-- Syllabus completi: 7.
-- Fogli senza punteggi: 08_VULN_ASSESSMENT_PT.
+- Syllabus completi: 8.
+- Fogli senza punteggi: nessuno.
 
 ## C3/C4 — Stessa area, costrutti distinti
 
@@ -17,23 +17,23 @@ L'accordo esatto è elevato, ma è favorito dall'effetto soffitto: molti syllabu
 
 ## C5 — Requisiti culturali/disciplinari
 
-- Confronto storico A1 a1_v5: n=7, κ=0.0, accuracy=0.571, MAE=0.429.
-- Sensibilità con score modale A1 a1_v6: n=7, κ=0.276, accuracy=0.571, MAE=0.429.
+- Confronto storico A1 a1_v5: n=8, κ=0.0, accuracy=0.5, MAE=0.5.
+- Sensibilità con score modale A1 a1_v6: n=8, κ=0.429, accuracy=0.625, MAE=0.375.
 
 Il confronto storico resta valido perché questionario e A1 a1_v5 usavano la stessa regola. La seconda riga misura soltanto quanto cambierebbe l'accordo con la ridefinizione successiva.
 
 ## C6 — Difficile per l'uomo, facile per la macchina?
 
-- Accordo numerico non interpretabile: n=7, κ=-0.312, accuracy=0.143, MAE=0.857.
+- Accordo dopo micro-rivalutazione C6: n=8, κ=1.0, accuracy=1.0, MAE=0.0.
 - Self-consistency C6: unanimità 1.00, stdev media 0.00.
 
-C6 è stabile per la macchina, ma il questionario umano misurava un altro costrutto. Non è possibile concludere che la macchina sia più brava finché l'esperto non valuta la trasparenza della verifica.
+Dopo il follow-up, C6 è confrontabile: il valutatore ha rivisto il criterio usando la definizione di trasparenza delle modalità di verifica. L'accordo perfetto indica che, in questo campione, il criterio è sia stabile per il sistema sia allineato al giudizio esperto; resta comunque un'evidenza diagnostica a singolo valutatore, non una misura di affidabilità inter-rater.
 
 ## C7 — Forma discorsiva vs struttura a blocchi
 
-- Confronto osservato: n=7, κ=0.054, accuracy=0.286, MAE=0.714.
-- Sensibilità stretta (solo conflitto esplicito blocchi/istruzioni): n=7, κ=0.125, accuracy=0.429, MAE=0.571.
-- Categorie delle motivazioni: {'block_or_module_structure': 1, 'insufficient_detail': 1, 'narrative_form': 3, 'no_written_reason': 1, 'other': 1}.
+- Confronto osservato: n=8, κ=0.091, accuracy=0.375, MAE=0.625.
+- Sensibilità stretta (solo conflitto esplicito blocchi/istruzioni): n=8, κ=0.158, accuracy=0.5, MAE=0.5.
+- Categorie delle motivazioni: {'block_or_module_structure': 1, 'insufficient_detail': 1, 'narrative_form': 3, 'no_written_reason': 2, 'other': 1}.
 
 ## Checklist locale LM-18 sui 30 syllabus
 

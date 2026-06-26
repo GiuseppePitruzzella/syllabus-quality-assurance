@@ -1,55 +1,39 @@
 # Phase 5.8 — Follow-up minimo per il valutatore esperto
 
-Il workbook ricevuto è sufficiente per un confronto diagnostico su sette
-syllabus. Prima di considerare chiusa la raccolta, restano due chiarimenti
-mirati.
+## Stato
 
-## 1. Foglio VAPT senza punteggi
+Chiuso il 2026-06-26. Il valutatore ha confermato che l'omissione del foglio
+`08_VULN_ASSESSMENT_PT` era una svista, ha completato VAPT e ha rivisto C6 per
+tutti gli otto syllabus dopo il chiarimento metodologico.
 
-Nel foglio `08_VULN_ASSESSMENT_PT` le nove celle di punteggio C1-C9 sono
-vuote. Occorre chiedere se:
+## Richiesta inviata
 
-- il syllabus è stato intenzionalmente escluso; oppure
-- si tratta di una compilazione omessa per errore.
+Il workbook ricevuto il 2026-06-25 era sufficiente per un confronto diagnostico
+su sette syllabus, ma lasciava aperti due punti:
 
-Nel primo caso il campione finale sarà dichiarato come sette syllabus
-effettivamente valutati. Nel secondo caso è sufficiente completare quel solo
-foglio.
+1. il foglio `08_VULN_ASSESSMENT_PT` non conteneva punteggi C1-C9;
+2. C6 nel questionario descriveva la coerenza RA-contenuti, mentre il sistema
+   storico confrontato in Phase 5.8 valutava la trasparenza delle modalità di
+   verifica.
 
-## 2. Micro-rivalutazione del solo C6
-
-Il questionario consegnato descriveva C6 come coerenza o mapping tra risultati
-di apprendimento e contenuti. Il sistema storico confrontato in Phase 5.8
-usava invece C6 per valutare la **trasparenza delle modalità di verifica**.
-I punteggi attuali non sono quindi confrontabili.
-
-Per evitare di ripetere l'intera valutazione, si propone di chiedere un nuovo
-punteggio C6 per i syllabus effettivamente inclusi, usando soltanto questa
-definizione:
+Per chiudere la raccolta è stato chiesto al valutatore di completare VAPT e di
+rivalutare C6 usando la seguente definizione:
 
 > **C6 — Trasparenza delle modalità di verifica.** Valuta se il syllabus
 > descrive chiaramente la tipologia delle prove, il modo in cui concorrono al
 > voto finale e, quando disponibili, criteri o fasce di valutazione, rubriche
 > ed esempi di domande.
 
-- **0:** modalità assenti, generiche o non comprensibili.
-- **1:** tipologia della prova chiara, ma criteri di attribuzione del voto o
-  dettagli operativi incompleti.
-- **2:** prove, contributo al voto e criteri di valutazione descritti in modo
-  chiaro; rubriche, fasce o esempi rendono la verifica trasparente.
-- **NA:** sezione non disponibile o tecnicamente non leggibile.
+## Esito
 
-È sufficiente indicare `0`, `1`, `2` o `NA`; una breve motivazione è utile solo
-nei casi dubbi. Questa micro-rivalutazione non modifica i giudizi già
-consegnati sugli altri criteri.
+Il workbook aggiornato contiene:
 
-## Testo breve suggerito per l'email
+- 8 syllabus completi;
+- 72 giudizi numerici su 72;
+- 0 `NA`;
+- 0 `MISSING`;
+- C6 confrontabile con il costrutto valutato dal sistema.
 
-> Grazie ancora per la valutazione. Nell'importazione ho rilevato due piccoli
-> punti da chiarire: il foglio VAPT risulta senza punteggi, quindi vorrei
-> capire se sia stato escluso intenzionalmente; inoltre, nel questionario C6
-> era descritto in modo diverso dal criterio usato dal sistema. Per rendere il
-> confronto metodologicamente corretto, Le chiederei soltanto di riassegnare
-> C6 ai syllabus valutati usando la breve definizione allegata. Non è
-> necessario rivedere gli altri criteri.
-
+Di conseguenza, l'audit di comparabilità v2 include C6 nel perimetro primario:
+C1, C3, C4, C5, C6. Nessun criterio è escluso dalle metriche di accordo; C2,
+C7, C8 e C9 restano secondari/esplorativi per differenze di perimetro o fonte.

@@ -158,7 +158,11 @@ def import_workbook(
     for sheet_name, records in extracted.items():
         destination = output_dir / f"{sheet_name}_blind.csv"
         with destination.open("w", encoding="utf-8", newline="") as target:
-            writer = csv.DictWriter(target, fieldnames=CSV_HEADERS)
+            writer = csv.DictWriter(
+                target,
+                fieldnames=CSV_HEADERS,
+                lineterminator="\n",
+            )
             writer.writeheader()
             writer.writerows(records)
 

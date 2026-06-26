@@ -118,9 +118,10 @@ separately. No automatic majority/consensus score is computed. Output:
 See `schema.json` for the canonical JSON shape if you prefer
 exporting to JSON instead of CSV.
 
-## Expert dataset received (2026-06-25)
+## Expert dataset received (2026-06-26 follow-up)
 
-The thesis advisor returned the blind workbook. For research-data integrity:
+The thesis advisor returned the updated blind workbook after the minimal
+follow-up request. For research-data integrity:
 
 - the original bytes are archived under
   `evaluators/expert_01/source/expert_01_blind_raw.xlsx`;
@@ -128,9 +129,10 @@ The thesis advisor returned the blind workbook. For research-data integrity:
   blind handling;
 - `scripts/import_human_judgment_xlsx.py` converts the OpenXML workbook into
   canonical per-syllabus CSVs without modifying or re-saving the source;
-- the imported workbook contains 63 numeric judgments and 9 missing values:
-  the entire `08_VULN_ASSESSMENT_PT` sheet has no scores. Missing values are
-  retained as `MISSING`, never inferred as `NA` or zero.
+- the imported workbook contains 72 numeric judgments and 0 missing values:
+  the previously blank `08_VULN_ASSESSMENT_PT` sheet is now complete, and C6
+  has been reviewed for all eight syllabus after the methodological
+  clarification.
 
 ### Comparability gate
 
@@ -139,15 +141,17 @@ compared with the prompt versions that generated `validation_lm18`
 (`a1_v5`, `a2_v1`, `a3_v1`, `a4_v2`). Results are stored in
 `analysis/comparability_audit.{json,md}`:
 
-- primary comparison: C1, C3, C4, C5;
+- primary comparison: C1, C3, C4, C5, C6;
 - secondary/exploratory comparison: C2, C7, C8, C9;
-- excluded from agreement metrics: C6, because the human sheet measured
-  RA-content mapping while the historical system measured assessment
-  transparency.
+- excluded from agreement metrics: none.
+
+C6 is included in the primary comparison only for the updated workbook: the
+template text remains legacy, but the evaluator explicitly revised C6 after the
+follow-up clarification using the assessment-transparency construct measured by
+the system.
 
 `aggregate_human_judgment.py` retains the all-criteria descriptive output but
 reports comparability-aware primary metrics first. Additional offline analyses
 of C5, C6, C7 and LM-18 local requirements are written to
-`analysis/expert_feedback_analysis.{json,md}`. The minimal clarification needed
-to close the collection (blank VAPT sheet and C6 micro-rerating) is recorded in
-`analysis/followup_request.md`.
+`analysis/expert_feedback_analysis.{json,md}`. The minimal clarification request
+and its closure are recorded in `analysis/followup_request.md`.

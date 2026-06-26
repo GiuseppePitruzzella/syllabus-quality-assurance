@@ -9,15 +9,15 @@ Il confronto usa il questionario blind ricevuto dal valutatore e le valutazioni 
 | C3 | Comparabile | primary | Le formulazioni differiscono, ma operazionalizzano lo stesso costrutto di qualità formulativa degli outcome. |
 | C4 | Comparabile | primary | Costrutto e anchor sono sostanzialmente equivalenti. |
 | C5 | Comparabile | primary | Il confronto storico è valido perché validation_lm18 usava a1_v5. La rubrica corrente a1_v7 è stata successivamente ridefinita e non va usata retroattivamente. |
-| C6 | Non comparabile | excluded | I due lati misurano costrutti differenti. Un accordo numerico sarebbe accidentale e non interpretabile. |
+| C6 | Comparabile | primary | La prima consegna usava un testo di template non allineato al sistema; dopo il follow-up il valutatore ha rivisto C6 per tutti i syllabus secondo la definizione corretta. Il testo legacy nel workbook resta un limite documentale, ma i punteggi aggiornati sono confrontabili. |
 | C7 | Parzialmente comparabile | secondary | Entrambi valutano la comprensibilità dei contenuti, ma il questionario premia esplicitamente macro-blocchi e può confliggere con le istruzioni locali favorevoli alla forma discorsiva. |
 | C8 | Parzialmente comparabile | secondary | Il giudizio umano copre un sottoinsieme del costrutto usato dal sistema; l'accordo resta informativo ma non pienamente equivalente. |
 | C9 | Parzialmente comparabile | secondary | Il costrutto è lo stesso, ma le fonti osservate non sono equivalenti: parser e portale possono introdurre marker o interruzioni non visibili al valutatore. |
 
 ## Perimetro delle metriche
 
-- **Primario:** C1, C3, C4, C5.
+- **Primario:** C1, C3, C4, C5, C6.
 - **Secondario/esplorativo:** C2, C7, C8, C9.
-- **Escluso dalle metriche di accordo:** C6.
+- **Escluso dalle metriche di accordo:** nessuno.
 
-C6 è escluso perché il questionario umano misura il mapping RA-contenuti, mentre il sistema misura la trasparenza della valutazione. C5 resta comparabile nel confronto storico perché sia il questionario sia A1 `a1_v5` usavano la tassonomia culturali/disciplinari; la successiva ridefinizione `a1_v7` sarà trattata soltanto come analisi controfattuale.
+C6 rientra nel perimetro primario soltanto nella versione aggiornata del workbook: il valutatore ha completato VAPT e rivalutato C6 dopo il chiarimento metodologico. C5 resta comparabile nel confronto storico perché sia il questionario sia A1 `a1_v5` usavano la tassonomia culturali/disciplinari; la successiva ridefinizione `a1_v7` sarà trattata soltanto come analisi controfattuale.
