@@ -89,3 +89,50 @@ def test_run_campaign_writes_24_dumps_and_resumes(tmp_path):
         graph_invoker=invoker, course_name="Deep Learning", resume=True,
     )
     assert calls["n"] == 24  # all resumed, no new invocations
+
+
+def test_build_manifest_has_git_and_config():
+    manifest = runner.build_manifest("DL", 3, Path("/tmp/out"))
+    assert manifest["experiment"] == "perturbation_sensitivity_v1"
+    assert manifest["base_seuid"] == "DL"
+    assert set(manifest["git"]) == {"commit", "branch", "dirty"}
+    assert manifest["scientific_config"]["llm_model"]
+    assert manifest["prompt_versions"]
+
+
+def test_write_outputs_creates_all_artifacts(tmp_path):
+    full2 = {f"C{i}": 2 for i in range(1, 10)}
+    c6_low = {**full2, "C6": 0}
+    records = []
+    for i in range(1, 4):
+        records.append({"condition": "base", "run_index": i, "status": "completed",
+                        "criterion_scores": full2, "core_score": 2.0, "coverage": 1.0,
+                        "na_criteria": [], "agent_errors": {}, "duration_ms": 1})
+    for p in runner.PERTURBATIONS:
+        sc = c6_low if p.id == "C6_strip_assessment" else full2
+        for i in range(1, 4):
+            records.append({"condition": p.id, "run_index": i, "status": "completed",
+                            "criterion_scores": sc, "core_score": 2.0, "coverage": 1.0,
+                            "na_criteria": [], "agent_errors": {}, "duration_ms": 1})
+
+    manifest = runner.build_manifest("DL", 3, tmp_path)
+    runner.write_outputs(tmp_path, records, manifest)
+
+    assert (tmp_path / "metrics.json").exists()
+    assert (tmp_path / "manifest.json").exists()
+    assert (tmp_path / "protocol.md").exists()
+    assert (tmp_path / "summary.md").exists()
+    assert (tmp_path / "tables" / "tbl_perturbation_deltas.tex").exists()
+    assert (tmp_path / "tables" / "tbl_side_effects.tex").exists()
+
+    metrics = json.loads((tmp_path / "metrics.json").read_text())
+    by_id = {v["variant_id"]: v for v in metrics["variants"]}
+    assert by_id["C6_strip_assessment"]["passed"] is True
+
+
+def test_dry_run_plan_lists_variants_and_expectations(tmp_path):
+    plan = runner.format_plan("DL", "Deep Learning", 3,
+                              runner.build_variants(_base_snapshot(), tmp_path))
+    assert "24" in plan          # total runs
+    assert "C6_strip_assessment" in plan
+    assert "C6" in plan          # expected target shown
