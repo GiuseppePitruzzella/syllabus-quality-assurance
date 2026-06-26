@@ -152,7 +152,7 @@ PERTURBATIONS: tuple[Perturbation, ...] = (
     Perturbation(
         "C3C4_generic_outcomes", ("C3", "C4"), "decrease",
         "Rende i risultati di apprendimento generici, corso-centrici e ripetitivi.",
-        (), perturb_c3c4_generic_outcomes,
+        ("C8",), perturb_c3c4_generic_outcomes,
     ),
     Perturbation(
         "C5_blank_prerequisites", ("C5",), "decrease",
@@ -162,13 +162,13 @@ PERTURBATIONS: tuple[Perturbation, ...] = (
     Perturbation(
         "C6_strip_assessment", ("C6",), "decrease",
         "Rimuove griglia/fasce/criteri/pesi/esempi dalla verifica.",
-        (), perturb_c6_strip_assessment,
+        ("C1", "C8"), perturb_c6_strip_assessment,
     ),
     Perturbation(
         "C7_remove_schedule", ("C7",), "decrease",
         "Rimuove la programmazione del corso (schedule); "
         "appiattisce eventuali contenuti strutturati.",
-        ("C8",), perturb_c7_remove_schedule,
+        ("C1", "C8"), perturb_c7_remove_schedule,
     ),
     Perturbation(
         "C9_editorial_noise", ("C9",), "decrease",

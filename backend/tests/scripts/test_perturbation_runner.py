@@ -122,6 +122,7 @@ def test_write_outputs_creates_all_artifacts(tmp_path):
     assert (tmp_path / "manifest.json").exists()
     assert (tmp_path / "protocol.md").exists()
     assert (tmp_path / "summary.md").exists()
+    assert (tmp_path / "analysis.md").exists()
     assert (tmp_path / "tables" / "tbl_perturbation_deltas.tex").exists()
     assert (tmp_path / "tables" / "tbl_side_effects.tex").exists()
 

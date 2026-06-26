@@ -48,6 +48,9 @@ def test_registry_has_seven_perturbations_with_unique_ids():
     ]
     assert len(set(ids)) == 7
     assert all(p.expected_direction == "decrease" for p in PERTURBATIONS)
+    assert perturbation_by_id("C3C4_generic_outcomes").plausible_coupling == ("C8",)
+    assert perturbation_by_id("C6_strip_assessment").plausible_coupling == ("C1", "C8")
+    assert perturbation_by_id("C7_remove_schedule").plausible_coupling == ("C1", "C8")
 
 
 def test_perturbations_do_not_mutate_the_base_in_place():

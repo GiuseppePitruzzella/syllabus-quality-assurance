@@ -34,6 +34,7 @@ from app.evaluation.analysis.perturbation import (  # noqa: E402
     generate_variants,
 )
 from app.evaluation.analysis.perturbation_reporting import (  # noqa: E402
+    render_analysis_md,
     render_perturbation_deltas_tex,
     render_protocol_md,
     render_side_effects_tex,
@@ -210,6 +211,8 @@ def write_outputs(
         render_protocol_md(manifest, metrics, PERTURBATIONS), encoding="utf-8")
     (output_dir / "summary.md").write_text(
         render_summary_md(metrics), encoding="utf-8")
+    (output_dir / "analysis.md").write_text(
+        render_analysis_md(metrics), encoding="utf-8")
     tables = output_dir / "tables"
     tables.mkdir(parents=True, exist_ok=True)
     (tables / "tbl_perturbation_deltas.tex").write_text(

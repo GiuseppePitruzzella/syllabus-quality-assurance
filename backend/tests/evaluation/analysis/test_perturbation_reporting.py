@@ -6,6 +6,7 @@ from app.evaluation.analysis.perturbation import (
     VariantResult,
 )
 from app.evaluation.analysis.perturbation_reporting import (
+    render_analysis_md,
     render_perturbation_deltas_tex,
     render_protocol_md,
     render_side_effects_tex,
@@ -55,6 +56,8 @@ def test_summary_md_has_verdict_table():
     assert "C6_strip_assessment" in md
     assert "PASS" in md
     assert "-2.00" in md
+    assert "PASS robusti" in md
+    assert "**FAIL:** nessuno" in md
 
 
 def test_protocol_md_lists_perturbations_and_caveats():
@@ -62,6 +65,23 @@ def test_protocol_md_lists_perturbations_and_caveats():
     assert "validità di costrutto" in md
     assert "english_coverage" in md   # C2 refinement note
     assert "C1" in md and "C7" in md  # coupling declaration
+    assert "C5 e C9 partono da baseline 1" not in md
+    assert "Tutti i bersagli partono dal massimo" in md
+
+
+def test_protocol_md_reports_limited_headroom_from_metrics():
+    metrics = _metrics()
+    metrics.variants[0].target_verdicts[0].base_mean = 1.0
+    md = render_protocol_md(_manifest(), metrics, PERTURBATIONS)
+    assert "C6 (baseline 1, delta minimo osservabile -1)" in md
+
+
+def test_analysis_md_distinguishes_construct_result_and_limit():
+    md = render_analysis_md(_metrics())
+    assert "validità di costrutto" in md
+    assert "C7_remove_schedule" in md
+    assert "C9_editorial_noise" in md
+    assert "limite di sensibilità" in md
 
 
 def test_deltas_tex_is_tabularx():
