@@ -2,9 +2,9 @@
 
 Dispatch by extension and return a deterministic, normalized
 plain-text version of the document. All failure modes — unsupported
-extension, unreadable file, parser-level exception, scanned PDF with
-no extractable text, empty / whitespace-only output, path escaping
-the storage root — surface as a single `ExtractionError`. Library
+extension, unreadable file, parser-level exception, scanned PDF whose
+optional OCR fallback fails, empty / whitespace-only output, path
+escaping the storage root — surface as a single `ExtractionError`. Library
 exceptions are wrapped via `raise ... from e` so the original cause
 is preserved internally without leaking the stack trace at the API
 layer.
@@ -69,13 +69,22 @@ def resolve_local_document_path(
 # ---------------------------------------------------------------------------
 
 
-def extract_text(abs_path: Path, extension: str) -> str:
+def extract_text(
+    abs_path: Path,
+    extension: str,
+    *,
+    pdf_ocr: Callable[[Path], str] | None = None,
+) -> str:
     """Extract normalized plain text from a local document.
 
     ``abs_path`` must already be the resolved absolute path
     (see :func:`resolve_local_document_path`). ``extension`` is the
     file extension as recorded on the registry row (e.g. ``.pdf``);
     ``.htm`` is normalised to ``.html`` so callers can pass either.
+
+    ``pdf_ocr`` is invoked only when a syntactically valid PDF yields
+    no text through the standard extractor. It stays unused for
+    ordinary text PDFs.
 
     Returns the normalized text.
 
@@ -92,7 +101,22 @@ def extract_text(abs_path: Path, extension: str) -> str:
     if not abs_path.is_file():
         raise ExtractionError(f"File not found: {abs_path}")
     raw = extractor(abs_path)
-    return _normalize_or_raise(raw, extension=ext)
+    try:
+        return _normalize_or_raise(raw, extension=ext)
+    except ExtractionError:
+        if ext != ".pdf" or pdf_ocr is None:
+            raise
+
+    try:
+        ocr_raw = pdf_ocr(abs_path)
+    except Exception as exc:
+        raise ExtractionError(f"PDF OCR fallback failed: {exc}") from exc
+    try:
+        return _normalize_or_raise(ocr_raw, extension=ext)
+    except ExtractionError as exc:
+        raise ExtractionError(
+            "PDF OCR fallback completed but produced no usable text."
+        ) from exc
 
 
 # ---------------------------------------------------------------------------

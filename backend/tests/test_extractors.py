@@ -5,7 +5,7 @@ Covers:
   - DOCX with a table
   - HTML strips script / style / noscript
   - empty / whitespace-only output → ExtractionError
-  - PDF with no extractable text (scanned) → ExtractionError
+  - scanned PDF → ExtractionError without OCR, extracted text with fallback
   - corrupted PDF / DOCX → ExtractionError
   - MD UTF-8 happy path + latin-1 fallback
   - unsupported extension → ExtractionError
@@ -198,6 +198,46 @@ def test_scanned_pdf_without_text_raises(tmp_path):
     # The message should mention OCR / scan so the API can surface a
     # specific hint to the user.
     assert "OCR" in str(excinfo.value) or "scan" in str(excinfo.value).lower()
+
+
+def test_scanned_pdf_uses_injected_ocr_fallback(tmp_path):
+    path = tmp_path / "scan.pdf"
+    _make_blank_pdf(path)
+    calls: list[Path] = []
+
+    def fake_ocr(received: Path) -> str:
+        calls.append(received)
+        return "Risultato | Attività formative\nConoscenza | INF/01"
+
+    text = extract_text(path, ".pdf", pdf_ocr=fake_ocr)
+
+    assert calls == [path]
+    assert "Risultato | Attività formative" in text
+
+
+def test_text_pdf_does_not_call_ocr_fallback(tmp_path):
+    path = tmp_path / "text.pdf"
+    _make_pdf(path, ["Matrice di Tuning LM-13"])
+
+    def unexpected_ocr(_path: Path) -> str:
+        raise AssertionError("OCR must not run for a text PDF")
+
+    assert "Matrice di Tuning" in extract_text(
+        path,
+        ".pdf",
+        pdf_ocr=unexpected_ocr,
+    )
+
+
+def test_scanned_pdf_wraps_ocr_failure(tmp_path):
+    path = tmp_path / "scan.pdf"
+    _make_blank_pdf(path)
+
+    def failing_ocr(_path: Path) -> str:
+        raise RuntimeError("vertex unavailable")
+
+    with pytest.raises(ExtractionError, match="OCR fallback failed"):
+        extract_text(path, ".pdf", pdf_ocr=failing_ocr)
 
 
 def test_corrupted_pdf_raises(tmp_path):

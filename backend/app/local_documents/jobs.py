@@ -19,6 +19,7 @@ actually scheduling a thread.
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 from typing import Callable
 
 import chromadb
@@ -56,6 +57,7 @@ class IndexingJobScheduler:
         embeddings: EmbeddingsClient,
         loop: asyncio.AbstractEventLoop | None = None,
         db_session_factory: Callable[[], object] = SessionLocal,
+        pdf_ocr: Callable[[Path], str] | None = None,
     ) -> None:
         self._chroma_client = chroma_client
         self._embeddings = embeddings
@@ -66,6 +68,7 @@ class IndexingJobScheduler:
         # the thread itself has no loop.
         self._loop = loop
         self._db_session_factory = db_session_factory
+        self._pdf_ocr = pdf_ocr
 
     def schedule(self, document_id: int) -> str:
         """Schedule an indexing run for ``document_id`` and return
@@ -92,6 +95,7 @@ class IndexingJobScheduler:
         chroma_client = self._chroma_client
         embeddings = self._embeddings
         session_factory = self._db_session_factory
+        pdf_ocr = self._pdf_ocr
 
         def _publish(event: SseEvent) -> None:
             job_registry.publish(job_id, event, loop)
@@ -104,7 +108,10 @@ class IndexingJobScheduler:
             try:
                 ingester = ExternalDocumentIngester(chroma_client, embeddings)
                 service = LocalDocumentIndexingService(
-                    db, ingester, progress_publisher=_publisher,
+                    db,
+                    ingester,
+                    progress_publisher=_publisher,
+                    pdf_ocr=pdf_ocr,
                 )
                 try:
                     result = service.index_document(document_id)

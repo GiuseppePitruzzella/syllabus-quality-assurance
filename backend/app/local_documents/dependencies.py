@@ -39,10 +39,12 @@ from app.local_documents.ingester import (
     ExternalDocumentIngester,
 )
 from app.local_documents.jobs import IndexingJobScheduler
+from app.local_documents.ocr import VertexPdfOcr
 from app.local_documents.service import LocalDocumentIndexingService
 
 _chroma_client_singleton: chromadb.api.client.Client | None = None
 _embeddings_singleton: VertexAIEmbeddings | None = None
+_pdf_ocr_singleton: VertexPdfOcr | None = None
 
 
 def get_chroma_client() -> chromadb.api.client.Client:
@@ -81,6 +83,19 @@ def get_embeddings() -> EmbeddingsClient:
     return _embeddings_singleton
 
 
+def get_pdf_ocr() -> VertexPdfOcr:
+    """Lazy OCR fallback for scanned PDFs using the configured Gemini model."""
+    global _pdf_ocr_singleton
+    if _pdf_ocr_singleton is None:
+        project, location = settings.require_vertex_ai_config()
+        _pdf_ocr_singleton = VertexPdfOcr(
+            project,
+            location,
+            settings.scientific.llm_model,
+        )
+    return _pdf_ocr_singleton
+
+
 def get_external_ingester(
     chroma: Annotated[chromadb.api.client.Client, Depends(get_chroma_client)],
 ) -> ExternalDocumentIngester:
@@ -102,6 +117,7 @@ def get_external_ingester(
 async def get_indexing_job_scheduler(
     chroma: Annotated[chromadb.api.client.Client, Depends(get_chroma_client)],
     embeddings: Annotated[EmbeddingsClient, Depends(get_embeddings)],
+    pdf_ocr: Annotated[VertexPdfOcr, Depends(get_pdf_ocr)],
 ) -> IndexingJobScheduler:
     """Scheduler used by upload (auto-trigger), PATCH (auto-reindex),
     and POST /reindex. Wraps the sync service in a JobRegistry job
@@ -113,13 +129,19 @@ async def get_indexing_job_scheduler(
     POST /reindex schedule work safely via `call_soon_threadsafe`.
     """
     loop = asyncio.get_running_loop()
-    return IndexingJobScheduler(chroma, embeddings, loop=loop)
+    return IndexingJobScheduler(
+        chroma,
+        embeddings,
+        loop=loop,
+        pdf_ocr=pdf_ocr,
+    )
 
 
 def get_indexing_service(
     db: Annotated[Session, Depends(get_db)],
     chroma: Annotated[chromadb.api.client.Client, Depends(get_chroma_client)],
     embeddings: Annotated[EmbeddingsClient, Depends(get_embeddings)],
+    pdf_ocr: Annotated[VertexPdfOcr, Depends(get_pdf_ocr)],
 ) -> LocalDocumentIndexingService:
     """Synchronous indexing service used by the PATCH auto-reindex.
 
@@ -128,7 +150,7 @@ def get_indexing_service(
     :func:`get_external_ingester` and never sees Vertex.
     """
     ingester = ExternalDocumentIngester(chroma, embeddings)
-    return LocalDocumentIndexingService(db, ingester)
+    return LocalDocumentIndexingService(db, ingester, pdf_ocr=pdf_ocr)
 
 
 class _NoEmbedder:
