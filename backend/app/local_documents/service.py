@@ -14,6 +14,7 @@ query the Chroma collection directly via a retriever.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Callable
 
 import structlog
@@ -63,6 +64,7 @@ class LocalDocumentIndexingService:
         chunker: ExternalDocumentChunker | None = None,
         storage_root: str | None = None,
         progress_publisher: Callable[[str], None] | None = None,
+        pdf_ocr: Callable[[Path], str] | None = None,
     ) -> None:
         self._db = db
         self._ingester = ingester
@@ -75,6 +77,7 @@ class LocalDocumentIndexingService:
         # publisher are swallowed so a flaky observer can never
         # corrupt the indexing run.
         self._progress_publisher = progress_publisher
+        self._pdf_ocr = pdf_ocr
 
     # ------------------------------------------------------------------
 
@@ -129,7 +132,11 @@ class LocalDocumentIndexingService:
             abs_path = resolve_local_document_path(
                 row.file_path, self._storage_root,
             )
-            return extract_text(abs_path, row.file_extension)
+            return extract_text(
+                abs_path,
+                row.file_extension,
+                pdf_ocr=self._pdf_ocr,
+            )
         except ExtractionError as exc:
             raise IndexingError(f"extraction_failed: {exc}") from exc
         except Exception as exc:

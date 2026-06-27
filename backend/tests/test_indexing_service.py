@@ -10,10 +10,12 @@ never touched.
 """
 from __future__ import annotations
 
+import io
 from datetime import datetime, timezone
 
 import chromadb
 import pytest
+from reportlab.pdfgen import canvas
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -146,6 +148,14 @@ def _make_doc_row(
     return row
 
 
+def _blank_pdf_bytes() -> bytes:
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer)
+    pdf.showPage()
+    pdf.save()
+    return buffer.getvalue()
+
+
 # ---------------------------------------------------------------------------
 # Happy path
 # ---------------------------------------------------------------------------
@@ -192,6 +202,35 @@ def test_reindex_is_idempotent_on_db_state(
     assert first.chunks_written == second.chunks_written
     assert row.chunk_count == first_chunk_count
     assert row.status == "indexed"
+
+
+def test_scanned_pdf_is_indexed_through_ocr_fallback(
+    db_session, ingester, tmp_path,
+):
+    cdl = _make_cdl(db_session)
+    row = _make_doc_row(
+        db_session,
+        cdl.id,
+        tmp_path,
+        extension=".pdf",
+        content=_blank_pdf_bytes(),
+        enabled_criteria=["E2"],
+    )
+    service = LocalDocumentIndexingService(
+        db_session,
+        ingester,
+        storage_root=str(tmp_path),
+        pdf_ocr=lambda _path: (
+            "Risultato di apprendimento | Attività formative\n"
+            "R1 | Analisi matematica"
+        ),
+    )
+
+    result = service.index_document(row.id)
+
+    db_session.refresh(row)
+    assert row.status == "indexed"
+    assert result.chunks_written > 0
 
 
 # ---------------------------------------------------------------------------
