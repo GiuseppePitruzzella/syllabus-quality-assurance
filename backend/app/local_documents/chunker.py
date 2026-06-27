@@ -115,6 +115,8 @@ class ExternalDocumentChunker:
         body = text.strip()
         if not body:
             return []
+        if document_metadata.get("document_type") == "matrice_tuning":
+            body = linearize_tuning_matrix(body)
 
         sub_bodies = split_long(body, self.max_chars, self.hard_max_chars)
         sub_bodies = merge_noise_subchunks(
@@ -152,6 +154,114 @@ def chunk_id_prefix(document_id: int, version: int) -> str:
     to guarantee no orphans survive a shrink.
     """
     return f"external_{document_id}_v{version}__"
+
+
+def linearize_tuning_matrix(text: str) -> str:
+    """Replace positional ``X`` cells with explicit course associations.
+
+    Scanned tuning matrices are commonly one very wide table. OCR can
+    preserve cell separators accurately while leaving the header in a
+    different chunk from the rows containing the ``X`` marks. Those
+    chunks are readable but semantically incomplete.
+
+    When a course-header row can be identified immediately before the
+    ``Competenze/Descrittori`` row, each marked row is rewritten as::
+
+        <learning outcome>
+        Attività formative associate: <course A>; <course B>
+
+    Missing or extra trailing empty cells are normalised safely. If the
+    header cannot be identified, the original text is returned unchanged
+    rather than guessing column semantics.
+    """
+    lines = text.splitlines()
+    descriptor_index = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if "|" in line
+            and (
+                "competenze/descrittori" in line.casefold()
+                or "descrittori di dublino" in line.casefold()
+            )
+        ),
+        None,
+    )
+    if descriptor_index is None:
+        return text
+
+    header_index = next(
+        (
+            index
+            for index in range(descriptor_index - 1, -1, -1)
+            if _looks_like_course_header(lines[index])
+        ),
+        None,
+    )
+    if header_index is None:
+        return text
+
+    headers = [cell.strip() for cell in lines[header_index].split("|")]
+    while headers and not headers[-1]:
+        headers.pop()
+    if headers and not headers[0]:
+        headers.pop(0)
+    if len(headers) < 5 or any(not header for header in headers):
+        return text
+
+    output = [line for line in lines[:header_index] if line.strip()]
+    output.append(
+        "Matrice linearizzata: le associazioni sono espresse per nome "
+        "dell'attività formativa."
+    )
+
+    expected_cells = len(headers) + 1
+    for raw_line in lines[descriptor_index:]:
+        if "|" not in raw_line:
+            if raw_line.strip():
+                output.append(raw_line.strip())
+            continue
+
+        cells = [cell.strip() for cell in raw_line.split("|")]
+        while len(cells) > expected_cells and not cells[-1]:
+            cells.pop()
+        while len(cells) < expected_cells:
+            cells.append("")
+
+        # A non-empty overflow would shift one or more associations.
+        # Preserve that row verbatim instead of manufacturing a mapping.
+        if len(cells) != expected_cells:
+            output.append(raw_line.strip())
+            continue
+
+        description = cells[0]
+        marked_indexes = [
+            index
+            for index, cell in enumerate(cells[1:])
+            if cell.casefold() == "x"
+        ]
+        if description:
+            output.append(description)
+        if marked_indexes:
+            if len(marked_indexes) == len(headers):
+                associations = "tutte le attività formative"
+            else:
+                associations = "; ".join(
+                    headers[index] for index in marked_indexes
+                )
+            output.append(f"Attività formative associate: {associations}")
+
+    return "\n".join(output).strip()
+
+
+def _looks_like_course_header(line: str) -> bool:
+    cells = [cell.strip() for cell in line.split("|")]
+    non_empty = [cell for cell in cells if cell]
+    return (
+        len(non_empty) >= 5
+        and len(non_empty) == len(cells)
+        and not any(cell.casefold() == "x" for cell in non_empty)
+    )
 
 
 def _build_metadata(

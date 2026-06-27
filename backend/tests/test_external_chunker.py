@@ -14,6 +14,7 @@ from app.local_documents.chunker import (
     ExternalDocumentChunker,
     build_chunk_id,
     chunk_id_prefix,
+    linearize_tuning_matrix,
 )
 
 
@@ -117,6 +118,50 @@ def test_optional_metadata_keys_are_dropped_when_missing():
     assert "academic_year" not in out
     assert "file_hash" not in out
     assert out["document_type"] == "usi_dipartimentali"
+
+
+def test_tuning_matrix_maps_x_cells_to_explicit_course_names():
+    text = """Pagina 1
+MATRICE DI TUNING
+Corso A | Corso B | Corso C | Corso D | Corso E
+Competenze/Descrittori di Dublino/Risultati di apprendimento | | | | | |
+Risultato alpha | X | | X | | | |
+continuazione del risultato | | | | |
+Risultato trasversale | X | X | X | X | X
+"""
+
+    linearized = linearize_tuning_matrix(text)
+
+    assert "Corso A | Corso B" not in linearized
+    assert "Risultato alpha" in linearized
+    assert "Attività formative associate: Corso A; Corso C" in linearized
+    assert "continuazione del risultato" in linearized
+    assert "Attività formative associate: tutte le attività formative" in linearized
+
+
+def test_tuning_matrix_without_recognisable_header_is_unchanged():
+    text = (
+        "Competenze/Descrittori di Dublino | | |\n"
+        "Risultato alpha | X | |"
+    )
+    assert linearize_tuning_matrix(text) == text
+
+
+def test_tuning_matrix_chunking_uses_linearized_associations():
+    text = """MATRICE DI TUNING
+Corso A | Corso B | Corso C | Corso D | Corso E
+Competenze/Descrittori di Dublino/Risultati di apprendimento | | | | |
+Risultato alpha | | X | | X |
+"""
+
+    chunks = ExternalDocumentChunker().chunk_text(
+        text,
+        _meta(document_type="matrice_tuning", enabled_criteria=["E2"]),
+    )
+
+    assert len(chunks) == 1
+    assert "Attività formative associate: Corso B; Corso D" in chunks[0].text
+    assert "Risultato alpha |" not in chunks[0].text
 
 
 # ---------------------------------------------------------------------------
