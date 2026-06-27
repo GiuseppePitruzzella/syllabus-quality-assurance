@@ -312,7 +312,7 @@ function PreviewBody({
       criterion.served_by === "registry" && criterion.applicable,
   );
   const e4Available = preview.by_criterion.E4?.applicable ?? false;
-  const canCustomizeSources = registryCriteria.some((criterion) =>
+  const hasAlternativeVersions = registryCriteria.some((criterion) =>
     groupByChain(criterion.candidates).some(
       (group) => group.candidates.filter((candidate) => candidate.selectable).length > 1,
     ),
@@ -369,12 +369,12 @@ function PreviewBody({
               Fonti della valutazione estesa
             </h3>
             <p className="mt-1 max-w-2xl text-xs leading-5 text-muted-foreground">
-              {canCustomizeSources
+              {hasAlternativeVersions
                 ? "Il sistema ha già scelto la versione più adatta di ogni documento. Personalizza soltanto se vuoi usare una versione diversa."
-                : "Il sistema ha già scelto la versione più adatta di ogni documento. Non sono disponibili versioni alternative."}
+                : "Il sistema ha già scelto la versione più adatta di ogni documento. Puoi comunque confermare esplicitamente quale fonte usare per ciascun criterio."}
             </p>
           </div>
-          {canCustomizeSources ? (
+          {registryCriteria.length > 0 ? (
             <Button
               type="button"
               variant="outline"
@@ -383,7 +383,7 @@ function PreviewBody({
               aria-expanded={customize}
             >
               <Settings2 className="h-3.5 w-3.5" aria-hidden />
-              {customize ? "Chiudi selezione" : "Modifica fonti"}
+              {customize ? "Chiudi selezione" : "Seleziona documenti"}
               {customize ? (
                 <ChevronUp className="h-3.5 w-3.5" aria-hidden />
               ) : (
@@ -696,16 +696,10 @@ function ChainAlternatives({
   onSelectChain: (chainKey: string, docId: number) => void;
   onResetChain: (chainKey: string) => void;
 }) {
-  const customizableGroups = groups.filter(
-    (group) =>
-      group.candidates.filter((candidate) => candidate.selectable).length > 1,
-  );
-  if (customizableGroups.length === 0) {
+  if (groups.length === 0) {
     return (
       <div className="mt-2.5 border-t border-dashed border-border/60 pt-2">
-        <p className="text-xs text-muted-foreground">
-          Nessuna versione alternativa disponibile.
-        </p>
+        <p className="text-xs text-muted-foreground">Nessun candidato.</p>
       </div>
     );
   }
@@ -714,7 +708,7 @@ function ChainAlternatives({
       <p className="text-[11px] font-medium text-foreground">
         Scegli la versione da usare
       </p>
-      {customizableGroups.map((group) => {
+      {groups.map((group) => {
         const overrideId = selection[group.chainKey];
         return (
           <div key={group.chainKey} className="space-y-1">
