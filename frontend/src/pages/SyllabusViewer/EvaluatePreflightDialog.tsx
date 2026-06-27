@@ -5,11 +5,14 @@ import { Dialog } from "@base-ui/react/dialog";
 import {
   AlertTriangle,
   Archive,
+  CheckCircle2,
   ChevronDown,
   ChevronUp,
+  CircleMinus,
   FileText,
   Info,
   Loader2,
+  Settings2,
   Sparkles,
   X,
 } from "lucide-react";
@@ -17,6 +20,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { ResolutionReasonPill } from "@/components/ResolutionReasonPill";
+import { labelForDocumentType } from "@/data/sources";
 import {
   ApiError,
   getResolutionPreview,
@@ -163,15 +167,15 @@ export function EvaluatePreflightDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[starting-style]:animate-in data-[starting-style]:fade-in-0" />
-        <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 flex max-h-[calc(100vh-2rem)] w-[min(720px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border bg-card shadow-lg data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[ending-style]:zoom-out-95 data-[starting-style]:animate-in data-[starting-style]:fade-in-0 data-[starting-style]:zoom-in-95">
+        <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 flex max-h-[calc(100vh-2rem)] w-[min(880px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-lg border bg-card shadow-lg data-[ending-style]:animate-out data-[ending-style]:fade-out-0 data-[ending-style]:zoom-out-95 data-[starting-style]:animate-in data-[starting-style]:fade-in-0 data-[starting-style]:zoom-in-95">
           <div className="flex items-start justify-between gap-4 border-b p-5">
             <div className="min-w-0 space-y-0.5">
               <Dialog.Title className="text-base font-semibold tracking-normal">
-                Avvio valutazione
+                Configura la valutazione
               </Dialog.Title>
               <Dialog.Description className="text-xs text-muted-foreground">
-                {courseName} — verifica le fonti dei criteri estesi prima di
-                avviare la run.
+                {courseName} — controlla quali criteri estesi sono disponibili
+                e quali fonti verranno utilizzate.
               </Dialog.Description>
             </div>
             <Dialog.Close
@@ -234,12 +238,12 @@ export function EvaluatePreflightDialog({
           <div className="flex items-center justify-between gap-2 border-t bg-muted/30 px-5 py-3">
             <p className="text-[11px] text-muted-foreground">
               {selectedIds.length === 0
-                ? "Nessun override: il resolver applica la precedence automatica."
+                ? "Scelta automatica delle fonti attiva."
                 : `${selectedIds.length} ${
                     selectedIds.length === 1
-                      ? "documento selezionato"
-                      : "documenti selezionati"
-                  } esplicitamente.`}
+                      ? "fonte personalizzata"
+                      : "fonti personalizzate"
+                  }; le altre restano automatiche.`}
             </p>
             <div className="flex items-center gap-2">
               <Dialog.Close
@@ -297,39 +301,248 @@ function PreviewBody({
   onSelectChain: (chainKey: string, docId: number) => void;
   onResetChain: (chainKey: string) => void;
 }) {
+  const criteria = EXTENDED_ORDER
+    .map((code) => preview.by_criterion[code])
+    .filter((criterion): criterion is ResolutionPreviewCriterion =>
+      criterion !== undefined,
+    );
+  const applicable = criteria.filter((criterion) => criterion.applicable);
+  const registryCriteria = criteria.filter(
+    (criterion) =>
+      criterion.served_by === "registry" && criterion.applicable,
+  );
+  const e4Available = preview.by_criterion.E4?.applicable ?? false;
+  const hasAlternativeVersions = registryCriteria.some((criterion) =>
+    groupByChain(criterion.candidates).some(
+      (group) => group.candidates.filter((candidate) => candidate.selectable).length > 1,
+    ),
+  );
+
   return (
-    <div className="space-y-3">
-      <NotInCoreScoreBanner />
-      <div className="space-y-2">
-        {EXTENDED_ORDER.map((code) => {
-          const criterion = preview.by_criterion[code];
-          if (!criterion) return null;
-          return (
+    <div className="space-y-5">
+      <EvaluationScopeSummary
+        applicableCount={applicable.length}
+        totalCount={criteria.length}
+      />
+
+      <section aria-labelledby="extended-criteria-heading">
+        <div className="mb-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+            Passaggio 1
+          </p>
+          <h3
+            id="extended-criteria-heading"
+            className="mt-0.5 text-sm font-semibold"
+          >
+            Criteri estesi disponibili
+          </h3>
+          <p className="mt-1 max-w-2xl text-xs leading-5 text-muted-foreground">
+            Non devi attivarli manualmente: ogni criterio viene valutato quando
+            la fonte necessaria è disponibile. Gli altri saranno indicati come
+            non valutabili (NA).
+          </p>
+        </div>
+        <div className="grid border-t sm:grid-cols-2">
+          {criteria.map((criterion, index) => (
+            <div
+              key={criterion.criterion_code}
+              className={
+                "border-b px-3 " + (index % 2 === 0 ? "sm:border-r" : "")
+              }
+            >
+              <CriterionScopeRow criterion={criterion} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="document-sources-heading">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+              Passaggio 2
+            </p>
+            <h3
+              id="document-sources-heading"
+              className="mt-0.5 text-sm font-semibold"
+            >
+              Fonti della valutazione estesa
+            </h3>
+            <p className="mt-1 max-w-2xl text-xs leading-5 text-muted-foreground">
+              {hasAlternativeVersions
+                ? "Il sistema ha già scelto la versione più adatta di ogni documento. Personalizza soltanto se vuoi usare una versione diversa."
+                : "Il sistema ha già scelto la versione più adatta di ogni documento. Puoi comunque confermare esplicitamente quale fonte usare per ciascun criterio."}
+            </p>
+          </div>
+          {registryCriteria.length > 0 ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onToggleCustomize}
+              aria-expanded={customize}
+            >
+              <Settings2 className="h-3.5 w-3.5" aria-hidden />
+              {customize ? "Chiudi selezione" : "Seleziona documenti"}
+              {customize ? (
+                <ChevronUp className="h-3.5 w-3.5" aria-hidden />
+              ) : (
+                <ChevronDown className="h-3.5 w-3.5" aria-hidden />
+              )}
+            </Button>
+          ) : null}
+        </div>
+
+        <div className="space-y-2">
+          {registryCriteria.map((criterion) => (
             <CriterionCard
-              key={code}
+              key={criterion.criterion_code}
               criterion={criterion}
               customize={customize}
               selection={selection}
               onSelectChain={onSelectChain}
               onResetChain={onResetChain}
             />
-          );
-        })}
-      </div>
-      <button
-        type="button"
-        onClick={onToggleCustomize}
-        className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-      >
-        {customize ? (
-          <ChevronUp className="h-3.5 w-3.5" aria-hidden />
-        ) : (
-          <ChevronDown className="h-3.5 w-3.5" aria-hidden />
-        )}
-        {customize ? "Nascondi alternative" : "Personalizza documenti"}
-      </button>
+          ))}
+
+          {e4Available ? (
+            <div className="flex items-start gap-3 border-y px-1 py-3 text-xs">
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                aria-hidden
+              />
+              <div>
+                <p className="font-medium">E4 usa il syllabus stesso</p>
+                <p className="mt-0.5 leading-5 text-muted-foreground">
+                  La coerenza cross-lingua confronta direttamente le sezioni
+                  italiane e inglesi. Non richiede documenti dal registry.
+                </p>
+              </div>
+            </div>
+          ) : null}
+
+          {registryCriteria.length === 0 && !e4Available ? (
+            <div className="flex items-start gap-2 border-y px-1 py-3 text-xs text-muted-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+              <p>
+                Nessuna fonte estesa è disponibile. La valutazione C1-C9 può
+                comunque essere avviata normalmente.
+              </p>
+            </div>
+          ) : null}
+        </div>
+      </section>
     </div>
   );
+}
+
+function EvaluationScopeSummary({
+  applicableCount,
+  totalCount,
+}: {
+  applicableCount: number;
+  totalCount: number;
+}) {
+  return (
+    <div className="grid gap-3 border-y bg-muted/20 px-1 py-3 sm:grid-cols-2">
+      <div className="flex items-start gap-3">
+        <CheckCircle2
+          className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+          aria-hidden
+        />
+        <div>
+          <p className="text-xs font-semibold">CoreScore</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            I criteri C1-C9 sono sempre inclusi.
+          </p>
+        </div>
+      </div>
+      <div className="flex items-start gap-3 sm:border-l sm:pl-4">
+        <Info
+          className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+          aria-hidden
+        />
+        <div>
+          <p className="text-xs font-semibold">Analisi estesa</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {applicableCount} di {totalCount} criteri E1-E5 disponibili. Non
+            modificano il CoreScore.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CriterionScopeRow({
+  criterion,
+}: {
+  criterion: ResolutionPreviewCriterion;
+}) {
+  const available = criterion.applicable;
+  return (
+    <div className="py-2.5">
+      <div className="flex min-w-0 items-start gap-3">
+        {available ? (
+          <CheckCircle2
+            className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+            aria-hidden
+          />
+        ) : (
+          <CircleMinus
+            className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground"
+            aria-hidden
+          />
+        )}
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <code className="font-mono text-[11px] font-semibold text-primary">
+              {criterion.criterion_code}
+            </code>
+            <span className="text-xs font-medium">
+              {CRITERION_LABELS[criterion.criterion_code]}
+            </span>
+          </div>
+          <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] leading-4">
+            <span className="text-muted-foreground">
+              {criterionSourceDescription(criterion)}
+            </span>
+            <span
+              className={
+                "font-medium " +
+                (available ? "text-emerald-700" : "text-muted-foreground")
+              }
+            >
+              {available ? "Sarà valutato" : "Non valutabile (NA)"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function criterionSourceDescription(
+  criterion: ResolutionPreviewCriterion,
+): string {
+  if (criterion.served_by === "syllabus") {
+    return "Confronto diretto tra le versioni italiana e inglese.";
+  }
+  if (criterion.served_by === "registry") {
+    const groups = groupByChain(criterion.candidates);
+    const sourceCount = groups.filter((group) => group.autoPick).length;
+    return `${sourceCount} ${
+      sourceCount === 1 ? "fonte documentale disponibile" : "fonti documentali disponibili"
+    }.`;
+  }
+  const missingSource: Record<ExtendedCriterionCode, string> = {
+    E1: "SUA-CdS non disponibile nel registry.",
+    E2: "Matrice di Tuning non disponibile nel registry.",
+    E3: "Regolamento didattico non disponibile nel registry.",
+    E4: "Versione inglese del syllabus non disponibile.",
+    E5: "Nessuna linea guida o uso locale disponibile nel registry.",
+  };
+  return missingSource[criterion.criterion_code];
 }
 
 /**
@@ -376,7 +589,7 @@ function chainLabel(group: ChainGroup): string {
   // All candidates in the chain share document_type and the same
   // normalized title — use the first one's display title.
   const head = group.candidates[0];
-  return `${head.title} · ${head.document_type}`;
+  return `${head.title} · ${labelForDocumentType(head.document_type)}`;
 }
 
 function CriterionCard({
@@ -409,18 +622,17 @@ function CriterionCard({
   return (
     <div
       className={
-        "rounded-md border bg-background/60 px-3 py-2.5 text-sm " +
-        (anyOverride ? "border-emerald-500/30 bg-emerald-500/5" : "")
+        "border px-3 py-3 text-sm " +
+        (anyOverride ? "border-emerald-500/40 bg-emerald-500/5" : "bg-background")
       }
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <code className="font-mono text-[11px] font-semibold text-primary">
           {criterion.criterion_code}
         </code>
         <span className="text-sm font-medium">
           {CRITERION_LABELS[criterion.criterion_code]}
         </span>
-        <ServedByPill servedBy={criterion.served_by} />
         {groups.length > 1 ? (
           <span className="text-[10px] text-muted-foreground">
             {groups.length} fonti
@@ -429,7 +641,7 @@ function CriterionCard({
       </div>
 
       {/* Effective perimeter — one row per chain in this criterion. */}
-      <div className="mt-1.5">
+      <div className="mt-2">
         {criterion.served_by === "syllabus" ? (
           <p className="text-xs text-muted-foreground">
             Servito dal syllabus stesso (campi <code className="font-mono">*_en</code>).
@@ -493,8 +705,8 @@ function ChainAlternatives({
   }
   return (
     <div className="mt-2.5 space-y-2.5 border-t border-dashed border-border/60 pt-2">
-      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        Alternative selezionabili
+      <p className="text-[11px] font-medium text-foreground">
+        Scegli la versione da usare
       </p>
       {groups.map((group) => {
         const overrideId = selection[group.chainKey];
@@ -547,7 +759,7 @@ function ChainAlternatives({
                 onClick={() => onResetChain(group.chainKey)}
                 className="text-[11px] font-medium text-primary hover:underline"
               >
-                ↺ ripristina scelta automatica per questa chain
+                Ripristina la scelta automatica
               </button>
             ) : null}
           </div>
@@ -570,21 +782,17 @@ function CandidateRow({
     <div className="flex flex-wrap items-center gap-2 text-xs">
       <FileText className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
       <span className="font-medium text-foreground/90">{candidate.title}</span>
-      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
-        {candidate.document_type}
-      </code>
-      <span className="text-[10px] tabular-nums text-muted-foreground">
-        v{candidate.version}
-      </span>
-      <code
-        className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
-        title={candidate.file_hash}
-      >
-        {candidate.file_hash.slice(0, 7)}
-      </code>
       <span className="text-[10px] text-muted-foreground">
-        {candidate.academic_year}
+        {labelForDocumentType(candidate.document_type)}
       </span>
+      <span className="text-[10px] tabular-nums text-muted-foreground">
+        versione {candidate.version}
+      </span>
+      {candidate.academic_year ? (
+        <span className="text-[10px] text-muted-foreground">
+          A.A. {candidate.academic_year}
+        </span>
+      ) : null}
       {selected ? (
         overrideActive ? (
           // 9.E.3.fix: mirror the post-run pill on the pre-run
@@ -605,49 +813,6 @@ function CandidateRow({
           archiviato
         </span>
       ) : null}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Pills + helpers
-// ---------------------------------------------------------------------------
-
-function ServedByPill({
-  servedBy,
-}: {
-  servedBy: ResolutionPreviewCriterion["served_by"];
-}) {
-  if (servedBy === "registry") {
-    return (
-      <span className="inline-flex items-center rounded-md border border-sky-500/30 bg-sky-500/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-700 dark:text-sky-300">
-        registry
-      </span>
-    );
-  }
-  if (servedBy === "syllabus") {
-    return (
-      <span className="inline-flex items-center rounded-md border border-violet-500/30 bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 dark:text-violet-300">
-        syllabus
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center rounded-md border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-      non applicabile
-    </span>
-  );
-}
-
-function NotInCoreScoreBanner() {
-  return (
-    <div className="flex items-start gap-2 rounded-md border border-violet-500/20 bg-violet-500/5 px-3 py-2 text-[11px] text-violet-900/80 dark:text-violet-200/80">
-      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-      <p>
-        Le scelte qui sotto influenzano <strong>solo</strong> i criteri estesi
-        E1-E5 — <em>non concorrono al CoreScore</em>. Una run senza override
-        applica la precedence automatica del resolver.
-      </p>
     </div>
   );
 }
