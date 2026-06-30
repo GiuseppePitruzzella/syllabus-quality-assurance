@@ -24,6 +24,7 @@ import {
 import { DublinDescriptors } from "./DublinDescriptors";
 import { CourseScheduleTable } from "./CourseScheduleTable";
 import { EvaluatePreflightDialog } from "./EvaluatePreflightDialog";
+import { RefreshSyllabusButton } from "./RefreshSyllabusButton";
 import { MetadataSidebar } from "./MetadataSidebar";
 
 /**
@@ -206,6 +207,7 @@ export function SyllabusViewer() {
               onChange={setLang}
               hasEnglish={data.has_english}
             />
+            <RefreshSyllabusButton seuid={data.seuid} />
             <EvaluateButton
               seuid={data.seuid}
               courseName={data.course_name ?? data.seuid}
