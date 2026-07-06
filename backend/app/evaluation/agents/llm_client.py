@@ -209,6 +209,18 @@ class VertexAILLMClient:
     def project_id(self) -> str:
         return self._project_id
 
+    def _backend_metadata(self) -> dict[str, Any]:
+        """Backend-specific metadata merged into every LLMResult.
+
+        Overridden by GeminiApiLLMClient (Developer API) which has no
+        GCP project/location.
+        """
+        return {
+            "backend": "vertex",
+            "gcp_project_id": self._project_id,
+            "gcp_location": self._location,
+        }
+
     def __call__(
         self,
         prompt: str,
@@ -268,8 +280,7 @@ class VertexAILLMClient:
 
         metadata: dict[str, Any] = {
             "model": self._model_name,
-            "gcp_project_id": self._project_id,
-            "gcp_location": self._location,
+            **self._backend_metadata(),
             "temperature": self._scientific.llm_temperature,
             "max_output_tokens": effective_max_output_tokens,
             "finish_reason": finish_reason_name,
