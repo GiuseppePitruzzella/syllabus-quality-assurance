@@ -54,6 +54,14 @@ class Settings(BaseSettings):
     gcp_project_id: str = ""
     gcp_location: str = "europe-west1"
 
+    # === Gemini backend selection (D080) ===
+    # Default: Vertex AI (reproducible thesis path). Set false to use the
+    # free Gemini Developer API (AI Studio) with GEMINI_API_KEY.
+    genai_use_vertex: bool = True
+    gemini_api_key: str = ""
+    # Free tier caps gemini-2.5-flash at 5 RPM (verified 2026-07-06, D080).
+    gemini_api_rpm_limit: int = 5
+
     # === Vector store and corpus paths (project root) ===
     chroma_persist_dir: str = str(PROJECT_ROOT / "data" / "chroma")
     normative_corpus_dir: str = str(PROJECT_ROOT / "data" / "normative_corpus")
@@ -126,6 +134,22 @@ class Settings(BaseSettings):
                 "experimental configuration and must be tracked explicitly."
             )
         return self.gcp_project_id, self.gcp_location
+
+    def require_gemini_api_key(self) -> str:
+        """Validate and return the AI Studio API key.
+
+        Raises:
+            RuntimeError: if ``gemini_api_key`` is empty while the
+                Developer API backend is selected.
+        """
+        if not self.gemini_api_key:
+            raise RuntimeError(
+                "GEMINI_API_KEY is not set but the Gemini Developer API "
+                "backend is selected (GENAI_USE_VERTEX=false). Set "
+                "GEMINI_API_KEY in backend/.env — get one at "
+                "https://aistudio.google.com/apikey."
+            )
+        return self.gemini_api_key
 
 
 settings = Settings()
