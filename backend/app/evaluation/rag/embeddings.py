@@ -167,3 +167,29 @@ class VertexAIEmbeddings:
             latency_ms=latency_ms,
         )
         return values
+
+
+class GeminiApiEmbeddings(VertexAIEmbeddings):
+    """Embeddings on the Gemini Developer API (AI Studio) free tier (D080).
+
+    Reuses all VertexAIEmbeddings behaviour (asymmetric task types, per-text
+    call, 3072-dim enforcement, retry policy). Only the client construction
+    differs: API key instead of ADC project/location. The spike (2026-07-06)
+    confirmed ``output_dimensionality=3072`` is honoured on this backend.
+    """
+
+    def __init__(
+        self,
+        api_key: str,
+        model_name: str = "gemini-embedding-001",
+        output_dimensionality: int = 3072,
+    ) -> None:
+        if not api_key:
+            raise ValueError("api_key is required (set GEMINI_API_KEY in .env)")
+        self._client = genai.Client(
+            api_key=api_key,
+            http_options=genai_types.HttpOptions(api_version="v1"),
+        )
+        self._model_name = model_name
+        self._location = ""
+        self._output_dim = output_dimensionality
