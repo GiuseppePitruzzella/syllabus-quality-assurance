@@ -59,34 +59,23 @@ def _production_async_service() -> AsyncEvaluationService:
     """
     import chromadb
 
+    from app.backends import build_embeddings_client, build_llm_client
     from app.config import settings
-    from app.evaluation.agents.llm_client import VertexAILLMClient
     from app.evaluation.orchestrator import build_graph
-    from app.evaluation.rag.embeddings import VertexAIEmbeddings
     from app.evaluation.rag.external_retriever import ExternalDocumentRetriever
     from app.evaluation.rag.retriever import NormativeRetriever
 
-    project_id, location = settings.require_vertex_ai_config()
     sci = settings.scientific
 
     chroma = chromadb.PersistentClient(path=settings.chroma_persist_dir)
-    embeddings = VertexAIEmbeddings(
-        project_id=project_id,
-        location=location,
-        model_name=sci.embedding_model,
-        output_dimensionality=sci.embedding_output_dimensionality,
-    )
+    embeddings = build_embeddings_client(settings)
     retriever = NormativeRetriever(chroma, embeddings, sci)
     # Phase 9.C.5.2: build the external retriever lazily so a fresh
     # install with no ``external_documents`` collection cannot crash
     # the startup path. The retriever itself returns [] on a missing
     # collection; instantiation is cheap and side-effect-free.
     external_retriever = ExternalDocumentRetriever(chroma, embeddings, sci)
-    llm_client = VertexAILLMClient(
-        project_id=project_id,
-        location=location,
-        scientific=sci,
-    )
+    llm_client = build_llm_client(settings, sci)
 
     def _graph_invoker(
         initial_state: dict[str, Any],

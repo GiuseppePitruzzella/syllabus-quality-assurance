@@ -38,6 +38,9 @@ def test_production_async_service_uses_vertex_clients(monkeypatch) -> None:
 
     class FakeSettings:
         chroma_persist_dir = "/tmp/chroma-test"
+        genai_use_vertex = True
+        gemini_api_key = ""
+        gemini_api_rpm_limit = 5
 
         @property
         def scientific(self) -> ScientificConfig:
@@ -45,6 +48,9 @@ def test_production_async_service_uses_vertex_clients(monkeypatch) -> None:
 
         def require_vertex_ai_config(self) -> tuple[str, str]:
             return ("proj-test", "europe-west1")
+
+        def require_gemini_api_key(self) -> str:
+            return self.gemini_api_key
 
     class FakeChromaClient:
         pass

@@ -685,7 +685,13 @@ class EvaluationService:
         self, session: Session, syllabus: Syllabus
     ) -> EvaluationResult:
         sci = self._settings.scientific
-        project_id, location = self._settings.require_vertex_ai_config()
+        if self._settings.genai_use_vertex:
+            project_id, location = self._settings.require_vertex_ai_config()
+        else:
+            # AI Studio (Developer API) has no GCP project/location. Keep the
+            # NOT-NULL columns satisfied with a sentinel; the real backend is
+            # traced per-agent in agent_outputs metadata (backend="ai_studio").
+            project_id, location = "ai_studio", ""
         evaluation_uuid = str(uuid.uuid4())
         record = EvaluationResult(
             evaluation_uuid=evaluation_uuid,

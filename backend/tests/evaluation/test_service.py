@@ -419,3 +419,40 @@ def test_default_prompt_versions_track_current_agent_releases():
         # .handler_prompt_versions``.
         "A5": "a5_v1",
     }
+
+
+def test_create_pending_record_ai_studio_backend_skips_vertex_config(
+    session_factory, seeded_syllabus
+):
+    """AI Studio (Developer API) settings must not require GCP config (D080).
+
+    ``gcp_project_id`` and ``gcp_location`` are NOT-NULL columns on
+    ``EvaluationResult`` that we deliberately keep unchanged. When
+    ``genai_use_vertex`` is False, ``_create_pending_record`` must populate
+    them with the ``"ai_studio"`` / ``""`` sentinel instead of calling
+    ``require_vertex_ai_config`` (which raises on an empty project id).
+    """
+    # gcp_project_id is explicitly cleared: it must stay empty to prove
+    # require_vertex_ai_config() is not invoked on this path (it would raise
+    # on an empty project id). Without this override, a local .env with a
+    # real GCP_PROJECT_ID would mask the behaviour under test.
+    ai_studio_settings = Settings(
+        genai_use_vertex=False, gemini_api_key="KEY", gcp_project_id=""
+    )
+    assert ai_studio_settings.gcp_project_id == ""
+
+    svc = EvaluationService(
+        session_factory=session_factory,
+        graph_invoker=_make_invoker(_full_outputs()),
+        settings=ai_studio_settings,
+    )
+
+    with session_factory() as session:
+        syllabus = (
+            session.query(Syllabus).filter_by(seuid=seeded_syllabus).one()
+        )
+        record = svc._create_pending_record(session, syllabus)
+        session.commit()
+
+        assert record.gcp_project_id == "ai_studio"
+        assert record.gcp_location == ""
