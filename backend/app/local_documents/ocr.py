@@ -75,7 +75,7 @@ class VertexPdfOcr:
         max_pages: int = 50,
         render_scale: float = 2.0,
     ) -> None:
-        if not project_id:
+        if client is None and not project_id:
             raise ValueError("project_id is required for PDF OCR")
         self._client = client or genai.Client(
             vertexai=True,

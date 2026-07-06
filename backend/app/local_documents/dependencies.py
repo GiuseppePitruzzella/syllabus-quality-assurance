@@ -78,8 +78,9 @@ def get_embeddings() -> EmbeddingsClient:
     """
     global _embeddings_singleton
     if _embeddings_singleton is None:
-        project, location = settings.require_vertex_ai_config()
-        _embeddings_singleton = VertexAIEmbeddings(project, location)
+        from app.backends import build_embeddings_client
+
+        _embeddings_singleton = build_embeddings_client(settings)
     return _embeddings_singleton
 
 
@@ -87,12 +88,9 @@ def get_pdf_ocr() -> VertexPdfOcr:
     """Lazy OCR fallback for scanned PDFs using the configured Gemini model."""
     global _pdf_ocr_singleton
     if _pdf_ocr_singleton is None:
-        project, location = settings.require_vertex_ai_config()
-        _pdf_ocr_singleton = VertexPdfOcr(
-            project,
-            location,
-            settings.scientific.llm_model,
-        )
+        from app.backends import build_pdf_ocr
+
+        _pdf_ocr_singleton = build_pdf_ocr(settings)
     return _pdf_ocr_singleton
 
 

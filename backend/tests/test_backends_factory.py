@@ -33,3 +33,13 @@ def test_build_embeddings_switches_on_flag(monkeypatch):
     ai = Settings(_env_file=None, genai_use_vertex=False, gemini_api_key="KEY")
     assert isinstance(backends.build_embeddings_client(vertex), VertexAIEmbeddings)
     assert isinstance(backends.build_embeddings_client(ai), GeminiApiEmbeddings)
+
+
+def test_build_pdf_ocr_ai_studio(monkeypatch):
+    from google import genai as google_genai
+
+    monkeypatch.setattr(google_genai, "Client", lambda *a, **k: MagicMock())
+    s = Settings(_env_file=None, genai_use_vertex=False, gemini_api_key="KEY")
+    ocr = backends.build_pdf_ocr(s)
+    # Injected client path: no project_id required.
+    assert ocr._model_name == s.scientific.llm_model
