@@ -366,3 +366,37 @@ def _safe_extract_text(response: Any) -> str:
     if not isinstance(text, str):
         raise LLMEmptyResponseError(f"text is not a string: {type(text).__name__}")
     return text
+
+
+# === Gemini Developer API (AI Studio) implementation ========================
+
+
+class GeminiApiLLMClient(VertexAILLMClient):
+    """LLM client on the Gemini Developer API (AI Studio) free tier (D080).
+
+    Reuses every VertexAILLMClient behaviour (retry policy, finish-reason
+    handling, text extraction, per-call ``max_output_tokens`` override).
+    Only two things differ: the client is built with an API key instead of
+    ADC project/location, and the metadata records ``backend="ai_studio"``.
+
+    ``api_version="v1"`` is pinned as on Vertex; the spike (2026-07-06)
+    confirmed it honours ``seed`` at temp=0.1 and ``output_dimensionality``.
+    """
+
+    def __init__(self, api_key: str, scientific: ScientificConfig) -> None:
+        if not api_key:
+            raise ValueError(
+                "api_key is required (set GEMINI_API_KEY in backend/.env)"
+            )
+        self._client = genai.Client(
+            api_key=api_key,
+            http_options=genai_types.HttpOptions(api_version="v1"),
+        )
+        # No GCP project/location on the Developer API backend.
+        self._project_id = ""
+        self._location = ""
+        self._scientific = scientific
+        self._model_name = scientific.llm_model
+
+    def _backend_metadata(self) -> dict[str, Any]:
+        return {"backend": "ai_studio"}
