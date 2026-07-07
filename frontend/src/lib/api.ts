@@ -21,7 +21,7 @@ import type {
   UserRole,
 } from "./types";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api";
 
 /**
  * Typed API error preserving the HTTP status, the raw detail
