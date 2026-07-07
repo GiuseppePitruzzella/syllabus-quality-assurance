@@ -32,8 +32,8 @@ import typer  # noqa: E402
 from rich.console import Console  # noqa: E402
 from rich.table import Table  # noqa: E402
 
+from app.backends import build_embeddings_client  # noqa: E402
 from app.config import settings  # noqa: E402
-from app.evaluation.rag.embeddings import VertexAIEmbeddings  # noqa: E402
 from app.evaluation.rag.ingester import CorpusIngester, IngestionReport  # noqa: E402
 from app.evaluation.rag.tagging_rules import TaggingRules  # noqa: E402
 
@@ -66,15 +66,9 @@ def main(
         _run_preview(rules, preview_path)
         return
 
-    # Real ingestion: requires Vertex AI configuration.
-    project_id, location = settings.require_vertex_ai_config()
-    sci = settings.scientific
-    embeddings = VertexAIEmbeddings(
-        project_id=project_id,
-        location=location,
-        model_name=sci.embedding_model,
-        output_dimensionality=sci.embedding_output_dimensionality,
-    )
+    # Real ingestion: requires Vertex AI or Gemini Developer API configuration,
+    # depending on settings.genai_use_vertex.
+    embeddings = build_embeddings_client(settings)
     ingester = CorpusIngester(
         corpus_dir=Path(settings.normative_corpus_dir),
         chroma_persist_dir=Path(settings.chroma_persist_dir),
