@@ -1,0 +1,48 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      GENAI_USE_VERTEX: "false"
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in .env}
+      GEMINI_API_RPM_LIMIT: "5"
+      DATABASE_URL: "sqlite:////app/backend/data/syllabus_ai.db"
+      CHROMA_PERSIST_DIR: "/app/data/chroma_aistudio"
+      NORMATIVE_CORPUS_DIR: "/app/data/normative_corpus"
+      TAGGING_RULES_FILE: "/app/data/tagging_rules.yaml"
+      LOCAL_DOCUMENTS_DIR: "/app/backend/data/local_documents"
+      AUTH_COOKIE_SECURE: "false"
+      LOG_LEVEL: "INFO"
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./data/normative_corpus:/app/data/normative_corpus:ro
+      - ./data/chroma_aistudio:/app/data/chroma_aistudio
+      - ./data/tagging_rules.yaml:/app/data/tagging_rules.yaml:ro
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+  # One-shot: build the AI Studio ChromaDB index from the corpus.
+  # Run explicitly: docker compose --profile seed run --rm seed
+  seed:
+    build: ./backend
+    profiles: ["seed"]
+    environment:
+      GENAI_USE_VERTEX: "false"
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in .env}
+      CHROMA_PERSIST_DIR: "/app/data/chroma_aistudio"
+      NORMATIVE_CORPUS_DIR: "/app/data/normative_corpus"
+      TAGGING_RULES_FILE: "/app/data/tagging_rules.yaml"
+    volumes:
+      - ./data/normative_corpus:/app/data/normative_corpus:ro
+      - ./data/chroma_aistudio:/app/data/chroma_aistudio
+      - ./data/tagging_rules.yaml:/app/data/tagging_rules.yaml:ro
+    command: ["uv", "run", "python", "scripts/ingest_corpus.py", "--force"]
