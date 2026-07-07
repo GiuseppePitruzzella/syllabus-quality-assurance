@@ -30,6 +30,7 @@ def build_embeddings_client(settings: Settings):
         api_key=settings.require_gemini_api_key(),
         model_name=sci.embedding_model,
         output_dimensionality=sci.embedding_output_dimensionality,
+        rpm_limit=settings.gemini_api_embed_rpm_limit,
     )
 
 

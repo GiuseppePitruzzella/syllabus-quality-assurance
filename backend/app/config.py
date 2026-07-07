@@ -61,6 +61,9 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     # Free tier caps gemini-2.5-flash at 5 RPM (verified 2026-07-06, D080).
     gemini_api_rpm_limit: int = 5
+    # Free tier caps gemini-embedding-001 at 100 requests/min (verified
+    # 2026-07-07). 90 keeps corpus ingestion under quota in a single pass.
+    gemini_api_embed_rpm_limit: int = 90
 
     # === Vector store and corpus paths (project root) ===
     chroma_persist_dir: str = str(PROJECT_ROOT / "data" / "chroma")

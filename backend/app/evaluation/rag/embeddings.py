@@ -183,9 +183,14 @@ class GeminiApiEmbeddings(VertexAIEmbeddings):
         api_key: str,
         model_name: str = "gemini-embedding-001",
         output_dimensionality: int = 3072,
+        rpm_limit: int = 0,
     ) -> None:
         if not api_key:
             raise ValueError("api_key is required (set GEMINI_API_KEY in .env)")
+        # Local import avoids a module-level dependency of the rag package on the
+        # agents package; the gate itself is dependency-free.
+        from app.evaluation.agents.rate_limit import MinIntervalGate
+
         self._client = genai.Client(
             api_key=api_key,
             http_options=genai_types.HttpOptions(api_version="v1"),
@@ -193,3 +198,10 @@ class GeminiApiEmbeddings(VertexAIEmbeddings):
         self._model_name = model_name
         self._location = ""
         self._output_dim = output_dimensionality
+        # Free-tier embedding quota is 100 req/min; gate each call to stay under
+        # it during corpus ingestion (315 chunks in one pass).
+        self._gate = MinIntervalGate(rpm_limit)
+
+    def _embed_one(self, text: str, task_type: str) -> list[float]:
+        self._gate.wait()
+        return super()._embed_one(text, task_type)
