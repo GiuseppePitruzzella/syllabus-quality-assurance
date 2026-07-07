@@ -215,6 +215,7 @@ backend/data/*.db
 
 # Phase 5: vector store, chunk previews, batch results (rebuildable artifacts)
 data/chroma/
+data/chroma_aistudio/
 data/chunks_preview.json
 data/batch_results/
 
