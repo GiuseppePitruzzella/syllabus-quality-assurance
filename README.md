@@ -74,13 +74,17 @@ I modelli utilizzati sono `gemini-2.5-flash` per la generazione e `gemini-embedd
 
 ## 🌱 Seeding dell'indice vettoriale
 
-Prima del primo avvio va costruito l'indice del corpus normativo (ChromaDB con embedding AI Studio). Va eseguito **una sola volta**:
+Prima del primo avvio va costruito l'indice del corpus normativo (ChromaDB con embedding AI Studio).
+
+Il prototipo è agnostico rispetto ai documenti interni: il corpus **non è incluso nel repository**. Inserisci i tuoi documenti normativi in formato Markdown in `data/normative_corpus/` (vedi il README nella cartella), poi esegui **una sola volta**:
 
 ```bash
 docker compose --profile seed run --rm seed
 ```
 
-L'operazione richiede alcuni minuti: gli embedding vengono deliberatamente rallentati (throttling) per restare sotto il limite gratuito di 100 richieste/minuto. Al termine dovresti vedere `Ingested: 315` chunk, `Errors: 0`.
+L'operazione richiede alcuni minuti: gli embedding vengono deliberatamente rallentati (throttling) per restare sotto il limite gratuito di 100 richieste/minuto. Al termine vedrai il numero di chunk indicizzati e `Errors: 0` (con il corpus sperimentale sono 315 chunk).
+
+**Contattami** se vuoi i documenti che ho usato per valutare i criteri core negli esperimenti, così da inserirli in `data/normative_corpus/`.
 
 ## 🚀 Avvio
 

@@ -219,6 +219,13 @@ data/chroma_aistudio/
 data/chunks_preview.json
 data/batch_results/
 
+# Normative corpus documents: kept out of version control so the prototype stays
+# agnostic to the specific internal documents used (the experimental corpus is
+# available from the author on request). The placeholder README documents the
+# expected input and keeps the directory present in a clone.
+data/normative_corpus/*
+!data/normative_corpus/README.md
+
 # Node
 node_modules/
 # Claude
