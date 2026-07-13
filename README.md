@@ -4,10 +4,10 @@
 <!-- <img src="assets/img/logo.png" alt="Logo" width="300"> -->
 </a>
 
-<h3 align="center">Syllabus Quality Assurance</h3>
+<h3 align="center">Multi-Agentic System for Evaluation of University Syllabi</h3>
 
 <p align="center">
-Sistema multi-agente di supporto alla valutazione automatica dei syllabus universitari, ancorato a un corpus normativo tramite RAG.
+A multi-agent system that supports the evaluation and quality assurance of university syllabi.
 <br /><br />
 <a href="https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/issues">Report Bug</a>
 ·
@@ -16,56 +16,50 @@ Sistema multi-agente di supporto alla valutazione automatica dei syllabus univer
 </p>
 </div>
 
-> **Vuoi provarlo senza costi e con un solo comando?**
-> Questo branch `main` è la configurazione di riferimento su **Vertex AI** (Google Cloud, a consumo), usata per gli esperimenti della tesi. Se preferisci eseguire il tutto **a costo zero** con le **API gratuite di Google (Gemini Developer API / AI Studio)** e **Docker**, passa al branch [`feature/docker-gemini-dev-api`](https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/tree/feature/docker-gemini-dev-api), che ha un README dedicato:
+> This `main` branch is the reference configuration on Vertex AI, used for the thesis experiments. If you prefer to run everything with Google's free API (Gemini Developer API / AI Studio) and Docker, switch to the [`feature/docker-gemini-dev-api`](https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/tree/feature/docker-gemini-dev-api) branch.
 > ```bash
 > git checkout feature/docker-gemini-dev-api
 > ```
 
 ## 📘 Project Overview
 
-Syllabus Quality Assurance è il mio progetto di tesi magistrale utile alla valutazione dei syllabus dell'Università di Catania. Il sistema legge il testo di un syllabus e lo confronta con una rubrica di criteri, restituendo per ciascuno un punteggio, una motivazione e le evidenze testuali su cui si basa. Le valutazioni sono ancorate a un corpus normativo chiuso tramite RAG (Retrieval-Augmented Generation): gli agenti non giudicano "a memoria", ma recuperano i frammenti normativi pertinenti e vi si appoggiano.
+Syllabus Quality Assurance is my master's thesis project for evaluating the syllabi of the University of Catania. The system reads the text of a syllabus and compares it against a rubric of criteria, returning for each one a score, a justification, and the textual evidence it relies on. Evaluations are grounded in a closed normative corpus via RAG. The case study was my own master's degree programme, LM-18 Computer Science.
 
-Caso di studio: Corso di Laurea Magistrale **LM-18 Informatica**.
+## ✨ Features
 
-## ✨ Funzionalità
+- Acquisition (i.e. scraping) of syllabi from SmartEdu, with local storage and browsing via the frontend;
+- Evaluation on the core criteria C1–C9 with a `CoreScore` (mean of the evaluated criteria, on a 0–2 scale);
+- Extended criteria E1–E5 (optional, exploratory), grounded in documents specific to the degree programme.
+- Multi-agent architecture based on four specialised agents A1–A4, each responsible for a subset of criteria.
+- RAG grounding over a set of institutional documents (ChromaDB) with `gemini-embedding-001` embeddings.
+- Per-evaluation output, guided and technical views of the results, and export capability.
 
-- **Acquisizione (scraping)** dei syllabus da SmartEdu, con salvataggio locale e consultazione via frontend.
-- **Valutazione sui criteri core C1–C9** con calcolo del `CoreScore` (media dei criteri valutati, scala 0–2).
-- **Criteri estesi E1–E5** (opzionali, esplorativi), ancorati a documenti specifici del Corso di Studio.
-- **Architettura multi-agente**: quattro agenti specialistici A1–A4, ognuno responsabile di un sottoinsieme di criteri.
-- **Grounding via RAG** su corpus normativo (ChromaDB) con embedding `gemini-embedding-001`.
-- **Doppio output** per ogni valutazione: JSON strutturato e report leggibile in italiano.
-- **Viste guidata e tecnica** dei risultati, con export DOCX.
-- **Bilingue**: gestisce syllabus con versione inglese assente, parziale o strutturata diversamente.
+## 🏗️ Architecture
 
-## 🏗️ Architettura
+Monorepo with two independent packages:
 
-Monorepo con due package indipendenti:
-
-| Componente | Stack | Porta (dev) |
+| Component | Stack | Port (dev) |
 | --- | --- | --- |
-| `backend/` | FastAPI + SQLAlchemy + SQLite, pipeline di valutazione LangGraph (agenti A1–A4), RAG su ChromaDB, client Gemini via **Vertex AI** | `8000` |
+| `backend/` | FastAPI + SQLAlchemy + SQLite, LangGraph evaluation pipeline (agents A1–A4), RAG over ChromaDB, Gemini client via **Vertex AI** | `8000` |
 | `frontend/` | React 19 + Vite (SPA) | `5173` |
 
-Modelli: generazione `gemini-2.5-flash`, embedding `gemini-embedding-001` (3072 dimensioni). Persistenza locale: SQLite in `backend/data/`, vector store ChromaDB in `data/chroma/`, corpus normativo in `data/normative_corpus/`.
+The models used are `gemini-2.5-flash` for generation and `gemini-embedding-001` for embeddings (3072 dimensions). Local persistence uses SQLite in `backend/data/`, a ChromaDB vector store in `data/chroma/`, and the normative corpus in `data/normative_corpus/`.
+Criteria are handled by the agents as follows: A1 → {C1, C2, C5}; A2 → {C3, C4}; A3 → {C6, C7, C8}; A4 → {C9}.
 
-Mapping criteri → agenti: A1 → {C1, C2, C5}; A2 → {C3, C4}; A3 → {C6, C7, C8}; A4 → {C9}.
+## 🧩 Prerequisites
 
-## 🧩 Prerequisiti
-
-- **Python 3.12** e [**uv**](https://docs.astral.sh/uv/) (gestione dipendenze backend).
-- **Node.js** (frontend React + Vite).
-- Un **progetto Google Cloud** con Vertex AI abilitato e le **Application Default Credentials** configurate:
+- **Python 3.12** and [**uv**](https://docs.astral.sh/uv/) (backend dependency management).
+- **Node.js** (React + Vite frontend).
+- A **Google Cloud project** with Vertex AI enabled and **Application Default Credentials** configured:
   ```bash
   gcloud auth application-default login
   ```
 
-## ⚙️ Setup & avvio (nativo, Vertex AI)
+## ⚙️ Setup & run (native, Vertex AI)
 
-**1. Configurazione backend.** In `backend/.env` (vedi `backend/.env.example`) imposta almeno il progetto GCP:
+**1. Backend configuration.** In `backend/.env` (see `backend/.env.example`) set at least the GCP project:
 ```bash
-GCP_PROJECT_ID=<il-tuo-progetto>
+GCP_PROJECT_ID=<your-project>
 # GCP_LOCATION=europe-west1   # default
 ```
 
@@ -76,12 +70,12 @@ uv sync
 uv run uvicorn app.main:app --reload      # http://localhost:8000
 ```
 
-**3. Corpus normativo e indicizzazione (una tantum).** Il prototipo è agnostico rispetto ai documenti interni: il corpus **non è incluso nel repository**. Inserisci i tuoi documenti normativi in formato Markdown in `data/normative_corpus/` (vedi il README nella cartella), poi costruisci l'indice ChromaDB con embedding Vertex:
+**3. Normative corpus and indexing (one-off).** The prototype is agnostic to the internal documents used: the corpus is **not included in the repository**. Place your normative documents *in Markdown format* in `data/normative_corpus/` (see the README in that folder), then build the ChromaDB index with Vertex embeddings:
 ```bash
 cd backend
 uv run python scripts/ingest_corpus.py
 ```
-**Contattami** se vuoi i documenti che ho usato per valutare i criteri core negli esperimenti, così da inserirli in `data/normative_corpus/`.
+> Contact me if you'd like the documents I used to evaluate the core criteria in the experiments, so you can place them in `data/normative_corpus/`.
 
 **4. Frontend.**
 ```bash
@@ -90,55 +84,52 @@ npm install
 npm run dev                                # http://localhost:5173
 ```
 
-Il frontend punta all'API su `http://localhost:8000/api`.
+## 📖 Using the application in practice
 
-## 📖 USAGE — usare l'applicazione in pratica
+A typical path, from a clean install to the first evaluation.
 
-Percorso tipico, dall'installazione pulita alla prima valutazione.
+### 1. Populate the data (scraping)
+On first start the database is empty: syllabi must be acquired from SmartEdu. Scraping works at four levels (departments, degree programmes, syllabus list, detail).
 
-### 1. Popolare i dati (scraping)
-Al primo avvio il database è vuoto: i syllabus vanno acquisiti da SmartEdu. Lo scraping è a 4 livelli (dipartimenti → corsi di laurea → elenco syllabus → dettaglio) ed è integrato nel flusso dell'app. Dal frontend puoi navigare i dipartimenti, selezionare il Corso di Laurea (es. LM-18 Informatica) e avviare l'acquisizione. Le operazioni batch usano il pattern `job_id` + streaming SSE per seguire l'avanzamento.
+From the frontend you can browse departments, select the degree programme (e.g. LM-18 Computer Science) and start the acquisition. Batch operations use the `job_id` + SSE streaming pattern to follow progress.
 
-In alternativa, via API (LM-18 ha `cdl_id = 3` nel DB locale di riferimento):
+Alternatively, via the API (`cdl_id = 3` for LM-18):
 ```bash
-# 1) popola l'elenco dei syllabus del CdL
+# 1) populate the programme's syllabus list
 curl -X POST http://localhost:8000/api/scrape/cdl/3/syllabi
-# 2) scarica i dettagli di tutti i syllabus dell'elenco
+# 2) download the details of every syllabus in the list
 curl -X POST http://localhost:8000/api/scrape/cdl/3/syllabi/all
 ```
-Lo scraping è volutamente rispettoso dell'infrastruttura UniCT (ritardo tra le richieste, user-agent identificato come ricerca accademica).
 
-### 2. Consultare i syllabus
-Apri il frontend, sfoglia i syllabus acquisiti e visualizza il dettaglio di ognuno (risultati di apprendimento, descrittori di Dublino, programma, versione inglese quando presente). Questa fase non richiede chiamate ai modelli.
+### 2. Browse the syllabi
+Open the frontend, browse the acquired syllabi and view the detail of each (learning outcomes, Dublin descriptors, programme, English version when present). This stage requires no model calls.
 
-### 3. Accesso
-Registra un account (email + password) e accedi: le funzioni di valutazione sono protette da autenticazione.
+### 3. Sign in
+Register an account and sign in to use the evaluation features.
 
-### 4. Valutare un syllabus
-Dalla pagina di un syllabus avvia una **valutazione**. Compare prima la schermata di **selezione esplicita dei documenti** (per i criteri estesi). Gli agenti A1–A4 vengono eseguiti in sequenza; l'avanzamento è mostrato in tempo reale via SSE. Al termine ottieni, per ogni criterio, punteggio, motivazione ed evidenze, oltre al `CoreScore` complessivo.
+### 4. Evaluate a syllabus
+From a syllabus page, start an **evaluation**. The **explicit document selection** screen appears first (for the extended criteria). Agents A1–A4 run in sequence; progress is shown in real time via SSE. At the end you get, for each criterion, a score, a justification and evidence, plus the overall `CoreScore`.
 
-### 5. Criteri estesi E1–E5 (documenti locali)
-I criteri core **C1–C9** valutano il solo testo del syllabus. I criteri estesi **E1–E5** richiedono documenti specifici del Corso di Studio: SUA-CdS, Regolamento didattico e Matrice di Tuning (E1–E4) e un documento di usi dipartimentali (E5). Caricali dalla sezione documenti, attendi che risultino **indicizzati**, poi **selezionali** nella schermata pre-valutazione. I documenti sono associati al Corso di Laurea, non all'account.
+### 5. Extended criteria E1–E5 (local documents)
+The core criteria **C1–C9** evaluate the syllabus text only. The extended criteria **E1–E5** require documents specific to the degree programme: SUA-CdS, the academic programme regulations and the Tuning matrix (E1–E4), and a departmental-practices document (E5). Upload them from the documents section, wait until they are **indexed**, then **select** them in the pre-evaluation screen. Documents are associated with the degree programme, not with the account.
 
-### 6. Risultati ed export
-I risultati sono consultabili in due viste: **guidata** (sintetica, per la lettura) e **tecnica** (dettaglio di evidenze, frammenti RAG recuperati, criteri in `NA`). Da qui puoi **esportare** la valutazione in **DOCX**.
+### 6. Results and export
+Results are available in two views: **guided** (concise, for reading) and **technical** (detail of evidence, retrieved RAG chunks, criteria marked `NA`). From here you can **export** the evaluation to **DOCX**.
 
-## 🔀 Backend dei modelli: Vertex AI (default) e alternativa gratuita
+## 🔀 Model backend
 
-Su `main` il backend dei modelli è **Vertex AI**: richiede un progetto GCP e le credenziali ADC, e fattura a consumo. È la configurazione con cui è stata condotta la campagna di valutazione della tesi.
+On `main` the model backend is **Vertex AI**: it requires a GCP project and ADC credentials, and it is billed per use. It is the configuration used to run the thesis evaluation campaign. Otherwise, the [`feature/docker-gemini-dev-api`](https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/tree/feature/docker-gemini-dev-api) branch lets you run the whole application in Docker using the Gemini Developer API (AI Studio) with a free API key, without any Google Cloud setup. The model stays identical (`gemini-2.5-flash` / `gemini-embedding-001`).
 
-Se non vuoi (o non puoi) usare Vertex, il branch [`feature/docker-gemini-dev-api`](https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/tree/feature/docker-gemini-dev-api) permette di eseguire l'intera applicazione **in Docker** usando la **Gemini Developer API (AI Studio)** con una **API key gratuita**, senza alcuna configurazione Google Cloud. Il modello resta identico (`gemini-2.5-flash` / `gemini-embedding-001`): cambia solo il canale. Consulta il README di quel branch per i dettagli.
-
-## 🗂️ Struttura del repository
+## 🗂️ Repository structure
 
 ```
 .
-├── backend/              # FastAPI, scraping, pipeline di valutazione, RAG
-│   ├── app/              # codice applicativo (API, agenti, RAG, modelli)
-│   ├── scripts/          # utilità CLI (es. ingest_corpus.py)
-│   └── data/             # SQLite + documenti caricati (locale)
+├── backend/              # FastAPI, scraping, evaluation pipeline, RAG
+│   ├── app/              # application code (API, agents, RAG, models)
+│   ├── scripts/          # CLI utilities (e.g. ingest_corpus.py)
+│   └── data/             # SQLite + uploaded documents (local)
 ├── frontend/             # React + Vite (SPA)
 └── data/
-    ├── normative_corpus/ # i tuoi documenti normativi (non versionati; vedi README)
-    └── chroma/           # vector store ChromaDB (generato)
+    ├── normative_corpus/ # your normative documents (not versioned; see README)
+    └── chroma/           # ChromaDB vector store (generated)
 ```
