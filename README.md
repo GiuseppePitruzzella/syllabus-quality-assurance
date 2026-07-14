@@ -7,7 +7,7 @@
 <h3 align="center">Syllabus Quality Assurance</h3>
 
 <p align="center">
-Sistema multi-agente di supporto alla valutazione automatica dei syllabus universitari, ancorato a un corpus normativo tramite RAG. Deployment Docker con Gemini Developer API (piano gratuito).
+A multi-agent system supporting the automated evaluation of university syllabi, grounded in a normative corpus via RAG. Docker deployment with the Gemini Developer API (free tier).
 <br /><br />
 <a href="https://github.com/GiuseppePitruzzella/syllabus-quality-assurance/issues">Report Bug</a>
 ·
@@ -16,142 +16,158 @@ Sistema multi-agente di supporto alla valutazione automatica dei syllabus univer
 </p>
 </div>
 
-> `feature/docker-gemini-dev-api` prevede l'esecuzione attraverso **Docker** usando **Gemini Developer API**. La configurazione a pagamento su Vertex AI resta disponibile by default su `main`.
+> The `feature/docker-gemini-dev-api` branch runs the application in **Docker** using the **Gemini Developer API**. The paid Vertex AI configuration remains available by default on `main`.
 
 ## 📘 Project Overview
 
-Syllabus Quality Assurance è il mio progetto di tesi magistrale utile alla valutazione di syllabus dell'Università di Catania.
-Il sistema legge il testo di un syllabus e lo confronta con una rubrica di criteri, restituendo per ciascun criterio un punteggio, una motivazione e le evidenze testuali su cui si basa. Le valutazioni sono ancorate ad un corpus normativo chiuso tramite RAG.
+Syllabus Quality Assurance is my master's thesis project for evaluating the syllabi of the University of Catania.
+The system reads the text of a syllabus and compares it against a rubric of criteria, returning for each criterion a score, a justification, and the textual evidence it relies on. Evaluations are grounded in a closed normative corpus via RAG.
 
-## ✨ Funzionalità
+## ✨ Features
 
-- **Valutazione sui criteri core C1–C9** con calcolo del `CoreScore` (media dei criteri valutati, scala 0–2).
-- **Criteri estesi E1–E5** (opzionali, esplorativi), ancorati a documenti specifici del Corso di Studio caricati dall'utente.
-- **Architettura multi-agente**: quattro agenti specialistici A1–A4, ognuno responsabile di un sottoinsieme di criteri.
-- **Grounding via RAG** su corpus normativo (ChromaDB) con embedding `gemini-embedding-001`.
-- **Doppio output** per ogni valutazione: JSON strutturato e report leggibile in italiano.
-- **Viste guidata e tecnica** dei risultati, con export DOCX.
-- **Bilingue**: gestisce syllabus con versione inglese assente, parziale o strutturata diversamente.
+- **Evaluation on the core criteria C1–C9** with a `CoreScore` (mean of the evaluated criteria, 0–2 scale).
+- **Extended criteria E1–E5** (optional, exploratory), grounded in programme-specific documents uploaded by the user.
+- **Multi-agent architecture**: four specialised agents A1–A4, each responsible for a subset of criteria.
+- **RAG grounding** over the normative corpus (ChromaDB) with `gemini-embedding-001` embeddings.
+- **Dual output** for each evaluation: structured JSON and a human-readable report in Italian.
+- **Guided and technical views** of the results, with DOCX export.
+- **Bilingual**: handles syllabi whose English version is absent, partial, or structured differently.
 
-## 🏗️ Architettura
+## 🏗️ Architecture
 
-Due container orchestrati da Docker Compose:
+Two containers orchestrated by Docker Compose:
 
-| Servizio | Contenuto | Esposizione |
+| Service | Contents | Exposure |
 | --- | --- | --- |
-| `backend` | FastAPI + SQLAlchemy + SQLite, pipeline di valutazione LangGraph (agenti A1–A4), RAG su ChromaDB, client Gemini AI Studio | interno (`8000`, non pubblicato) |
-| `frontend` | React 19 + Vite, servito da **nginx** che fa da reverse proxy verso `/api` | `http://localhost:8080` |
+| `backend` | FastAPI + SQLAlchemy + SQLite, LangGraph evaluation pipeline (agents A1–A4), RAG over ChromaDB, Gemini AI Studio client | internal (`8000`, not published) |
+| `frontend` | React 19 + Vite, served by **nginx** acting as a reverse proxy to `/api` | `http://localhost:8080` |
 
-Un terzo servizio `seed` costruisce una tantum l'indice vettoriale del corpus normativo.
-I modelli utilizzati sono `gemini-2.5-flash` per la generazione e `gemini-embedding-001` per l'embedding.
+A third `seed` service builds the normative corpus's vector index once.
+The models used are `gemini-2.5-flash` for generation and `gemini-embedding-001` for embeddings.
 
-- `backend/data/`, database SQLite e documenti caricati;
-- `data/normative_corpus/`, corpus normativo (input del seed);
-- `data/chroma_aistudio/`, indice vettoriale costruito con embedding AI Studio.
+- `backend/data/` — SQLite database and uploaded documents;
+- `data/normative_corpus/` — normative corpus (seed input);
+- `data/chroma_aistudio/` — vector index built with AI Studio embeddings.
 
-## 🧩 Prerequisiti
+## 🧩 Prerequisites
 
-- **Docker** e **Docker Compose** installati e con il daemon attivo.
-- Una **API key gratuita di Gemini**, ottenibile su [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
-- (Consigliato) il **bundle del database SQLite pre-popolato** con i syllabus, per non dover rifare lo scraping.
+- **Docker** and **Docker Compose** installed, with the daemon running.
+- A **free Gemini API key**, obtainable at [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
 
-## ⚙️ Configurazione iniziale
+## ⚡ Quick start
 
-1. Copiare il file di esempio delle variabili d'ambiente e inserire la propria chiave:
+All the steps, in order, from clone to first run:
+
+```bash
+# 1. Free API key (https://aistudio.google.com/apikey)
+cp .env.example .env
+#    then open .env and set GEMINI_API_KEY=<your-key>
+
+# 2. CORE-CRITERIA documents (required): place the normative corpus
+#    .md files in data/normative_corpus/ (contact me for the experimental ones)
+
+# 3. Build the vector index (one-off, a few minutes)
+docker compose --profile seed run --rm seed
+
+# 4. Start the application
+docker compose up --build          # then open http://localhost:8080
+
+# To stop everything
+docker compose down
+```
+
+Documents for the **extended criteria (E1–E5)** are **optional** and are uploaded from the app (see *Local documents and extended criteria*). Each step is detailed in the sections below.
+
+## ⚙️ Initial configuration
+
+1. Copy the example environment file and insert your key:
 
    ```bash
    cp .env.example .env
-   # modificare .env e impostare GEMINI_API_KEY=<la-tua-chiave>
+   # edit .env and set GEMINI_API_KEY=<your-key>
    ```
 
-   Il file `.env` è git-ignored: la chiave resta solo sulla tua macchina.
+   The `.env` file is git-ignored: the key stays only on your machine.
 
-2. (Consigliato) copiare il database pre-popolato in `backend/data/`, così l'app parte con i syllabus già caricati:
+## 🌱 Core-criteria documents and seeding
 
-   ```bash
-   cp /percorso/al/bundle/syllabus_ai.db backend/data/syllabus_ai.db
-   ```
+The core criteria **C1–C9** are grounded in a **normative corpus**: providing these documents and building the index is **required** for the core evaluation to work.
 
-## 🌱 Seeding dell'indice vettoriale
-
-Prima del primo avvio va costruito l'indice del corpus normativo (ChromaDB con embedding AI Studio).
-
-Il prototipo è agnostico rispetto ai documenti interni: il corpus **non è incluso nel repository**. Inserisci i tuoi documenti normativi in formato Markdown in `data/normative_corpus/` (vedi il README nella cartella), poi esegui **una sola volta**:
+The prototype is agnostic to the internal documents used: the corpus is **not included in the repository**. Place your normative documents in Markdown (`.md`) in `data/normative_corpus/` (see the README in that folder), then build the index (ChromaDB with AI Studio embeddings) **once**:
 
 ```bash
 docker compose --profile seed run --rm seed
 ```
 
-L'operazione richiede alcuni minuti: gli embedding vengono deliberatamente rallentati (throttling) per restare sotto il limite gratuito di 100 richieste/minuto. Al termine vedrai il numero di chunk indicizzati e `Errors: 0` (con il corpus sperimentale sono 315 chunk).
+This takes a few minutes: embeddings are deliberately throttled to stay under the free-tier limit of 100 requests/minute. At the end you'll see the number of indexed chunks and `Errors: 0` (315 chunks with the experimental corpus).
 
-**Contattami** se vuoi i documenti che ho usato per valutare i criteri core negli esperimenti, così da inserirli in `data/normative_corpus/`.
+**Contact me** if you'd like the documents I used to evaluate the core criteria in the experiments, so you can place them in `data/normative_corpus/`.
 
-## 🚀 Avvio
+## 🚀 Run
 
 ```bash
 docker compose up --build
 ```
 
-Poi apri **[http://localhost:8080](http://localhost:8080)**. Per fermare lo stack: `docker compose down`.
+Then open **[http://localhost:8080](http://localhost:8080)**. To stop the stack: `docker compose down`.
 
-## 🖥️ Guida all'uso
+## 🖥️ How to use
 
-1. **Registrazione / login.** Al primo accesso crea un account e accedi.
-2. **Consultazione.** Sfoglia i syllabus già presenti e apri il dettaglio di uno di essi.
-3. **Valutazione.** Dalla pagina di un syllabus avvia una valutazione. Prima dell'esecuzione compare la schermata di **selezione esplicita dei documenti** (per i criteri estesi). Al termine puoi consultare i risultati nelle viste **guidata** e **tecnica** ed esportarli in DOCX.
-4. **Attesa.** Una valutazione nuova esegue gli agenti A1–A4 in sequenza; con il piano gratuito (5 richieste/minuto sull'LLM) può richiedere qualche minuto.
+1. **Register / sign in.** On first access, create an account and sign in.
+2. **Browse.** Browse the syllabi already present and open the detail of one.
+3. **Evaluate.** From a syllabus page, start an evaluation. Before it runs, the **explicit document selection** screen appears (for the extended criteria). When done, you can view the results in the **guided** and **technical** views and export them to DOCX.
+4. **Wait.** A new evaluation runs agents A1–A4 in sequence; on the free tier (5 requests/minute on the LLM) it may take a few minutes.
 
-## 📄 Documenti locali e criteri estesi (E1–E5)
+## 📄 Local documents and extended criteria (E1–E5) — optional
 
-I criteri core **C1–C9** valutano il solo testo del syllabus e funzionano **da subito** dopo il seed. I criteri estesi **E1–E5** richiedono invece documenti specifici del Corso di Studio (SUA-CdS, Regolamento didattico, Matrice di Tuning per E1–E4; documento di usi dipartimentali per E5).
+The core criteria **C1–C9** evaluate the syllabus text only and work right after the seed. The extended criteria **E1–E5** are **optional** and require programme-specific documents (SUA-CdS, academic regulations, and the Tuning matrix for E1–E4; a departmental-practices document for E5).
 
-> I documenti sono associati al Corso di Laurea, non all'account. Un documento caricato è quindi visibile a tutti gli account sullo stesso CdL: è una scelta di progetto del prototipo (perimetro a valutatore singolo), non un errore.
+To enable them, **upload them from the app** (documents section) and wait until they are *indexed*: on upload they are indexed with AI Studio embeddings into the `data/chroma_aistudio` index. Then **select** them in the pre-evaluation screen.
 
-## 📊 Monitoraggio delle chiamate API
+> After the seed, the AI Studio index contains only the corpus. Re-uploading the full set to use the extended criteria for LM-18 costs about **129 embedding calls**.
 
-`gemini-2.5-flash` è limitato a circa **5 richieste al minuto**, più un tetto giornaliero. Le valutazioni sono perciò più lente (throttling integrato). `gemini-embedding-001` è limitato a circa **100 richieste al minuto**. Seed e indicizzazione documenti sono rallentati per rispettarlo.
+> Documents are associated with the degree programme, not with the account. An uploaded document is therefore visible to all accounts on the same programme: this is a design choice of the prototype (single-evaluator scope), not a bug.
 
-**Lato Google (ufficiale):** l'uso corrente e i limiti sono consultabili su [ai.dev/rate-limit](https://ai.dev/rate-limit) e nella [documentazione dei rate limit](https://ai.google.dev/gemini-api/docs/rate-limits).
+## 📊 API call limits and monitoring
 
-**Lato locale (in tempo reale):** il backend registra una riga di log per ogni chiamata di embedding. Per contarle:
+The free tier has both **per-minute** and **per-day** limits:
+
+- `gemini-2.5-flash` (LLM): about **5 requests/minute** and a **daily cap** on requests. Evaluations are therefore slower (built-in throttling).
+- `gemini-embedding-001` (embeddings): about **100 requests/minute** (a quota separate from the LLM). Seeding and document indexing are throttled to respect it.
+
+> **Daily limit.** If calls fail with `RESOURCE_EXHAUSTED` and the quota cited contains *PerDay*, you've exhausted the **daily cap**: waiting a minute isn't enough. Free-tier quotas reset at **midnight Pacific Time**, i.e. **~09:00 Italian time**. If you don't want to wait, use a **second API key** (from another Google project, with its own quota) or switch to **Vertex AI** (`GENAI_USE_VERTEX=true`).
+
+**Google side (official):** current usage and limits are available at [ai.dev/rate-limit](https://ai.dev/rate-limit) and in the [rate-limits documentation](https://ai.google.dev/gemini-api/docs/rate-limits).
+
+**Local side (real time):** the backend logs one line per embedding call. To count them:
 
 ```bash
-# conteggio istantaneo delle chiamate embedding dall'avvio del container
+# instant count of embedding calls since the container started
 docker compose logs backend | grep -c embedding_completed
 
-# monitoraggio dal vivo (una riga per ogni embedding)
+# live monitoring (one line per embedding)
 docker compose logs -f backend | grep --line-buffered embedding_completed
 ```
 
-## 🔀 Backend: AI Studio vs Vertex AI
+## 🔀 Model backend: AI Studio vs Vertex AI
 
-Il backend dei modelli è selezionabile via variabile d'ambiente, senza modifiche al codice:
+The model backend is selectable via an environment variable, with no code changes:
 
-- `GENAI_USE_VERTEX=false` (default in Docker) → Gemini Developer API / AI Studio, con `GEMINI_API_KEY`.
-- `GENAI_USE_VERTEX=true` → Vertex AI, con credenziali GCP (`GCP_PROJECT_ID` e Application Default Credentials). È la configurazione usata per riprodurre la campagna di valutazione della tesi.
+- `GENAI_USE_VERTEX=false` (default in Docker) → Gemini Developer API / AI Studio, with `GEMINI_API_KEY`.
+- `GENAI_USE_VERTEX=true` → Vertex AI, with GCP credentials (`GCP_PROJECT_ID` and Application Default Credentials). This is the configuration used to reproduce the thesis evaluation campaign.
 
-Il modello resta identico nei due casi: cambia solo il canale di fatturazione. Nota: i due backend usano indici vettoriali separati (`data/chroma_aistudio` per AI Studio, `data/chroma` per Vertex), per non mescolare embedding prodotti da canali diversi.
+The model stays identical in both cases: only the billing channel changes. Note: the two backends use separate vector indexes (`data/chroma_aistudio` for AI Studio, `data/chroma` for Vertex) so as not to mix embeddings produced by different channels.
 
-## 🩺 Risoluzione dei problemi
-
-| Sintomo | Causa / soluzione |
-| --- | --- |
-| 502 all'apertura di localhost:8080 | nginx risponde prima che il backend abbia finito il boot. Ricarica la pagina dopo qualche secondo. |
-| Il seed fallisce con `RESOURCE_EXHAUSTED` (429) | Limite embedding per minuto o tetto giornaliero. Attendi qualche minuto (o il giorno dopo) e rilancia il seed. |
-| I criteri E1–E5 restano vuoti | I documenti non sono stati caricati/indicizzati in questo ambiente, oppure non sono stati selezionati nella schermata pre-valutazione. Vedi la sezione *Documenti locali e criteri estesi*. |
-| `GEMINI_API_KEY is not set` | Manca la chiave: verifica di aver creato `.env` con `GEMINI_API_KEY` valorizzata. |
-| Modifiche al codice non hanno effetto | Ricostruisci l'immagine: `docker compose build <servizio>`. Nota che il servizio `seed` ha un'immagine separata da `backend`. |
-
-## 🗂️ Struttura del repository
+## 🗂️ Repository structure
 
 ```
 .
-├── backend/              # FastAPI, pipeline di valutazione, RAG, Dockerfile
-│   └── data/             # SQLite + documenti caricati (bind-mount)
+├── backend/              # FastAPI, evaluation pipeline, RAG, Dockerfile
+│   └── data/             # SQLite + uploaded documents (bind-mount)
 ├── frontend/             # React + Vite, Dockerfile, nginx.conf
 ├── data/
-│   ├── normative_corpus/ # corpus normativo (input del seed)
-│   └── chroma_aistudio/  # indice vettoriale AI Studio (generato dal seed)
-├── docker-compose.yml    # orchestrazione: backend, frontend, seed
-└── .env.example          # template variabili d'ambiente (GEMINI_API_KEY)
+│   ├── normative_corpus/ # normative corpus (seed input)
+│   └── chroma_aistudio/  # AI Studio vector index (generated by the seed)
+├── docker-compose.yml    # orchestration: backend, frontend, seed
+└── .env.example          # environment variables template (GEMINI_API_KEY)
 ```
