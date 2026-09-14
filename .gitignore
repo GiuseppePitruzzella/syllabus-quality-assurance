@@ -218,6 +218,7 @@ data/chroma/
 data/chroma_aistudio/
 data/chunks_preview.json
 data/batch_results/
+data/local_benchmarks/
 
 # Normative corpus documents: kept out of version control so the prototype stays
 # agnostic to the specific internal documents used (the experimental corpus is

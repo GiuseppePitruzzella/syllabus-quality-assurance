@@ -25,8 +25,7 @@ Preserved invariants:
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass, field
-from typing import Any, Protocol
+from typing import Any
 
 import structlog
 from google import genai
@@ -45,6 +44,15 @@ from tenacity import (
 )
 
 from app.config import ScientificConfig
+# Re-export the existing public names for compatibility with all callers.
+from app.evaluation.agents.llm_types import (
+    LLMClient as LLMClient,
+    LLMEmptyResponseError as LLMEmptyResponseError,
+    LLMError as LLMError,
+    LLMResponseTruncatedError as LLMResponseTruncatedError,
+    LLMResult as LLMResult,
+    LLMSafetyBlockedError as LLMSafetyBlockedError,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -79,85 +87,6 @@ def _is_retryable_error(exc: BaseException) -> bool:
 _FINISH_OK = {"STOP"}
 _FINISH_TRUNCATED = {"MAX_TOKENS"}
 _FINISH_SAFETY = {"SAFETY", "BLOCKLIST", "PROHIBITED_CONTENT", "SPII", "RECITATION"}
-
-
-# === typed errors ===========================================================
-
-
-class LLMError(RuntimeError):
-    """Base class for LLM client errors."""
-
-
-class LLMSafetyBlockedError(LLMError):
-    """Raised when the response or prompt is blocked by Vertex safety filters.
-
-    Per the Phase 5 spec, the agent layer must record the affected
-    criteria as NA with reason ``"blocked by safety filter"`` and NOT
-    retry. The truth-value of this error is the block reason name
-    (e.g. ``"SAFETY"``, ``"PROHIBITED_CONTENT"``).
-    """
-
-    def __init__(self, reason: str, *, prompt_blocked: bool = False) -> None:
-        super().__init__(
-            ("prompt blocked by safety filter: " if prompt_blocked else "response blocked by safety filter: ")
-            + reason
-        )
-        self.reason = reason
-        self.prompt_blocked = prompt_blocked
-
-
-class LLMResponseTruncatedError(LLMError):
-    """Raised when the model hit ``max_output_tokens`` before finishing.
-
-    The agent layer can retry once with a smaller payload or with a more
-    aggressive 'be concise' instruction. Not retried inside the client.
-    """
-
-
-class LLMEmptyResponseError(LLMError):
-    """Raised when the model returns no usable text (no candidates,
-    OTHER finish reason, model armor, malformed function call)."""
-
-
-# === result type ============================================================
-
-
-@dataclass(frozen=True)
-class LLMResult:
-    """One generation result with its metadata.
-
-    Attributes:
-        text: Plain text returned by the model. The agent passes this
-            into :meth:`BaseAgent._parse_response`.
-        metadata: Dict suitable for ``execution_metadata`` of
-            ``AgentOutput``. Always contains: ``model``, ``gcp_project_id``,
-            ``gcp_location``, ``temperature``, ``max_output_tokens``,
-            ``finish_reason``, ``prompt_chars``, ``response_chars``,
-            ``latency_ms``. May contain ``seed``.
-    """
-
-    text: str
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-
-# === protocol ===============================================================
-
-
-class LLMClient(Protocol):
-    """Minimum surface that ``BaseAgent`` needs.
-
-    Any callable returning an object with a ``.text`` attribute satisfies
-    this. ``VertexAILLMClient`` is the production implementation; tests
-    use a ``MagicMock`` that returns ``LLMResult``.
-    """
-
-    def __call__(
-        self,
-        prompt: str,
-        *,
-        seed: int | None = None,
-        max_output_tokens: int | None = None,
-    ) -> LLMResult: ...
 
 
 # === Vertex AI implementation ===============================================

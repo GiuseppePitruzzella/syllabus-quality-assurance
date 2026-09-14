@@ -25,6 +25,11 @@ The system reads the text of a syllabus and compares it against a rubric of crit
 
 ## ✨ Features
 
+**Local model experiment:** a separate, opt-in [Qwen3.5-4B benchmark](experiments/local-qwen/README.md)
+replays archived evaluation prompts through local Ollama, with **zero inference
+API charges and no cloud fallback**. It does not change the web app's Gemini
+backend. Use it to measure whether local evaluation is useful before adoption.
+
 - **Evaluation on the core criteria C1–C9** with a `CoreScore` (mean of the evaluated criteria, 0–2 scale).
 - **Extended criteria E1–E5** (optional, exploratory), grounded in programme-specific documents uploaded by the user.
 - **Multi-agent architecture**: four specialised agents A1–A4, each responsible for a subset of criteria.

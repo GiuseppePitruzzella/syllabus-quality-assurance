@@ -1,0 +1,462 @@
+{
+  "experiment": "local_qwen_development_pilot_2026_09_13",
+  "hardware": {
+    "model": "MacBook Air M2",
+    "unified_memory_gib": 8
+  },
+  "base_git_commit": "ac423eabf9cfeec922850661e25984ca9609d807",
+  "runtime": {
+    "ollama_version": "0.32.15",
+    "model": "qwen3.5:4b",
+    "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "model_size_bytes": 3389983735,
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.7B",
+      "quantization_level": "Q4_K_M"
+    },
+    "model_parameters": "presence_penalty               1.5\ntemperature                    1\ntop_k                          20\ntop_p                          0.95",
+    "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315",
+    "config": {
+      "base_url": "http://127.0.0.1:11435",
+      "model": "qwen3.5:4b",
+      "num_ctx": 16384,
+      "max_output_tokens": 2048,
+      "timeout_seconds": 600,
+      "temperature": 0.1,
+      "seed": 42
+    },
+    "api_cost_usd": 0
+  },
+  "provenance_note": "Development pilot: IoT runs preceded source hashes, memory snapshots and extraction of backend-neutral types. Generation policy was unchanged. Deep Learning and the negative test record implementation hashes. Raw responses stay local; hashes and reviewed metrics are published.",
+  "scope": "Four agents on Internet of Things; A4 on the longer Deep Learning syllabus. One attempt each, historical prompts, frozen retrieval; no human gold standard, held-out sample or repeatability claim.",
+  "summary": {
+    "attempted": 5,
+    "valid": 5,
+    "valid_rate": 1.0,
+    "compared_criteria": 10,
+    "agreement_with_archived_gemini": 0.6,
+    "numeric_mae": 0.4,
+    "na_disagreements": 0,
+    "evidences": 34,
+    "verified_evidences": 22,
+    "evidence_verification_rate": 0.6470588235294118,
+    "judgments_without_evidence": 0,
+    "median_wall_seconds": 176.984,
+    "max_wall_seconds": 363.246,
+    "api_cost_usd": 0,
+    "per_criterion": {
+      "C1": {
+        "n": 1,
+        "agreement": 0.0
+      },
+      "C2": {
+        "n": 1,
+        "agreement": 1.0
+      },
+      "C3": {
+        "n": 1,
+        "agreement": 1.0
+      },
+      "C4": {
+        "n": 1,
+        "agreement": 0.0
+      },
+      "C5": {
+        "n": 1,
+        "agreement": 1.0
+      },
+      "C6": {
+        "n": 1,
+        "agreement": 0.0
+      },
+      "C7": {
+        "n": 1,
+        "agreement": 0.0
+      },
+      "C8": {
+        "n": 1,
+        "agreement": 1.0
+      },
+      "C9": {
+        "n": 2,
+        "agreement": 1.0
+      }
+    },
+    "interpretation": "Diagnostic replay; not human accuracy or a production acceptance gate."
+  },
+  "cases": [
+    {
+      "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+      "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+      "prompt_version": "a1_v5",
+      "prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+      "prompt_chars": 33675,
+      "reference_scores": {
+        "C1": 2,
+        "C2": 0,
+        "C5": 1
+      },
+      "reference_last_call_latency_ms": 16860,
+      "local_artifact": "data/local_benchmarks/pilot_core_iot_v1/a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649__run1.json",
+      "artifact_sha256": "5398edf14d9edb52d304969eaad30183014de815a3cf47f78b1c91056913520e",
+      "response_sha256": "d14d228c3232dd455f404b2f272c7caf4e17cbbf48d06b7bbed32b508f2a589a",
+      "status": "valid",
+      "wall_seconds": 176.984,
+      "metadata": {
+        "backend": "ollama_local",
+        "model": "qwen3.5:4b",
+        "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+        "finish_reason": "STOP",
+        "num_ctx": 16384,
+        "max_output_tokens": 2048,
+        "requested_max_output_tokens": null,
+        "temperature": 0.1,
+        "seed": 42,
+        "thinking": false,
+        "prompt_chars": 33675,
+        "response_chars": 3783,
+        "latency_ms": 176890,
+        "api_cost_usd": 0,
+        "total_duration": 176672029000,
+        "load_duration": 15626625,
+        "prompt_eval_duration": 60193119000,
+        "eval_duration": 114853912000,
+        "prompt_eval_count": 9582,
+        "prompt_eval_cached_count": null,
+        "eval_count": 1050
+      },
+      "comparisons": [
+        {
+          "criterion": "C1",
+          "reference": 2,
+          "local": 1,
+          "agrees": false,
+          "absolute_error": 1,
+          "na_disagreement": false
+        },
+        {
+          "criterion": "C2",
+          "reference": 0,
+          "local": 0,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        },
+        {
+          "criterion": "C5",
+          "reference": 1,
+          "local": 1,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        }
+      ],
+      "evidences": 6,
+      "verified_evidences": 4,
+      "implementation_sha256": null,
+      "swap_before": null,
+      "swap_after": null,
+      "model_memory_after": null
+    },
+    {
+      "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+      "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+      "prompt_version": "a2_v1",
+      "prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+      "prompt_chars": 26500,
+      "reference_scores": {
+        "C3": 1,
+        "C4": 2
+      },
+      "reference_last_call_latency_ms": 21032,
+      "local_artifact": "data/local_benchmarks/pilot_core_iot_v1/a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649__run1.json",
+      "artifact_sha256": "93c08aa68fee400df13dea80672b3557bf8107c153cfde25f37a8a89c944daf4",
+      "response_sha256": "7078cfcf08c5e534f4d79d6f42f244c7fa9b7ec6751a8c8aaf53a57f0655ca30",
+      "status": "valid",
+      "wall_seconds": 233.747,
+      "metadata": {
+        "backend": "ollama_local",
+        "model": "qwen3.5:4b",
+        "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+        "finish_reason": "STOP",
+        "num_ctx": 16384,
+        "max_output_tokens": 2048,
+        "requested_max_output_tokens": null,
+        "temperature": 0.1,
+        "seed": 42,
+        "thinking": false,
+        "prompt_chars": 26500,
+        "response_chars": 5101,
+        "latency_ms": 233719,
+        "api_cost_usd": 0,
+        "total_duration": 233641094625,
+        "load_duration": 30768542,
+        "prompt_eval_duration": 79844539000,
+        "eval_duration": 152419734000,
+        "prompt_eval_count": 7235,
+        "prompt_eval_cached_count": null,
+        "eval_count": 1153
+      },
+      "comparisons": [
+        {
+          "criterion": "C3",
+          "reference": 1,
+          "local": 1,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        },
+        {
+          "criterion": "C4",
+          "reference": 2,
+          "local": 1,
+          "agrees": false,
+          "absolute_error": 1,
+          "na_disagreement": false
+        }
+      ],
+      "evidences": 10,
+      "verified_evidences": 6,
+      "implementation_sha256": null,
+      "swap_before": null,
+      "swap_after": null,
+      "model_memory_after": null
+    },
+    {
+      "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "fixture": "a3_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+      "fixture_sha256": "b8aadf3423a2edbdb88855f22ce966e792900596d66c61e9aef8840c14d52239",
+      "prompt_version": "a3_v1",
+      "prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+      "prompt_chars": 36779,
+      "reference_scores": {
+        "C6": 2,
+        "C7": 2,
+        "C8": 2
+      },
+      "reference_last_call_latency_ms": 34694,
+      "local_artifact": "data/local_benchmarks/pilot_core_iot_v1/a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649__run1.json",
+      "artifact_sha256": "c96b2e31f1a60e5954ab5a2fe6cdcc48ee84748488a24264063879a4fec6a227",
+      "response_sha256": "1458a5b8e37d47f097b95e6ea3c2f35d6678fbed557339f9882f04ae65c6145e",
+      "status": "valid",
+      "wall_seconds": 363.246,
+      "metadata": {
+        "backend": "ollama_local",
+        "model": "qwen3.5:4b",
+        "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+        "finish_reason": "STOP",
+        "num_ctx": 16384,
+        "max_output_tokens": 2048,
+        "requested_max_output_tokens": null,
+        "temperature": 0.1,
+        "seed": 42,
+        "thinking": false,
+        "prompt_chars": 36779,
+        "response_chars": 6550,
+        "latency_ms": 363216,
+        "api_cost_usd": 0,
+        "total_duration": 363135131041,
+        "load_duration": 24662208,
+        "prompt_eval_duration": 118987865000,
+        "eval_duration": 243141902000,
+        "prompt_eval_count": 10175,
+        "prompt_eval_cached_count": null,
+        "eval_count": 1603
+      },
+      "comparisons": [
+        {
+          "criterion": "C6",
+          "reference": 2,
+          "local": 1,
+          "agrees": false,
+          "absolute_error": 1,
+          "na_disagreement": false
+        },
+        {
+          "criterion": "C7",
+          "reference": 2,
+          "local": 1,
+          "agrees": false,
+          "absolute_error": 1,
+          "na_disagreement": false
+        },
+        {
+          "criterion": "C8",
+          "reference": 2,
+          "local": 2,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        }
+      ],
+      "evidences": 10,
+      "verified_evidences": 7,
+      "implementation_sha256": null,
+      "swap_before": null,
+      "swap_after": null,
+      "model_memory_after": null
+    },
+    {
+      "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "fixture": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+      "fixture_sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e",
+      "prompt_version": "a4_v2",
+      "prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+      "prompt_chars": 21775,
+      "reference_scores": {
+        "C9": 1
+      },
+      "reference_last_call_latency_ms": 12886,
+      "local_artifact": "data/local_benchmarks/pilot_a4_iot_v1/a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649__run1.json",
+      "artifact_sha256": "098a787a5e6bb05c1bd2284ac35327f84ca1f1fe2c939bd0b81cd196928e40d4",
+      "response_sha256": "4b1e7935824c2619cf08836e9672925e7a097c7d6aeaf226944413e699f5fceb",
+      "status": "valid",
+      "wall_seconds": 99.237,
+      "metadata": {
+        "backend": "ollama_local",
+        "model": "qwen3.5:4b",
+        "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+        "finish_reason": "STOP",
+        "num_ctx": 16384,
+        "max_output_tokens": 2048,
+        "requested_max_output_tokens": null,
+        "temperature": 0.1,
+        "seed": 42,
+        "thinking": false,
+        "prompt_chars": 21775,
+        "response_chars": 2483,
+        "latency_ms": 99132,
+        "api_cost_usd": 0,
+        "total_duration": 98812448250,
+        "load_duration": 14555934583,
+        "prompt_eval_duration": 33257371000,
+        "eval_duration": 50800818000,
+        "prompt_eval_count": 5822,
+        "prompt_eval_cached_count": null,
+        "eval_count": 621
+      },
+      "comparisons": [
+        {
+          "criterion": "C9",
+          "reference": 1,
+          "local": 1,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        }
+      ],
+      "evidences": 5,
+      "verified_evidences": 3,
+      "implementation_sha256": null,
+      "swap_before": null,
+      "swap_after": null,
+      "model_memory_after": null
+    },
+    {
+      "case_id": "a4_3540D939-DA16-4C1D-983C-E6B85C403F2F",
+      "fixture": "a4_calibration_3540D939-DA16-4C1D-983C-E6B85C403F2F.json",
+      "fixture_sha256": "cda302e2dcfdff6cf424bcf24977dc57b4487292c86f60da9cde5dd7b759facf",
+      "prompt_version": "a4_v2",
+      "prompt_sha256": "9c874ef092d9a42b75585d0793d4be85ad08ee9b2178edde87771533e20202e1",
+      "prompt_chars": 42648,
+      "reference_scores": {
+        "C9": 1
+      },
+      "reference_last_call_latency_ms": 15360,
+      "local_artifact": "data/local_benchmarks/pilot_a4_deep_learning_v1/a4_3540D939-DA16-4C1D-983C-E6B85C403F2F__run1.json",
+      "artifact_sha256": "db96e06bc3cfab6c2f9527000967c60d93dc314141b78f187219247d26acdb3c",
+      "response_sha256": "354a5b2f5d0b87b426c6ca011ff9b373bc87a81564ddad39c1a15c94146545ea",
+      "status": "valid",
+      "wall_seconds": 74.264,
+      "metadata": {
+        "backend": "ollama_local",
+        "model": "qwen3.5:4b",
+        "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+        "finish_reason": "STOP",
+        "num_ctx": 16384,
+        "max_output_tokens": 2048,
+        "requested_max_output_tokens": null,
+        "temperature": 0.1,
+        "seed": 42,
+        "thinking": false,
+        "prompt_chars": 42648,
+        "response_chars": 1135,
+        "latency_ms": 74242,
+        "api_cost_usd": 0,
+        "total_duration": 74082355250,
+        "load_duration": 18876625,
+        "prompt_eval_duration": 49509030000,
+        "eval_duration": 19656268000,
+        "prompt_eval_count": 10503,
+        "prompt_eval_cached_count": null,
+        "eval_count": 306
+      },
+      "comparisons": [
+        {
+          "criterion": "C9",
+          "reference": 1,
+          "local": 1,
+          "agrees": true,
+          "absolute_error": 0,
+          "na_disagreement": false
+        }
+      ],
+      "evidences": 3,
+      "verified_evidences": 2,
+      "implementation_sha256": {
+        "scripts/benchmark_local_qwen.py": "317dce8e54bdbd951a3bce91504e20880045bb16ef62327f45839554258960db",
+        "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+        "app/evaluation/agents/llm_types.py": "657ee9abc34a094355fce45e8bbbf5bb48b15e5699472420907a28642ae84d67",
+        "app/evaluation/analysis/local_benchmark.py": "7f639b8ac4b2df2c7552ba3135481cb01327a73b16da794a6b11470a5eef36b3"
+      },
+      "swap_before": "total = 7168.00M  used = 6405.62M  free = 762.38M  (encrypted)",
+      "swap_after": "total = 7168.00M  used = 6606.94M  free = 561.06M  (encrypted)",
+      "model_memory_after": {
+        "size": 4187435821,
+        "size_vram": 3133690345,
+        "context_length": 16384
+      }
+    }
+  ],
+  "expected_context_rejection": {
+    "config": {
+      "base_url": "http://127.0.0.1:11435",
+      "model": "qwen3.5:4b",
+      "num_ctx": 2048,
+      "max_output_tokens": 512,
+      "timeout_seconds": 600,
+      "temperature": 0.1,
+      "seed": 42
+    },
+    "implementation_sha256": {
+      "scripts/benchmark_local_qwen.py": "317dce8e54bdbd951a3bce91504e20880045bb16ef62327f45839554258960db",
+      "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+      "app/evaluation/agents/llm_types.py": "657ee9abc34a094355fce45e8bbbf5bb48b15e5699472420907a28642ae84d67",
+      "app/evaluation/analysis/local_benchmark.py": "7f639b8ac4b2df2c7552ba3135481cb01327a73b16da794a6b11470a5eef36b3"
+    },
+    "record": {
+      "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+      "run": 1,
+      "status": "error",
+      "swap_before": "total = 7168.00M  used = 6667.44M  free = 500.56M  (encrypted)",
+      "error": "LocalInferenceError: Ollama HTTP 400: {\"error\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (5822 tokens) exceeds the available context size (2048 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":5822,\\\"n_ctx\\\":2048}}\"}",
+      "ollama_response": null,
+      "wall_seconds": 5.769,
+      "swap_after": "total = 5120.00M  used = 4407.38M  free = 712.62M  (encrypted)",
+      "model_memory_after": {
+        "size": 3075704093,
+        "size_vram": 3075704093,
+        "context_length": 2048
+      }
+    }
+  },
+  "decision": "Keep the opt-in benchmark and local adapter; do not enable Qwen as the production evaluator. Local usefulness and equivalence are not established."
+}
