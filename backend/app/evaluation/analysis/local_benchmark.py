@@ -24,12 +24,20 @@ class JudgmentResponse(BaseModel):
     judgments: list[CriterionJudgment] = Field(min_length=1, max_length=9)
 
 
-def response_schema(criteria: list[str]) -> dict[str, Any]:
+def response_schema(criteria: list[str], *, require_all_fields: bool = False) -> dict[str, Any]:
     schema = JudgmentResponse.model_json_schema()
     schema["properties"]["judgments"].update(minItems=len(criteria), maxItems=len(criteria))
     code = schema["$defs"]["CriterionJudgment"]["properties"]["criterion_code"]
     code.pop("pattern", None)
     code["enum"] = criteria
+    if require_all_fields:
+        # Pydantic defaults make score/is_na/evidences optional in JSON Schema.
+        # A generated answer still needs an explicit score-or-NA decision.
+        # Keep the archived decoding schema unchanged for historical replay.
+        for model in [schema, schema["$defs"]["CriterionJudgment"],
+                      schema["$defs"]["CriterionEvidence"]]:
+            model["required"] = list(model["properties"])
+            model["additionalProperties"] = False
     return schema
 
 

@@ -84,6 +84,19 @@ def test_schema_constrains_owned_criteria():
         "C1", "C2", "C5"]
 
 
+def test_revised_decoding_contract_requires_explicit_score_or_na():
+    historical = response_schema(["C1"])
+    assert "score" not in historical["$defs"]["CriterionJudgment"]["required"]
+    revised = response_schema(["C1"], require_all_fields=True)
+    for model in [revised, revised["$defs"]["CriterionJudgment"],
+                  revised["$defs"]["CriterionEvidence"]]:
+        assert set(model["required"]) == set(model["properties"])
+        assert model["additionalProperties"] is False
+    assert {"score", "is_na", "na_reason", "evidences"} <= set(
+        revised["$defs"]["CriterionJudgment"]["required"]
+    )
+
+
 def test_all_committed_fixtures_replay_without_db_or_corpus():
     fixtures = Path(__file__).resolve().parents[2] / "fixtures/llm_responses"
     cases = [load_case(p) for p in fixtures.glob("a[1-4]_calibration_*.json")]

@@ -8,6 +8,10 @@ deserves further development.
 Read the [first MacBook Air M2 / 8 GB pilot](RESULTS.md) before running a larger
 campaign. Completing a JSON response is not evidence of reliable scoring.
 
+The [documentary review and separated rubric](RUBRIC_REVIEW.md) introduces the
+opt-in `separated_v1` policy. It changes some scoring rules as well as wording;
+it is neither a validated replacement nor a complete 2026 compliance check.
+
 ## Cost boundary
 
 - No Gemini, Vertex AI, remote embeddings, OCR or production database calls.
@@ -66,6 +70,11 @@ uv run --frozen python scripts/benchmark_local_qwen.py --execute \
 uv run --frozen python scripts/benchmark_local_qwen.py --execute \
   --seuid 0B53E8E2-4B90-426F-A25C-3AA31FA4B649
 
+# Revised criterion boundaries and complete score anchors, local only.
+uv run --frozen python scripts/benchmark_local_qwen.py --execute \
+  --prompt-policy separated_v1 \
+  --seuid 0B53E8E2-4B90-426F-A25C-3AA31FA4B649
+
 # Full initial sample: 5 syllabi x 4 agents. Allow substantial time on an Air.
 uv run --frozen python scripts/benchmark_local_qwen.py --execute
 ```
@@ -90,8 +99,20 @@ measurements**. Raw experiment artifacts stay local until reviewed.
 
 Committed `backend/tests/fixtures/llm_responses/` files contain complete
 historical prompts, including syllabus and selected normative passages.
-Each first prompt is replayed verbatim. Final archived Gemini judgments
-supply comparison scores. No retriever or embedding model runs.
+By default (`--prompt-policy archived`), each first prompt is replayed verbatim.
+`--prompt-policy separated_v1` replaces the instructions using a versioned
+catalog, preserving the syllabus and retrieved JSON blocks byte for byte.
+Final archived Gemini judgments supply comparison scores. No retriever or
+embedding model runs. Under the revised rubric, agreement with the old scores
+is descriptive only: both the rubric and the prompt have changed.
+
+The manifest records original and effective prompt hashes, catalog and source
+code hashes, plus hashes of the preserved data blocks for revised prompts.
+Each effective prompt is saved alongside raw results for local review.
+The experimental policy also requires every response field in the decoding
+schema, including an explicit score-or-NA decision. The archived policy keeps
+its original decoding schema. This is another controlled configuration
+difference, not evidence of an isolated wording effect.
 
 - Historical prompt versions may differ from current prompts. Versions and
   input hashes are saved in the manifest.
@@ -133,6 +154,7 @@ configuration.
 cd backend
 uv run --frozen pytest -q tests/agents/test_ollama_client.py \
   tests/evaluation/analysis/test_local_benchmark.py \
+  tests/evaluation/analysis/test_local_rubric.py \
   tests/scripts/test_benchmark_local_qwen.py
 ```
 

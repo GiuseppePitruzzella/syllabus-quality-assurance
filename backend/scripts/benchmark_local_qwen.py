@@ -26,6 +26,9 @@ from app.evaluation.agents.ollama_client import (  # noqa: E402
 from app.evaluation.analysis.local_benchmark import (  # noqa: E402
     assess_response, load_case, response_schema, summarise,
 )
+from app.evaluation.analysis.local_rubric import (  # noqa: E402
+    POLICY, RUBRIC_PATH, prepare_prompt,
+)
 
 
 def write_json(path: Path, value: object) -> None:
@@ -34,11 +37,20 @@ def write_json(path: Path, value: object) -> None:
     temporary.replace(path)
 
 
-def write_summary(output: Path, records: list[dict]) -> None:
+def write_summary(output: Path, records: list[dict], policy: str = "archived") -> None:
     summary = summarise(records)
+    summary["prompt_policy"] = policy
+    summary["rubric_changed"] = policy != "archived"
+    if policy != "archived":
+        summary["interpretation"] = (
+            "Different experimental rubric; archived Gemini agreement is descriptive only. "
+            "Not a test of accuracy, normative compliance or isolated wording improvements."
+        )
     write_json(output / "summary.json", summary)
     lines = ["# Local Qwen diagnostic replay", "",
              "Archived Gemini agreement is not accuracy against human experts.", "",
+             f"- Prompt policy: {policy}; rubric changed: {summary['rubric_changed']}",
+             summary["interpretation"], "",
              f"- Attempted: {summary['attempted']}; valid: {summary['valid']}",
              f"- Score agreement: {summary['agreement_with_archived_gemini']}",
              f"- Numeric MAE: {summary['numeric_mae']}",
@@ -75,6 +87,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seuid", action="append")
     parser.add_argument("--limit", type=int, default=0, help="0 means all selected cases")
     parser.add_argument("--runs", type=int, default=1)
+    parser.add_argument("--prompt-policy", choices=["archived", POLICY], default="archived",
+                        help="Historical replay or separately versioned experimental rubric")
     parser.add_argument("--base-url", default="http://127.0.0.1:11435")
     parser.add_argument("--num-ctx", type=int, default=16384)
     parser.add_argument("--max-output-tokens", type=int, default=2048)
@@ -97,8 +111,15 @@ def main(argv: list[str] | None = None) -> int:
         cases = cases[:args.limit]
     if not cases:
         parser.error("No matching replay cases")
+    try:
+        prompts = {c.case_id: prepare_prompt(c, args.prompt_policy) for c in cases}
+    except ValueError as exc:
+        parser.error(str(exc))
     for case in cases:
-        print(f"{case.case_id}: {len(case.prompt)} chars; archived {case.prompt_version}")
+        print(f"{case.case_id}: {len(prompts[case.case_id].text)} chars; "
+              f"archived {case.prompt_version}; policy {args.prompt_policy}")
+    if args.prompt_policy != "archived":
+        print("Experimental rubric differs from Gemini's archived rubric; agreement is descriptive.")
     print(f"{len(cases) * args.runs} local calls planned. Inference API cost: $0.", flush=True)
     if not args.execute:
         print("Dry run only. Add --execute to contact local Ollama.")
@@ -124,30 +145,40 @@ def main(argv: list[str] | None = None) -> int:
             "git_commit": git.stdout.strip(), "platform": platform.platform(),
             "machine": platform.machine(), "config": asdict(config), "runtime": identity,
             "runs_per_case": args.runs, "retrieval": "frozen in archived prompt; no embeddings",
-            "method": "first original prompt; structured output; thinking disabled; no retries",
+            "prompt_policy": args.prompt_policy,
+            "require_all_response_fields": args.prompt_policy != "archived",
+            "method": "versioned prompt policy; structured output; thinking disabled; no retries",
             "implementation_sha256": {
                 str(p.relative_to(BACKEND)): hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in [Path(__file__).resolve(),
                           BACKEND / "app/evaluation/agents/ollama_client.py",
                           BACKEND / "app/evaluation/agents/llm_types.py",
-                          BACKEND / "app/evaluation/analysis/local_benchmark.py"]
+                          BACKEND / "app/evaluation/analysis/local_benchmark.py",
+                          BACKEND / "app/evaluation/analysis/local_rubric.py", RUBRIC_PATH]
             },
             "cases": [{"case_id": c.case_id, "fixture": c.fixture_name,
                        "fixture_sha256": c.fixture_sha256, "prompt_version": c.prompt_version,
                        "prompt_sha256": hashlib.sha256(c.prompt.encode()).hexdigest(),
                        "prompt_chars": len(c.prompt), "reference_scores": c.reference_scores,
+                       "effective_prompt_chars": len(prompts[c.case_id].text),
+                       "prompt_provenance": prompts[c.case_id].provenance,
                        "reference_last_call_latency_ms": c.reference_latency_ms} for c in cases],
         }
         write_json(output / "manifest.json", manifest)
         for case in cases:
-            client.response_schema = response_schema(case.criteria)
+            prepared = prompts[case.case_id]
+            (output / f"{case.case_id}__prompt.txt").write_text(prepared.text, encoding="utf-8")
+            client.response_schema = response_schema(
+                case.criteria, require_all_fields=args.prompt_policy != "archived"
+            )
             for run in range(1, args.runs + 1):
                 started = time.monotonic()
-                record = {"case_id": case.case_id, "run": run, "status": "error"}
+                record = {"case_id": case.case_id, "run": run, "status": "error",
+                          "prompt_provenance": prepared.provenance}
                 record["swap_before"] = swap_snapshot()
                 print(f"Running {case.case_id} #{run} ...", flush=True)
                 try:
-                    result = client(case.prompt)
+                    result = client(prepared.text)
                     record["raw_response"] = result.text
                     record["metadata"] = result.metadata
                     record["assessment"] = assess_response(case, result.text)
@@ -160,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
                 record["model_memory_after"] = client.memory_snapshot()
                 write_json(output / f"{case.case_id}__run{run}.json", record)
                 records.append(record)
-                write_summary(output, records)
+                write_summary(output, records, args.prompt_policy)
                 print(f"  {record['status']} in {record['wall_seconds']}s", flush=True)
         print(f"Results: {output}")
         return 0 if all(r["status"] == "valid" for r in records) else 1

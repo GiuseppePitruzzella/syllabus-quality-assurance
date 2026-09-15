@@ -1,0 +1,49 @@
+{
+  "review_date": "2026-09-15",
+  "policy": "separated_v1",
+  "sources": [
+    {
+      "local_name": "ava3.md",
+      "sha256": "4ade5d3751cbe2818b73a8970e74d6cd72ca2f01c56c5b350ade1c4cfefd1184",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "ava3_unict.md",
+      "sha256": "fb394101ec55df253815753836e6e0a8cdd57022102387a2e50381f6656c97e5",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "cpds_unict.md",
+      "sha256": "df183fadea1e93ad45b709a317f943257fcf2cb6db2ef7e8b1917a1ee60c25a5",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "dm1154.md",
+      "sha256": "12332f74d75423841c9d078074d0d242f17e9f179b49ff5ea5c7f387779b4a76",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "lg_unict.md",
+      "sha256": "89bd78865d4022c86a4b2da131ba77b25e1f689f2e09701e2e1e2b15940489de",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "lgsua_cds.md",
+      "sha256": "d1afeed48fcfbd5ae7ee4f85ddf152e5e23dbaa547266e5b32f8e868564c2822",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "local_name": "matrice_tuning.md",
+      "sha256": "5b369c8906c9570d95e63705b3b2875b11264bfe5377638810901a77342f023d",
+      "role": "historical local corpus; not redistributed"
+    },
+    {
+      "url": "https://www.unict.it/sites/default/files/files/linee_guida_syllabus.pdf",
+      "version": "26.04",
+      "retrieved_on": "2026-09-15",
+      "sha256": "9032c1dc5722304b62641ba838e8262eced35d752e20fab3dc56c409a620a71f",
+      "bytes": 1584811,
+      "role": "current public guide; separate from historical corpus"
+    }
+  ]
+}

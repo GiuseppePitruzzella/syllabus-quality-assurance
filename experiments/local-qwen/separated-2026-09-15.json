@@ -1,0 +1,972 @@
+{
+  "experiment": "separated_rubric_development_2026_09_15",
+  "scope": "Four agents on one previously inspected IoT syllabus; no held-out or expert test.",
+  "interpretation": "Prompt, rubric and decoding contract changed. Not an isolated wording effect.",
+  "api_cost_usd": 0,
+  "stages": [
+    {
+      "name": "separated_v1_iot_20260915",
+      "manifest": {
+        "experiment": "local_qwen_replay_v1",
+        "created_at": "2026-09-15T08:45:40.425740+00:00",
+        "git_commit": "e49c3c95a3ab3ae6006c2c9b08ea168d5d622185",
+        "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "config": {
+          "base_url": "http://127.0.0.1:11435",
+          "model": "qwen3.5:4b",
+          "num_ctx": 16384,
+          "max_output_tokens": 2048,
+          "timeout_seconds": 600,
+          "temperature": 0.1,
+          "seed": 42
+        },
+        "runtime": {
+          "ollama_version": "0.32.15",
+          "model": "qwen3.5:4b",
+          "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+          "model_size_bytes": 3389983735,
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "4.7B",
+            "quantization_level": "Q4_K_M"
+          },
+          "model_parameters": "temperature                    1\ntop_k                          20\ntop_p                          0.95\npresence_penalty               1.5",
+          "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315",
+          "config": {
+            "base_url": "http://127.0.0.1:11435",
+            "model": "qwen3.5:4b",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "timeout_seconds": 600,
+            "temperature": 0.1,
+            "seed": 42
+          },
+          "api_cost_usd": 0
+        },
+        "runs_per_case": 1,
+        "retrieval": "frozen in archived prompt; no embeddings",
+        "prompt_policy": "separated_v1",
+        "method": "versioned prompt policy; structured output; thinking disabled; no retries",
+        "implementation_sha256": {
+          "scripts/benchmark_local_qwen.py": "493615152593eb5f0c5d96c02275974fdac48c3393c2de8b7bac1d07f8eb27da",
+          "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+          "app/evaluation/agents/llm_types.py": "7a4502aacfc294301812b69f603aca3d0e2238e783f9e9d5940107a71b9dfc60",
+          "app/evaluation/analysis/local_benchmark.py": "7f639b8ac4b2df2c7552ba3135481cb01327a73b16da794a6b11470a5eef36b3",
+          "app/evaluation/analysis/local_rubric.py": "36bec16b66a96a924dc73c65b7775a86400457a310354895b200756db972dd5e",
+          "app/evaluation/analysis/local_rubric_v1.json": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13"
+        },
+        "cases": [
+          {
+            "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+            "prompt_version": "a1_v5",
+            "prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "prompt_chars": 33675,
+            "reference_scores": {
+              "C1": 2,
+              "C2": 0,
+              "C5": 1
+            },
+            "effective_prompt_chars": 35283,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a1_v5",
+              "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+              "effective_prompt_sha256": "ee5bc79ba38d8cde775e248c9e6fcaadef33afdff03acf744893d44c98340ed7",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "41a25410fbd8b1b273efb085849cff3303976cde447b412eda3f31e8e0ab2ef9",
+              "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 16860
+          },
+          {
+            "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+            "prompt_version": "a2_v1",
+            "prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "prompt_chars": 26500,
+            "reference_scores": {
+              "C3": 1,
+              "C4": 2
+            },
+            "effective_prompt_chars": 26060,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a2_v1",
+              "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+              "effective_prompt_sha256": "e12ec65e480c15fe6569080a55229a937e291f5fdc3833f9519d1b9478a05044",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "b05f433ab7993914380f1f20dfff3bbdcf1de4557a7656a04d21849d7b6a15b6",
+              "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 21032
+          },
+          {
+            "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a3_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "b8aadf3423a2edbdb88855f22ce966e792900596d66c61e9aef8840c14d52239",
+            "prompt_version": "a3_v1",
+            "prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "prompt_chars": 36779,
+            "reference_scores": {
+              "C6": 2,
+              "C7": 2,
+              "C8": 2
+            },
+            "effective_prompt_chars": 37585,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a3_v1",
+              "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+              "effective_prompt_sha256": "98fa407e44167f4b07cc8799541119566f246a7b3680fdc97674a2b934b9c79a",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "6b9b935ae599ae4ee6e97f4c7db19db94a635292522d75587f3ace5cebcbf8aa",
+              "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 34694
+          },
+          {
+            "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e",
+            "prompt_version": "a4_v2",
+            "prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "prompt_chars": 21775,
+            "reference_scores": {
+              "C9": 1
+            },
+            "effective_prompt_chars": 17027,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a4_v2",
+              "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+              "effective_prompt_sha256": "d1c6ece4632d62623714f260dedbd988b6a73b4fc939e026e4eab833f7fd1327",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "c59f6c5dfc3d1616889a9f10bd227c4fafa5751c1a868ae7688127f492e6e262",
+              "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 12886
+          }
+        ]
+      },
+      "summary": {
+        "attempted": 4,
+        "valid": 1,
+        "valid_rate": 0.25,
+        "compared_criteria": 1,
+        "agreement_with_archived_gemini": 0.0,
+        "numeric_mae": 1,
+        "na_disagreements": 0,
+        "evidences": 2,
+        "verified_evidences": 2,
+        "evidence_verification_rate": 1.0,
+        "judgments_without_evidence": 0,
+        "median_wall_seconds": 118.4215,
+        "max_wall_seconds": 198.387,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C9": {
+            "n": 1,
+            "agreement": 0.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements.",
+        "prompt_policy": "separated_v1",
+        "rubric_changed": true
+      },
+      "cases": [
+        {
+          "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "error",
+          "wall_seconds": 152.474,
+          "artifact_sha256": "3f66a58af6dd452ac8dbef74654bc1eaffa8c8623853d90d4d44b0c6896287a9",
+          "response_sha256": "78c241f545cc04f09098047cc7eaf848f49450771597f96babead62dc7bffec3",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a1_v5",
+            "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "effective_prompt_sha256": "ee5bc79ba38d8cde775e248c9e6fcaadef33afdff03acf744893d44c98340ed7",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "41a25410fbd8b1b273efb085849cff3303976cde447b412eda3f31e8e0ab2ef9",
+            "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 35283,
+            "response_chars": 3368,
+            "latency_ms": 152449,
+            "api_cost_usd": 0,
+            "total_duration": 152295736625,
+            "load_duration": 18317976667,
+            "prompt_eval_duration": 65786300000,
+            "eval_duration": 66766439000,
+            "prompt_eval_count": 9809,
+            "prompt_eval_cached_count": null,
+            "eval_count": 834
+          },
+          "swap_before": "total = 3072.00M  used = 1781.88M  free = 1290.12M  (encrypted)",
+          "swap_after": "total = 6144.00M  used = 4508.50M  free = 1635.50M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "failure_type": "ValidationError",
+          "failure_summary": "No usable score decision: see preserved local raw response."
+        },
+        {
+          "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "error",
+          "wall_seconds": 84.369,
+          "artifact_sha256": "eee516dab257f9beadf7dbd166c3c84416118f455b1a3ef2dd8234d706fe0022",
+          "response_sha256": "291d4b0152b284f8243fbf6cec48ec91d9143a1f6abc57cec44f739d4615db8a",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a2_v1",
+            "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "effective_prompt_sha256": "e12ec65e480c15fe6569080a55229a937e291f5fdc3833f9519d1b9478a05044",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "b05f433ab7993914380f1f20dfff3bbdcf1de4557a7656a04d21849d7b6a15b6",
+            "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 26060,
+            "response_chars": 2266,
+            "latency_ms": 84352,
+            "api_cost_usd": 0,
+            "total_duration": 84283062041,
+            "load_duration": 51447291,
+            "prompt_eval_duration": 37204631000,
+            "eval_duration": 44880218000,
+            "prompt_eval_count": 7040,
+            "prompt_eval_cached_count": null,
+            "eval_count": 569
+          },
+          "swap_before": "total = 6144.00M  used = 4529.00M  free = 1615.00M  (encrypted)",
+          "swap_after": "total = 6144.00M  used = 5099.12M  free = 1044.88M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "failure_type": "ValidationError",
+          "failure_summary": "No usable score decision: see preserved local raw response."
+        },
+        {
+          "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "error",
+          "wall_seconds": 198.387,
+          "artifact_sha256": "5bc2992b76c5bcf181441ffc5755b301feac1d6604572086cb8ebf090204c3c5",
+          "response_sha256": "c80b37a5990da1bc9de83e995ed0bccb8c25719cc8d1d5ea5d4ea955d3b2d3d3",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a3_v1",
+            "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "effective_prompt_sha256": "98fa407e44167f4b07cc8799541119566f246a7b3680fdc97674a2b934b9c79a",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "6b9b935ae599ae4ee6e97f4c7db19db94a635292522d75587f3ace5cebcbf8aa",
+            "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 37585,
+            "response_chars": 5226,
+            "latency_ms": 198355,
+            "api_cost_usd": 0,
+            "total_duration": 198279176583,
+            "load_duration": 66250333,
+            "prompt_eval_duration": 73365470000,
+            "eval_duration": 123319768000,
+            "prompt_eval_count": 10264,
+            "prompt_eval_cached_count": null,
+            "eval_count": 1291
+          },
+          "swap_before": "total = 6144.00M  used = 5120.31M  free = 1023.69M  (encrypted)",
+          "swap_after": "total = 6144.00M  used = 5434.06M  free = 709.94M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "failure_type": "ValidationError",
+          "failure_summary": "No usable score decision: see preserved local raw response."
+        },
+        {
+          "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "valid",
+          "wall_seconds": 54.63,
+          "artifact_sha256": "f364f80dfe985e42e9efd0759e78e37ab97e1b473228730e050b3e96fc222c0b",
+          "response_sha256": "4322d57a42e2fc49efc6ef8a80077e3a5e6d19012b406a9a4a995d3c82458276",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a4_v2",
+            "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "effective_prompt_sha256": "d1c6ece4632d62623714f260dedbd988b6a73b4fc939e026e4eab833f7fd1327",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "c59f6c5dfc3d1616889a9f10bd227c4fafa5751c1a868ae7688127f492e6e262",
+            "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 17027,
+            "response_chars": 1038,
+            "latency_ms": 54594,
+            "api_cost_usd": 0,
+            "total_duration": 54486787500,
+            "load_duration": 48656917,
+            "prompt_eval_duration": 33976608000,
+            "eval_duration": 19533973000,
+            "prompt_eval_count": 4494,
+            "prompt_eval_cached_count": null,
+            "eval_count": 269
+          },
+          "swap_before": "total = 6144.00M  used = 5452.75M  free = 691.25M  (encrypted)",
+          "swap_after": "total = 7168.00M  used = 5875.62M  free = 1292.38M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "comparisons": [
+            {
+              "criterion": "C9",
+              "reference": 1,
+              "local": 0,
+              "agrees": false,
+              "absolute_error": 1,
+              "na_disagreement": false
+            }
+          ],
+          "evidences": 2,
+          "verified_evidences": 2,
+          "judgments_without_evidence": 0
+        }
+      ]
+    },
+    {
+      "name": "separated_v1_required_iot_20260915",
+      "manifest": {
+        "experiment": "local_qwen_replay_v1",
+        "created_at": "2026-09-15T08:54:20.718940+00:00",
+        "git_commit": "e49c3c95a3ab3ae6006c2c9b08ea168d5d622185",
+        "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "config": {
+          "base_url": "http://127.0.0.1:11435",
+          "model": "qwen3.5:4b",
+          "num_ctx": 16384,
+          "max_output_tokens": 2048,
+          "timeout_seconds": 600,
+          "temperature": 0.1,
+          "seed": 42
+        },
+        "runtime": {
+          "ollama_version": "0.32.15",
+          "model": "qwen3.5:4b",
+          "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+          "model_size_bytes": 3389983735,
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "qwen35",
+            "families": [
+              "qwen35"
+            ],
+            "parameter_size": "4.7B",
+            "quantization_level": "Q4_K_M"
+          },
+          "model_parameters": "temperature                    1\ntop_k                          20\ntop_p                          0.95\npresence_penalty               1.5",
+          "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315",
+          "config": {
+            "base_url": "http://127.0.0.1:11435",
+            "model": "qwen3.5:4b",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "timeout_seconds": 600,
+            "temperature": 0.1,
+            "seed": 42
+          },
+          "api_cost_usd": 0
+        },
+        "runs_per_case": 1,
+        "retrieval": "frozen in archived prompt; no embeddings",
+        "prompt_policy": "separated_v1",
+        "require_all_response_fields": true,
+        "method": "versioned prompt policy; structured output; thinking disabled; no retries",
+        "implementation_sha256": {
+          "scripts/benchmark_local_qwen.py": "6dd8184c0cf18f625d34271f4e90d7bc71b3dba7f54e2fc4c8f87e9cd7bb141e",
+          "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+          "app/evaluation/agents/llm_types.py": "7a4502aacfc294301812b69f603aca3d0e2238e783f9e9d5940107a71b9dfc60",
+          "app/evaluation/analysis/local_benchmark.py": "a1c6b9984e4a25a70ddad282ccd31b2962cc8d146fb1ee8686a18a1488c51e81",
+          "app/evaluation/analysis/local_rubric.py": "36bec16b66a96a924dc73c65b7775a86400457a310354895b200756db972dd5e",
+          "app/evaluation/analysis/local_rubric_v1.json": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13"
+        },
+        "cases": [
+          {
+            "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+            "prompt_version": "a1_v5",
+            "prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "prompt_chars": 33675,
+            "reference_scores": {
+              "C1": 2,
+              "C2": 0,
+              "C5": 1
+            },
+            "effective_prompt_chars": 35283,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a1_v5",
+              "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+              "effective_prompt_sha256": "ee5bc79ba38d8cde775e248c9e6fcaadef33afdff03acf744893d44c98340ed7",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "41a25410fbd8b1b273efb085849cff3303976cde447b412eda3f31e8e0ab2ef9",
+              "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 16860
+          },
+          {
+            "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+            "prompt_version": "a2_v1",
+            "prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "prompt_chars": 26500,
+            "reference_scores": {
+              "C3": 1,
+              "C4": 2
+            },
+            "effective_prompt_chars": 26060,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a2_v1",
+              "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+              "effective_prompt_sha256": "e12ec65e480c15fe6569080a55229a937e291f5fdc3833f9519d1b9478a05044",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "b05f433ab7993914380f1f20dfff3bbdcf1de4557a7656a04d21849d7b6a15b6",
+              "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 21032
+          },
+          {
+            "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a3_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "b8aadf3423a2edbdb88855f22ce966e792900596d66c61e9aef8840c14d52239",
+            "prompt_version": "a3_v1",
+            "prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "prompt_chars": 36779,
+            "reference_scores": {
+              "C6": 2,
+              "C7": 2,
+              "C8": 2
+            },
+            "effective_prompt_chars": 37585,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a3_v1",
+              "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+              "effective_prompt_sha256": "98fa407e44167f4b07cc8799541119566f246a7b3680fdc97674a2b934b9c79a",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "6b9b935ae599ae4ee6e97f4c7db19db94a635292522d75587f3ace5cebcbf8aa",
+              "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 34694
+          },
+          {
+            "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+            "fixture": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+            "fixture_sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e",
+            "prompt_version": "a4_v2",
+            "prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "prompt_chars": 21775,
+            "reference_scores": {
+              "C9": 1
+            },
+            "effective_prompt_chars": 17027,
+            "prompt_provenance": {
+              "policy": "separated_v1",
+              "archived_prompt_version": "a4_v2",
+              "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+              "effective_prompt_sha256": "d1c6ece4632d62623714f260dedbd988b6a73b4fc939e026e4eab833f7fd1327",
+              "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+              "syllabus_block_sha256": "c59f6c5dfc3d1616889a9f10bd227c4fafa5751c1a868ae7688127f492e6e262",
+              "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+              "rubric_changed": true,
+              "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+            },
+            "reference_last_call_latency_ms": 12886
+          }
+        ]
+      },
+      "summary": {
+        "attempted": 4,
+        "valid": 4,
+        "valid_rate": 1.0,
+        "compared_criteria": 9,
+        "agreement_with_archived_gemini": 0.6666666666666666,
+        "numeric_mae": 0.3333333333333333,
+        "na_disagreements": 0,
+        "evidences": 32,
+        "verified_evidences": 18,
+        "evidence_verification_rate": 0.5625,
+        "judgments_without_evidence": 0,
+        "median_wall_seconds": 61.935,
+        "max_wall_seconds": 90.612,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C1": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C2": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C3": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C4": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C5": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C6": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C7": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C8": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C9": {
+            "n": 1,
+            "agreement": 0.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements.",
+        "prompt_policy": "separated_v1",
+        "rubric_changed": true
+      },
+      "cases": [
+        {
+          "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "valid",
+          "wall_seconds": 54.093,
+          "artifact_sha256": "c65e42c9adfd6716f23c5d47cadedffbe25403c54fa008d2a93c9f1b418a24fb",
+          "response_sha256": "da5023ac608bb9928fdbb442dd1a86ac549c3f6953f7324060da17a55b7a6d4d",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a1_v5",
+            "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "effective_prompt_sha256": "ee5bc79ba38d8cde775e248c9e6fcaadef33afdff03acf744893d44c98340ed7",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "41a25410fbd8b1b273efb085849cff3303976cde447b412eda3f31e8e0ab2ef9",
+            "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 35283,
+            "response_chars": 2662,
+            "latency_ms": 54070,
+            "api_cost_usd": 0,
+            "total_duration": 54031416917,
+            "load_duration": 18720834,
+            "prompt_eval_duration": 1155570000,
+            "eval_duration": 47350195000,
+            "prompt_eval_count": 9809,
+            "prompt_eval_cached_count": null,
+            "eval_count": 710
+          },
+          "swap_before": "total = 7168.00M  used = 5981.25M  free = 1186.75M  (encrypted)",
+          "swap_after": "total = 7168.00M  used = 5727.69M  free = 1440.31M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "comparisons": [
+            {
+              "criterion": "C1",
+              "reference": 2,
+              "local": 2,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            },
+            {
+              "criterion": "C2",
+              "reference": 0,
+              "local": 0,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            },
+            {
+              "criterion": "C5",
+              "reference": 1,
+              "local": 1,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            }
+          ],
+          "evidences": 13,
+          "verified_evidences": 1,
+          "judgments_without_evidence": 0
+        },
+        {
+          "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "valid",
+          "wall_seconds": 69.777,
+          "artifact_sha256": "3689498b9a6dd22e9bafbb0ac90d1ed9e58102eca96f401096495a47402e282b",
+          "response_sha256": "a8f7e95a5ab5a9e5b7dbaaab1184c63cf66c1ce0165e868fa58780c7d7828e32",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a2_v1",
+            "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "effective_prompt_sha256": "e12ec65e480c15fe6569080a55229a937e291f5fdc3833f9519d1b9478a05044",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "b05f433ab7993914380f1f20dfff3bbdcf1de4557a7656a04d21849d7b6a15b6",
+            "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 26060,
+            "response_chars": 2925,
+            "latency_ms": 69738,
+            "api_cost_usd": 0,
+            "total_duration": 69653153083,
+            "load_duration": 32655708,
+            "prompt_eval_duration": 2054918000,
+            "eval_duration": 64018496000,
+            "prompt_eval_count": 7040,
+            "prompt_eval_cached_count": null,
+            "eval_count": 736
+          },
+          "swap_before": "total = 7168.00M  used = 5727.69M  free = 1440.31M  (encrypted)",
+          "swap_after": "total = 7168.00M  used = 5880.75M  free = 1287.25M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "comparisons": [
+            {
+              "criterion": "C3",
+              "reference": 1,
+              "local": 2,
+              "agrees": false,
+              "absolute_error": 1,
+              "na_disagreement": false
+            },
+            {
+              "criterion": "C4",
+              "reference": 2,
+              "local": 2,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            }
+          ],
+          "evidences": 11,
+          "verified_evidences": 11,
+          "judgments_without_evidence": 0
+        },
+        {
+          "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "valid",
+          "wall_seconds": 90.612,
+          "artifact_sha256": "4388d33de6479ebc29806706dd1425b019546b6c38024b5cfcb7df5862ac2f73",
+          "response_sha256": "b2d127bc240b55e7595de851806d6f5fe86f04ef560e3a6cb44e923a575e99f5",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a3_v1",
+            "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "effective_prompt_sha256": "98fa407e44167f4b07cc8799541119566f246a7b3680fdc97674a2b934b9c79a",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "6b9b935ae599ae4ee6e97f4c7db19db94a635292522d75587f3ace5cebcbf8aa",
+            "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 37585,
+            "response_chars": 2675,
+            "latency_ms": 90587,
+            "api_cost_usd": 0,
+            "total_duration": 90502088917,
+            "load_duration": 18205125,
+            "prompt_eval_duration": 876118000,
+            "eval_duration": 84648159000,
+            "prompt_eval_count": 10264,
+            "prompt_eval_cached_count": null,
+            "eval_count": 679
+          },
+          "swap_before": "total = 7168.00M  used = 5872.75M  free = 1295.25M  (encrypted)",
+          "swap_after": "total = 7168.00M  used = 5988.62M  free = 1179.38M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "comparisons": [
+            {
+              "criterion": "C6",
+              "reference": 2,
+              "local": 2,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            },
+            {
+              "criterion": "C7",
+              "reference": 2,
+              "local": 2,
+              "agrees": true,
+              "absolute_error": 0,
+              "na_disagreement": false
+            },
+            {
+              "criterion": "C8",
+              "reference": 2,
+              "local": 1,
+              "agrees": false,
+              "absolute_error": 1,
+              "na_disagreement": false
+            }
+          ],
+          "evidences": 6,
+          "verified_evidences": 4,
+          "judgments_without_evidence": 0
+        },
+        {
+          "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "status": "valid",
+          "wall_seconds": 24.999,
+          "artifact_sha256": "9388a3cee61e2ada51009cbd2612642365fcafb0d4870c4f1ce960c87a5d8f6b",
+          "response_sha256": "e4fe68f1f0e8f46b7eade189ae2a4598966577e4e638bb24a67d968e05c3d8d8",
+          "prompt_provenance": {
+            "policy": "separated_v1",
+            "archived_prompt_version": "a4_v2",
+            "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "effective_prompt_sha256": "d1c6ece4632d62623714f260dedbd988b6a73b4fc939e026e4eab833f7fd1327",
+            "rubric_sha256": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13",
+            "syllabus_block_sha256": "c59f6c5dfc3d1616889a9f10bd227c4fafa5751c1a868ae7688127f492e6e262",
+            "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+            "rubric_changed": true,
+            "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only."
+          },
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 17027,
+            "response_chars": 722,
+            "latency_ms": 24983,
+            "api_cost_usd": 0,
+            "total_duration": 24877921709,
+            "load_duration": 22171834,
+            "prompt_eval_duration": 2447350000,
+            "eval_duration": 18704078000,
+            "prompt_eval_count": 4494,
+            "prompt_eval_cached_count": null,
+            "eval_count": 203
+          },
+          "swap_before": "total = 7168.00M  used = 5988.62M  free = 1179.38M  (encrypted)",
+          "swap_after": "total = 7168.00M  used = 6301.31M  free = 866.69M  (encrypted)",
+          "model_memory_after": {
+            "size": 4187435821,
+            "size_vram": 3133690345,
+            "context_length": 16384
+          },
+          "comparisons": [
+            {
+              "criterion": "C9",
+              "reference": 1,
+              "local": 2,
+              "agrees": false,
+              "absolute_error": 1,
+              "na_disagreement": false
+            }
+          ],
+          "evidences": 2,
+          "verified_evidences": 2,
+          "judgments_without_evidence": 0
+        }
+      ]
+    }
+  ],
+  "total_attempted": 8,
+  "total_valid": 5,
+  "score_comparison": [
+    {
+      "criterion": "C1",
+      "archived_gemini": 2,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    },
+    {
+      "criterion": "C2",
+      "archived_gemini": 0,
+      "qwen_archived_prompt": 0,
+      "qwen_separated_v1": 0
+    },
+    {
+      "criterion": "C3",
+      "archived_gemini": 1,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    },
+    {
+      "criterion": "C4",
+      "archived_gemini": 2,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    },
+    {
+      "criterion": "C5",
+      "archived_gemini": 1,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 1
+    },
+    {
+      "criterion": "C6",
+      "archived_gemini": 2,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    },
+    {
+      "criterion": "C7",
+      "archived_gemini": 2,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    },
+    {
+      "criterion": "C8",
+      "archived_gemini": 2,
+      "qwen_archived_prompt": 2,
+      "qwen_separated_v1": 1
+    },
+    {
+      "criterion": "C9",
+      "archived_gemini": 1,
+      "qwen_archived_prompt": 1,
+      "qwen_separated_v1": 2
+    }
+  ]
+}

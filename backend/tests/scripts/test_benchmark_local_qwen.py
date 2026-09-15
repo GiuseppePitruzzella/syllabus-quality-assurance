@@ -24,6 +24,7 @@ import runpy, sys
 sys.argv = ['benchmark_local_qwen.py', '--limit', '1']
 namespace = runpy.run_path('scripts/benchmark_local_qwen.py')
 assert namespace['main'](['--limit', '1']) == 0
+assert namespace['main'](['--prompt-policy', 'separated_v1', '--limit', '1']) == 0
 assert 'app.config' not in sys.modules
 assert 'google.genai' not in sys.modules
 """
@@ -45,6 +46,28 @@ def test_record_survives_failure_and_summary_counts_it(monkeypatch, tmp_path):
     assert summary["attempted"] == 1 and summary["valid"] == 0
     assert summary["agreement_with_archived_gemini"] is None
     client.close.assert_called_once()
+
+
+def test_experimental_policy_is_sent_and_saved_with_distinct_provenance(monkeypatch, tmp_path):
+    client = Mock(return_value=LLMResult("invalid JSON", {"backend": "ollama_local"}))
+    client.preflight.return_value = {}
+    client.last_response = None
+    client.memory_snapshot.return_value = None
+    monkeypatch.setattr(runner, "OllamaLLMClient", lambda _: client)
+    output = tmp_path / "revised"
+    assert runner.main(["--execute", "--agent", "A4", "--limit", "1",
+                        "--prompt-policy", "separated_v1", "--output-dir", str(output)]) == 1
+    manifest = json.loads((output / "manifest.json").read_text())
+    provenance = manifest["cases"][0]["prompt_provenance"]
+    assert provenance["archived_prompt_sha256"] != provenance["effective_prompt_sha256"]
+    assert provenance["rubric_changed"] is True
+    assert manifest["require_all_response_fields"] is True
+    assert "score" in client.response_schema["$defs"]["CriterionJudgment"]["required"]
+    prompt = next(output.glob("*__prompt.txt")).read_text()
+    client.assert_called_once_with(prompt)
+    summary = json.loads((output / "summary.json").read_text())
+    assert summary["prompt_policy"] == "separated_v1"
+    assert "Different experimental rubric" in summary["interpretation"]
 
 
 def test_past_experiment_is_never_overwritten(monkeypatch, tmp_path):
