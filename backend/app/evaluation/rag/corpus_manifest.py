@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import cast
 
 from app.evaluation.rag.chunker import MarkdownChunker
+from app.evaluation.rag.corpus_files import corpus_markdown_files
 from app.evaluation.rag.tagging_rules import TaggingRules
 from app.schemas.normative_corpus import NormativeCorpusDocument
 
@@ -24,7 +25,7 @@ def list_normative_corpus_documents(
     corpus_dir: Path,
     tagging_rules_file: Path,
 ) -> list[NormativeCorpusDocument]:
-    """Return the eight corpus documents with criterion/agent coverage.
+    """Return source documents with criterion/agent coverage, excluding README.
 
     Sorting is stable and user-oriented: higher-priority documents first,
     then the document id. Untagged/context documents remain visible so the
@@ -35,7 +36,7 @@ def list_normative_corpus_documents(
     chunker = MarkdownChunker()
     documents: list[NormativeCorpusDocument] = []
 
-    for path in sorted(corpus_dir.glob("*.md")):
+    for path in corpus_markdown_files(corpus_dir):
         document_id = path.stem
         metadata = rules.document_metadata(document_id)
         metadata["language"] = metadata.get("language", "it")

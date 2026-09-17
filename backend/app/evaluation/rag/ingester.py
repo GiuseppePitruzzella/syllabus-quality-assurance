@@ -21,6 +21,7 @@ import chromadb
 import structlog
 
 from app.evaluation.rag.chunker import Chunk, MarkdownChunker
+from app.evaluation.rag.corpus_files import corpus_markdown_files
 from app.evaluation.rag.embeddings import VertexAIEmbeddings
 from app.evaluation.rag.tagging_rules import ALL_AGENTS, ALL_CRITERIA, TaggingRules
 
@@ -79,13 +80,13 @@ class CorpusIngester:
     # ---- public API ----
 
     def produce_chunks(self) -> list[Chunk]:
-        """Run chunker + tagger over every Markdown file in ``corpus_dir``.
+        """Run chunker + tagger over source Markdown files, excluding README.
 
         Returns the tagged chunks without touching ChromaDB or Vertex AI;
         useful for the ``--preview`` mode of the CLI.
         """
         chunks: list[Chunk] = []
-        for md_file in sorted(self._corpus_dir.glob("*.md")):
+        for md_file in corpus_markdown_files(self._corpus_dir):
             doc_id = md_file.stem
             doc_meta = self._rules.document_metadata(doc_id)
             doc_meta["language"] = doc_meta.get("language", "it")

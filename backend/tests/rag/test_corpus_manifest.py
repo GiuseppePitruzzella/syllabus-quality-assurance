@@ -52,3 +52,13 @@ def test_active_corpus_contains_only_core_sources():
 
     assert all(doc.is_core_source for doc in docs)
     assert all(doc.core_chunk_count > 0 for doc in docs)
+
+
+def test_readme_is_excluded_without_hiding_untagged_source_documents(tmp_path):
+    (tmp_path / "README.md").write_text("# Installation\n\nRepository instructions.\n")
+    (tmp_path / "context.md").write_text("# Context\n\nA source not yet tagged.\n")
+    docs = list_normative_corpus_documents(
+        corpus_dir=tmp_path, tagging_rules_file=Path(settings.tagging_rules_file),
+    )
+    assert [doc.document_id for doc in docs] == ["context"]
+    assert not docs[0].is_core_source

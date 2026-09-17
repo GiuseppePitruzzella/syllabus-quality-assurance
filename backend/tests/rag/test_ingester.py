@@ -122,6 +122,23 @@ def test_produce_chunks_runs_chunker_and_tagger(tmp_path: Path):
     assert doc1_section1.metadata["tag_C3"] is False
 
 
+def test_repository_readme_is_not_embedded_and_untagged_sources_remain(tmp_path):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    _write_corpus(corpus)
+    (corpus / "ReadMe.md").write_text(
+        "# Setup\n\n## 1. Installation\n\nNever embed these setup instructions.\n"
+    )
+    (corpus / "context.md").write_text(
+        "# Context\n\n## 1. Background\n\nAdditional source without tags.\n"
+    )
+    ingester = CorpusIngester(corpus, tmp_path / "chroma", _make_rules(), _fake_embeddings())
+    report = ingester.ingest_all()
+    assert set(report.chunks_by_document) == {"doc1", "doc2", "context"}
+    embedded = ingester._embeddings.embed_documents.call_args.args[0]
+    assert all("setup instructions" not in text for text in embedded)
+
+
 # ---------------------------------------------------------------------------
 # ingest_all: full pipeline against real ChromaDB
 # ---------------------------------------------------------------------------
