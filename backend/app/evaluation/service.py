@@ -40,6 +40,7 @@ import structlog
 from sqlalchemy.orm import Session
 
 from app.config import Settings, settings as default_settings
+from app.evaluation.agents.prompts.core_rubric import CORE_PROMPT_VERSIONS
 from app.evaluation.aggregator import AggregatedResult
 from app.evaluation.state import EvaluationState, snapshot_syllabus
 from app.local_documents.resolver import (
@@ -66,10 +67,7 @@ logger = structlog.get_logger(__name__)
 # ``prompt_versions`` snapshot does not have to carry five extra
 # keys on every run.
 DEFAULT_PROMPT_VERSIONS: dict[str, str] = {
-    "A1": "a1_v7",
-    "A2": "a2_v1",
-    "A3": "a3_v1",
-    "A4": "a4_v10",
+    **CORE_PROMPT_VERSIONS,
     "A5": "a5_v1",
 }
 

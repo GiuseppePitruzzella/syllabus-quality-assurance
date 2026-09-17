@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.evaluation.agents.base import BaseAgent
+from app.evaluation.agents.prompts.core_rubric import CORE_PROMPT_VERSIONS
 from app.evaluation.agents.prompts.a3_prompt import (
     A3_RELEVANT_FIELDS,
     build_a3_prompt,
@@ -37,7 +38,8 @@ class DidacticConsistencyAgent(BaseAgent):
     # C7 is intentionally soft on score=0 (a keyword list is C7=1, not
     # C7=0) and C8 score=2 is anchored to "evidenze testuali concrete"
     # to avoid rewarding inferred coherence.
-    prompt_version = "a3_v1"
+    # Restored complete anchors; existing scoring text is unchanged.
+    prompt_version = CORE_PROMPT_VERSIONS["A3"]
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

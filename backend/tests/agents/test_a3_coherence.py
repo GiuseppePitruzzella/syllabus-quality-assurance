@@ -172,7 +172,7 @@ def test_didactic_consistency_agent_advertises_correct_codes():
     agent = DidacticConsistencyAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A3"
     assert agent.criteria_codes == ["C6", "C7", "C8"]
-    assert agent.prompt_version == "a3_v1"
+    assert agent.prompt_version == "a3_v2"
 
 
 def test_didactic_consistency_agent_uses_a3_prompt_builder():

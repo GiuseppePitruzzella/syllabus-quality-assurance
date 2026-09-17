@@ -26,6 +26,10 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from app.evaluation.agents.prompts.core_rubric import (
+    A3_CRITERIA_SPECS as A3_CRITERIA_SPECS,
+    resolve_criteria_specs,
+)
 from app.evaluation.agents.prompts.base import BASE_SYSTEM_PROMPT
 from app.evaluation.agents.schemas import AgentInput
 
@@ -48,38 +52,6 @@ Avvertenze specifiche per A3:
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto, considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
-A3_CRITERIA_SPECS: list[dict[str, Any]] = [
-    {
-        "criterion_code": "C6",
-        "name": "Modalità di verifica dell'apprendimento",
-        "owned_by": "A3",
-        "anchors": {
-            "0": "Modalità di verifica assenti o ridotte a una sola riga senza alcun dettaglio (es. 'esame finale' senza tipologia né criteri).",
-            "1": "Modalità di verifica presenti ma generiche, senza criteri di attribuzione del voto né esempi di domande. La verifica è descritta a livello di tipologia (scritto, orale) ma non a livello di valutazione.",
-            "2": "Modalità di verifica articolate: tipologia chiara, criteri di attribuzione del voto espliciti e/o esempi di domande pertinenti agli obiettivi del corso. Le Linee Guida UniCT raccomandano l'esplicitazione di criteri e/o rubriche di valutazione.",
-        },
-    },
-    {
-        "criterion_code": "C7",
-        "name": "Chiarezza dei contenuti del corso",
-        "owned_by": "A3",
-        "anchors": {
-            "0": "Contenuti assenti o ridotti a poche etichette isolate, non sufficienti a capire cosa verrà trattato nel corso.",
-            "1": "Contenuti presenti ma poco organizzati: per esempio elenco lineare di argomenti o parole chiave senza scansione tematica.",
-            "2": "Contenuti articolati con organizzazione chiara, sezioni, progressione, schedule o struttura riconoscibile. I contenuti sono coerenti con il livello del CdS e con gli obiettivi formativi dichiarati.",
-        },
-    },
-    {
-        "criterion_code": "C8",
-        "name": "Coerenza didattico-valutativa",
-        "owned_by": "A3",
-        "anchors": {
-            "0": "Forte disallineamento fra risultati di apprendimento, metodi didattici, contenuti e modalità di verifica: la verifica non misura quello che gli RA dichiarano, oppure i metodi didattici non supportano gli RA, oppure i contenuti sono scollegati dagli obiettivi.",
-            "1": "Allineamento parziale: alcune componenti coerenti, altre no (es. contenuti allineati agli RA ma modalità di verifica non centrate, oppure il contrario).",
-            "2": "Allineamento chiaro: i contenuti, i metodi didattici e le modalità di verifica concorrono in modo coerente al raggiungimento dei risultati di apprendimento dichiarati. Le Linee Guida UniCT raccomandano l'esplicitazione di questo allineamento; quando l'allineamento è ricostruibile da evidenze testuali concrete del syllabus, anche se non dichiarato in forma esplicita, il punteggio può essere 2.",
-        },
-    },
-]
 
 # Fields A3 reads from the syllabus.
 #
@@ -169,7 +141,7 @@ def build_a3_prompt(agent_input: AgentInput | dict[str, Any]) -> str:
     7. closing                  — one-line directive to emit JSON only
     """
     data = _coerce_agent_input(agent_input)
-    criteria_specs = data.criteria_specs or A3_CRITERIA_SPECS
+    criteria_specs = resolve_criteria_specs(data.criteria_specs, "A3")
     return "\n\n".join(
         [
             BASE_SYSTEM_PROMPT.strip(),

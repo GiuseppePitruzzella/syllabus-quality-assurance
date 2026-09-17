@@ -23,6 +23,10 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from app.evaluation.agents.prompts.core_rubric import (
+    A2_CRITERIA_SPECS as A2_CRITERIA_SPECS,
+    resolve_criteria_specs,
+)
 from app.evaluation.agents.prompts.base import BASE_SYSTEM_PROMPT
 from app.evaluation.agents.schemas import AgentInput
 
@@ -43,28 +47,6 @@ Avvertenze specifiche per A2:
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto, considera quel descrittore o RA come assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
-A2_CRITERIA_SPECS: list[dict[str, Any]] = [
-    {
-        "criterion_code": "C3",
-        "name": "Formulazione dei risultati di apprendimento",
-        "owned_by": "A2",
-        "anchors": {
-            "0": "Risultati di apprendimento assenti o formulati come descrizione del corso ('il corso copre X', 'saranno presentate Y'). La descrizione dei contenuti non è un risultato di apprendimento.",
-            "1": "Risultati di apprendimento espressi in termini di apprendimento ma generici, ripetitivi o poco verificabili (es. 'lo studente acquisirà conoscenze', 'lo studente sarà in grado di comprendere').",
-            "2": "Risultati di apprendimento specifici, verificabili e formulati in termini di conoscenze e abilità osservabili. Le Linee Guida UniCT raccomandano l'uso di verbi d'azione concreti e la coerenza con il livello del CdS.",
-        },
-    },
-    {
-        "criterion_code": "C4",
-        "name": "Articolazione secondo i Descrittori di Dublino",
-        "owned_by": "A2",
-        "anchors": {
-            "0": "I cinque Descrittori di Dublino (knowledge_and_understanding, applying_knowledge, making_judgements, communication_skills, learning_skills) sono praticamente assenti o costituiti da formulazioni minimali prive di contenuto sostanziale.",
-            "1": "Alcuni dei cinque Descrittori sono compilati, ma con contenuti generici, duplicati tra loro o non differenziati: il syllabus copre i Descrittori solo formalmente.",
-            "2": "Tutti e cinque i Descrittori sono articolati con contenuti specifici e differenziati, coerenti con il livello del CdS e con i risultati di apprendimento dichiarati nel campo narrativo. Le Linee Guida UniCT raccomandano una formulazione esplicita per ciascuno dei cinque descrittori.",
-        },
-    },
-]
 
 # Fields A2 reads from the syllabus.
 #
@@ -148,7 +130,7 @@ def build_a2_prompt(agent_input: AgentInput | dict[str, Any]) -> str:
     7. closing                  — one-line directive to emit JSON only
     """
     data = _coerce_agent_input(agent_input)
-    criteria_specs = data.criteria_specs or A2_CRITERIA_SPECS
+    criteria_specs = resolve_criteria_specs(data.criteria_specs, "A2")
     return "\n\n".join(
         [
             BASE_SYSTEM_PROMPT.strip(),

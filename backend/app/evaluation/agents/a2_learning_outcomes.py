@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.evaluation.agents.base import BaseAgent
+from app.evaluation.agents.prompts.core_rubric import CORE_PROMPT_VERSIONS
 from app.evaluation.agents.prompts.a2_prompt import (
     A2_RELEVANT_FIELDS,
     build_a2_prompt,
@@ -38,7 +39,8 @@ class PedagogicalAgent(BaseAgent):
     # ScientificConfig.llm_max_output_tokens=8192 set in D030. Anchors
     # use soft normative wording ("le LG UniCT raccomandano") in line
     # with the methodological correction made on A1/C5 (a1_v4).
-    prompt_version = "a2_v1"
+    # Restored complete anchors; existing scoring text is unchanged.
+    prompt_version = CORE_PROMPT_VERSIONS["A2"]
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

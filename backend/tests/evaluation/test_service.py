@@ -409,10 +409,10 @@ def test_default_prompt_versions_track_current_agent_releases():
     actually produced the run. D026 / D043.
     """
     assert DEFAULT_PROMPT_VERSIONS == {
-        "A1": "a1_v7",
-        "A2": "a2_v1",
-        "A3": "a3_v1",
-        "A4": "a4_v10",
+        "A1": "a1_v8",
+        "A2": "a2_v2",
+        "A3": "a3_v2",
+        "A4": "a4_v11",
         # Phase 9.C.5.3: A5 added at coordinator-level. The per-E*
         # handler versions live in
         # ``EvaluationResult.extended_criteria_result.agent_output

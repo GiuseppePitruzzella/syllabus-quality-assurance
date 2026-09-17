@@ -170,7 +170,7 @@ def test_pedagogical_agent_advertises_correct_codes():
     agent = PedagogicalAgent(retriever=MagicMock(), llm_client=MagicMock())
     assert agent.agent_code == "A2"
     assert agent.criteria_codes == ["C3", "C4"]
-    assert agent.prompt_version == "a2_v1"
+    assert agent.prompt_version == "a2_v2"
 
 
 def test_pedagogical_agent_uses_a2_prompt_builder():

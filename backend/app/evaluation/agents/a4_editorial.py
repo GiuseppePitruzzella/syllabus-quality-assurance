@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.evaluation.agents.base import BaseAgent
+from app.evaluation.agents.prompts.core_rubric import CORE_PROMPT_VERSIONS
 from app.evaluation.agents.prompts.a4_prompt import (
     A4_RELEVANT_FIELDS,
     build_a4_prompt,
@@ -87,7 +88,8 @@ class EditorialCareAgent(BaseAgent):
     #   English title, and narrows EN/reference penalties to clear textual
     #   defects rather than intelligible non-native phrasing or harmless
     #   citation-style variation.
-    prompt_version = "a4_v10"
+    # Restored complete anchors; existing scoring text is unchanged.
+    prompt_version = CORE_PROMPT_VERSIONS["A4"]
 
     def __init__(self, retriever: Any, llm_client: Any) -> None:
         super().__init__(

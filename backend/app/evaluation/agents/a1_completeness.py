@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.evaluation.agents.base import BaseAgent
+from app.evaluation.agents.prompts.core_rubric import CORE_PROMPT_VERSIONS
 from app.evaluation.agents.prompts.a1_prompt import build_a1_prompt
 
 # Fields A1 reads from the syllabus. Order is preserved in the prompt
@@ -115,7 +116,8 @@ class CompletenessAgent(BaseAgent):
     #   it). Title (course_name_en) is diagnostic but non-blocking; presence
     #   is separated from quality (style/typos -> C9/E4). Also fixes the
     #   snapshot gap that hid course_name_en from A1. C1/C5 unchanged.
-    prompt_version = "a1_v7"
+    # Restored complete anchors; existing scoring text is unchanged.
+    prompt_version = CORE_PROMPT_VERSIONS["A1"]
 
     # D030.bis: A1 needs more headroom than the global 8192 budget on
     # the longest LM-18 syllabi (e.g. Machine Learning triggered a

@@ -5,6 +5,10 @@ import json
 from typing import Any
 
 from app.evaluation.agents.english_coverage import english_coverage, suggest_c2
+from app.evaluation.agents.prompts.core_rubric import (
+    A1_CRITERIA_SPECS as A1_CRITERIA_SPECS,
+    resolve_criteria_specs,
+)
 from app.evaluation.agents.prompts.base import BASE_SYSTEM_PROMPT
 from app.evaluation.agents.schemas import AgentInput
 
@@ -25,38 +29,6 @@ Avvertenze specifiche per A1:
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto (stringa vuota o null), considera la sezione assente. Questo NON è NA: è informazione utile per il punteggio (0 o 1).
 """
 
-A1_CRITERIA_SPECS: list[dict[str, Any]] = [
-    {
-        "criterion_code": "C1",
-        "name": "Completezza strutturale e documentale",
-        "owned_by": "A1",
-        "anchors": {
-            "0": "Mancano 3 o più sezioni, o più sezioni sono presenti solo come intestazione vuota.",
-            "1": "Manca 1 o 2 sezioni, o alcune sezioni sono compilate in modo puramente nominale.",
-            "2": "Tutte le sezioni sono presenti e compilate con contenuto sostanziale.",
-        },
-    },
-    {
-        "criterion_code": "C2",
-        "name": "Completezza bilingue",
-        "owned_by": "A1",
-        "anchors": {
-            "0": "Nessuna delle 3 sezioni informative inglesi (risultati di apprendimento, contenuti, modalità di verifica) presente: versione inglese assente o limitata al solo titolo.",
-            "1": "1 o 2 delle 3 sezioni informative inglesi presenti (copertura parziale).",
-            "2": "Tutte e 3 le sezioni informative inglesi presenti. Il titolo inglese è diagnostico, non bloccante.",
-        },
-    },
-    {
-        "criterion_code": "C5",
-        "name": "Chiarezza dei prerequisiti",
-        "owned_by": "A1",
-        "anchors": {
-            "0": "Prerequisiti assenti, tautologici, o formulati solo come codici/nomi di insegnamenti senza indicare le conoscenze richieste.",
-            "1": "Prerequisiti presenti ma parzialmente operativi: aree molto generiche, nomi di insegnamenti con scarso dettaglio, oppure conoscenze specifiche senza livello atteso / priorità / contesto d'uso.",
-            "2": "Prerequisiti specifici e utili all'autovalutazione dello studente: indicano conoscenze o abilità richieste con sufficiente granularità; la distinzione culturali/disciplinari o la gradazione utili/importanti/indispensabili rafforzano il giudizio ma non sono obbligatorie.",
-        },
-    },
-]
 
 A1_OUTPUT_SCHEMA_INSTRUCTIONS = """SCHEMA OUTPUT JSON (forma, non valori da copiare):
 {
@@ -102,7 +74,7 @@ def build_a1_prompt(agent_input: AgentInput | dict[str, Any]) -> str:
     7. closing                  — one-line directive to emit JSON only
     """
     data = _coerce_agent_input(agent_input)
-    criteria_specs = data.criteria_specs or A1_CRITERIA_SPECS
+    criteria_specs = resolve_criteria_specs(data.criteria_specs, "A1")
     coverage = english_coverage(data.syllabus_data)
     precheck = {"english_coverage": coverage, "suggested_c2": suggest_c2(coverage)}
     return "\n\n".join(

@@ -25,6 +25,8 @@
  * extended one.
  */
 
+import { ACTIVE_CORE_PROMPT_VERSIONS } from "./profile";
+
 export type Score = 0 | 1 | 2 | "NA";
 
 export interface Anchor {
@@ -77,29 +79,29 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Completezza",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v6",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A1,
     description:
       "Verifica la presenza e compilazione sostanziale di tutte le sezioni previste dalle Linee Guida UniCT: risultati di apprendimento, prerequisiti, contenuti, modalità di valutazione, esempi di domande, testi adottati, modalità di svolgimento, modalità di frequenza, programmazione del corso.",
     anchors: [
-      { score: 0, description: "Più di una sezione obbligatoria mancante o sostanzialmente vuota." },
-      { score: 1, description: "Una sezione obbligatoria mancante o compilata in modo frammentario." },
+      { score: 0, description: "Mancano tre o più sezioni, o più sezioni sono presenti solo come intestazione vuota." },
+      { score: 1, description: "Mancano una o due sezioni, o alcune sono compilate in modo puramente nominale." },
       { score: 2, description: "Tutte le sezioni obbligatorie compilate in modo sostantivo." },
       { score: "NA", description: "Contenuto non recuperabile per errore tecnico persistente." },
     ],
   },
   {
     code: "C2",
-    name: "Completezza bilingue",
+    name: "Copertura inglese minima",
     area: "Bilinguismo",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v6",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A1,
     description:
-      "Verifica la disponibilità della versione inglese sul perimetro minimo: titolo, risultati di apprendimento, contenuti, modalità di verifica. L'assenza reale della versione inglese non rende NA il criterio: incide sul punteggio.",
+      "Verifica la presenza in inglese di risultati di apprendimento, contenuti e modalità di verifica. Il titolo è diagnostico e non determina il punteggio. Questo indicatore non certifica il bilinguismo completo della scheda.",
     anchors: [
-      { score: 0, description: "Versione inglese assente o perimetro minimo non coperto." },
-      { score: 1, description: "Versione inglese presente ma con copertura parziale del perimetro minimo." },
-      { score: 2, description: "Versione inglese completa sul perimetro minimo (titolo, RA, contenuti, MV)." },
+      { score: 0, description: "Nessuna delle tre sezioni informative in inglese presente." },
+      { score: 1, description: "Una o due delle tre sezioni informative in inglese presenti." },
+      { score: 2, description: "Tutte e tre le sezioni informative in inglese presenti." },
       { score: "NA", description: "Riservato a casi tecnici eccezionali, non al solo dato mancante." },
     ],
     notes:
@@ -111,7 +113,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Outcome",
     agent: "A2",
     weight: 1.0,
-    prompt_version: "a2_v1",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A2,
     description:
       "Valuta la formulazione degli outcome come apprendimenti osservabili, non come argomenti o contenuti del corso.",
     anchors: [
@@ -127,7 +129,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Outcome",
     agent: "A2",
     weight: 1.0,
-    prompt_version: "a2_v1",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A2,
     description:
       "Valuta presenza e qualità dell'articolazione dei cinque Descrittori di Dublino: conoscenza/comprensione, capacità di applicare, autonomia di giudizio, abilità comunicative, capacità di apprendimento. Indipendente dalla bilinguità (C2).",
     anchors: [
@@ -143,7 +145,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Completezza",
     agent: "A1",
     weight: 1.0,
-    prompt_version: "a1_v6",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A1,
     description:
       "Valuta se i prerequisiti sono formulati in modo utile allo studente per autovalutarsi prima del corso. Per il punteggio massimo serve una formulazione specifica e operativa; la distinzione culturali/disciplinari o la gradazione di importanza sono segnali positivi, non condizioni obbligatorie.",
     anchors: [
@@ -161,7 +163,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Coerenza",
     agent: "A3",
     weight: 1.0,
-    prompt_version: "a3_v1",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A3,
     description:
       "Valuta la chiarezza delle modalità di verifica dell'apprendimento. Criteri di voto, rubriche o esempi di domande sono raccomandati ma non singolarmente obbligatori se la modalità è già chiara.",
     anchors: [
@@ -177,7 +179,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Coerenza",
     agent: "A3",
     weight: 1.0,
-    prompt_version: "a3_v1",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A3,
     description:
       "Valuta se contenuti e programmazione permettono allo studente di capire cosa verrà trattato e con quale organizzazione. Focus sulla qualità informativa della sezione contenuti.",
     anchors: [
@@ -193,7 +195,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Coerenza",
     agent: "A3",
     weight: 1.0,
-    prompt_version: "a3_v1",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A3,
     description:
       "Valuta il principio di constructive alignment: risultati di apprendimento, contenuti, metodi didattici e modalità di verifica devono tenersi insieme. Richiede inferenza relazionale fra più sezioni.",
     anchors: [
@@ -211,7 +213,7 @@ export const CORE_CRITERIA: CoreCriterion[] = [
     area: "Editoriale",
     agent: "A4",
     weight: 1.0,
-    prompt_version: "a4_v10",
+    prompt_version: ACTIVE_CORE_PROMPT_VERSIONS.A4,
     description:
       "Valuta la cura editoriale osservabile del documento: refusi reali, qualità dei riferimenti e incongruenze formali evidenti. Non penalizza frammenti tecnici dei campi Dublin, artefatti plausibilmente introdotti dal parser, refusi localizzati ripetuti in campi duplicati, né contraddizioni semantiche IT/EN che ricadono su altri criteri.",
     anchors: [

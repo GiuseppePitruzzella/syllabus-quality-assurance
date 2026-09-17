@@ -37,7 +37,7 @@ export interface EvaluationProfile {
   locked_reason: string;
 }
 
-export const ACTIVE_PROFILE: EvaluationProfile = {
+export const THESIS_PROFILE: EvaluationProfile = {
   name: "LM-18 / Tesi v1",
   rubric_label: "C1-C9 (core) + E1-E5 (estesi, sperimentali)",
   llm_model: "gemini-2.5-flash",
@@ -58,4 +58,24 @@ export const ACTIVE_PROFILE: EvaluationProfile = {
   locked: true,
   locked_reason:
     "Profilo bloccato per riproducibilità della validazione sperimentale Phase 5.7 (30 syllabi LM-18) e dei giudizi umani Phase 5.8 (shortlist 8 syllabi). Una modifica ai parametri deve generare una nuova versione del profilo, non mutare quello esistente.",
+};
+
+// This version restores complete score anchors in the prompts. Historical
+// validation remains attached to THESIS_PROFILE, not automatically to this one.
+export const ACTIVE_CORE_PROMPT_VERSIONS = {
+  A1: "a1_v8",
+  A2: "a2_v2",
+  A3: "a3_v2",
+  A4: "a4_v11",
+} as const;
+
+export const ACTIVE_PROFILE: EvaluationProfile = {
+  ...THESIS_PROFILE,
+  name: "LM-18 / Regole complete v2",
+  prompt_versions: Object.entries(ACTIVE_CORE_PROMPT_VERSIONS).map(([agent, version]) => ({
+    agent,
+    version,
+  })),
+  locked_reason:
+    "Versione con le regole di punteggio complete nei prompt. Le soglie restano invariate; le validazioni precedenti si riferiscono al profilo storico e non dimostrano automaticamente l'accuratezza di questa versione.",
 };

@@ -15,7 +15,8 @@ from app.evaluation.agents.schemas import (
     CriterionJudgment,
     RetrievedChunkRef,
 )
-from app.evaluation.rag.query_builder import CRITERION_DESCRIPTIONS, build_retrieval_query
+from app.evaluation.agents.prompts.core_rubric import resolve_criteria_specs
+from app.evaluation.rag.query_builder import build_retrieval_query
 
 PromptBuilder = Callable[[AgentInput], str]
 
@@ -110,14 +111,8 @@ class BaseAgent(ABC):
             contexts.extend(self._chunk_to_context(criterion, chunk) for chunk in chunks)
         return contexts
 
-    def _criteria_specs(self) -> list[dict[str, str]]:
-        return [
-            {
-                "criterion_code": criterion,
-                "description": CRITERION_DESCRIPTIONS[criterion],
-            }
-            for criterion in self.criteria_codes
-        ]
+    def _criteria_specs(self) -> list[dict[str, Any]]:
+        return resolve_criteria_specs([], self.agent_code)
 
     def _call_llm_with_retry(self, prompt: str, max_retries: int = 2) -> str:
         """Call the LLM and retry when the JSON output does not validate."""

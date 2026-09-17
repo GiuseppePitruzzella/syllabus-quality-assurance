@@ -46,6 +46,10 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from app.evaluation.agents.prompts.core_rubric import (
+    A4_CRITERIA_SPECS as A4_CRITERIA_SPECS,
+    resolve_criteria_specs,
+)
 from app.evaluation.agents.prompts.base import BASE_SYSTEM_PROMPT
 from app.evaluation.agents.schemas import AgentInput
 
@@ -75,18 +79,6 @@ Avvertenze specifiche per A4:
 - Quando un campo del syllabus è presente nei DATI DEL SYLLABUS ma vuoto, NON è di per sé un difetto editoriale: è informazione che spetta ad altri criteri. C9 valuta come è scritto quello che c'è, non quello che manca strutturalmente.
 """
 
-A4_CRITERIA_SPECS: list[dict[str, Any]] = [
-    {
-        "criterion_code": "C9",
-        "name": "Cura editoriale del syllabus",
-        "owned_by": "A4",
-        "anchors": {
-            "0": "Difetti editoriali GRAVI, DIFFUSI e SISTEMATICI, tali da compromettere la leggibilità o l'affidabilità del documento. Esempi: parti del syllabus illeggibili o sintatticamente rotte in modo ricorrente; sezione bibliografica completamente assente o priva di qualunque riferimento risolvibile; riferimenti o frasi sistematicamente corrotti. Punteggio 0 NON va assegnato per refusi sparsi, difetti minori o possibili artefatti di parsing.",
-            "1": "Difetti editoriali reali e osservabili ma di entità contenuta: almeno due difetti concreti e indipendenti in campi distinti, oppure un singolo difetto redazionale grave e chiaramente attribuibile al testo originale. Esempi: refusi/errori grammaticali evidenti in più sezioni, riferimenti bibliografici sostanzialmente non risolvibili, link/riferimenti testuali malformati, incongruenze formali minori ma verificabili. Il documento resta leggibile e usabile. Non assegnare 1 per un solo difetto minore o localizzato, per inglese comprensibile ma non perfettamente idiomatico, per variazioni innocue nello stile dei riferimenti, per la ripetizione dello stesso refuso in campi duplicati/derivati, per titoli tecnici/citazioni bibliografiche che mescolano parole italiane e inglesi in modo comprensibile, per campi dublin_* frammentari, per contraddizioni semantiche IT/EN o se le uniche evidenze sono possibili artefatti di scraping/parsing. In particolare: un refuso localizzato più una citazione tecnica mista ma intelligibile non costituiscono due difetti indipendenti.",
-            "2": "Documento editorialmente curato o con difetti assenti/trascurabili: refusi non evidenti o non significativi, riferimenti sufficientemente chiari, struttura leggibile e coerente. Un singolo difetto minore/localizzato, anche se ripetuto in campi duplicati o derivati, non basta ad abbassare il punteggio. Inglese comprensibile ma non idiomatico, titoli tecnici, citazioni bibliografiche o righe di programmazione che combinano lessico italiano e inglese restano accettabili se sono intelligibili e coerenti. Possibili artefatti di parsing isolati (es. a capo anomali, punti iniziali, marker '-->', sequenze '\\n') e frammentarietà dei campi dublin_* non bastano ad abbassare il punteggio se non sono difetti verificabili del testo originale. Il giudizio resta editoriale: non valuta l'equivalenza semantica IT/EN, che appartiene a E4.",
-        },
-    },
-]
 
 # Fields A4 reads from the syllabus.
 #
@@ -191,7 +183,7 @@ def build_a4_prompt(agent_input: AgentInput | dict[str, Any]) -> str:
     7. closing                  — one-line directive to emit JSON only
     """
     data = _coerce_agent_input(agent_input)
-    criteria_specs = data.criteria_specs or A4_CRITERIA_SPECS
+    criteria_specs = resolve_criteria_specs(data.criteria_specs, "A4")
     return "\n\n".join(
         [
             BASE_SYSTEM_PROMPT.strip(),
