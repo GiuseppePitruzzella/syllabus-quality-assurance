@@ -8,6 +8,10 @@ deserves further development.
 Read the [first MacBook Air M2 / 8 GB pilot](RESULTS.md) before running a larger
 campaign. Completing a JSON response is not evidence of reliable scoring.
 
+To keep the repository and benchmarks on the Mac while running only Ollama
+and Qwen on Windows, follow the [Mac → ThinkPad setup guide](MAC_THINKPAD.md).
+It uses an authorized SSH tunnel and requires no project dependencies on Windows.
+
 The [documentary review and separated rubric](RUBRIC_REVIEW.md) introduces the
 opt-in `separated_v1` policy. It changes some scoring rules as well as wording;
 it is neither a validated replacement nor a complete 2026 compliance check.
@@ -94,6 +98,13 @@ Records include raw responses, score differences, evidence checks, token
 counts, prompt/generation/load durations and best-effort memory snapshots.
 The `/api/ps` allocation and before/after macOS swap readings are **not peak RAM
 measurements**. Raw experiment artifacts stay local until reviewed.
+For two-machine runs, use `--inference-location ssh-tunnel`; for inference on
+the benchmark host, use `--inference-location same-machine`. This records a
+user declaration, not detected hardware, and does not establish a connection.
+The default is `unspecified`. The manifest labels measurement scope explicitly:
+platform, architecture and swap belong to the benchmark host, while runtime
+identity and model allocations come from the Ollama server. Wall time includes
+transport. The loopback-only URL restriction still applies.
 
 ## Method and limitations
 

@@ -44,12 +44,14 @@ def write_json(path: Path, value: object) -> None:
 
 
 def write_summary(output: Path, records: list[dict], policy: str = "archived",
-                  evidence_mode: str = "literal", context_mode: str = "archived") -> None:
+                  evidence_mode: str = "literal", context_mode: str = "archived",
+                  inference_location: str = "unspecified") -> None:
     summary = summarise(records)
     summary["prompt_policy"] = policy
     summary["rubric_changed"] = policy != "archived"
     summary["evidence_mode"] = evidence_mode
     summary["context_mode"] = context_mode
+    summary["inference_location"] = inference_location
     if policy != "archived":
         summary["interpretation"] = (
             "Different experimental rubric; archived Gemini agreement is descriptive only. "
@@ -66,6 +68,9 @@ def write_summary(output: Path, records: list[dict], policy: str = "archived",
              f"- Prompt policy: {policy}; rubric changed: {summary['rubric_changed']}",
              f"- Evidence mode: {evidence_mode}",
              f"- Context mode: {context_mode}",
+             f"- Inference location (user-declared): {inference_location}",
+             "- Swap readings describe the benchmark host; Ollama allocations describe "
+             "the model server. Neither measures peak RAM.",
              summary["interpretation"], "",
              f"- Attempted: {summary['attempted']}; valid: {summary['valid']}",
              f"- Score agreement: {summary['agreement_with_archived_gemini']}",
@@ -111,6 +116,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--context-mode", choices=["archived", CONTEXT_MODE], default="archived",
                         help="Frozen per-case context or fixed historical A2/A4 references")
     parser.add_argument("--base-url", default="http://127.0.0.1:11435")
+    parser.add_argument("--inference-location", default="unspecified",
+                        choices=["unspecified", "same-machine", "ssh-tunnel"],
+                        help="Record the declared model location; does not create a tunnel "
+                             "or allow non-loopback URLs")
     parser.add_argument("--num-ctx", type=int, default=16384)
     parser.add_argument("--max-output-tokens", type=int, default=2048)
     parser.add_argument("--timeout", type=float, default=600)
@@ -174,6 +183,17 @@ def main(argv: list[str] | None = None) -> int:
             "experiment": "local_qwen_replay_v1", "created_at": datetime.now(timezone.utc).isoformat(),
             "git_commit": git.stdout.strip(), "platform": platform.platform(),
             "machine": platform.machine(), "config": asdict(config), "runtime": identity,
+            "inference_location": args.inference_location,
+            "inference_location_source": "user-declared; not detected from loopback URL",
+            "measurement_scope": {
+                "platform": "benchmark_host",
+                "machine": "benchmark_host",
+                "swap_before": "benchmark_host",
+                "swap_after": "benchmark_host",
+                "model_memory_after": "ollama_server_allocation_not_peak_ram",
+                "wall_seconds": "benchmark_host_end_to_end_including_transport",
+                "runtime": "ollama_server",
+            },
             "runs_per_case": args.runs,
             "retrieval": "no embeddings; " + args.context_mode,
             "prompt_policy": args.prompt_policy,
@@ -237,7 +257,7 @@ def main(argv: list[str] | None = None) -> int:
                 write_json(output / f"{case.case_id}__run{run}.json", record)
                 records.append(record)
                 write_summary(output, records, args.prompt_policy, args.evidence_mode,
-                              args.context_mode)
+                              args.context_mode, args.inference_location)
                 print(f"  {record['status']} in {record['wall_seconds']}s", flush=True)
         print(f"Results: {output}")
         return 0 if all(r["status"] == "valid" for r in records) else 1

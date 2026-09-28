@@ -106,6 +106,42 @@ def test_preflight_failure_has_a_saved_diagnostic(monkeypatch, tmp_path):
     client.close.assert_called_once()
 
 
+def test_tunnel_report_distinguishes_client_swap_from_server_allocation(monkeypatch, tmp_path):
+    client = Mock(side_effect=RuntimeError("remote model failed"))
+    client.preflight.return_value = {"model_digest": "fixture"}
+    client.last_response = None
+    allocation = {"size": 5_000_000_000, "size_vram": 0, "context_length": 16384}
+    client.memory_snapshot.return_value = allocation
+    factory = Mock(return_value=client)
+    monkeypatch.setattr(runner, "OllamaLLMClient", factory)
+    monkeypatch.setattr(runner, "swap_snapshot", lambda: "Mac swap snapshot")
+    output = tmp_path / "tunnel"
+    assert runner.main(["--execute", "--agent", "A1", "--limit", "1",
+                        "--base-url", "http://127.0.0.1:11436",
+                        "--inference-location", "ssh-tunnel",
+                        "--output-dir", str(output)]) == 1
+    assert factory.call_args.args[0].base_url == "http://127.0.0.1:11436"
+    manifest = json.loads((output / "manifest.json").read_text())
+    record = json.loads(next(output.glob("*__run1.json")).read_text())
+    summary = json.loads((output / "summary.json").read_text())
+    assert manifest["inference_location"] == summary["inference_location"] == "ssh-tunnel"
+    assert manifest["measurement_scope"]["swap_after"] == "benchmark_host"
+    assert "ollama_server" in manifest["measurement_scope"]["model_memory_after"]
+    assert record["swap_after"] == "Mac swap snapshot"
+    assert record["model_memory_after"] == allocation
+    assert summary["attempted"] == 1 and summary["valid"] == 0
+
+
+def test_tunnel_declaration_does_not_allow_direct_remote_endpoint(monkeypatch):
+    factory = Mock(side_effect=AssertionError("network"))
+    monkeypatch.setattr(runner, "OllamaLLMClient", factory)
+    with pytest.raises(SystemExit) as error:
+        runner.main(["--execute", "--inference-location", "ssh-tunnel",
+                     "--base-url", "http://192.168.1.5:11434"])
+    assert error.value.code == 2
+    factory.assert_not_called()
+
+
 @pytest.mark.parametrize("valid", [True, False])
 @pytest.mark.parametrize("mode", ["source_ids_v1", "source_ids_v2"])
 def test_source_protocol_records_selection_or_rejection_without_hiding_raw_answer(
