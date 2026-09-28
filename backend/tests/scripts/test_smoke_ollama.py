@@ -11,10 +11,11 @@ import requests
 from scripts import smoke_ollama as smoke
 
 
-def server(monkeypatch, *, entry=None, show=None, answer='{"risposta": 4}', reason="stop"):
+def server(monkeypatch, *, entry=None, show=None, answer='{"risposta": 4}', reason="stop",
+           model=smoke.MODEL):
     bodies = [
         {"version": "0.32.15"},
-        {"models": [entry or {"name": smoke.MODEL, "size": 3_000_000_000, "digest": "fixture"}]},
+        {"models": [entry or {"name": model, "size": 3_000_000_000, "digest": "fixture"}]},
         show or {"details": {"family": "qwen35", "quantization_level": "Q4_K_M"}},
         {"message": {"content": answer}, "done": True, "done_reason": reason,
          "load_duration": 2_000_000_000, "eval_count": 8},
@@ -27,9 +28,10 @@ def server(monkeypatch, *, entry=None, show=None, answer='{"risposta": 4}', reas
     return session
 
 
-def test_single_small_generation_without_proxy_then_model_release(monkeypatch, capsys):
-    session = server(monkeypatch)
-    assert smoke.main(["--host", "192.168.1.50"]) == 0
+@pytest.mark.parametrize("model", smoke.MODELS)
+def test_single_small_generation_without_proxy_then_model_release(monkeypatch, capsys, model):
+    session = server(monkeypatch, model=model)
+    assert smoke.main(["--execute", "--host", "192.168.1.50", "--model", model]) == 0
     assert session.trust_env is False
     calls = session.request.call_args_list
     assert len(calls) == 5
@@ -38,6 +40,7 @@ def test_single_small_generation_without_proxy_then_model_release(monkeypatch, c
         "version", "tags", "show", "chat", "ps",
     ]
     payload = calls[3].kwargs["json"]
+    assert payload["model"] == calls[2].kwargs["json"]["model"] == model
     assert payload["keep_alive"] == 0
     assert payload["think"] is False and payload["stream"] is False
     assert payload["options"]["num_ctx"] == 2048
@@ -53,7 +56,7 @@ def test_single_small_generation_without_proxy_then_model_release(monkeypatch, c
 ])
 def test_wrong_or_truncated_answer_is_failure_without_retry(monkeypatch, capsys, answer, reason):
     session = server(monkeypatch, answer=answer, reason=reason)
-    assert smoke.main(["--host", "192.168.1.50"]) == 1
+    assert smoke.main(["--execute", "--host", "192.168.1.50"]) == 1
     assert session.request.call_count == 5
     assert json.dumps(answer) in capsys.readouterr().out
 
@@ -66,7 +69,7 @@ def test_wrong_or_truncated_answer_is_failure_without_retry(monkeypatch, capsys,
 ])
 def test_missing_or_nonlocal_model_is_never_generated(monkeypatch, entry, show, expected_calls):
     session = server(monkeypatch, entry=entry, show=show)
-    assert smoke.main(["--host", "192.168.1.50"]) == 1
+    assert smoke.main(["--execute", "--host", "192.168.1.50"]) == 1
     assert session.request.call_count == expected_calls
 
 
@@ -82,7 +85,7 @@ def test_public_or_ambiguous_address_is_rejected(host):
 def test_redirect_and_network_failure_do_not_trigger_another_request(monkeypatch, failure):
     session = server(monkeypatch)
     session.request.side_effect = [failure]
-    assert smoke.main(["--host", "192.168.1.50"]) == 1
+    assert smoke.main(["--execute", "--host", "192.168.1.50"]) == 1
     assert session.request.call_count == 1
 
 
@@ -91,8 +94,24 @@ def test_model_release_check_failure_does_not_hide_successful_generation(monkeyp
     calls = list(session.request.side_effect)
     calls[-1] = requests.ConnectionError("server unavailable after generation")
     session.request.side_effect = calls
-    assert smoke.main(["--host", "192.168.1.50"]) == 0
+    assert smoke.main(["--execute", "--host", "192.168.1.50"]) == 0
     assert '"model_still_loaded": null' in capsys.readouterr().out
+
+
+def test_default_preview_never_constructs_network_session(monkeypatch, capsys):
+    monkeypatch.setattr(smoke.requests, "Session", Mock(side_effect=AssertionError("network")))
+    assert smoke.main(["--host", "192.168.1.50", "--model", "qwen3.5:9b"]) == 0
+    output = capsys.readouterr().out
+    assert '"mode": "offline_preview"' in output
+    assert '"model": "qwen3.5:9b"' in output
+    assert '"path": "/api/chat"' in output
+    assert "nessun collegamento" in output
+
+
+def test_request_for_9b_does_not_substitute_available_4b(monkeypatch):
+    session = server(monkeypatch, model="qwen3.5:4b")
+    assert smoke.main(["--execute", "--host", "192.168.1.50", "--model", "qwen3.5:9b"]) == 1
+    assert session.request.call_count == 2
 
 
 def test_script_does_not_import_application_or_cloud_sdk():

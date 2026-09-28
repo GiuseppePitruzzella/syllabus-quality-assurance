@@ -10,7 +10,11 @@ campaign. Completing a JSON response is not evidence of reliable scoring.
 
 For one tiny connectivity/generation check without the syllabus pipeline, use
 the [standalone smoke test](SMOKE_TEST.md). It also supports a directly addressed
-private IPv4 Ollama server, requests two CPU threads and releases Qwen afterward.
+private IPv4 Ollama server and explicitly selected `qwen3.5:9b` or `qwen3.5:4b`.
+It defaults to an offline preview: review and approve the displayed operations
+before adding `--execute`. Only then does it request two CPU threads and model
+release after generation. Company-computer access requires the user's explicit
+supervision, including read-only requests. The syllabus benchmark remains 4B-only.
 
 To keep the repository and benchmarks on the Mac while running only Ollama
 and Qwen on Windows, follow the [Mac → ThinkPad setup guide](MAC_THINKPAD.md).

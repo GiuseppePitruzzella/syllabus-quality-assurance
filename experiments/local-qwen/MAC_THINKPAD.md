@@ -4,6 +4,11 @@ Per verificare soltanto collegamento e una breve risposta, usa prima il
 [test minimo senza SSH e senza syllabus](SMOKE_TEST.md). La procedura sotto
 riguarda invece il benchmark completo tramite tunnel.
 
+**Supervisione:** ogni operazione sul ThinkPad, anche di sola lettura, deve
+essere esaminata e approvata esplicitamente dall'utente. Questa guida non
+autorizza l'esecuzione automatica dei passaggi. Il modello 9B installato sul
+ThinkPad è supportato dal test minimo; il benchmark descritto sotto resta 4B.
+
 Questa configurazione lascia repository, dipendenze, preparazione dei prompt,
 confronti e risultati sul Mac. Il ThinkPad esegue soltanto Ollama e il modello
 Qwen3.5-4B Q4_K_M. Non occorrono Python, Node, Docker, WSL o una copia del
