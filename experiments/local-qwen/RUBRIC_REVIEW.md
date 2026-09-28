@@ -43,6 +43,13 @@ Neppure le fasce valutative di AVA3 equivalgono direttamente a questa scala.
 
 ## Problemi riscontrati
 
+**Aggiornamento 16 settembre 2026:** il problema di consegna degli anchor
+descritto al punto 1 è stato corretto nei builder e in `BaseAgent`, con catalogo
+centrale, controlli di completezza e nuove versioni A1 v8 / A2 v2 / A3 v2 /
+A4 v11. I testi degli anchor attivi non sono stati riscritti. La descrizione
+seguente conserva lo stato osservato durante l'esperimento del 14–15 settembre.
+Le soglie di `separated_v1` restano sperimentali.
+
 1. **Gli anchor possono sparire dal prompt effettivo.**
    `BaseAgent._criteria_specs()` produce codice e descrizione. I builder usano
    `data.criteria_specs or A*_CRITERIA_SPECS`: una lista non vuota di descrizioni

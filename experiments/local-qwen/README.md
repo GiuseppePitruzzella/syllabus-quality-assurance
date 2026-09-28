@@ -2,7 +2,7 @@
 
 This opt-in experiment tests **Qwen3.5-4B, Q4_K_M** on archived syllabus
 evaluation prompts. It does not enable Qwen in the web application or replace
-the validated Gemini configuration. It helps decide whether a local backend
+the existing cloud backend. It helps decide whether a local backend
 deserves further development.
 
 Read the [first MacBook Air M2 / 8 GB pilot](RESULTS.md) before running a larger
@@ -97,6 +97,79 @@ measurements**. Raw experiment artifacts stay local until reviewed.
 
 ## Method and limitations
 
+### Restored anchors, source selections and fixed references — September 2026
+
+The application prompt builders now obtain complete, validated score anchors
+from `backend/app/evaluation/agents/prompts/core_rubric.py`. The existing anchor
+texts were moved unchanged. The corresponding prompt versions are A1 v8,
+A2 v2, A3 v2 and A4 v11; persisted version metadata uses the same catalog.
+This fixes missing instructions, but does not establish better scoring accuracy.
+The candidate rules in [RUBRIC_PROPOSAL_V2.md](RUBRIC_PROPOSAL_V2.md) are not activated.
+The [September implementation and trial report](ANCHORS_EVIDENCE_RESULTS.md)
+includes the failed first source protocol and the targeted correction.
+
+Three independent experiment options support controlled comparisons:
+
+| Option | Behavior |
+|---|---|
+| `--prompt-policy current_v1` | Current application builders on the archived syllabus and normative context; no live retrieval |
+| `--prompt-policy current_without_anchors_v1` | Diagnostic control: identical to `current_v1` except that the criterion block contains the old description-only input |
+| `--evidence-mode source_ids_v2` | Qwen selects numbered passages; original quotes and empty-field claims are checked against each criterion's allowed fields |
+| `--evidence-mode source_ids_v1` | Legacy protocol retained to reproduce the trial that failed C1; no criterion-specific field restrictions |
+| `--context-mode fixed_core_v1` | Fixed, deduplicated historical references for A2/A4; other agents are rejected before inference |
+
+The defaults remain `archived`, `literal`, and archived context. The two
+`current_*` policies use the same required-field decoding schema. Compare
+them to isolate delivery of the specification block; comparisons to archived
+Gemini also involve different prompt versions and are descriptive only.
+
+Source selection annotates the entire syllabus without dropping text,
+preserving nested fields and string offsets. Version 2 keeps text fields as
+strings with inline passage markers; version 1 wraps them in passage objects.
+Version 2 also restricts evidence and absence fields by criterion, preventing
+English omissions from being used as proof of missing Italian sections in C1.
+It supports current and separated policies, not historical rubric replay.
+It changes presentation as well as the response contract. In particular,
+current A4 normally uses readable
+field blocks; the source protocol uses annotated JSON. All original values
+remain recoverable. Unknown IDs, duplicate selections, unsupported absence
+claims and score decisions without any source or verified absence fail
+validation. Raw failed answers are retained. An empty field is not a quotation.
+Source-ID fidelity is enforced by construction: **100% literal fidelity would
+not establish that passages are relevant or that scores are correct.**
+Allowed-field checks cannot verify all reasoning within those fields. Version 1
+produced a serious C1 error despite perfect quote fidelity; keep it for
+reproduction, not as the recommended source protocol.
+
+The fixed reference pack selects exact texts from hashed archived fixtures,
+with all criterion-to-passage associations retained. It stores selectors and
+hashes without republishing a separate copy of the normative texts. A2's six
+entries become four passages (9,732 → 6,150 text characters); A4 retains two.
+The pack preserves historical version labels as metadata, including labels
+that should not be treated as independently verified source editions. It is
+not a UniCT 26.04 compliance profile. A1/A3 still need separate curation.
+Neither the fixed pack nor source selection is enabled in the web application.
+
+```sh
+# Compare generated quotations with source selection on the same current prompts.
+uv run --frozen python scripts/benchmark_local_qwen.py --execute \
+  --prompt-policy current_v1 --evidence-mode source_ids_v2 \
+  --seuid 0B53E8E2-4B90-426F-A25C-3AA31FA4B649
+
+# Change only the context policy for the supported agents.
+uv run --frozen python scripts/benchmark_local_qwen.py --execute \
+  --prompt-policy current_v1 --evidence-mode source_ids_v2 \
+  --context-mode fixed_core_v1 --agent A2 --agent A4 \
+  --seuid 0B53E8E2-4B90-426F-A25C-3AA31FA4B649
+```
+
+The manifest records each option, source catalog and context hashes. The
+local `*__sources.json` file maps IDs back to original paths and offsets.
+Quotes, resolved decisions, raw outputs and failures are saved separately
+within each record. No model output is silently rewritten into a passing score.
+
+### Historical replay
+
 Committed `backend/tests/fixtures/llm_responses/` files contain complete
 historical prompts, including syllabus and selected normative passages.
 By default (`--prompt-policy archived`), each first prompt is replayed verbatim.
@@ -140,7 +213,8 @@ it should the web application offer local scoring.
 
 The transport implements the existing `LLMClient` callable interface for future
 `BaseAgent` integration without an Ollama SDK dependency. A complete offline
-web-app mode will also require validated local retrieval/embeddings and OCR;
+web-app mode will also require validated local source selection (fixed or
+retrieved) and document/OCR handling;
 changing the generative model alone is insufficient.
 
 Shared result/error types live in `llm_types.py`; the existing `llm_client.py`
@@ -153,8 +227,11 @@ configuration.
 ```sh
 cd backend
 uv run --frozen pytest -q tests/agents/test_ollama_client.py \
+  tests/agents/test_core_rubric_delivery.py \
   tests/evaluation/analysis/test_local_benchmark.py \
   tests/evaluation/analysis/test_local_rubric.py \
+  tests/evaluation/analysis/test_local_evidence.py \
+  tests/evaluation/analysis/test_local_context.py \
   tests/scripts/test_benchmark_local_qwen.py
 ```
 

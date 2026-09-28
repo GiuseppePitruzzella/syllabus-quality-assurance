@@ -1,0 +1,153 @@
+{
+  "policy": "fixed_core_v1",
+  "profile": "Historical A2/A4 calibration context; not UniCT 26.04",
+  "source_note": "Texts and version labels preserved from archived fixtures; version labels are not independently certified. No syllabus text is included.",
+  "agents": {
+    "A2": {
+      "derivation": "Identical criterion-to-text associations in all five archived cases",
+      "fixtures": [
+        {
+          "name": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091"
+        },
+        {
+          "name": "a2_calibration_3540D939-DA16-4C1D-983C-E6B85C403F2F.json",
+          "sha256": "6000340989e5220f93af2a2bc723f0c6973d920c74085c72d8ae8856d009221f"
+        },
+        {
+          "name": "a2_calibration_E2446DF6-59A1-46FD-B8D8-635EB937C1B3.json",
+          "sha256": "2ccde9f5e7403779fd9bcdcc4e794d42632cf4596066bb2c62bb5f8415fab413"
+        },
+        {
+          "name": "a2_calibration_F4AF1512-9D7A-4256-B57D-E103E05B009B.json",
+          "sha256": "9cac08c94f38da3ecc282bb03a11bea0ff9778c71cee977bead2d94834ca45b5"
+        },
+        {
+          "name": "a2_calibration_FE97232C-4F07-41F8-A82F-FF73592265EC.json",
+          "sha256": "f8bc66303d39942a93aaa424a7767368bf47617fde77fcd8c61c6ecf8b4b710a"
+        }
+      ],
+      "passages": [
+        {
+          "chunk_id": "lg_unict__3.1__0",
+          "text_sha256": "b099c75f8eac90ae5e82db12d34551af3d1b0db508bdd299fc562a11cf4869d9",
+          "criterion_codes": [
+            "C3",
+            "C4"
+          ],
+          "metadata": {
+            "document_id": "lg_unict",
+            "document_title": "Linee Guida UniCT per la compilazione del Syllabus",
+            "document_version": "2.0_settembre_2023",
+            "section_ref": "3.1",
+            "section_title": "Risultati di apprendimento",
+            "source_type": "linea_guida_ateneo"
+          }
+        },
+        {
+          "chunk_id": "matrice_tuning__2.b__0",
+          "text_sha256": "0e18418432e05b29353dc2d72e51b0966349ddfcd10b26848a64b2c5c17099ad",
+          "criterion_codes": [
+            "C3"
+          ],
+          "metadata": {
+            "document_id": "matrice_tuning",
+            "document_title": "Linee guida Matrice di Tuning",
+            "document_version": "1.0_gennaio_2026",
+            "section_ref": "2.b",
+            "section_title": "La Matrice di Tuning",
+            "source_type": "linea_guida_ateneo"
+          }
+        },
+        {
+          "chunk_id": "lgsua_cds__7.d__0",
+          "text_sha256": "7ad8eba07a5e4bad27cf295b830542adee4e8a3a4e21e4412e099727772977c5",
+          "criterion_codes": [
+            "C3",
+            "C4"
+          ],
+          "metadata": {
+            "document_id": "lgsua_cds",
+            "document_title": "Linee guida SUA-CdS",
+            "document_version": "2026",
+            "section_ref": "7.d",
+            "section_title": "SEZIONE A - Obiettivi della formazione",
+            "source_type": "linea_guida_ateneo"
+          }
+        },
+        {
+          "chunk_id": "lg_unict__Allegato 1.a__0",
+          "text_sha256": "7427a42b435dd3473719f2648388e34b63c4a89f85cf0c3aee7f97a68e1d4c31",
+          "criterion_codes": [
+            "C4"
+          ],
+          "metadata": {
+            "document_id": "lg_unict",
+            "document_title": "Linee Guida UniCT per la compilazione del Syllabus",
+            "document_version": "2.0_settembre_2023",
+            "section_ref": "Allegato 1.a",
+            "section_title": "Descrittori di Dublino",
+            "source_type": "linea_guida_ateneo"
+          }
+        }
+      ]
+    },
+    "A4": {
+      "derivation": "Identical criterion-to-text associations in all five archived cases",
+      "fixtures": [
+        {
+          "name": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e"
+        },
+        {
+          "name": "a4_calibration_3540D939-DA16-4C1D-983C-E6B85C403F2F.json",
+          "sha256": "cda302e2dcfdff6cf424bcf24977dc57b4487292c86f60da9cde5dd7b759facf"
+        },
+        {
+          "name": "a4_calibration_E2446DF6-59A1-46FD-B8D8-635EB937C1B3.json",
+          "sha256": "637b10ac437d9676ac508cc84a53c935a7560a0e977546f0edc52588acf52709"
+        },
+        {
+          "name": "a4_calibration_F4AF1512-9D7A-4256-B57D-E103E05B009B.json",
+          "sha256": "7ec32a657c86346ac0475f3a127a51d180e7e7fe251c1e7e7b684faf39ccc5c4"
+        },
+        {
+          "name": "a4_calibration_FE97232C-4F07-41F8-A82F-FF73592265EC.json",
+          "sha256": "5922f43049aca62cc7e6106a61495620da8d6a609f2f9df74ee5686f77c51307"
+        }
+      ],
+      "passages": [
+        {
+          "chunk_id": "lg_unict__3.6__0",
+          "text_sha256": "d576a3ae1e587a305cf2d0c0ae92176f96e5fcea21ffe138af0ab4cfb4a222fb",
+          "criterion_codes": [
+            "C9"
+          ],
+          "metadata": {
+            "document_id": "lg_unict",
+            "document_title": "Linee Guida UniCT per la compilazione del Syllabus",
+            "document_version": "2.0_settembre_2023",
+            "section_ref": "3.6",
+            "section_title": "Testi",
+            "source_type": "linea_guida_ateneo"
+          }
+        },
+        {
+          "chunk_id": "cpds_unict__Quadro B__0",
+          "text_sha256": "d772bfe5a5de31cd2dc0a5c41411ace376bc41127ee2540cb67af6ee7793d44c",
+          "criterion_codes": [
+            "C9"
+          ],
+          "metadata": {
+            "document_id": "cpds_unict",
+            "document_title": "Istruzioni Operative CPDS UniCT",
+            "document_version": "24_ottobre_2025",
+            "section_ref": "Quadro B",
+            "section_title": "Analisi e proposte in merito a materiali e ausili didattici, laboratori, aule, attrezzature, in relazione al raggiungimento degli obiettivi di apprendimento al livello desiderato",
+            "source_type": "documento_cpds"
+          }
+        }
+      ]
+    }
+  }
+}

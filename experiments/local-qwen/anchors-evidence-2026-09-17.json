@@ -1,0 +1,1169 @@
+{
+  "experiment": "current_anchors_source_protocols_fixed_context_v1",
+  "trial_dates": [
+    "2026-09-16",
+    "2026-09-17"
+  ],
+  "report_date": "2026-09-28",
+  "syllabus": "Internet of Things",
+  "seuid": "0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+  "hardware": "MacBook Air M2, 8 GB unified memory",
+  "api_cost_usd": 0,
+  "limits": [
+    "One previously used development syllabus, one attempt per configuration. No held-out human validation.",
+    "Source-ID literal fidelity is guaranteed by reconstruction, not evidence of semantic relevance.",
+    "Current builders differ from archived Gemini versions. Agreement is descriptive, not accuracy.",
+    "Timing is uncontrolled for load, cache, swap and thermals. Allocation is not peak RAM.",
+    "The description-only control is implemented and tested but was not run with live inference.",
+    "Raw artifacts remain in ignored local directories; hashes identify the exact runs."
+  ],
+  "implementations": {
+    "e80048bbac60996a1abbfa7c9ee946c98435e53d84a556169c85adf0e68bdbda": {
+      "scripts/benchmark_local_qwen.py": "981d87d0d286a713f485072020ec163bcdb2b95496e156dc04a26005ad3baefa",
+      "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+      "app/evaluation/agents/llm_types.py": "7a4502aacfc294301812b69f603aca3d0e2238e783f9e9d5940107a71b9dfc60",
+      "app/evaluation/analysis/local_benchmark.py": "a1c6b9984e4a25a70ddad282ccd31b2962cc8d146fb1ee8686a18a1488c51e81",
+      "app/evaluation/analysis/local_rubric.py": "e181742945806658cab7bbfa564b56a02feebd76cbf20c319eb55b663b8af49c",
+      "app/evaluation/analysis/local_evidence.py": "cd452aba8b27f87c48209ed2b4189dbe0a21ac65a8819ff74f4095cb040c178c",
+      "app/evaluation/agents/prompts/__init__.py": "5829f54746573633cd6b5f8fcff3a705e1998bce4eb3a3f160799992bd8c72ee",
+      "app/evaluation/agents/prompts/a1_prompt.py": "34472afcd8e27d5a3a85d157203a937848adead3f4a181d1a603ae06ba70b7df",
+      "app/evaluation/agents/prompts/a2_prompt.py": "1e49f41ffb34eed8a334805fab3798e450261bbef91458fb3e22177ac49501ea",
+      "app/evaluation/agents/prompts/a3_prompt.py": "3ecb2289424032e1526e8022086f7566a5c7d0ac16764ff5c435ad314648152b",
+      "app/evaluation/agents/prompts/a4_prompt.py": "d8c8423b62c1233285f38f9d53fffd7dfe772d79c0307f6a6f6e5bf32bbf80b1",
+      "app/evaluation/agents/prompts/base.py": "4d2611391fa63e3cff86753ea8a76f81db412d6a84442ab456c0de38a57ff929",
+      "app/evaluation/agents/prompts/core_rubric.py": "fd5e9352af9efbf0cfb138a9d12e8f4c47d8326d3473a6ca943ecee6f9562e0c",
+      "app/evaluation/analysis/local_rubric_v1.json": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13"
+    },
+    "b7b1a8d4219fa24f7e478bb4a42cb05509a454c0a5207191ed268d66f3fec256": {
+      "scripts/benchmark_local_qwen.py": "8796a6433c7ba0ac3b9f850efd874b03ae5cd9b47b45cf8400ef5ec5bc534463",
+      "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+      "app/evaluation/agents/llm_types.py": "7a4502aacfc294301812b69f603aca3d0e2238e783f9e9d5940107a71b9dfc60",
+      "app/evaluation/analysis/local_benchmark.py": "a1c6b9984e4a25a70ddad282ccd31b2962cc8d146fb1ee8686a18a1488c51e81",
+      "app/evaluation/analysis/local_rubric.py": "e181742945806658cab7bbfa564b56a02feebd76cbf20c319eb55b663b8af49c",
+      "app/evaluation/analysis/local_evidence.py": "cd452aba8b27f87c48209ed2b4189dbe0a21ac65a8819ff74f4095cb040c178c",
+      "app/evaluation/analysis/local_context.py": "a37f0be1707ed3ce1b35ddf79e077749506b002182eee13b83e47a9985f587e8",
+      "app/evaluation/analysis/local_context_v1.json": "42a2105c095fa79d4be7b40fbe030cf6a2cd178a6a8faebcd56a5d176c2aca1c",
+      "app/evaluation/agents/prompts/__init__.py": "5829f54746573633cd6b5f8fcff3a705e1998bce4eb3a3f160799992bd8c72ee",
+      "app/evaluation/agents/prompts/a1_prompt.py": "34472afcd8e27d5a3a85d157203a937848adead3f4a181d1a603ae06ba70b7df",
+      "app/evaluation/agents/prompts/a2_prompt.py": "1e49f41ffb34eed8a334805fab3798e450261bbef91458fb3e22177ac49501ea",
+      "app/evaluation/agents/prompts/a3_prompt.py": "3ecb2289424032e1526e8022086f7566a5c7d0ac16764ff5c435ad314648152b",
+      "app/evaluation/agents/prompts/a4_prompt.py": "d8c8423b62c1233285f38f9d53fffd7dfe772d79c0307f6a6f6e5bf32bbf80b1",
+      "app/evaluation/agents/prompts/base.py": "4d2611391fa63e3cff86753ea8a76f81db412d6a84442ab456c0de38a57ff929",
+      "app/evaluation/agents/prompts/core_rubric.py": "fd5e9352af9efbf0cfb138a9d12e8f4c47d8326d3473a6ca943ecee6f9562e0c",
+      "app/evaluation/analysis/local_rubric_v1.json": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13"
+    },
+    "267e75f5eaa32ca47e1f6074c28a4548c58f0af8cdf3a97fbb0d9ca9a1649af9": {
+      "scripts/benchmark_local_qwen.py": "88cc37495b617c616c9131651a97469b4c033e6a7393d7a587701255fe56bcbb",
+      "app/evaluation/agents/ollama_client.py": "733be2c3d5d825eb5b3da44407db43290508025804b3d21f8a34c8d870bc855c",
+      "app/evaluation/agents/llm_types.py": "7a4502aacfc294301812b69f603aca3d0e2238e783f9e9d5940107a71b9dfc60",
+      "app/evaluation/analysis/local_benchmark.py": "a1c6b9984e4a25a70ddad282ccd31b2962cc8d146fb1ee8686a18a1488c51e81",
+      "app/evaluation/analysis/local_rubric.py": "e181742945806658cab7bbfa564b56a02feebd76cbf20c319eb55b663b8af49c",
+      "app/evaluation/analysis/local_evidence.py": "7a96aab6ce6e431fc01ccfd37de57bed75dc03435bb9948a0246be2ddb597d50",
+      "app/evaluation/analysis/local_context.py": "a37f0be1707ed3ce1b35ddf79e077749506b002182eee13b83e47a9985f587e8",
+      "app/evaluation/analysis/local_context_v1.json": "42a2105c095fa79d4be7b40fbe030cf6a2cd178a6a8faebcd56a5d176c2aca1c",
+      "app/evaluation/agents/prompts/__init__.py": "5829f54746573633cd6b5f8fcff3a705e1998bce4eb3a3f160799992bd8c72ee",
+      "app/evaluation/agents/prompts/a1_prompt.py": "34472afcd8e27d5a3a85d157203a937848adead3f4a181d1a603ae06ba70b7df",
+      "app/evaluation/agents/prompts/a2_prompt.py": "1e49f41ffb34eed8a334805fab3798e450261bbef91458fb3e22177ac49501ea",
+      "app/evaluation/agents/prompts/a3_prompt.py": "3ecb2289424032e1526e8022086f7566a5c7d0ac16764ff5c435ad314648152b",
+      "app/evaluation/agents/prompts/a4_prompt.py": "d8c8423b62c1233285f38f9d53fffd7dfe772d79c0307f6a6f6e5bf32bbf80b1",
+      "app/evaluation/agents/prompts/base.py": "4d2611391fa63e3cff86753ea8a76f81db412d6a84442ab456c0de38a57ff929",
+      "app/evaluation/agents/prompts/core_rubric.py": "fd5e9352af9efbf0cfb138a9d12e8f4c47d8326d3473a6ca943ecee6f9562e0c",
+      "app/evaluation/analysis/local_rubric_v1.json": "25c9874b0597b53e89cf6013ae349d4cf0d2f73c91e650fb108bff8e19005d13"
+    }
+  },
+  "trials": [
+    {
+      "label": "A",
+      "local_artifact_directory": "data/local_benchmarks/anchors_20260916_literal",
+      "created_at": "2026-09-16T13:14:40.843187+00:00",
+      "git_head_during_run": "e88f8820b1792db21238c7d1824180c116f0e4e1",
+      "implementation_key": "e80048bbac60996a1abbfa7c9ee946c98435e53d84a556169c85adf0e68bdbda",
+      "manifest_sha256": "0eabf793e7451371e368aeca43a5a5768ca9b178aeb8e6f6ff992683cdb20f49",
+      "summary_sha256": "9a94f8de5450bd77c6054332c6b388239189217fe5489092727ee06429761add",
+      "prompt_policy": "current_v1",
+      "evidence_mode": "literal",
+      "context_mode": "archived",
+      "summary": {
+        "attempted": 4,
+        "valid": 4,
+        "valid_rate": 1.0,
+        "compared_criteria": 9,
+        "agreement_with_archived_gemini": 0.6666666666666666,
+        "numeric_mae": 0.3333333333333333,
+        "na_disagreements": 0,
+        "evidences": 28,
+        "verified_evidences": 15,
+        "evidence_verification_rate": 0.5357142857142857,
+        "judgments_without_evidence": 1,
+        "median_wall_seconds": 256.313,
+        "max_wall_seconds": 290.429,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C1": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C2": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C3": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C4": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C5": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C6": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C7": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C8": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C9": {
+            "n": 1,
+            "agreement": 0.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements.",
+        "prompt_policy": "current_v1",
+        "rubric_changed": true,
+        "evidence_mode": "literal"
+      },
+      "records": [
+        {
+          "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "e8d89067671ac794de6a989302d3b9a5592a84ba6785f19f71e95d0b0e6bdc55",
+          "raw_response_sha256": "fff6288dfd8dc388352e51cd502a67ea9bd8b56f77c4656b685976a9f693ce4e",
+          "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a1_v5",
+            "current_prompt_version": "a1_v8",
+            "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "effective_prompt_sha256": "5d45d3b81a5057ef0838860d3c881b167414ceb6f4984271e09c771a959fed92",
+            "criteria_specs_sha256": "076183d729f010ecb68476ca4c467036d13b3aa5d21cb1df76318bc0cf9f2689",
+            "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block."
+          },
+          "reference_scores": {
+            "C1": 2,
+            "C2": 0,
+            "C5": 1
+          },
+          "scores": {
+            "C1": 2,
+            "C2": 0,
+            "C5": 1
+          },
+          "wall_seconds": 277.907,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 35703,
+            "response_chars": 7416,
+            "latency_ms": 277873,
+            "api_cost_usd": 0,
+            "total_duration": 277621018500,
+            "load_duration": 13153217625,
+            "prompt_eval_duration": 59325824000,
+            "eval_duration": 204930039000,
+            "prompt_eval_count": 10155,
+            "prompt_eval_cached_count": null,
+            "eval_count": 1883
+          },
+          "evidence_count": 13,
+          "verified_evidence_count": 7,
+          "judgments_without_evidence": 0,
+          "source_selections": null
+        },
+        {
+          "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "37a9a0c569d7bb86033e4600601d7a93d5db4637e7b72249fd006088227d3bb0",
+          "raw_response_sha256": "0e74e7aa0ad6b3a0d761dcc6805a48e931616151590217d15a45f81de977d068",
+          "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a2_v1",
+            "current_prompt_version": "a2_v2",
+            "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "effective_prompt_sha256": "6ec1fc1180948ce02509156b48854dbbcaeafecb5ba79eef422fb8ff49e21e68",
+            "criteria_specs_sha256": "02f0f07eab33b6f859d88c76921602a1542544e5d7ff72192f8d35c0184aeb91",
+            "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block."
+          },
+          "reference_scores": {
+            "C3": 1,
+            "C4": 2
+          },
+          "scores": {
+            "C3": 1,
+            "C4": 1
+          },
+          "wall_seconds": 234.719,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 27628,
+            "response_chars": 4152,
+            "latency_ms": 234659,
+            "api_cost_usd": 0,
+            "total_duration": 234554112541,
+            "load_duration": 119853291,
+            "prompt_eval_duration": 91919747000,
+            "eval_duration": 141026264000,
+            "prompt_eval_count": 7534,
+            "prompt_eval_cached_count": null,
+            "eval_count": 962
+          },
+          "evidence_count": 7,
+          "verified_evidence_count": 0,
+          "judgments_without_evidence": 0,
+          "source_selections": null
+        },
+        {
+          "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "13428b0ebcdf746e0e224ff511f5f6b3fa48512e082772a613da689cbaebb308",
+          "raw_response_sha256": "89863c1d9d50e24b35d8f43e26774c7fb8424536dd4da118e6eda1649051406c",
+          "fixture": "a3_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "b8aadf3423a2edbdb88855f22ce966e792900596d66c61e9aef8840c14d52239",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a3_v1",
+            "current_prompt_version": "a3_v2",
+            "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "effective_prompt_sha256": "ef0759afc6d599844044bdb22a14ac9b816c37b8d5f8a7835955a377a5c73aeb",
+            "criteria_specs_sha256": "b6656addeebdec61d3829edfd8ec2fb12af3375c812bf25351e6bc35b3655442",
+            "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block."
+          },
+          "reference_scores": {
+            "C6": 2,
+            "C7": 2,
+            "C8": 2
+          },
+          "scores": {
+            "C6": 2,
+            "C7": 1,
+            "C8": 2
+          },
+          "wall_seconds": 290.429,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 38519,
+            "response_chars": 5569,
+            "latency_ms": 290405,
+            "api_cost_usd": 0,
+            "total_duration": 290329082875,
+            "load_duration": 26365000,
+            "prompt_eval_duration": 120894303000,
+            "eval_duration": 167629681000,
+            "prompt_eval_count": 10619,
+            "prompt_eval_cached_count": null,
+            "eval_count": 1383
+          },
+          "evidence_count": 8,
+          "verified_evidence_count": 8,
+          "judgments_without_evidence": 0,
+          "source_selections": null
+        },
+        {
+          "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "e3cf9cd5cd8175b06667dfa42c108cd2c145b1caf0da176b42fef055555ad3a2",
+          "raw_response_sha256": "cbcecdd27003cdcfcc4020d299e6abac843753be487cd070f6f7a0824839f331",
+          "fixture": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a4_v2",
+            "current_prompt_version": "a4_v11",
+            "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "effective_prompt_sha256": "2224779811a8549f0a63034bc1513188c3961ac29b800119d9d5ea2d549ea034",
+            "criteria_specs_sha256": "834ad21a2a8fdf61e2bc794fcd50fc741da58a296dbed890f2f364d8e3adcb74",
+            "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block."
+          },
+          "reference_scores": {
+            "C9": 1
+          },
+          "scores": {
+            "C9": 2
+          },
+          "wall_seconds": 83.819,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 29081,
+            "response_chars": 588,
+            "latency_ms": 83798,
+            "api_cost_usd": 0,
+            "total_duration": 83710537167,
+            "load_duration": 42367375,
+            "prompt_eval_duration": 66710687999,
+            "eval_duration": 15265998000,
+            "prompt_eval_count": 7587,
+            "prompt_eval_cached_count": null,
+            "eval_count": 167
+          },
+          "evidence_count": 0,
+          "verified_evidence_count": 0,
+          "judgments_without_evidence": 1,
+          "source_selections": null
+        }
+      ]
+    },
+    {
+      "label": "B",
+      "local_artifact_directory": "data/local_benchmarks/anchors_20260917_sources",
+      "created_at": "2026-09-17T11:25:52.126834+00:00",
+      "git_head_during_run": "e88f8820b1792db21238c7d1824180c116f0e4e1",
+      "implementation_key": "b7b1a8d4219fa24f7e478bb4a42cb05509a454c0a5207191ed268d66f3fec256",
+      "manifest_sha256": "eb2dd1d65cce81813627962e1ca170bff04db4d9d3c3c07345c8d19a2d00d19a",
+      "summary_sha256": "d8fed3f6035a3bf30534132342a8f5184ca231a51e2c2540a84d6520c187f35a",
+      "prompt_policy": "current_v1",
+      "evidence_mode": "source_ids_v1",
+      "context_mode": "archived",
+      "summary": {
+        "attempted": 4,
+        "valid": 4,
+        "valid_rate": 1.0,
+        "compared_criteria": 9,
+        "agreement_with_archived_gemini": 0.5555555555555556,
+        "numeric_mae": 0.5555555555555556,
+        "na_disagreements": 0,
+        "evidences": 38,
+        "verified_evidences": 38,
+        "evidence_verification_rate": 1.0,
+        "judgments_without_evidence": 0,
+        "median_wall_seconds": 242.2145,
+        "max_wall_seconds": 388.918,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C1": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C2": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C3": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C4": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C5": {
+            "n": 1,
+            "agreement": 0.0
+          },
+          "C6": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C7": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C8": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C9": {
+            "n": 1,
+            "agreement": 0.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements. Source-ID quote fidelity is enforced by construction; source relevance and scoring still require human review.",
+        "prompt_policy": "current_v1",
+        "rubric_changed": true,
+        "evidence_mode": "source_ids_v1",
+        "context_mode": "archived"
+      },
+      "records": [
+        {
+          "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "557a85e6aa32b1ea96764448b358de6c4c83536c8b7163859910bf45888f8b05",
+          "raw_response_sha256": "012dc82a71f1d9e028f5ae6b4532ee51e4026bf6b2f1937ed52362fe47a852c8",
+          "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a1_v5",
+            "current_prompt_version": "a1_v8",
+            "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "effective_prompt_sha256": "d08b49e3bb0d9ee922dc6eb29e9ca86af969dd46bcbc88d5925faf6d96ffbafd",
+            "criteria_specs_sha256": "076183d729f010ecb68476ca4c467036d13b3aa5d21cb1df76318bc0cf9f2689",
+            "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "evidence_mode": "source_ids_v1",
+            "source_catalog_sha256": "bbd34b3806abfa7c70d7bbcdd80a75bea1c407953bb20f043c579f6468f0d0b2",
+            "base_prompt_sha256": "5d45d3b81a5057ef0838860d3c881b167414ceb6f4984271e09c771a959fed92",
+            "source_passages": 35,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C1": 2,
+            "C2": 0,
+            "C5": 1
+          },
+          "scores": {
+            "C1": 0,
+            "C2": 0,
+            "C5": 0
+          },
+          "wall_seconds": 201.773,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 38792,
+            "response_chars": 2259,
+            "latency_ms": 201739,
+            "api_cost_usd": 0,
+            "total_duration": 201608165208,
+            "load_duration": 13371727166,
+            "prompt_eval_duration": 73059231000,
+            "eval_duration": 114390913000,
+            "prompt_eval_count": 11278,
+            "prompt_eval_cached_count": null,
+            "eval_count": 705
+          },
+          "evidence_count": 15,
+          "verified_evidence_count": 15,
+          "judgments_without_evidence": 0,
+          "source_selections": [
+            {
+              "criterion": "C1",
+              "evidence_ids": [
+                "S0024",
+                "S0025",
+                "S0026",
+                "S0027",
+                "S0028",
+                "S0029",
+                "S0030",
+                "S0031",
+                "S0032",
+                "S0033",
+                "S0034",
+                "S0035"
+              ],
+              "verified_absent_fields": [
+                "learning_outcomes_en",
+                "dublin_knowledge_en",
+                "dublin_applying_en",
+                "dublin_judgement_en",
+                "dublin_communication_en",
+                "dublin_learning_en",
+                "prerequisites_en",
+                "course_content_en",
+                "assessment_methods_en"
+              ]
+            },
+            {
+              "criterion": "C2",
+              "evidence_ids": [
+                "S0001",
+                "S0020"
+              ],
+              "verified_absent_fields": [
+                "learning_outcomes_en",
+                "dublin_knowledge_en",
+                "dublin_applying_en",
+                "dublin_judgement_en",
+                "dublin_communication_en",
+                "dublin_learning_en",
+                "prerequisites_en",
+                "course_content_en",
+                "assessment_methods_en"
+              ]
+            },
+            {
+              "criterion": "C5",
+              "evidence_ids": [
+                "S0011"
+              ],
+              "verified_absent_fields": [
+                "prerequisites_en"
+              ]
+            }
+          ]
+        },
+        {
+          "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "6cd49e5f8e551a1c635990a7c58663c1a267b02de62c4695a668e63526e41379",
+          "raw_response_sha256": "2477ea6fb1eb8e7934e8d873f266b7247d9fb60378ec9c606c8e9d369935ca11",
+          "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a2_v1",
+            "current_prompt_version": "a2_v2",
+            "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "effective_prompt_sha256": "90d8bc75057c151a41b667a58559cbe9ad5b4436ed2bcc7851e44d8569fe4190",
+            "criteria_specs_sha256": "02f0f07eab33b6f859d88c76921602a1542544e5d7ff72192f8d35c0184aeb91",
+            "normative_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "evidence_mode": "source_ids_v1",
+            "source_catalog_sha256": "bd12053745d2ccfc1e2652640d895d90d2c4e16bb50751861e7dc7e0b1127a8d",
+            "base_prompt_sha256": "6ec1fc1180948ce02509156b48854dbbcaeafecb5ba79eef422fb8ff49e21e68",
+            "source_passages": 12,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C3": 1,
+            "C4": 2
+          },
+          "scores": {
+            "C3": 1,
+            "C4": 1
+          },
+          "wall_seconds": 228.313,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 28218,
+            "response_chars": 1272,
+            "latency_ms": 228276,
+            "api_cost_usd": 0,
+            "total_duration": 228153608500,
+            "load_duration": 22231583,
+            "prompt_eval_duration": 129792001000,
+            "eval_duration": 96397314000,
+            "prompt_eval_count": 7789,
+            "prompt_eval_cached_count": null,
+            "eval_count": 399
+          },
+          "evidence_count": 9,
+          "verified_evidence_count": 9,
+          "judgments_without_evidence": 0,
+          "source_selections": [
+            {
+              "criterion": "C3",
+              "evidence_ids": [
+                "S0002",
+                "S0003",
+                "S0004",
+                "S0005"
+              ],
+              "verified_absent_fields": []
+            },
+            {
+              "criterion": "C4",
+              "evidence_ids": [
+                "S0006",
+                "S0007",
+                "S0008",
+                "S0009",
+                "S0010"
+              ],
+              "verified_absent_fields": []
+            }
+          ]
+        },
+        {
+          "case_id": "a3_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "71cba088f69647aa9e5848292b8e4ff924fff5a0787a68e8e2aa99db97e1c1d5",
+          "raw_response_sha256": "0939409c99ef5f11d2ae9d89e6b52545ac2e77f84f806117049433ddff89ec8b",
+          "fixture": "a3_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "b8aadf3423a2edbdb88855f22ce966e792900596d66c61e9aef8840c14d52239",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a3_v1",
+            "current_prompt_version": "a3_v2",
+            "archived_prompt_sha256": "0d328be4283e07d5fe5cb47b4ccf9b9b5cf107ce8de27e0475658b5f04bbce8f",
+            "effective_prompt_sha256": "ec2e7342b5f21d3dd73b82d8d849212df720ea4c624d4617b2687e10d08f658f",
+            "criteria_specs_sha256": "b6656addeebdec61d3829edfd8ec2fb12af3375c812bf25351e6bc35b3655442",
+            "normative_context_block_sha256": "5130974bd2b31da1fc23776c83393f1f74f7a6d932279f0dafee3056d070216c",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "evidence_mode": "source_ids_v1",
+            "source_catalog_sha256": "d20d7806ef8dc22abf0ed09aa71d0751542889e931d1aa61015855958c531c62",
+            "base_prompt_sha256": "ef0759afc6d599844044bdb22a14ac9b816c37b8d5f8a7835955a377a5c73aeb",
+            "source_passages": 44,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C6": 2,
+            "C7": 2,
+            "C8": 2
+          },
+          "scores": {
+            "C6": 2,
+            "C7": 2,
+            "C8": 2
+          },
+          "wall_seconds": 388.918,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 42403,
+            "response_chars": 1449,
+            "latency_ms": 388858,
+            "api_cost_usd": 0,
+            "total_duration": 388775002375,
+            "load_duration": 31009750,
+            "prompt_eval_duration": 248971632000,
+            "eval_duration": 138434979000,
+            "prompt_eval_count": 11994,
+            "prompt_eval_cached_count": null,
+            "eval_count": 448
+          },
+          "evidence_count": 12,
+          "verified_evidence_count": 12,
+          "judgments_without_evidence": 0,
+          "source_selections": [
+            {
+              "criterion": "C6",
+              "evidence_ids": [
+                "S0040",
+                "S0041",
+                "S0042"
+              ],
+              "verified_absent_fields": []
+            },
+            {
+              "criterion": "C7",
+              "evidence_ids": [
+                "S0011",
+                "S0012",
+                "S0013",
+                "S0014",
+                "S0015"
+              ],
+              "verified_absent_fields": []
+            },
+            {
+              "criterion": "C8",
+              "evidence_ids": [
+                "S0002",
+                "S0004",
+                "S0040",
+                "S0043"
+              ],
+              "verified_absent_fields": []
+            }
+          ]
+        },
+        {
+          "case_id": "a4_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "83e87dca6edcc58a93842c3c2fda407aac018b877ff77546f8d70597a0328010",
+          "raw_response_sha256": "9da99209399a935f2eabf1e9341a022f36ab8a6366feaf4cc60448871e920cf1",
+          "fixture": "a4_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "0f0ed79a72fb5dd103d82f72ee99f5aa5b727fa2abe0357eb33d18c0cf26629e",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a4_v2",
+            "current_prompt_version": "a4_v11",
+            "archived_prompt_sha256": "f73d25e190d38c343dd475fee401694e25770f81da442bdb1a859bee1ad8bd03",
+            "effective_prompt_sha256": "68a769c6b0694c34855a1b3f4f408a43095d18342f8add6ba3af0c1950dbaf18",
+            "criteria_specs_sha256": "834ad21a2a8fdf61e2bc794fcd50fc741da58a296dbed890f2f364d8e3adcb74",
+            "normative_context_block_sha256": "aca6179c20e85ce6b11428c3793f7e7c8b10162bbcd1032b664acbc610fd48ee",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "evidence_mode": "source_ids_v1",
+            "source_catalog_sha256": "de0d118bc5edc8e8f5ad075f4208a242b3e45ba60dbf3d6fa132b004f8e9ccb1",
+            "base_prompt_sha256": "2224779811a8549f0a63034bc1513188c3961ac29b800119d9d5ea2d549ea034",
+            "source_passages": 51,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C9": 1
+          },
+          "scores": {
+            "C9": 2
+          },
+          "wall_seconds": 256.116,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 31713,
+            "response_chars": 660,
+            "latency_ms": 256065,
+            "api_cost_usd": 0,
+            "total_duration": 255940594250,
+            "load_duration": 31247500,
+            "prompt_eval_duration": 181456283000,
+            "eval_duration": 72712393000,
+            "prompt_eval_count": 8778,
+            "prompt_eval_cached_count": null,
+            "eval_count": 195
+          },
+          "evidence_count": 2,
+          "verified_evidence_count": 2,
+          "judgments_without_evidence": 0,
+          "source_selections": [
+            {
+              "criterion": "C9",
+              "evidence_ids": [
+                "S0021",
+                "S0034"
+              ],
+              "verified_absent_fields": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "C",
+      "local_artifact_directory": "data/local_benchmarks/anchors_20260917_sources_v2_a1",
+      "created_at": "2026-09-17T11:44:36.646985+00:00",
+      "git_head_during_run": "b3e5f590f17d387f28782b412110f65be6a0d8f3",
+      "implementation_key": "267e75f5eaa32ca47e1f6074c28a4548c58f0af8cdf3a97fbb0d9ca9a1649af9",
+      "manifest_sha256": "a37ca7af75b284f0b2bdbf6ce09fdfad94b4416e9d1ae69f712fa3c793f65953",
+      "summary_sha256": "531a330b76edd4bc17c3213d36bbfc19995679d1f41bda2ed5a7db50e9df6134",
+      "prompt_policy": "current_v1",
+      "evidence_mode": "source_ids_v2",
+      "context_mode": "archived",
+      "summary": {
+        "attempted": 1,
+        "valid": 1,
+        "valid_rate": 1.0,
+        "compared_criteria": 3,
+        "agreement_with_archived_gemini": 1.0,
+        "numeric_mae": 0,
+        "na_disagreements": 0,
+        "evidences": 10,
+        "verified_evidences": 10,
+        "evidence_verification_rate": 1.0,
+        "judgments_without_evidence": 1,
+        "median_wall_seconds": 207.884,
+        "max_wall_seconds": 207.884,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C1": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C2": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C5": {
+            "n": 1,
+            "agreement": 1.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements. Source-ID quote fidelity is enforced by construction; source relevance and scoring still require human review.",
+        "prompt_policy": "current_v1",
+        "rubric_changed": true,
+        "evidence_mode": "source_ids_v2",
+        "context_mode": "archived"
+      },
+      "records": [
+        {
+          "case_id": "a1_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "ef963b5c86638272859f6736cc5b8be006425fd75596f7252dc868c5793bb9ed",
+          "raw_response_sha256": "6fcf8fab23f621aa9f613a4ac57807ea5ec80a2dacf3805089432a6a8f8c7ae8",
+          "fixture": "a1_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "fad3ae6f02a2d00b975c6ca2b41c7022937dc0a8d5b100ad2b16676909d8903a",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a1_v5",
+            "current_prompt_version": "a1_v8",
+            "archived_prompt_sha256": "627b3934a227995cbc187a5292d5ff6e9075d210962f264dd04a9d887bf41f51",
+            "effective_prompt_sha256": "1215118fabf79ac5ea648c8233a9385125c401aa3bb5666f78eb0a51aa582388",
+            "criteria_specs_sha256": "076183d729f010ecb68476ca4c467036d13b3aa5d21cb1df76318bc0cf9f2689",
+            "normative_context_block_sha256": "385e1eee4a7a9b7e73c3519c8b5e21db3f744ccf80019cb734792361e7cfdccb",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "evidence_mode": "source_ids_v2",
+            "source_catalog_sha256": "bbd34b3806abfa7c70d7bbcdd80a75bea1c407953bb20f043c579f6468f0d0b2",
+            "base_prompt_sha256": "5d45d3b81a5057ef0838860d3c881b167414ceb6f4984271e09c771a959fed92",
+            "source_passages": 35,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C1": 2,
+            "C2": 0,
+            "C5": 1
+          },
+          "scores": {
+            "C1": 2,
+            "C2": 0,
+            "C5": 1
+          },
+          "wall_seconds": 207.884,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 36187,
+            "response_chars": 1796,
+            "latency_ms": 207822,
+            "api_cost_usd": 0,
+            "total_duration": 207589465292,
+            "load_duration": 31540417,
+            "prompt_eval_duration": 118171459000,
+            "eval_duration": 87275358000,
+            "prompt_eval_count": 10476,
+            "prompt_eval_cached_count": null,
+            "eval_count": 555
+          },
+          "evidence_count": 10,
+          "verified_evidence_count": 10,
+          "judgments_without_evidence": 1,
+          "source_selections": [
+            {
+              "criterion": "C1",
+              "evidence_ids": [
+                "S0002",
+                "S0011",
+                "S0012",
+                "S0015",
+                "S0019",
+                "S0020",
+                "S0021",
+                "S0023",
+                "S0024"
+              ],
+              "verified_absent_fields": []
+            },
+            {
+              "criterion": "C2",
+              "evidence_ids": [],
+              "verified_absent_fields": [
+                "learning_outcomes_en",
+                "course_content_en",
+                "assessment_methods_en"
+              ]
+            },
+            {
+              "criterion": "C5",
+              "evidence_ids": [
+                "S0011"
+              ],
+              "verified_absent_fields": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "D",
+      "local_artifact_directory": "data/local_benchmarks/anchors_20260917_fixed_a2",
+      "created_at": "2026-09-17T11:50:43.735112+00:00",
+      "git_head_during_run": "b3e5f590f17d387f28782b412110f65be6a0d8f3",
+      "implementation_key": "267e75f5eaa32ca47e1f6074c28a4548c58f0af8cdf3a97fbb0d9ca9a1649af9",
+      "manifest_sha256": "6b73d195dd2350750e96df81dfe7026d5a6058db85b81bf2f1ede0de926021f6",
+      "summary_sha256": "3f8223c46eb5a7a07fd79b6360b724ec913220759d805c110ea67b5ad77b6a69",
+      "prompt_policy": "current_v1",
+      "evidence_mode": "source_ids_v1",
+      "context_mode": "fixed_core_v1",
+      "summary": {
+        "attempted": 1,
+        "valid": 1,
+        "valid_rate": 1.0,
+        "compared_criteria": 2,
+        "agreement_with_archived_gemini": 1.0,
+        "numeric_mae": 0,
+        "na_disagreements": 0,
+        "evidences": 9,
+        "verified_evidences": 9,
+        "evidence_verification_rate": 1.0,
+        "judgments_without_evidence": 0,
+        "median_wall_seconds": 63.678,
+        "max_wall_seconds": 63.678,
+        "api_cost_usd": 0,
+        "per_criterion": {
+          "C3": {
+            "n": 1,
+            "agreement": 1.0
+          },
+          "C4": {
+            "n": 1,
+            "agreement": 1.0
+          }
+        },
+        "interpretation": "Different experimental rubric; archived Gemini agreement is descriptive only. Not a test of accuracy, normative compliance or isolated wording improvements. Source-ID quote fidelity is enforced by construction; source relevance and scoring still require human review.",
+        "prompt_policy": "current_v1",
+        "rubric_changed": true,
+        "evidence_mode": "source_ids_v1",
+        "context_mode": "fixed_core_v1"
+      },
+      "records": [
+        {
+          "case_id": "a2_0B53E8E2-4B90-426F-A25C-3AA31FA4B649",
+          "run": 1,
+          "status": "valid",
+          "error": null,
+          "record_sha256": "cbac48726730da5a075b97a1432ceb227e515313be3fd5e3ef8be3bebe1f4607",
+          "raw_response_sha256": "39f3498f65d9e18c8ea83998a80a08001e105b9acba5785e867c81e97ade7fbd",
+          "fixture": "a2_calibration_0B53E8E2-4B90-426F-A25C-3AA31FA4B649.json",
+          "fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+          "prompt_provenance": {
+            "policy": "current_v1",
+            "archived_prompt_version": "a2_v1",
+            "current_prompt_version": "a2_v2",
+            "archived_prompt_sha256": "5042366e0545002e9d8ed49e568ea6eb67e9dba97ab51dce6254c1fba5a86204",
+            "effective_prompt_sha256": "f084619a52f3995b44124bc00fe66d162a8b1a1beface3badbb07dd61405c2b4",
+            "criteria_specs_sha256": "02f0f07eab33b6f859d88c76921602a1542544e5d7ff72192f8d35c0184aeb91",
+            "normative_context_block_sha256": "21e6179cd386a767563669c7147a092155a747af21892553a10bda24927c82f9",
+            "rubric_changed": true,
+            "anchors_restored": true,
+            "comparison_limit": "Current prompts on archived data, not historical replay. The without-anchors control differs only in the criteria block.",
+            "context_mode": "fixed_core_v1",
+            "context_profile": "Historical A2/A4 calibration context; not UniCT 26.04",
+            "context_pack_sha256": "42a2105c095fa79d4be7b40fbe030cf6a2cd178a6a8faebcd56a5d176c2aca1c",
+            "fixed_source_fixture_sha256": "ff3a9b6e7c025ef5f9957d1169425e6781c269d955a6dbeec7e29b3328b1b091",
+            "base_context_block_sha256": "2d6f775e294d38521d29f4eb82f41217ad7622633dbd8f60ce9cd9e05c0cd773",
+            "context_text_chars_before": 9732,
+            "context_text_chars_after": 6150,
+            "fixed_context_limit": "Historical sources only. Version labels are archived metadata. Not a 26.04 profile or proof of coverage for every syllabus.",
+            "evidence_mode": "source_ids_v1",
+            "source_catalog_sha256": "bd12053745d2ccfc1e2652640d895d90d2c4e16bb50751861e7dc7e0b1127a8d",
+            "base_prompt_sha256": "9c33071cb2bbd39439fefe23ec449302abb09737e26fd4d3012c2e2ca14458ec",
+            "source_passages": 12,
+            "quote_metric_limit": "Literal fidelity is enforced by construction, not model accuracy."
+          },
+          "reference_scores": {
+            "C3": 1,
+            "C4": 2
+          },
+          "scores": {
+            "C3": 1,
+            "C4": 2
+          },
+          "wall_seconds": 63.678,
+          "metadata": {
+            "backend": "ollama_local",
+            "model": "qwen3.5:4b",
+            "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+            "finish_reason": "STOP",
+            "num_ctx": 16384,
+            "max_output_tokens": 2048,
+            "requested_max_output_tokens": null,
+            "temperature": 0.1,
+            "seed": 42,
+            "thinking": false,
+            "prompt_chars": 20724,
+            "response_chars": 1586,
+            "latency_ms": 63644,
+            "api_cost_usd": 0,
+            "total_duration": 63442175375,
+            "load_duration": 18334334,
+            "prompt_eval_duration": 26708933000,
+            "eval_duration": 31322152000,
+            "prompt_eval_count": 5541,
+            "prompt_eval_cached_count": null,
+            "eval_count": 451
+          },
+          "evidence_count": 9,
+          "verified_evidence_count": 9,
+          "judgments_without_evidence": 0,
+          "source_selections": [
+            {
+              "criterion": "C3",
+              "evidence_ids": [
+                "S0002",
+                "S0003",
+                "S0004",
+                "S0005"
+              ],
+              "verified_absent_fields": []
+            },
+            {
+              "criterion": "C4",
+              "evidence_ids": [
+                "S0006",
+                "S0007",
+                "S0008",
+                "S0009",
+                "S0010"
+              ],
+              "verified_absent_fields": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime": {
+    "ollama_version": "0.32.15",
+    "model": "qwen3.5:4b",
+    "model_digest": "2a654d98e6fba55d452b7043684e9b57a947e393bbffa62485a7aac05ee4eefd",
+    "model_size_bytes": 3389983735,
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen35",
+      "families": [
+        "qwen35"
+      ],
+      "parameter_size": "4.7B",
+      "quantization_level": "Q4_K_M"
+    },
+    "model_parameters": "presence_penalty               1.5\ntemperature                    1\ntop_k                          20\ntop_p                          0.95",
+    "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315",
+    "config": {
+      "base_url": "http://127.0.0.1:11435",
+      "model": "qwen3.5:4b",
+      "num_ctx": 16384,
+      "max_output_tokens": 2048,
+      "timeout_seconds": 600,
+      "temperature": 0.1,
+      "seed": 42
+    },
+    "api_cost_usd": 0
+  },
+  "generation_config": {
+    "base_url": "http://127.0.0.1:11435",
+    "model": "qwen3.5:4b",
+    "num_ctx": 16384,
+    "max_output_tokens": 2048,
+    "timeout_seconds": 600,
+    "temperature": 0.1,
+    "seed": 42,
+    "thinking": false,
+    "requests_in_parallel": 1,
+    "hidden_retries": 0
+  },
+  "offline_scope_audit": {
+    "input": "trial B raw outputs",
+    "new_inference": false,
+    "A1": "rejected: an absent field is outside its criterion scope",
+    "A2": "accepted by field checks only",
+    "A3": "accepted by field checks only",
+    "A4": "accepted by field checks only"
+  },
+  "validation": {
+    "backend_tests_passed": 1273,
+    "backend_tests_failed": 0,
+    "backend_test_date": "2026-09-17",
+    "frontend_build": "passed",
+    "ruff_changed_python_files": "passed",
+    "code_unchanged_since_final_live_trial": true,
+    "candidate_rubric_active": false,
+    "qwen_active_in_web_application": false
+  }
+}

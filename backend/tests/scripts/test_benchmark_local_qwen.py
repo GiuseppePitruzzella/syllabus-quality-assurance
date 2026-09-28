@@ -25,6 +25,12 @@ sys.argv = ['benchmark_local_qwen.py', '--limit', '1']
 namespace = runpy.run_path('scripts/benchmark_local_qwen.py')
 assert namespace['main'](['--limit', '1']) == 0
 assert namespace['main'](['--prompt-policy', 'separated_v1', '--limit', '1']) == 0
+assert namespace['main'](['--prompt-policy', 'current_v1', '--evidence-mode',
+                         'source_ids_v1', '--limit', '1']) == 0
+assert namespace['main'](['--prompt-policy', 'current_v1', '--evidence-mode',
+                         'source_ids_v2', '--limit', '1']) == 0
+assert namespace['main'](['--prompt-policy', 'current_v1', '--agent', 'A2',
+                         '--context-mode', 'fixed_core_v1', '--limit', '1']) == 0
 assert 'app.config' not in sys.modules
 assert 'google.genai' not in sys.modules
 """
@@ -98,3 +104,37 @@ def test_preflight_failure_has_a_saved_diagnostic(monkeypatch, tmp_path):
     assert json.loads((output / "preflight_error.json").read_text())["api_cost_usd"] == 0
     client.assert_not_called()
     client.close.assert_called_once()
+
+
+@pytest.mark.parametrize("valid", [True, False])
+@pytest.mark.parametrize("mode", ["source_ids_v1", "source_ids_v2"])
+def test_source_protocol_records_selection_or_rejection_without_hiding_raw_answer(
+    monkeypatch, tmp_path, valid, mode,
+):
+    payload = {"judgments": [{"criterion_code": "C9", "score": 2, "is_na": False,
+                             "na_reason": None, "confidence": "medium",
+                             "justification": "Motivazione di prova del contratto delle evidenze.",
+                             "evidence_ids": ["S0001" if valid else "S9999"],
+                             "absent_fields": []}]}
+    client = Mock(return_value=LLMResult(json.dumps(payload), {}))
+    client.preflight.return_value = {}
+    client.last_response = None
+    client.memory_snapshot.return_value = None
+    monkeypatch.setattr(runner, "OllamaLLMClient", lambda _: client)
+    output = tmp_path / "sources"
+    code = runner.main(["--execute", "--agent", "A4", "--limit", "1",
+                        "--prompt-policy", "current_v1", "--evidence-mode", mode,
+                        "--context-mode", "fixed_core_v1", "--output-dir", str(output)])
+    assert code == (0 if valid else 1)
+    record = json.loads(next(output.glob("*__run1.json")).read_text())
+    assert json.loads(record["raw_response"]) == payload
+    summary = json.loads((output / "summary.json").read_text())
+    assert summary["attempted"] == 1 and summary["valid"] == int(valid)
+    assert "by construction" in summary["interpretation"]
+    assert summary["context_mode"] == "fixed_core_v1"
+    assert next(output.glob("*__sources.json")).is_file()
+    assert "evidence_ids" in client.response_schema["$defs"]["SourceJudgment"]["required"]
+    if valid:
+        assert record["assessment"]["source_selections"][0]["evidence_ids"] == ["S0001"]
+    else:
+        assert "Unknown source" in record["error"]

@@ -27,7 +27,13 @@ from app.evaluation.analysis.local_benchmark import (  # noqa: E402
     assess_response, load_case, response_schema, summarise,
 )
 from app.evaluation.analysis.local_rubric import (  # noqa: E402
-    POLICY, RUBRIC_PATH, prepare_prompt,
+    CURRENT_POLICIES, POLICY, RUBRIC_PATH, prepare_prompt,
+)
+from app.evaluation.analysis.local_evidence import (  # noqa: E402
+    EVIDENCE_MODES, assess_source_response, prepare_source_prompt,
+)
+from app.evaluation.analysis.local_context import (  # noqa: E402
+    CONTEXT_MODE, PACK_PATH, prepare_fixed_context,
 )
 
 
@@ -37,19 +43,29 @@ def write_json(path: Path, value: object) -> None:
     temporary.replace(path)
 
 
-def write_summary(output: Path, records: list[dict], policy: str = "archived") -> None:
+def write_summary(output: Path, records: list[dict], policy: str = "archived",
+                  evidence_mode: str = "literal", context_mode: str = "archived") -> None:
     summary = summarise(records)
     summary["prompt_policy"] = policy
     summary["rubric_changed"] = policy != "archived"
+    summary["evidence_mode"] = evidence_mode
+    summary["context_mode"] = context_mode
     if policy != "archived":
         summary["interpretation"] = (
             "Different experimental rubric; archived Gemini agreement is descriptive only. "
             "Not a test of accuracy, normative compliance or isolated wording improvements."
         )
+    if evidence_mode in EVIDENCE_MODES:
+        summary["interpretation"] += (
+            " Source-ID quote fidelity is enforced by construction; "
+            "source relevance and scoring still require human review."
+        )
     write_json(output / "summary.json", summary)
     lines = ["# Local Qwen diagnostic replay", "",
              "Archived Gemini agreement is not accuracy against human experts.", "",
              f"- Prompt policy: {policy}; rubric changed: {summary['rubric_changed']}",
+             f"- Evidence mode: {evidence_mode}",
+             f"- Context mode: {context_mode}",
              summary["interpretation"], "",
              f"- Attempted: {summary['attempted']}; valid: {summary['valid']}",
              f"- Score agreement: {summary['agreement_with_archived_gemini']}",
@@ -87,8 +103,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seuid", action="append")
     parser.add_argument("--limit", type=int, default=0, help="0 means all selected cases")
     parser.add_argument("--runs", type=int, default=1)
-    parser.add_argument("--prompt-policy", choices=["archived", POLICY], default="archived",
+    parser.add_argument("--prompt-policy", choices=["archived", POLICY, *CURRENT_POLICIES],
+                        default="archived",
                         help="Historical replay or separately versioned experimental rubric")
+    parser.add_argument("--evidence-mode", choices=["literal", *EVIDENCE_MODES], default="literal",
+                        help="Literal generated quotes or validated source passage selection")
+    parser.add_argument("--context-mode", choices=["archived", CONTEXT_MODE], default="archived",
+                        help="Frozen per-case context or fixed historical A2/A4 references")
     parser.add_argument("--base-url", default="http://127.0.0.1:11435")
     parser.add_argument("--num-ctx", type=int, default=16384)
     parser.add_argument("--max-output-tokens", type=int, default=2048)
@@ -113,6 +134,15 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("No matching replay cases")
     try:
         prompts = {c.case_id: prepare_prompt(c, args.prompt_policy) for c in cases}
+        if args.context_mode == CONTEXT_MODE:
+            prompts = {c.case_id: prepare_fixed_context(prompts[c.case_id], c.agent_code,
+                                                      args.fixtures_dir)
+                       for c in cases}
+        sources = {}
+        if args.evidence_mode in EVIDENCE_MODES:
+            sources = {c.case_id: prepare_source_prompt(c, prompts[c.case_id], args.evidence_mode)
+                       for c in cases}
+            prompts = {key: value.prepared for key, value in sources.items()}
     except ValueError as exc:
         parser.error(str(exc))
     for case in cases:
@@ -144,9 +174,12 @@ def main(argv: list[str] | None = None) -> int:
             "experiment": "local_qwen_replay_v1", "created_at": datetime.now(timezone.utc).isoformat(),
             "git_commit": git.stdout.strip(), "platform": platform.platform(),
             "machine": platform.machine(), "config": asdict(config), "runtime": identity,
-            "runs_per_case": args.runs, "retrieval": "frozen in archived prompt; no embeddings",
+            "runs_per_case": args.runs,
+            "retrieval": "no embeddings; " + args.context_mode,
             "prompt_policy": args.prompt_policy,
-            "require_all_response_fields": args.prompt_policy != "archived",
+            "evidence_mode": args.evidence_mode,
+            "context_mode": args.context_mode,
+            "require_all_response_fields": args.prompt_policy != "archived" or bool(sources),
             "method": "versioned prompt policy; structured output; thinking disabled; no retries",
             "implementation_sha256": {
                 str(p.relative_to(BACKEND)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -154,7 +187,11 @@ def main(argv: list[str] | None = None) -> int:
                           BACKEND / "app/evaluation/agents/ollama_client.py",
                           BACKEND / "app/evaluation/agents/llm_types.py",
                           BACKEND / "app/evaluation/analysis/local_benchmark.py",
-                          BACKEND / "app/evaluation/analysis/local_rubric.py", RUBRIC_PATH]
+                          BACKEND / "app/evaluation/analysis/local_rubric.py",
+                          BACKEND / "app/evaluation/analysis/local_evidence.py",
+                          BACKEND / "app/evaluation/analysis/local_context.py", PACK_PATH,
+                          *sorted((BACKEND / "app/evaluation/agents/prompts").glob("*.py")),
+                          RUBRIC_PATH]
             },
             "cases": [{"case_id": c.case_id, "fixture": c.fixture_name,
                        "fixture_sha256": c.fixture_sha256, "prompt_version": c.prompt_version,
@@ -168,7 +205,12 @@ def main(argv: list[str] | None = None) -> int:
         for case in cases:
             prepared = prompts[case.case_id]
             (output / f"{case.case_id}__prompt.txt").write_text(prepared.text, encoding="utf-8")
-            client.response_schema = response_schema(
+            source = sources.get(case.case_id)
+            if source:
+                write_json(output / f"{case.case_id}__sources.json", {
+                    "passages": source.passages, "empty_fields": source.empty_fields,
+                })
+            client.response_schema = source.schema(case.criteria) if source else response_schema(
                 case.criteria, require_all_fields=args.prompt_policy != "archived"
             )
             for run in range(1, args.runs + 1):
@@ -181,7 +223,10 @@ def main(argv: list[str] | None = None) -> int:
                     result = client(prepared.text)
                     record["raw_response"] = result.text
                     record["metadata"] = result.metadata
-                    record["assessment"] = assess_response(case, result.text)
+                    record["assessment"] = (
+                        assess_source_response(case, result.text, source) if source
+                        else assess_response(case, result.text)
+                    )
                     record["status"] = "valid"
                 except Exception as exc:
                     record["error"] = f"{type(exc).__name__}: {exc}"
@@ -191,7 +236,8 @@ def main(argv: list[str] | None = None) -> int:
                 record["model_memory_after"] = client.memory_snapshot()
                 write_json(output / f"{case.case_id}__run{run}.json", record)
                 records.append(record)
-                write_summary(output, records, args.prompt_policy)
+                write_summary(output, records, args.prompt_policy, args.evidence_mode,
+                              args.context_mode)
                 print(f"  {record['status']} in {record['wall_seconds']}s", flush=True)
         print(f"Results: {output}")
         return 0 if all(r["status"] == "valid" for r in records) else 1

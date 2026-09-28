@@ -15,6 +15,7 @@ from typing import Any
 from app.evaluation.analysis.local_benchmark import ReplayCase
 
 POLICY = "separated_v1"
+CURRENT_POLICIES = ("current_v1", "current_without_anchors_v1")
 RUBRIC_PATH = Path(__file__).with_name("local_rubric_v1.json")
 OWNERS = {"A1": ["C1", "C2", "C5"], "A2": ["C3", "C4"],
           "A3": ["C6", "C7", "C8"], "A4": ["C9"]}
@@ -78,6 +79,8 @@ def prepare_prompt(case: ReplayCase, policy: str = "archived") -> PreparedPrompt
             "archived_prompt_sha256": original_hash, "effective_prompt_sha256": original_hash,
             "rubric_changed": False,
         })
+    if policy in CURRENT_POLICIES:
+        return _prepare_current(case, policy)
     if policy != POLICY:
         raise ValueError(f"Unknown prompt policy: {policy}")
     if case.criteria != OWNERS.get(case.agent_code):
@@ -118,4 +121,53 @@ def prepare_prompt(case: ReplayCase, policy: str = "archived") -> PreparedPrompt
         "normative_context_block_sha256": sha256(context_block),
         "rubric_changed": True,
         "comparison_limit": "Different rubric; archived Gemini agreement is descriptive only.",
+    })
+
+
+def _prepare_current(case: ReplayCase, policy: str) -> PreparedPrompt:
+    """Current builders with frozen data; control removes only the anchor block.
+
+    This is not a replay of a historical agent version. No field selection,
+    retrieval, settings, database or cloud client is invoked.
+    """
+    from app.evaluation.agents.prompts import (
+        build_a1_prompt, build_a2_prompt, build_a3_prompt, build_a4_prompt,
+    )
+    from app.evaluation.agents.prompts.core_rubric import (
+        CORE_PROMPT_VERSIONS, resolve_criteria_specs,
+    )
+    from app.evaluation.rag.query_builder import CRITERION_DESCRIPTIONS
+
+    if case.criteria != OWNERS.get(case.agent_code):
+        raise ValueError("Case criteria do not match the agent scope")
+    _, syllabus = extract_json_block(case.prompt, SYLLABUS_MARKER)
+    context_block, context = extract_json_block(case.prompt, CONTEXT_MARKER)
+    if syllabus != case.syllabus or not isinstance(context, list):
+        raise ValueError("Archived syllabus/context does not match the replay case")
+    builders = {"A1": build_a1_prompt, "A2": build_a2_prompt,
+                "A3": build_a3_prompt, "A4": build_a4_prompt}
+    specs = resolve_criteria_specs([], case.agent_code)
+    prompt = builders[case.agent_code]({
+        "syllabus_data": syllabus, "normative_context": context,
+        "criteria_specs": specs, "syllabus_seuid": case.seuid,
+    })
+    if policy == "current_without_anchors_v1":
+        block, _ = extract_json_block(prompt, "SPECIFICHE CRITERI:")
+        descriptions = [{"criterion_code": c, "description": CRITERION_DESCRIPTIONS[c]}
+                        for c in case.criteria]
+        replacement = "SPECIFICHE CRITERI:\n```json\n" + json.dumps(
+            descriptions, ensure_ascii=False, indent=2
+        ) + "\n```"
+        prompt = prompt.replace(block, replacement, 1)
+    return PreparedPrompt(prompt, {
+        "policy": policy, "archived_prompt_version": case.prompt_version,
+        "current_prompt_version": CORE_PROMPT_VERSIONS[case.agent_code],
+        "archived_prompt_sha256": sha256(case.prompt),
+        "effective_prompt_sha256": sha256(prompt),
+        "criteria_specs_sha256": sha256(json.dumps(specs, ensure_ascii=False, sort_keys=True)),
+        "normative_context_block_sha256": sha256(context_block),
+        "rubric_changed": True,
+        "anchors_restored": policy == "current_v1",
+        "comparison_limit": "Current prompts on archived data, not historical replay. "
+                            "The without-anchors control differs only in the criteria block.",
     })
