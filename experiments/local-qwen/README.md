@@ -8,6 +8,10 @@ deserves further development.
 Read the [first MacBook Air M2 / 8 GB pilot](RESULTS.md) before running a larger
 campaign. Completing a JSON response is not evidence of reliable scoring.
 
+For one tiny connectivity/generation check without the syllabus pipeline, use
+the [standalone smoke test](SMOKE_TEST.md). It also supports a directly addressed
+private IPv4 Ollama server, requests two CPU threads and releases Qwen afterward.
+
 To keep the repository and benchmarks on the Mac while running only Ollama
 and Qwen on Windows, follow the [Mac → ThinkPad setup guide](MAC_THINKPAD.md).
 It uses an authorized SSH tunnel and requires no project dependencies on Windows.

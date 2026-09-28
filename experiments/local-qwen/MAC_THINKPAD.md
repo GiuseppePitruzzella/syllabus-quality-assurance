@@ -1,5 +1,9 @@
 # Progetto sul Mac, Ollama sul ThinkPad
 
+Per verificare soltanto collegamento e una breve risposta, usa prima il
+[test minimo senza SSH e senza syllabus](SMOKE_TEST.md). La procedura sotto
+riguarda invece il benchmark completo tramite tunnel.
+
 Questa configurazione lascia repository, dipendenze, preparazione dei prompt,
 confronti e risultati sul Mac. Il ThinkPad esegue soltanto Ollama e il modello
 Qwen3.5-4B Q4_K_M. Non occorrono Python, Node, Docker, WSL o una copia del
